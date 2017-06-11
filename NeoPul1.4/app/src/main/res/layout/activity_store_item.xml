@@ -3,7 +3,7 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-android:background="#0100FF"
+android:background="#00ff7b00"
     >
 
     <ListView
@@ -11,7 +11,8 @@ android:background="#0100FF"
         android:layout_width="300dp"
         android:layout_height="400dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:background="@drawable/backg2" />
 
 </RelativeLayout>
 

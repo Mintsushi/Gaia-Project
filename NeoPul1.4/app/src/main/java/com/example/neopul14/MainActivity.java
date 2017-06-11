@@ -22,12 +22,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity  implements GestureDetector.OnGestureListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener {
 
-    // 마우스 이밴트 변수  ( 현제 사용 안함)
-    GestureDetector detector;
+    NavigationView navigationView;
+    View header;
+
+    TextView nicknameText;
+    TextView emailText;
+    TextView seedText;
+    TextView fruitnumText;
+
     // 뒤로가기 터치 이밴트 변수
     BackPressCloseHandler backPressCloseHandler;
     //임시저장소
@@ -47,8 +54,21 @@ public class MainActivity extends AppCompatActivity  implements GestureDetector.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 마우스이밴트 관리자
-        detector = new GestureDetector(this, this);
+
+        //네비게이션드로우
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        header = navigationView.getHeaderView(0);
+
+        // 회원정보 네비게이션드로우
+        nicknameText = (TextView)header.findViewById(R.id.nicknameText);
+        nicknameText = (TextView)header.findViewById(R.id.nicknameText);
+        emailText = (TextView)header.findViewById(R.id.emailText);
+        seedText = (TextView)header.findViewById(R.id.seednumText);
+        fruitnumText = (TextView)header.findViewById(R.id.fruitnumText);
+
+
+
         // 뒤로가기 터치 관리자
         backPressCloseHandler = new BackPressCloseHandler(this);
 
@@ -185,61 +205,9 @@ public class MainActivity extends AppCompatActivity  implements GestureDetector.
     }
 
 
+
     // 이 밑으로는 클릭 이밴트들
     // 왼쪽 슬라이드 캘랜더로 가계해주고
-
-    public boolean onTouchEvent(MotionEvent motionEvent) {
-        int d = motionEvent.getDeviceId();
-        Log.i("OnTouchEvent",".");
-        return detector.onTouchEvent(motionEvent);
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        Log.i("onDown",".");
-        Toast.makeText(this, "[Touch] X = " + e.getX() + " / Y = " + e.getY(), Toast.LENGTH_SHORT).show();
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-        Log.i("onShowPress",".");
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        float x1 = e1.getX(); //40
-        float x2 = e2.getX(); //140
-        Log.i("onScroll",".");
-        /*
-        if ((x2 - x1) > 100 && count == 0) {
-            count = 1;
-            startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-            overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
-            finish();
-            return false;
-        }
-        */
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-        Toast.makeText(this, "[LongPress] X = " + e.getX() + " / Y = " + e.getY(), Toast.LENGTH_SHORT).show();
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-        return false;
-    }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -281,7 +249,6 @@ public class MainActivity extends AppCompatActivity  implements GestureDetector.
 
     }
 
-    @Override
 
     // 메인 뒤로가기터치
     // 뒤로가기 터치시

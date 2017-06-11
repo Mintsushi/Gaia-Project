@@ -71,7 +71,7 @@ public class LoginPageActivity  extends AppCompatActivity {
                 pwtemp = pwEditText.getText().toString();
 
                 // 아이디가 Riza, 비밀번호가 0401이여아먄 로그인 가능 틀렸다면 다이얼로그창으로 알림
-                if(idtemp.equals("Riza")) {
+                if(idtemp.equals("neopul@gmail.com")) {
                     if (pwtemp.equals("0401")) {
                         startActivity(new Intent(LoginPageActivity.this, MainActivity.class));
                         finish();

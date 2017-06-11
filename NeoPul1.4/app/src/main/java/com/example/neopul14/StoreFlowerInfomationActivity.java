@@ -31,7 +31,7 @@ public class StoreFlowerInfomationActivity extends Fragment
     {
         final FlowerData flowerdata = new FlowerData();
         View view = inflater.inflate(R.layout.view_listinfomation,null);
-        view.setBackgroundColor(Color.GREEN);
+        view.setBackground(getActivity().getDrawable(R.drawable.backg1));
 
         ImageView flowerImage = (ImageView) view.findViewById(R.id.liFlowerImage);
         //flowerImage.setImageDrawable(getActivity().getDrawable(R.drawable.plant));

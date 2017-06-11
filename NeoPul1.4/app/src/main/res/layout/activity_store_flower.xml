@@ -3,14 +3,15 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical"
-android:background="#1DDB16"
+android:background="#00ffc800"
     >
 
     <ListView
         android:id="@+id/flowerList"
         android:layout_width="300dp"
         android:layout_height="400dp"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:background="@drawable/backg1" />
 
 </RelativeLayout>

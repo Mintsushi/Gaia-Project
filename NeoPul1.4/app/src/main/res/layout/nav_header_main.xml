@@ -31,23 +31,23 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:adjustViewBounds="false"
-        app:srcCompat="@android:drawable/sym_def_app_icon" /> />
+        app:srcCompat="@drawable/sunflower_brown" /> />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/nicknameText"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Riza"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/emailText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.28"
         android:text="ealiza41@gmail.com"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="13sp"
-        android:layout_weight="0.28" />
+        android:textSize="13sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,7 +61,7 @@
             app:srcCompat="@android:drawable/btn_star_big_on" />
 
         <TextView
-            android:id="@+id/d"
+            android:id="@+id/seednumText"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:text="999" />
@@ -73,7 +73,7 @@
             app:srcCompat="@android:drawable/btn_star_big_off" />
 
         <TextView
-            android:id="@+id/a"
+            android:id="@+id/fruitnumText"
             android:layout_width="60dp"
             android:layout_height="20dp"
             android:text="999" />

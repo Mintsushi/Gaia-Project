@@ -24,6 +24,7 @@ public class StoreFlowerPollenInfomationActivity extends Fragment
      int flowerNumber;
      int pollenNumber;
      int pool;
+
     StoreFlowerPollenInfomationActivity(int i, int j){
         this.flowerNumber = i;
         this.pollenNumber = j;
@@ -33,7 +34,7 @@ public class StoreFlowerPollenInfomationActivity extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.view_listinfomation,null);
-        view.setBackgroundColor(Color.GREEN);
+        view.setBackground(getActivity().getDrawable(R.drawable.backg1));
 
         final PlantData plantdata = new PlantData();
 
@@ -62,7 +63,6 @@ public class StoreFlowerPollenInfomationActivity extends Fragment
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int i){
-
                                 //startActivity(new Intent(getActivity(), MainActivity.class));
                                 getActivity().finish();
                             }

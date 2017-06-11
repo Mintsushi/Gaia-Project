@@ -41,8 +41,6 @@ public class StoreFlowerActivity extends Fragment
             adapter.addItem(getActivity().getDrawable(flowerdata.getImages(a)), flowerdata.getnames(a), flowerdata.getnames(a));
         }
 
-
-
         //구매리스트의 아이템 클릭시 이밴트
         // 구매확인창 ( StoreFlowerInfomationActivity )으로 가며 구매한 아이템의 번호를 들고 간다
         listView.setOnItemClickListener(

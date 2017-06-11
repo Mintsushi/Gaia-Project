@@ -22,12 +22,6 @@ public class StoreMainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_main);
 
-        // 기본적으로 아이템 구매리스트 (StoreItemActivity)이 플레그먼트형태로 상점화면에 보여줌
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.FL, new StoreItemActivity())
-                .commit();
-
         // 뒤로가기버튼
         Button backButton = (Button)findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -37,6 +31,12 @@ public class StoreMainActivity extends AppCompatActivity
             }
 
         });
+
+        // 기본적으로 아이템 구매리스트 (StoreItemActivity)이 플레그먼트형태로 상점화면에 보여줌
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.FL, new StoreItemActivity())
+                .commit();
 
         // 클릭시 아이템 구매리스트 (StoreItemActivity)이 플레그먼트형태로 상점화면에 보여줌
         Button itemButton = (Button)findViewById(R.id.itemStoreButton);
@@ -49,7 +49,7 @@ public class StoreMainActivity extends AppCompatActivity
             }
         });
 
-        // 기본적으로 꽃 구매리스트 (StoreFlowerActivity)이 플레그먼트형태로 상점화면에 보여줌
+        // 클릭시 꽃 구매리스트 (StoreFlowerActivity)이 플레그먼트형태로 상점화면에 보여줌
         Button flowerButton = (Button)findViewById(R.id.flowerStoreButton);
         flowerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){

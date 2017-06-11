@@ -32,6 +32,7 @@ public class StoreItemInfomationActivity extends Fragment
 
         View view = inflater.inflate(R.layout.view_listinfomation,null);
         view.setBackgroundColor(Color.BLUE);
+        view.setBackground(getActivity().getDrawable(R.drawable.backg2));
 
         final ItemData itemdata = new ItemData();
 

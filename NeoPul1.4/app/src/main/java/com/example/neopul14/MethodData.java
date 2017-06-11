@@ -1,7 +1,12 @@
 package com.example.neopul14;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Created by Mint on 2017-05-10.
@@ -94,5 +99,21 @@ class PlantData{
     public String getitems(int i) {
         return this.items[i];
     }
+}
+
+class PlantTable{
+    int count;
+    String saveFile = "planttable.txt";
+
+    int[] UserNo = new int[9];
+    int[] FlowerNo  = new int[9];
+    int[] PotNo  = new int[9];
+    String[] PlantImagePath = new String[9];
+    String[] PlantImageEffectPath = new String[9];
+    String[] PlantName = new String[9];;
+
+    int[] HP = new int[9];;
+    int[] EXP = new int[9];;
+    int[] Lever = new int[9];;
 }
 
