@@ -67,23 +67,25 @@
 
     <Button
         android:id="@+id/buyPollenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="50dp"
+        android:background="@drawable/testbtn1"
         android:text="Buy"
-        android:layout_marginLeft="70dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/cancelpollenButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="53dp"
+        android:background="@drawable/testbtn1"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintLeft_toRightOf="@+id/buyPollenButton"
-        android:layout_marginLeft="29dp" />
+        app:layout_constraintLeft_toRightOf="@+id/buyPollenButton" />
 
 </android.support.constraint.ConstraintLayout>
 
