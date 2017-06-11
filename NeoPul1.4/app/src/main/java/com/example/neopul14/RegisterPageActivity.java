@@ -45,17 +45,17 @@ public class RegisterPageActivity extends AppCompatActivity {
         Button idButton = (Button)findViewById(R.id.IDButton);
         idButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                idtemp = idEditText.getText().toString();
-                // 다르면 if 같으면 else
-                if(!(idtemp.equals("Riza"))){
-                    AlertDialogMassage("ID Error","Duplicate ID is duplicated.","OK");
-                }
-                else{
-                    AlertDialogMassage("ID OK","Use the following ID : " + idtemp,"OK");
-                    count[0] = 1;
-                    //입력그만받기 넣기
-                }
-            }
+                    idtemp = idEditText.getText().toString();
+                    // 다르면 if 같으면 else
+                    if (!(idtemp.equals("Riza"))) {
+                        AlertDialogMassage("ID Error", "Duplicate ID is duplicated.", "OK");
+                    } else {
+                        AlertDialogMassage("ID OK", "Use the following ID : " + idtemp, "OK");
+                        count[0] = 1;
+                        //입력그만받기 넣기
+                    }
+
+            } //onClick
 
         });
 
