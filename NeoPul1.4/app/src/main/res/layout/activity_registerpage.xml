@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="wrap_content"
+        android:layout_height="700dp"
+        android:layout_marginTop="-2dp"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/plantmanager2"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="350dp"
+        android:layout_height="450dp"
+        android:id="@+id/constraintLayout2"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="17dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="350dp"
+            android:layout_height="450dp"
+            app:srcCompat="@android:color/holo_green_light"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/IDText"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="50dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="IDinput"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <EditText
+            android:id="@+id/IDEditTxet"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="50dp"
+            android:background="@android:color/holo_green_dark"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/IDButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="95dp"
+            android:text="OK"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/PWText"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="140dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="PW"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <EditText
+            android:id="@+id/PWEditText"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="140dp"
+            android:background="@android:color/holo_green_dark"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintRight_toRightOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
+            tools:text="password" />
+
+        <TextView
+            android:id="@+id/RePWText"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="195dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="RePW"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <EditText
+            android:id="@+id/RePWEditText"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="195dp"
+            android:background="@android:color/holo_green_dark"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintRight_toRightOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout2"
+            tools:text="password" />
+
+        <TextView
+            android:id="@+id/nicnameText"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="250dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="Nicinput"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <EditText
+            android:id="@+id/nicnameEditText"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="250dp"
+            android:background="@android:color/holo_green_dark"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="NicName" />
+
+        <Button
+            android:id="@+id/nicnameButton"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="295dp"
+            android:text="OK"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/mailText"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="350dp"
+            android:background="@android:color/holo_green_dark"
+            android:text="E-mail"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <EditText
+            android:id="@+id/maillEditText"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="36dp"
+            android:layout_marginTop="350dp"
+            android:background="@android:color/holo_green_dark"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="E-Mail"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="70dp"
+            android:text="Back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <Button
+            android:id="@+id/joinButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="70dp"
+            android:text="Join"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+            app:layout_constraintRight_toRightOf="@+id/constraintLayout2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
