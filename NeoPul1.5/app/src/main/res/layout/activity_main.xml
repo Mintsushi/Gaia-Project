@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/backg7">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
+        android:src="@drawable/neopullogo"/>
+
+    <EditText
+        android:layout_width="280sp"
+        android:layout_height="70sp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape"
+        android:hint="Email"
+        android:id="@+id/login_email" />
+
+    <EditText
+        android:layout_width="280sp"
+        android:layout_height="70sp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:background="@drawable/shape"
+        android:hint="Password"
+        android:id="@+id/login_password" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="280sp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="10sp">
+
+        <Button
+            android:text="회원가입"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/sign"
+            android:layout_marginRight="40dp"
+            android:textColor="#000000"
+            android:background="@drawable/loginbutton" />
+
+        <Button
+            android:text="로그인"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/login"
+            android:textColor="#000000"
+            android:background="@drawable/loginbutton" />
+    </LinearLayout>
+
+    <CheckBox
+        android:text="Remember Login"
+        android:textColor="#000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7sp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/checkBox" />
+
+</LinearLayout>

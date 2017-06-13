@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backg7"
+    android:gravity="center">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
+        android:src="@drawable/neopullogo"/>
+
+    <EditText
+        android:layout_width="280sp"
+        android:layout_height="70sp"
+        android:id="@+id/signid"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10sp"
+        android:hint="ID"
+        android:background="@drawable/shape"/>
+    <EditText
+        android:layout_width="280sp"
+        android:layout_height="70sp"
+        android:id="@+id/nickname"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10sp"
+        android:hint="NickName"
+        android:background="@drawable/shape"/>
+    <EditText
+        android:layout_width="280sp"
+        android:layout_height="70sp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/signpassword"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10sp"
+        android:hint="PassWord"
+        android:background="@drawable/shape"/>
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:text="회원가입"
+        android:id="@+id/signUp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/loginbutton" />
+</LinearLayout>
