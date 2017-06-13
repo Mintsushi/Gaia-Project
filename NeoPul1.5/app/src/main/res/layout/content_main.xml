@@ -98,7 +98,7 @@
             android:textStyle="bold"
             android:layout_width="120dp"
             android:layout_height="50dp"
-            android:id="@+id/store"
+            android:id="@+id/storeButton"
             android:layout_gravity="right"
             android:background="@drawable/testbtn1"/>
 

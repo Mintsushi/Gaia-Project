@@ -128,7 +128,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         backPressCloseHandler = new BackPressCloseHandler(this);
 
-        Button storeButton = (Button)findViewById(R.id.store);
+        Button storeButton = (Button)findViewById(R.id.storeButton);
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,6 +280,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                                 int plantId = getResources().getIdentifier("plantImage"+Integer.toString(i+1),"id",getPackageName());
                                 ImageView plant = (ImageView)findViewById(plantId);
                                 plant.setOnLongClickListener(StartActivity.this);
+                                plant.set
 
                                 plantId = getResources().getIdentifier("plant"+flower+pollen,"drawable",getPackageName());
                                 plant.setImageResource(plantId);
