@@ -41,30 +41,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import static com.example.round.neopul15.R.drawable.fertilizer;
 
 /**
  * Created by Round on 2017-06-12.
  */
 
-public class StartActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnLongClickListener{
+public class StartActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnLongClickListener,View.OnClickListener{
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
     TextView nickname, email, seed, fruit;
-    View header;
-    NavigationView navigationView;
+    View header;NavigationView navigationView;
+
     GridLayout grid;
 
     private OverlayService mOverlayService;
     private Intent overLayService;
 
+    private ArrayList<PlantInfo> mArray = new ArrayList<>();
     private Boolean mConnected = false;
     private Boolean mClear = false;
     private static IBinder mOverlayBinder;
-
-    BackPressCloseHandler backPressCloseHandler;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -91,6 +92,18 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         }
 
         return false;
+    }
+
+    @Override
+    public void onClick(View view){
+
+        for(int i=0;i<mArray.size();i++){
+            if(mArray.get(i).getPlantId() == view.getId()){
+                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
+                intent.putExtra("path","plant"+mArray.get(i).getFlower()+mArray.get(i).getPollen());
+                startActivity(intent);
+            }
+        }
     }
 
     @Override
@@ -126,7 +139,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        backPressCloseHandler = new BackPressCloseHandler(this);
 
         Button storeButton = (Button)findViewById(R.id.storeButton);
         storeButton.setOnClickListener(new View.OnClickListener() {
@@ -183,14 +195,10 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         super.onDestroy();
         Log.i("MainActivity","onDestroy");
         if(mConnected) {
-//            if(mOverlayService.getSize() == 0 && mClear == false)
-//                unbindService(mServiceConnection);
+            //if(mOverlayService.getSize() == 0 && mClear == false)
+                //unbindService(mServiceConnection);
             //unregisterReceiver(restartService);
         }
-    }
-
-    public void onBackPressed(){
-        backPressCloseHandler.onBackPressed();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -257,6 +265,26 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         requestQueue.add(request);
     }
 
+    public class PlantInfo{
+
+        private int id;
+        private String flower;
+        private String pollen;
+        private int plantId;
+
+        public PlantInfo(int id, String flower,String pollen,int plantId){
+            this.id = id;
+            this.flower = flower;
+            this.pollen = pollen;
+            this.plantId = plantId;
+        }
+
+        public int getId(){return this.id;}
+        public String getFlower(){return this.flower;}
+        public String getPollen(){return this.pollen;}
+        public int getPlantId(){return this.plantId;}
+
+    }
     private void getPlant(){
 
         String url="http://202.31.200.143/user/plant/"+pref.getString("id","");
@@ -278,9 +306,13 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                                 String pollen = object.getString("potNo");
                                 Log.i("StartActivity","plant"+flower+pollen);
                                 int plantId = getResources().getIdentifier("plantImage"+Integer.toString(i+1),"id",getPackageName());
+
+
+                                mArray.add(new PlantInfo(id,flower,pollen,plantId));
+
                                 ImageView plant = (ImageView)findViewById(plantId);
                                 plant.setOnLongClickListener(StartActivity.this);
-                                plant.set
+                                plant.setOnClickListener(StartActivity.this);
 
                                 plantId = getResources().getIdentifier("plant"+flower+pollen,"drawable",getPackageName());
                                 plant.setImageResource(plantId);
@@ -301,36 +333,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         RequestQueue requestQueue= Volley.newRequestQueue(this);
         requestQueue.add(request);
-    }
-
-    protected class BackPressCloseHandler {
-
-        private long backKeyPressedTime = 0;
-        private Toast toast;
-
-        private Activity activity;
-
-        public BackPressCloseHandler(Activity context) {
-            this.activity = context;
-        }
-
-        public void onBackPressed() {
-            if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-                backKeyPressedTime = System.currentTimeMillis();
-                showGuide();
-                return;
-            }
-            if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-                activity.finish();
-                toast.cancel();
-            }
-        }
-
-        public void showGuide() {
-            toast = Toast.makeText(activity,
-                    "\'Back\'Press the button once more to exit.", Toast.LENGTH_SHORT);
-            toast.show();
-        }
     }
 
 }
