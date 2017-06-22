@@ -77,6 +77,7 @@ public class StoreFlowerPollenActivity extends Fragment{
                 if(count > mArray.size()-1)
                     count = mArray.size()-1;
                 setImage();
+                // 각각 화분명 가격 정보 변화 필요
             }
         });
 
@@ -87,6 +88,7 @@ public class StoreFlowerPollenActivity extends Fragment{
                 if(count<0)
                     count=0;
                 setImage();
+                // 각각 화분명 가격 정보 변화 필요
             }
         });
 
@@ -164,6 +166,10 @@ public class StoreFlowerPollenActivity extends Fragment{
                 Map<String,String> params = new HashMap<>();
 
                 params.put("email",pref.getString("id",""));
+
+                // 토탈코스트 만큼 빼면될듯
+                int TotalCost = flower.getCost() + mArray.get(count).getCost();
+
                 params.put("flower",Integer.toString(flower.getId()));
                 params.put("pollen",Integer.toString(mArray.get(count).getId()));
 

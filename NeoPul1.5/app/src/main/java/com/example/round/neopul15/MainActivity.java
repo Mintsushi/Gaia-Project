@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //login을 성공하였다면
                         //response=wearableID
+                        //if(!response.equals("false")){
                         if(!response.equals("false")){
 
                             editor.putString("nickname", response);

@@ -48,6 +48,7 @@ public class StoreItemActivity extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 StoreItemInformationActivity itemInform = new StoreItemInformationActivity();
+                // StoreItemInformationActivity class 에게 현제 구매한 아이템 넘김
                 itemInform.setItem(mArray.get(i));
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.FL,itemInform)
@@ -100,6 +101,7 @@ public class StoreItemActivity extends Fragment {
         requestQueue.add(request);
     }
 
+    // 아이템 기초 데이터 포멧
     public class ItemInfo{
 
         private int id;
@@ -123,6 +125,7 @@ public class StoreItemActivity extends Fragment {
         public int getId(){return this.id;}
     }
 
+    // 아이템 리스트 포멧
     static class ItemViewHolder{
         CircleImageView itemImage;
         TextView itemName;

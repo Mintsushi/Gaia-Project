@@ -124,10 +124,13 @@ public class StoreItemInformationActivity extends Fragment{
             public void onErrorResponse(VolleyError error){
                 Log.i("MainActivity","onErrorResponse : "+error.toString());
             }
-        }){
+        }) {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<>();
+
+                // 토탈코스트 뺴면됨
+                int TotalCost = item.getCost();
 
                 params.put("email",pref.getString("id",""));
                 params.put("item",Integer.toString(item.getId()));
