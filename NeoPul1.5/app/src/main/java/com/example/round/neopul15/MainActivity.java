@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putBoolean("autoLogin", true);
                                 editor.commit();
                             }
-//                            //Login에 성공하였으므로 App의 MainActivity 실행
+                            //Login에 성공하였으므로 App의 MainActivity 실행
                             Intent intent = new Intent(MainActivity.this, StartActivity.class);
                             startActivity(intent);
                             finish();

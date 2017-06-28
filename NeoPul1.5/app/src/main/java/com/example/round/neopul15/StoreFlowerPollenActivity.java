@@ -145,14 +145,19 @@ public class StoreFlowerPollenActivity extends Fragment{
                     public void onResponse(String response){
                         Log.i("MainActivity","Response : "+response);
 
-                        if(response.equals("true")){
-                            Toast.makeText(getContext(),"Success Buy Flower",Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getContext().getApplicationContext(),StartActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
+                        //추가코드
+                        if(CostCalculate(0) == true) {
+                            if (response.equals("true")) {
+                                Toast.makeText(getContext(), "Success Buy Flower", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getContext().getApplicationContext(), StartActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            } else {
+                                Toast.makeText(getContext(), "Failed Buy Flower", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(getContext(),"Failed Buy Flower",Toast.LENGTH_LONG).show();
+                        else {
+                            Toast.makeText(getContext(),"Be short of money ",Toast.LENGTH_LONG).show();
                         }
                     }
                 },new Response.ErrorListener(){
@@ -167,18 +172,53 @@ public class StoreFlowerPollenActivity extends Fragment{
 
                 params.put("email",pref.getString("id",""));
 
-                // 토탈코스트 만큼 빼면될듯
-                int TotalCost = flower.getCost() + mArray.get(count).getCost();
-
                 params.put("flower",Integer.toString(flower.getId()));
                 params.put("pollen",Integer.toString(mArray.get(count).getId()));
-
+                //추가코드
+                params.put("seed",Integer.toString(pref.getInt("PresentSeed",0)));
+                params.put("fruit",Integer.toString(pref.getInt("PresentFruit",0)));
                 return params;
             }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(request);
+    }
+
+    //추가코드
+    boolean CostCalculate(int type){
+        int TotalCost =  flower.getCost() + mArray.get(count).getCost();
+        int CostType = type;
+        int money;
+
+        // Seed구매
+        if(CostType == 0){
+            money = pref.getInt("PresentSeed",0);
+
+            if(TotalCost > money){
+                Log.e("Cost","Be short of Seed ");
+                return false;
+            }else{
+                money = money - TotalCost;
+                editor.putInt("PresentSeed",money);
+                editor.commit();
+                return true;
+            }
+        }
+        // fruit구매
+        else{
+            money = pref.getInt("PresentFruit",0);
+
+            if(TotalCost > money){
+                Log.e("Cost","Be short of Fruit ");
+                return false;
+            }else{
+                money = money - TotalCost;
+                editor.putInt("PresentFruit",money);
+                editor.commit();
+                return true;
+            }
+        }
     }
 
     private void setImage(){

@@ -4,17 +4,20 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -205,11 +208,39 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.logOut) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("LogOut??");
+            builder.setTitle("LogOut")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            editor.clear();
+                            editor.commit();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            return;
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.setTitle("LogOut");
+            alert.show();
+        } else if (id == R.id.seting) {
+
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 
     private void getUserInform(){
 
@@ -239,6 +270,12 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                             int getMedicine = response.getInt("water");
                             int getFerilizer = response.getInt("ferilizer");
                             int getPesticideNum = response.getInt("pesticideNum");
+
+                            // f재화 저장
+                            editor.putInt("PresentSeed",getSeed);
+                            Log.i("startSeed",String.valueOf(getSeed));
+                            editor.putInt("PresentFruit",getFruit);
+                            editor.commit();
 
                             nickname.setText(name);
                             email.setText(pref.getString("id",""));

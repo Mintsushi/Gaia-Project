@@ -109,16 +109,22 @@ public class StoreItemInformationActivity extends Fragment{
                     public void onResponse(String response){
                         Log.i("MainActivity","Response : "+response);
 
-                        if(response.equals("true")){
-                            Toast.makeText(getContext(),"Success Buy Item",Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(getContext().getApplicationContext(),StartActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
+                        // 추가코드
+                        if(CostCalculate(0) == true) {
+                            if (response.equals("true")) {
+                                Toast.makeText(getContext(), "Success Buy Item", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(getContext().getApplicationContext(), StartActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            } else {
+                                Toast.makeText(getContext(), "Failed Buy Item", Toast.LENGTH_LONG).show();
+                            }
                         }
-                        else{
-                            Toast.makeText(getContext(),"Failed Buy Item",Toast.LENGTH_LONG).show();
+                        else {
+                            Toast.makeText(getContext(),"Be short of money ",Toast.LENGTH_LONG).show();
                         }
-                    }
+
+                }
                 },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
@@ -129,17 +135,54 @@ public class StoreItemInformationActivity extends Fragment{
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<>();
 
-                // 토탈코스트 뺴면됨
-                int TotalCost = item.getCost();
-
                 params.put("email",pref.getString("id",""));
                 params.put("item",Integer.toString(item.getId()));
-
+                //추가코드
+                Log.i("prefSeed",String.valueOf(pref.getInt("PresentSeed",0)));
+                params.put("seed",Integer.toString(pref.getInt("PresentSeed",0)));
+                params.put("fruit",Integer.toString(pref.getInt("PresentFruit",0)));
                 return params;
             }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(request);
+    }
+//추가코드
+    boolean CostCalculate(int type){
+        int TotalCost = item.getCost();
+        int CostType = type;
+        int money;
+
+        // Seed구매
+        if(CostType == 0){
+            money = pref.getInt("PresentSeed",0);
+
+            if(TotalCost > money){
+                Log.e("Cost","Be short of Seed ");
+                return false;
+            }else{
+                money = money - TotalCost;
+
+                Log.i("BuySeed",String.valueOf(money));
+                editor.putInt("PresentSeed",money);
+                editor.commit();
+                return true;
+            }
+        }
+        // fruit구매
+        else{
+            money = pref.getInt("PresentFruit",0);
+
+            if(TotalCost > money){
+                Log.e("Cost","Be short of Fruit ");
+                return false;
+            }else{
+                money = money - TotalCost;
+                editor.putInt("PresentFruit",money);
+                editor.commit();
+                return true;
+            }
+        }
     }
 }
