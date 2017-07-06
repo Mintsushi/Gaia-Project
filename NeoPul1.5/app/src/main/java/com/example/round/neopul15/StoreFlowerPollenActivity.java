@@ -64,7 +64,7 @@ public class StoreFlowerPollenActivity extends Fragment{
         name = (TextView)view.findViewById(R.id.pollenName);
         cost = (TextView)view.findViewById(R.id.pollenCost);
 
-        int id = getResources().getIdentifier(flower.getPath(),"drawable",getActivity().getPackageName());
+        int id = getResources().getIdentifier(flower.getPath()+"3","drawable",getActivity().getPackageName());
         flowerImage.setImageResource(id);
 
         ImageButton right = (ImageButton)view.findViewById(R.id.poRButton);
@@ -145,20 +145,15 @@ public class StoreFlowerPollenActivity extends Fragment{
                     public void onResponse(String response){
                         Log.i("MainActivity","Response : "+response);
 
-                        //추가코드
-                        if(CostCalculate(0) == true) {
-                            if (response.equals("true")) {
-                                Toast.makeText(getContext(), "Success Buy Flower", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getContext().getApplicationContext(), StartActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
-                            } else {
-                                Toast.makeText(getContext(), "Failed Buy Flower", Toast.LENGTH_LONG).show();
-                            }
+
+                        if (response.equals("true")) {
+                            Toast.makeText(getContext(), "Success Buy Flower", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(getContext().getApplicationContext(), StartActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
                         }
-                        else {
-                            Toast.makeText(getContext(),"Be short of money ",Toast.LENGTH_LONG).show();
-                        }
+                        else {Toast.makeText(getContext(),response,Toast.LENGTH_LONG).show();                            }
+
                     }
                 },new Response.ErrorListener(){
             @Override
@@ -175,7 +170,11 @@ public class StoreFlowerPollenActivity extends Fragment{
                 params.put("flower",Integer.toString(flower.getId()));
                 params.put("pollen",Integer.toString(mArray.get(count).getId()));
                 //추가코드
-                params.put("seed",Integer.toString(pref.getInt("PresentSeed",0)));
+                params.put("seed",String.valueOf(flower.getCost() + mArray.get(count).getCost()));
+                Log.i("email : ",pref.getString("id",""));
+                Log.i("flower : ",Integer.toString(flower.getId()));
+                Log.i("pollen : ",Integer.toString(mArray.get(count).getId()));
+                Log.i("Cost : ",String.valueOf(flower.getCost() + mArray.get(count).getCost()));
                 params.put("fruit",Integer.toString(pref.getInt("PresentFruit",0)));
                 return params;
             }
@@ -196,12 +195,14 @@ public class StoreFlowerPollenActivity extends Fragment{
             money = pref.getInt("PresentSeed",0);
 
             if(TotalCost > money){
+                editor.putInt("PresentSeed",0);
+                editor.commit();
                 Log.e("Cost","Be short of Seed ");
                 return false;
             }else{
-                money = money - TotalCost;
-                editor.putInt("PresentSeed",money);
+                editor.putInt("PresentSeed",TotalCost);
                 editor.commit();
+                Log.i("Cost2 : ",String.valueOf(pref.getInt("PresentSeed",0)));
                 return true;
             }
         }
@@ -214,7 +215,7 @@ public class StoreFlowerPollenActivity extends Fragment{
                 return false;
             }else{
                 money = money - TotalCost;
-                editor.putInt("PresentFruit",money);
+                editor.putInt("PresentFruit",TotalCost);
                 editor.commit();
                 return true;
             }
@@ -264,10 +265,10 @@ public class StoreFlowerPollenActivity extends Fragment{
                             try{
                                 JSONObject object = response.getJSONObject(i);
 
-                                int id = object.getInt("pollenNo");
-                                String name = object.getString("pollenName");
-                                String path = object.getString("pollenPath");
-                                int cost = object.getInt("pollenCost");
+                                int id = object.getInt("potNo");
+                                String name = object.getString("potName");
+                                String path = object.getString("potImagePath");
+                                int cost = object.getInt("seedPrice");
                                 mArray.add(new PollenInfo(id,name,path,cost));
 
                             }catch (JSONException e){

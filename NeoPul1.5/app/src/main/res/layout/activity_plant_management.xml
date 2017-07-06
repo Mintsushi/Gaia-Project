@@ -9,7 +9,7 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="50dp"
+        android:layout_width="88dp"
         android:layout_height="50dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
@@ -46,7 +46,9 @@
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/linearLayout2"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -179,13 +181,14 @@
                 app:layout_constraintLeft_toRightOf="@+id/HPBar" />
 
             <TextView
+                android:id="@+id/maxHP"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginLeft="0dp"
                 android:layout_marginStart="0dp"
                 android:text="/100"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                app:layout_constraintBottom_toTopOf="@+id/maxEXP"
                 app:layout_constraintLeft_toRightOf="@+id/currentHP" />
 
         </LinearLayout>
@@ -232,7 +235,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/EXPBar" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/maxEXP"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:layout_marginBottom="116dp"
@@ -249,7 +252,6 @@
         android:id="@+id/entryview"
         android:layout_width="276dp"
         android:layout_height="293dp"
-        android:layout_marginLeft="0dp"
         android:layout_marginTop="86dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -310,6 +312,40 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/on" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="289dp"
+        android:layout_height="17dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <TextView
+            android:id="@+id/waterNumText"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/energyNumText"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:text="0" />
+
+        <TextView
+            android:id="@+id/medicineNumText"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:text="0" />
 
     </LinearLayout>
 

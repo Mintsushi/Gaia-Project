@@ -149,7 +149,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             public void onClick(View view) {
                 Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -267,8 +266,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                             String name = response.getString("nickname");
                             int getSeed = response.getInt("seed");
                             int getFruit = response.getInt("fruit");
-                            int getMedicine = response.getInt("water");
-                            int getFerilizer = response.getInt("ferilizer");
+                            int getMedicine = response.getInt("waterNum");
+                            int getFerilizer = response.getInt("ferilizerNum");
                             int getPesticideNum = response.getInt("pesticideNum");
 
                             // f재화 저장
@@ -332,7 +331,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
                     @Override
                     public void onResponse(JSONArray response){
-                        Log.i("StoreItemActivity",response.toString());
+                        Log.i("StartActivity",response.toString());
 
                         for(int i=0;i<response.length();i++){
 
@@ -352,12 +351,12 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                                 plant.setOnLongClickListener(StartActivity.this);
                                 plant.setOnClickListener(StartActivity.this);
 
-                                plantId = getResources().getIdentifier("plant"+flower+pollen,"drawable",getPackageName());
+                                plantId = getResources().getIdentifier("hoya3","drawable",getPackageName());
                                 plant.setImageResource(plantId);
                                 plant.setTag(plantId);
 
                             }catch (JSONException e){
-                                Log.i("StoreItemActivity",e.toString());
+                                Log.i("StartActivity",e.toString());
                             }
                         }
                     }
@@ -365,7 +364,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.i("StoreItemActivity",error.toString());
+                Log.i("StartActivity",error.toString());
             }
         });
 

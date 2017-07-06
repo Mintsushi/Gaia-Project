@@ -45,7 +45,7 @@ public class StoreFlowerInformationActivity extends Fragment{
         TextView cost = (TextView)view.findViewById(R.id.flower_Cost);
 
         name.setText(flower.getName());
-        int id = getResources().getIdentifier(flower.getPath(),"drawable",getActivity().getPackageName());
+        int id = getResources().getIdentifier(flower.getPath()+"3","drawable",getActivity().getPackageName());
         image.setImageResource(id);
         inform.setText(flower.getInfo());
         cost.setText(Integer.toString(flower.getCost()));

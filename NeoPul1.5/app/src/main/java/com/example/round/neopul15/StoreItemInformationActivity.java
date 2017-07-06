@@ -109,20 +109,16 @@ public class StoreItemInformationActivity extends Fragment{
                     public void onResponse(String response){
                         Log.i("StoreItemActivity","Response : "+response);
 
-                        // 추가코드
-                        if(CostCalculate(0) == true) {
+
                             if (response.equals("true")) {
                                 Toast.makeText(getContext(), "Success Buy Item", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getContext().getApplicationContext(), StartActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
                             } else {
-                                Toast.makeText(getContext(), "Failed Buy Item", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
                             }
-                        }
-                        else {
-                            Toast.makeText(getContext(),"Be short of money ",Toast.LENGTH_LONG).show();
-                        }
+
 
                 }
                 },new Response.ErrorListener(){
@@ -138,9 +134,7 @@ public class StoreItemInformationActivity extends Fragment{
                 params.put("email",pref.getString("id",""));
                 params.put("item",Integer.toString(item.getId()));
                 //추가코드
-                Log.i("prefSeed",String.valueOf(pref.getInt("PresentSeed",0)));
-                params.put("seed",Integer.toString(pref.getInt("PresentSeed",0)));
-                params.put("fruit",Integer.toString(pref.getInt("PresentFruit",0)));
+                Log.i("massage OK","tq");
                 return params;
             }
         };
@@ -162,11 +156,7 @@ public class StoreItemInformationActivity extends Fragment{
                 Log.e("Cost","Be short of Seed ");
                 return false;
             }else{
-                money = money - TotalCost;
-
-                Log.i("BuySeed",String.valueOf(money));
-                editor.putInt("PresentSeed",money);
-                editor.commit();
+                Log.i("Cost","Be Seed OK ");
                 return true;
             }
         }

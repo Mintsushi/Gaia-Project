@@ -80,9 +80,9 @@ public class StoreFlowerActivity extends Fragment {
 
                                 int id = object.getInt("flowerNo");
                                 String name = object.getString("flowerName");
-                                String info = object.getString("flowerInfo");
-                                String path = object.getString("flowerPath");
-                                int cost = object.getInt("flowerCost");
+                                String info = object.getString("flowerExplain");
+                                String path = object.getString("flowerImagePath");
+                                int cost = object.getInt("seedPrice");
                                 mArray.add(new FlowerInfo(id,name,info,path,cost));
 
                             }catch (JSONException e){
@@ -167,7 +167,7 @@ public class StoreFlowerActivity extends Fragment {
             FlowerInfo info = mArray.get(position);
 
             if(info != null){
-                int id = getResources().getIdentifier(info.getPath(),"drawable",getActivity().getPackageName());
+                int id = getResources().getIdentifier(info.getPath()+"3","drawable",getActivity().getPackageName());
                 viewHolder.itemImage.setImageResource(id);
                 viewHolder.itemName.setText(info.getName());
                 viewHolder.itemInfo.setText(info.getInfo());
