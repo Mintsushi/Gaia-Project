@@ -322,6 +322,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         public int getPlantId(){return this.plantId;}
 
     }
+
     private void getPlant(){
 
         String url="http://202.31.200.143/user/plant/"+pref.getString("id","");

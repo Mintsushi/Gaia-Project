@@ -37,6 +37,39 @@
         android:layout_marginEnd="1dp" />
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/linearLayout2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lv."
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/PlantLV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="25dp" />
+
+        <TextView
+            android:id="@+id/PlantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 꽃이름"
+            android:textSize="25dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"

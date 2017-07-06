@@ -107,7 +107,7 @@ public class StoreItemInformationActivity extends Fragment{
                 new Response.Listener<String>(){
                     @Override
                     public void onResponse(String response){
-                        Log.i("MainActivity","Response : "+response);
+                        Log.i("StoreItemActivity","Response : "+response);
 
                         // 추가코드
                         if(CostCalculate(0) == true) {
@@ -128,7 +128,7 @@ public class StoreItemInformationActivity extends Fragment{
                 },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.i("MainActivity","onErrorResponse : "+error.toString());
+                Log.i("StoreItemActivity","onErrorResponse : "+error.toString());
             }
         }) {
             @Override

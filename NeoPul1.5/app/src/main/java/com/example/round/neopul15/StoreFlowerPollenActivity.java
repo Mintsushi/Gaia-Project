@@ -227,6 +227,7 @@ public class StoreFlowerPollenActivity extends Fragment{
         name.setText(mArray.get(count).getName());
         cost.setText(Integer.toString(mArray.get(count).getCost()));
     }
+
     public class PollenInfo{
 
         private int id;
