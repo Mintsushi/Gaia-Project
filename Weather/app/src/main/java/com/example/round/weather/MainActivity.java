@@ -1,5 +1,6 @@
 package com.example.round.weather;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +20,11 @@ import android.widget.ToggleButton;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected LocationManager locationManager;
     private Boolean isGPSEnabled = false;
     private Boolean isNetworkEnabled = false;
+    private TextView td;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 .setDeniedMessage("거부하셨습니다...\n[설정]>[권한]에서 권한을 허용할 수 있습니다.")
                 .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
+        td = (TextView)findViewById(R.id.dateNow);
 
         tv = (TextView)findViewById(R.id.textView2);
         tv.setText("위치정보 미수신중");
@@ -114,6 +122,15 @@ public class MainActivity extends AppCompatActivity {
                     "\n경도 : "+latitude+
                     "\n고도 : "+altitude+
                     "\n정확도 : "+accuracy);
+
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String formatDate = format.format(date);
+
+            td.setText(formatDate);
+
+            setWeather(longitude,latitude,date);
         }
 
         @Override
@@ -176,5 +193,57 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    private void setWeather(double longitude, double laptitude, Date date){
+        int year = date.getYear();
+        int month = date.getMonth();
+        int day = date.getDay();
+        int hours = date.getHours();
+        int minutes = date.getMinutes();
+
+        if(minutes < 30){
+            hours = hours - 1;
+            if(hours < 0){
+                date.setDate(date.getDate() - 1);
+                day = date.getDay();
+                month = date.getMonth();
+                year = date.getYear();
+                hours = 23;
+            }
+        }
+
+        if(hours <10)
+            hours='0'+hours;
+        if(month<10)
+            month='0'+month;
+        if(day<10)
+            day='0'+day;
+
+        Log.i("getTime","time : "+year+"/"+month+"/"+day+"/"+hours+"/"+minutes);
+
+        String today = year+""+month+""+day;
+        String apiKey="2bJOUKUamMQJqNyOnD%2FyZ9FJrJbd2L1I%2BVCNMtNpBD%2BEoRGG%2BCfHkLWhcYsmsbgI4%2Bb5%2FeFotaKiYy5%2FTNDqfA%3D%3D";
+
+            //URL
+            String url ="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrid";
+            url+="?ServiceKey="+apiKey;
+            url+="&base_date="+today;
+            url+="&base_time"+hours+"00";
+            url+="&nx="+longitude+"&ny="+laptitude;
+            url+="&pageNo=1&numOfRows=7";
+            url+="&_type=json";
+//            //Service Key
+//            url.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "="+apiKey);
+//            //Service 인증
+//            //url.append("&"+URLEncoder.encode("ServiceKey","UTF-8")+"="+URLEncoder.encode("SERVICE_KEY","UTF-8"));
+//            //날짜
+//            url.append("&"+URLEncoder.encode("base_date","UTF-8")+"="+today);
+//            url.append("&"+URLEncoder.encode("base_time","UTF-8")+"="+hours+"00");
+//            url.append("&"+URLEncoder.encode("nx")+"="+longitude+"&"+URLEncoder.encode("ny")+"="+laptitude);
+//            url.append("&"+URLEncoder.encode("pageNo=1&numOfRows=7"));
+//            url.append("&"+URLEncoder.encode("_type")+"=json");
+            Log.i("setWeather",url);
+
     }
 }

@@ -16,6 +16,11 @@
         android:id="@+id/textView2"
         android:text="Result" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateNow"/>
+
     <ToggleButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
