@@ -1,94 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/test1">
 
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_weight="0.71" />
+
     <GridLayout
         android:id="@+id/grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="413dp"
         android:columnCount="3"
-        android:rowCount="3"
-        android:layout_weight="0.71">
+        android:rowCount="3">
 
-        <ImageView
-                android:id="@+id/plantImage7"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_margin="10dp"
- />
-
-            <ImageView
-                android:id="@+id/plantImage8"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_margin="10dp"
- />
-
-            <ImageView
-                android:id="@+id/plantImage9"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_margin="10dp"
- />
-
-        <ImageView
-            android:id="@+id/plantImage5"
+        <LinearLayout
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:gravity="bottom"
             android:layout_margin="10dp"
-/>
+            android:orientation="vertical">
 
-        <ImageView
-                android:id="@+id/plantImage2"
+            <ImageView
+                android:id="@+id/plantflowerImage1"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-/>
+                android:layout_height="70dp"
+                android:layout_weight="1" />
 
-        <ImageView
-                android:id="@+id/plantImage3"
+            <ImageView
+                android:id="@+id/plantpotImage1"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="20dp"
-/>
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
 
-        <ImageView
-                android:id="@+id/plantImage6"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_margin="10dp"
- />
-
-        <ImageView
-            android:id="@+id/plantImage1"
+        <LinearLayout
             android:layout_width="100dp"
-            android:layout_height="99dp"
+            android:layout_height="100dp"
             android:gravity="bottom"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-/>
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage2"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage2"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage3"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage3"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage4"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage4"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage5"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage5"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage6"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage6"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout><LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="bottom"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
         <ImageView
-                android:id="@+id/plantImage4"
+            android:id="@+id/plantflowerImage7"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+               />
+
+        <ImageView
+            android:id="@+id/plantpotImage7"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+              />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage8"
                 android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:gravity="bottom"
-                android:layout_margin="10dp"
- />
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage8"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="bottom"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/plantflowerImage9"
+                android:layout_width="100dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                   />
+
+            <ImageView
+                android:id="@+id/plantpotImage9"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                  />
+        </LinearLayout>
 
     </GridLayout>
 

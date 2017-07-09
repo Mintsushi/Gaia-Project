@@ -171,10 +171,8 @@ public class StoreFlowerPollenActivity extends Fragment{
                 params.put("pollen",Integer.toString(mArray.get(count).getId()));
                 //추가코드
                 params.put("seed",String.valueOf(flower.getCost() + mArray.get(count).getCost()));
-                Log.i("email : ",pref.getString("id",""));
-                Log.i("flower : ",Integer.toString(flower.getId()));
-                Log.i("pollen : ",Integer.toString(mArray.get(count).getId()));
-                Log.i("Cost : ",String.valueOf(flower.getCost() + mArray.get(count).getCost()));
+                params.put("flowerImagePath",flower.getPath());
+                params.put("potImagePath",mArray.get(count).getPath());
                 params.put("fruit",Integer.toString(pref.getInt("PresentFruit",0)));
                 return params;
             }
