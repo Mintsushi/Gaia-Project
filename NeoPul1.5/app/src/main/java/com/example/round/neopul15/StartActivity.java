@@ -104,6 +104,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             if(mArray.get(i).getPlantId() == view.getId()){
                 Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
                 intent.putExtra("path","plant"+mArray.get(i).getFlower()+mArray.get(i).getPollen());
+                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
                 startActivity(intent);
             }
         }
@@ -306,20 +307,25 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         private int id;
         private String flower;
         private String pollen;
+        private String flowerImagePath;
+        private String potImagePath;
         private int plantId;
 
-        public PlantInfo(int id, String flower,String pollen,int plantId){
+        public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP){
             this.id = id;
             this.flower = flower;
             this.pollen = pollen;
             this.plantId = plantId;
+            this.flowerImagePath = FIP;
+            this.potImagePath = PIP;
         }
 
         public int getId(){return this.id;}
         public String getFlower(){return this.flower;}
         public String getPollen(){return this.pollen;}
         public int getPlantId(){return this.plantId;}
-
+        public String getFlowerImagePath(){return this.flowerImagePath;}
+        public String getPotImagePath(){return this.potImagePath;}
     }
 
     private void getPlant(){
@@ -339,21 +345,29 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                                 JSONObject object = response.getJSONObject(i);
 
                                 int id = object.getInt("plantNo");
-                                String flower = object.getString("flowrNo");
+                                String flower = object.getString("flowerNo");
                                 String pollen = object.getString("potNo");
+                                String FIP = object.getString("flowerImagePath");
+                                String PIP = object.getString("potImagePath");
                                 Log.i("StartActivity","plant"+flower+pollen);
-                                int plantId = getResources().getIdentifier("plantImage"+Integer.toString(i+1),"id",getPackageName());
 
+                                int plantId = getResources().getIdentifier("plantflowerImage"+Integer.toString(i+1),"id",getPackageName());
+                                int plantpotId = getResources().getIdentifier("plantpotImage"+Integer.toString(i+1),"id",getPackageName());
 
-                                mArray.add(new PlantInfo(id,flower,pollen,plantId));
+                                mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP));
 
                                 ImageView plant = (ImageView)findViewById(plantId);
+                                ImageView plantpot = (ImageView)findViewById(plantpotId);
+
                                 plant.setOnLongClickListener(StartActivity.this);
                                 plant.setOnClickListener(StartActivity.this);
+                                plantId = getResources().getIdentifier(FIP,"drawable",getPackageName());
+                                int potpath =  getResources().getIdentifier(PIP,"drawable",getPackageName());
 
-                                plantId = getResources().getIdentifier("hoya3","drawable",getPackageName());
                                 plant.setImageResource(plantId);
+                                plantpot.setImageResource(potpath);
                                 plant.setTag(plantId);
+                                plant.setTag(plantpot);
 
                             }catch (JSONException e){
                                 Log.i("StartActivity",e.toString());

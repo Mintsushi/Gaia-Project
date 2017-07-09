@@ -134,7 +134,7 @@ public class StoreItemInformationActivity extends Fragment{
                 params.put("email",pref.getString("id",""));
                 params.put("item",Integer.toString(item.getId()));
                 //추가코드
-                Log.i("massage OK","tq");
+                Log.i("massage OK","ok");
                 return params;
             }
         };
