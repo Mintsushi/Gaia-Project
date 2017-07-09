@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 
             td.setText(formatDate);
 
-            setWeather(longitude,latitude,date);
         }
 
         @Override
@@ -195,55 +194,4 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void setWeather(double longitude, double laptitude, Date date){
-        int year = date.getYear();
-        int month = date.getMonth();
-        int day = date.getDay();
-        int hours = date.getHours();
-        int minutes = date.getMinutes();
-
-        if(minutes < 30){
-            hours = hours - 1;
-            if(hours < 0){
-                date.setDate(date.getDate() - 1);
-                day = date.getDay();
-                month = date.getMonth();
-                year = date.getYear();
-                hours = 23;
-            }
-        }
-
-        if(hours <10)
-            hours='0'+hours;
-        if(month<10)
-            month='0'+month;
-        if(day<10)
-            day='0'+day;
-
-        Log.i("getTime","time : "+year+"/"+month+"/"+day+"/"+hours+"/"+minutes);
-
-        String today = year+""+month+""+day;
-        String apiKey="2bJOUKUamMQJqNyOnD%2FyZ9FJrJbd2L1I%2BVCNMtNpBD%2BEoRGG%2BCfHkLWhcYsmsbgI4%2Bb5%2FeFotaKiYy5%2FTNDqfA%3D%3D";
-
-            //URL
-            String url ="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastGrid";
-            url+="?ServiceKey="+apiKey;
-            url+="&base_date="+today;
-            url+="&base_time"+hours+"00";
-            url+="&nx="+longitude+"&ny="+laptitude;
-            url+="&pageNo=1&numOfRows=7";
-            url+="&_type=json";
-//            //Service Key
-//            url.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "="+apiKey);
-//            //Service 인증
-//            //url.append("&"+URLEncoder.encode("ServiceKey","UTF-8")+"="+URLEncoder.encode("SERVICE_KEY","UTF-8"));
-//            //날짜
-//            url.append("&"+URLEncoder.encode("base_date","UTF-8")+"="+today);
-//            url.append("&"+URLEncoder.encode("base_time","UTF-8")+"="+hours+"00");
-//            url.append("&"+URLEncoder.encode("nx")+"="+longitude+"&"+URLEncoder.encode("ny")+"="+laptitude);
-//            url.append("&"+URLEncoder.encode("pageNo=1&numOfRows=7"));
-//            url.append("&"+URLEncoder.encode("_type")+"=json");
-            Log.i("setWeather",url);
-
-    }
 }
