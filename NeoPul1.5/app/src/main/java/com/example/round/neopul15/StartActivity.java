@@ -133,7 +133,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         getUserInform();
         getPlant();
-
+/*
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -142,7 +142,17 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+*/
+        Button setBtn = (Button)findViewById(R.id.setButton);
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.clear();
+                editor.commit();
+                finish();
 
+            }
+        });
 
         Button storeButton = (Button)findViewById(R.id.storeButton);
         storeButton.setOnClickListener(new View.OnClickListener() {
@@ -253,10 +263,10 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                     public void onResponse(JSONObject response){
                         Log.i("StartActivity","getUserInform : "+response.toString());
 
-                        nickname =(TextView)header.findViewById(R.id.nicknameText);
+                        nickname =(TextView)findViewById(R.id.userNickNameText);
                         email = (TextView)header.findViewById(R.id.emailText);
-                        seed = (TextView)header.findViewById(R.id.seednumText);
-                        fruit = (TextView)header.findViewById(R.id.fruitnumText);
+                        seed = (TextView)findViewById(R.id.userseedNumText);
+                        fruit = (TextView)findViewById(R.id.userfruitNumText);
 
                         Menu menu = navigationView.getMenu();
                         MenuItem medicine = menu.findItem(R.id.nav_medicine);

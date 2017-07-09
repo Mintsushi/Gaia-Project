@@ -5,10 +5,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +51,12 @@ public class PlantManagementActivity extends AppCompatActivity {
     //------------------------------------------------------------
     Button back;
     ImageView effect;
+    //-------------------가로 세로 관리 버튼 -------------------
+    ImageButton itemMB;
+    ImageButton touchMB;
+    LinearLayout item11;
+    LinearLayout EXPget11;
+
     //---------------------------가로 버튼---------------------------
     Button water;       //물주기 버튼
     Button energy;      //비료 버튼
@@ -81,7 +91,7 @@ public class PlantManagementActivity extends AppCompatActivity {
     TextView energyNumtextview;
     TextView medicienNumtextview;
 
-    //프로그레스 바의 최대 수치 (임시값)
+    //프로그레스 바의 최대 수치 ()
     int maxHPProgress;
     int maxEXPProgress;
 
@@ -117,7 +127,15 @@ public class PlantManagementActivity extends AppCompatActivity {
         //------------------------------------------------------------------
         effect = (ImageView) findViewById(R.id.buttonEffectImage);
         effect.setVisibility(View.INVISIBLE);
-        back = (Button) findViewById(R.id.button);
+
+        //----------------------------------------------------------------
+        itemMB = (ImageButton) findViewById(R.id.bagButton);
+        touchMB = (ImageButton) findViewById(R.id.touchButton);
+        item11 = (LinearLayout)findViewById(R.id.ITEM11);
+        EXPget11 = (LinearLayout)findViewById(R.id.EXPGET11);
+        item11.setVisibility(View.INVISIBLE);
+        EXPget11.setVisibility(View.INVISIBLE);
+
         //---------------------------가로 버튼---------------------------
         water = (Button) findViewById(R.id.btnWater);
         energy = (Button) findViewById(R.id.btnEnergy);
@@ -134,8 +152,8 @@ public class PlantManagementActivity extends AppCompatActivity {
 
         //---------------------------프로그레스 바---------------------------
         //프로그레스 바 ID 받아옴
-        hp = (ProgressBar)findViewById(R.id.HPBar);
-        exp = (ProgressBar)findViewById(R.id.EXPBar);
+        hp = (ProgressBar)findViewById(R.id.HPbar);
+        exp = (ProgressBar)findViewById(R.id.EXPbar);
 
         // 체력 경험치 최대치 나타내는 textview ID 받아옴
         maxHPtextview = (TextView)findViewById(R.id.maxHP);
@@ -151,11 +169,31 @@ public class PlantManagementActivity extends AppCompatActivity {
         medicienNumtextview = (TextView)findViewById(R.id.medicineNumText);
         //-----------------------버튼 이벤트 --------------------------------------
 
-        back.setOnClickListener(new View.OnClickListener() {
+
+        //관리버튼
+        itemMB.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //code
-            }
+            public void onClick(View v) {
+                if(item11.getVisibility()==View.VISIBLE){
+                    item11.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    item11.setVisibility(View.VISIBLE);
+                }
+            }//onClick
+        });
+
+        //관리버튼
+        touchMB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(EXPget11.getVisibility()==View.VISIBLE){
+                    EXPget11.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    EXPget11.setVisibility(View.VISIBLE);
+                }
+            }//onClick
         });
 
         //가로 버튼
@@ -505,7 +543,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                             getFlowerInform(plantinfomation.getFlower());
                             getPollenInform(plantinfomation.getPollen());
 
-                            level.setText(String.valueOf(plantinfomation.getLV()));
+                            level.setText("LV " + String.valueOf(plantinfomation.getLV()));
                             name.setText(plantinfomation.getFlowerImagePath());
 
                             HPtextview.setText(String.valueOf(plantinfomation.getHP()));
@@ -687,7 +725,7 @@ public class PlantManagementActivity extends AppCompatActivity {
 
         // 체력 경험치 최대치 설정
         maxHPtextview.setText("/ " + maxHPProgress);
-        maxEXPtextview.setText(String.valueOf(maxEXPProgress));
+        maxEXPtextview.setText("/ " + maxEXPProgress);
 
         //프로그레스 바의 현재 수치를 int 변수에 받아옴
         currenthp = Integer.parseInt(HPtextview.getText().toString());
