@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.19999999">
 
         <ImageView
             android:id="@+id/plantImage7"
@@ -58,7 +59,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="bottom" />
 
         <ImageView
@@ -66,7 +67,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="bottom" />
 
         <ImageView
@@ -79,9 +80,9 @@
         <ImageView
             android:id="@+id/plantImage1"
             android:layout_width="100dp"
-            android:layout_height="99dp"
+            android:layout_height="100dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:gravity="bottom" />
 
         <ImageView
@@ -168,5 +169,32 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/option_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/change" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/bag2" />
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/shop" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
