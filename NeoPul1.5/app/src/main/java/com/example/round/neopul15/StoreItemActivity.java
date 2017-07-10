@@ -76,11 +76,11 @@ public class StoreItemActivity extends Fragment {
                             try{
                                 JSONObject object = response.getJSONObject(i);
 
-                                int id = object.getInt("itemNo");
+                                int id = object.getInt("itemID");
                                 String name = object.getString("itemName");
-                                String info = object.getString("itemInfo");
-                                String path = object.getString("itemPath");
-                                int cost = object.getInt("itemCost");
+                                String info = object.getString("itemExplain");
+                                String path = object.getString("itemImagePath");
+                                int cost = object.getInt("seedPrice");
                                 mArray.add(new ItemInfo(id,name,info,path,cost));
 
                             }catch (JSONException e){

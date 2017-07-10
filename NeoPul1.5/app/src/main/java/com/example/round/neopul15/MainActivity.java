@@ -2,6 +2,7 @@ package com.example.round.neopul15;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 //        editor.putBoolean("autoLogin", true);
 //        editor.putString("nickname","Round");
 //        editor.commit();
+
 
         if(pref.getBoolean("autoLogin",false)){
             //App의 Main Activity를 실행

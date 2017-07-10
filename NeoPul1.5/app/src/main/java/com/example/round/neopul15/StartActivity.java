@@ -104,6 +104,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             if(mArray.get(i).getPlantId() == view.getId()){
                 Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
                 intent.putExtra("path","plant"+mArray.get(i).getFlower()+mArray.get(i).getPollen());
+                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
                 startActivity(intent);
             }
         }
@@ -132,7 +133,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
         getUserInform();
         getPlant();
-
+/*
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -141,7 +142,17 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+*/
+        Button setBtn = (Button)findViewById(R.id.setButton);
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editor.clear();
+                editor.commit();
+                finish();
 
+            }
+        });
 
         Button storeButton = (Button)findViewById(R.id.storeButton);
         storeButton.setOnClickListener(new View.OnClickListener() {
@@ -149,7 +160,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
             public void onClick(View view) {
                 Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -253,10 +263,10 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                     public void onResponse(JSONObject response){
                         Log.i("StartActivity","getUserInform : "+response.toString());
 
-                        nickname =(TextView)header.findViewById(R.id.nicknameText);
+                        nickname =(TextView)findViewById(R.id.userNickNameText);
                         email = (TextView)header.findViewById(R.id.emailText);
-                        seed = (TextView)header.findViewById(R.id.seednumText);
-                        fruit = (TextView)header.findViewById(R.id.fruitnumText);
+                        seed = (TextView)findViewById(R.id.userseedNumText);
+                        fruit = (TextView)findViewById(R.id.userfruitNumText);
 
                         Menu menu = navigationView.getMenu();
                         MenuItem medicine = menu.findItem(R.id.nav_medicine);
@@ -267,8 +277,8 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                             String name = response.getString("nickname");
                             int getSeed = response.getInt("seed");
                             int getFruit = response.getInt("fruit");
-                            int getMedicine = response.getInt("water");
-                            int getFerilizer = response.getInt("ferilizer");
+                            int getMedicine = response.getInt("waterNum");
+                            int getFerilizer = response.getInt("ferilizerNum");
                             int getPesticideNum = response.getInt("pesticideNum");
 
                             // f재화 저장
@@ -307,21 +317,27 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         private int id;
         private String flower;
         private String pollen;
+        private String flowerImagePath;
+        private String potImagePath;
         private int plantId;
 
-        public PlantInfo(int id, String flower,String pollen,int plantId){
+        public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP){
             this.id = id;
             this.flower = flower;
             this.pollen = pollen;
             this.plantId = plantId;
+            this.flowerImagePath = FIP;
+            this.potImagePath = PIP;
         }
 
         public int getId(){return this.id;}
         public String getFlower(){return this.flower;}
         public String getPollen(){return this.pollen;}
         public int getPlantId(){return this.plantId;}
-
+        public String getFlowerImagePath(){return this.flowerImagePath;}
+        public String getPotImagePath(){return this.potImagePath;}
     }
+
     private void getPlant(){
 
         String url="http://202.31.200.143/user/plant/"+pref.getString("id","");
@@ -331,7 +347,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
                     @Override
                     public void onResponse(JSONArray response){
-                        Log.i("StoreItemActivity",response.toString());
+                        Log.i("StartActivity",response.toString());
 
                         for(int i=0;i<response.length();i++){
 
@@ -339,24 +355,32 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                                 JSONObject object = response.getJSONObject(i);
 
                                 int id = object.getInt("plantNo");
-                                String flower = object.getString("flowrNo");
+                                String flower = object.getString("flowerNo");
                                 String pollen = object.getString("potNo");
+                                String FIP = object.getString("flowerImagePath");
+                                String PIP = object.getString("potImagePath");
                                 Log.i("StartActivity","plant"+flower+pollen);
-                                int plantId = getResources().getIdentifier("plantImage"+Integer.toString(i+1),"id",getPackageName());
 
+                                int plantId = getResources().getIdentifier("plantflowerImage"+Integer.toString(i+1),"id",getPackageName());
+                                int plantpotId = getResources().getIdentifier("plantpotImage"+Integer.toString(i+1),"id",getPackageName());
 
-                                mArray.add(new PlantInfo(id,flower,pollen,plantId));
+                                mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP));
 
                                 ImageView plant = (ImageView)findViewById(plantId);
+                                ImageView plantpot = (ImageView)findViewById(plantpotId);
+
                                 plant.setOnLongClickListener(StartActivity.this);
                                 plant.setOnClickListener(StartActivity.this);
+                                plantId = getResources().getIdentifier(FIP,"drawable",getPackageName());
+                                int potpath =  getResources().getIdentifier(PIP,"drawable",getPackageName());
 
-                                plantId = getResources().getIdentifier("plant"+flower+pollen,"drawable",getPackageName());
                                 plant.setImageResource(plantId);
+                                plantpot.setImageResource(potpath);
                                 plant.setTag(plantId);
+                                plant.setTag(plantpot);
 
                             }catch (JSONException e){
-                                Log.i("StoreItemActivity",e.toString());
+                                Log.i("StartActivity",e.toString());
                             }
                         }
                     }
@@ -364,7 +388,7 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
 
             @Override
             public void onErrorResponse(VolleyError error){
-                Log.i("StoreItemActivity",error.toString());
+                Log.i("StartActivity",error.toString());
             }
         });
 
