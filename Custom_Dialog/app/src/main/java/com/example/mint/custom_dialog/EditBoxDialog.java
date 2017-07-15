@@ -47,22 +47,5 @@ public class EditBoxDialog extends Dialog {
 
     }
 
-    public String getMode(){
-        return mode;
-    }
-    public void setMode(String mode2){
-            Log.i("=======================", mode);
-            mode = mode2;
-            name.setText(mode);
-
-    }
-    public String getText(){
-        return text;
-    }
-    public void setText(String text2){
-        text = text2;
-        explain.setText(text);
-    }
-
 }
 
