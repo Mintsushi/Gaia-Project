@@ -7,33 +7,27 @@
     android:layout_height="match_parent">
 
 
+    <ImageButton
+        android:id="@+id/nameChange"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/chagename"
+        tools:layout_editor_absoluteY="16dp"
+        tools:layout_editor_absoluteX="117dp" />
+
     <ImageView
         android:id="@+id/plantflowerImage"
-        android:layout_width="200dp"
-        android:layout_height="300dp"
+        android:layout_width="306dp"
+        android:layout_height="392dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="80dp"
-        android:scaleType="fitXY"
+        android:background="@drawable/plant21"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/plantpotImage"
-        android:layout_width="300dp"
-        android:layout_height="150dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="302dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
-        android:layout_marginEnd="8dp" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -58,10 +52,10 @@
 
             <TextView
                 android:id="@+id/PlantLV"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="level"
+                android:text="LV 28"
                 android:textSize="20dp" />
 
             <TextView
@@ -69,182 +63,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="7"
-                android:text="name"
+                android:text="Rose"
                 android:textSize="20dp" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/nameChange"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/chagename" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/EXPGET11"
-        android:layout_width="70dp"
-        android:layout_height="280dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="70dp"
-        app:layout_constraintLeft_toLeftOf="parent">
-
-        <Button
-            android:id="@+id/btnTouch"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-
-            android:background="@drawable/touch"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnScissors" />
-
-        <Button
-            android:id="@+id/btnScissors"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-
-            android:background="@drawable/scissor"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnTalk" />
-
-        <Button
-            android:id="@+id/btnTalk"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-
-            android:background="@drawable/talk"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnMusic" />
-
-        <Button
-            android:id="@+id/btnMusic"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-
-            android:background="@drawable/music"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </LinearLayout>
-
-
-    <Button
-        android:id="@+id/ONOFF"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_weight="1"
-        android:background="@drawable/on"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/ITEM11"
-        android:layout_width="120dp"
-        android:layout_height="210dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/backg2"
-        android:orientation="vertical"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2">
-
-        <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnWater"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:background="@drawable/water" />
-
-            <TextView
-                android:id="@+id/waterNumText"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnEnergy"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:background="@drawable/energy" />
-
-            <TextView
-                android:id="@+id/energyNumText"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnMedicine"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_weight="1"
-                android:background="@drawable/water" />
-
-            <TextView
-                android:id="@+id/medicineNumText"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:text="0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/buttonEffectImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginLeft="166dp"
-        android:layout_marginTop="65dp"
-        android:visibility="visible"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/background_light"
-        android:layout_marginStart="166dp" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/hp11"
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="90dp"
-        android:layout_marginRight="60dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginRight="88dp"
         app:layout_constraintRight_toRightOf="parent">
 
         <ProgressBar
@@ -308,8 +140,8 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="199dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginBottom="150dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent">
 
         <ProgressBar
@@ -390,31 +222,31 @@
             android:layout_weight="1"
             android:background="@drawable/touch_icon" />
     </LinearLayout>
+
     <ImageButton
         android:id="@+id/flowerEntryBtn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/messege"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="65dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        tools:layout_editor_absoluteX="338dp"
+        tools:layout_editor_absoluteY="60dp" />
 
     <ImageButton
-        android:id="@+id/flowerInfoBut"
+        android:id="@+id/imageButton2"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
         android:background="@drawable/entry"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/flowerEntryBtn" />
-
-    <ImageView
-        android:id="@+id/levelupview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/up"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="105dp" />
+        tools:layout_editor_absoluteX="338dp"
+        tools:layout_editor_absoluteY="102dp" />
+    <Button
+        android:id="@+id/ONOFF"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/on"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bgi1">
+    android:background="@drawable/loginbgi1">
 
     <Button
         android:text="게임시작"

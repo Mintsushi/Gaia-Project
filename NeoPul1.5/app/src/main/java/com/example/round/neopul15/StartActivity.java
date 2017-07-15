@@ -103,7 +103,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
         for(int i=0;i<mArray.size();i++){
             if(mArray.get(i).getPlantId() == view.getId()){
                 Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
-                intent.putExtra("path","plant"+mArray.get(i).getFlower()+mArray.get(i).getPollen());
                 intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
                 startActivity(intent);
             }
@@ -294,7 +293,6 @@ public class StartActivity extends AppCompatActivity implements NavigationView.O
                             medicine.setTitle("Medicine     x"+Integer.toString(getMedicine));
                             fertilizer.setTitle("Fertilizer   x"+Integer.toString(getFerilizer));
                             pesticide.setTitle("Pesticide    x"+Integer.toString(getPesticideNum));
-
 
                         }catch (JSONException e){
                             Log.i("MainActivity","JSONException :"+e.toString());

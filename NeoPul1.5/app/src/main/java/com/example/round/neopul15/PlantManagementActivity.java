@@ -1,5 +1,7 @@
 package com.example.round.neopul15;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,9 +50,15 @@ public class PlantManagementActivity extends AppCompatActivity {
     //--------------------------꽃 정보 --------------------------
     TextView name;
     TextView level;
-    //------------------------------------------------------------
-    Button back;
     ImageView effect;
+    int maxLevel;
+
+    ImageView levelupview;
+    //-------------------기타 버튼--------------------------------
+    Button back;
+    ImageButton inform;
+    ImageButton entry;
+
     //-------------------가로 세로 관리 버튼 -------------------
     ImageButton itemMB;
     ImageButton touchMB;
@@ -94,11 +102,11 @@ public class PlantManagementActivity extends AppCompatActivity {
     //프로그레스 바의 최대 수치 ()
     int maxHPProgress;
     int maxEXPProgress;
-
-    int maxLevel;
+    //프로그레스 바의 체력당비율
+    int setProgressResult;
     //---------------------------기타 보조 변수---------------------------
     int a; //위젯 ON/OFF 변경 용 변수
-
+    int informup[] = {0,0};
     //-------------------아이템 변수----------------------------------------
     int waternum = 0;
     int energynum = 0;
@@ -128,7 +136,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         effect = (ImageView) findViewById(R.id.buttonEffectImage);
         effect.setVisibility(View.INVISIBLE);
 
-        //----------------------------------------------------------------
+        //------------------아이템/이밴트----------------------------------
         itemMB = (ImageButton) findViewById(R.id.bagButton);
         touchMB = (ImageButton) findViewById(R.id.touchButton);
         item11 = (LinearLayout)findViewById(R.id.ITEM11);
@@ -136,6 +144,9 @@ public class PlantManagementActivity extends AppCompatActivity {
         item11.setVisibility(View.INVISIBLE);
         EXPget11.setVisibility(View.INVISIBLE);
 
+        //------------------기타 버튼----------------
+        levelupview = (ImageView)findViewById(R.id.levelupview);
+        levelupview.setVisibility(View.INVISIBLE);
         //---------------------------가로 버튼---------------------------
         water = (Button) findViewById(R.id.btnWater);
         energy = (Button) findViewById(R.id.btnEnergy);
@@ -148,7 +159,11 @@ public class PlantManagementActivity extends AppCompatActivity {
         scissors = (Button) findViewById(R.id.btnScissors);
         touch = (Button) findViewById(R.id.btnTouch);
 
-        //intent.putExtra("path","plant"+mArray.get(i).getFlower()+mArray.get(i).getPollen());
+        //------- 정보,응모버튼-----------------------
+
+        inform = (ImageButton)findViewById(R.id.flowerInfoBut);
+        entry= (ImageButton)findViewById(R.id.flowerEntryBtn);
+        entry.setVisibility(View.INVISIBLE);
 
         //---------------------------프로그레스 바---------------------------
         //프로그레스 바 ID 받아옴
@@ -196,71 +211,7 @@ public class PlantManagementActivity extends AppCompatActivity {
             }//onClick
         });
 
-        //가로 버튼
-        water.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( currenthp==maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    setItem(1);
-                    // 체력 1증가
-                    currenthp++;
-                    hp.setProgress(currenthp);
-                    HPtextview.setText("" + currenthp);
-                    setPlant(1,currenthp);
-                    effect.setImageResource(R.drawable.water);
-                    effect.setVisibility(View.VISIBLE);
-                    delayA();
-                }
-            }//onClick
-        });
-
-        energy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if( currenthp == maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    setItem(2);
-
-                    //체력 5증가
-                    if(currenthp + 5 > maxHPProgress){ currenthp = maxHPProgress; }
-                    else { currenthp = currenthp + 5; }
-
-                    hp.setProgress(currenthp);
-                    HPtextview.setText("" + currenthp);
-                    setPlant(1,currenthp);
-                    effect.setImageResource(R.drawable.energy);
-                    effect.setVisibility(View.VISIBLE);
-                    delayA();
-                }
-            }//onClick
-        });
-
-        medicine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( currenthp==maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    //체력 10증가
-                    if(currenthp + 10 > maxHPProgress){ currenthp = maxHPProgress; }
-                    else { currenthp = currenthp + 10; }
-                    hp.setProgress(currenthp);
-                    HPtextview.setText("" + currenthp);
-                    setPlant(1,currenthp);
-                    effect.setImageResource(R.drawable.water);
-                    effect.setVisibility(View.VISIBLE);
-                    delayA();
-                }
-            }//onClick
-        });
-
+        // 온오프버튼
         ONOFF.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,8 +227,92 @@ public class PlantManagementActivity extends AppCompatActivity {
 
         });
 
+        //가로 버튼
+        water.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( currenthp==maxHPProgress){
+                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if(waternum <= 0){
+                        return;
+                    }
+                    else {
+                        setItem(1,1);
 
+                        currenthp++;
+                        hp.setProgress(currenthp / setProgressResult);
+                        HPtextview.setText("" + currenthp);
+                        setPlant(1, String.valueOf(currenthp));
+                        effect.setImageResource(R.drawable.water);
+                        effect.setVisibility(View.VISIBLE);
+                        delayA();
+                    }
+                }
+            }//onClick
+        });
 
+        energy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if( currenthp == maxHPProgress){
+                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if(energynum <= 0){
+                        return;
+                    }
+                    else {
+                        setItem(2,2);
+
+                        //체력 5증가
+                        if (currenthp + 5 > maxHPProgress) {
+                            currenthp = maxHPProgress;
+                        } else {
+                            currenthp = currenthp + 5;
+                        }
+
+                        hp.setProgress(currenthp / setProgressResult);
+                        HPtextview.setText("" + currenthp);
+                        setPlant(1, String.valueOf(currenthp));
+                        effect.setImageResource(R.drawable.energy);
+                        effect.setVisibility(View.VISIBLE);
+                        delayA();
+                    }
+                }
+            }//onClick
+        });
+
+        medicine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( currenthp==maxHPProgress){
+                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    if(mediciennum <= 0){
+                        return;
+                    }
+                    else {
+                        setItem(3,3);
+                        //체력 10증가
+                        if (currenthp + 10 > maxHPProgress) {
+                            currenthp = maxHPProgress;
+                        } else {
+                            currenthp = currenthp + 10;
+                        }
+                        hp.setProgress(currenthp / setProgressResult);
+                        HPtextview.setText("" + currenthp);
+                        setPlant(1, String.valueOf(currenthp));
+                        effect.setImageResource(R.drawable.water);
+                        effect.setVisibility(View.VISIBLE);
+                        delayA();
+                    }
+                }
+            }//onClick
+        });
 
         //세로 버튼
         music.setOnClickListener(new View.OnClickListener() {
@@ -288,10 +323,9 @@ public class PlantManagementActivity extends AppCompatActivity {
                     LevelUp(currentexp-maxEXPProgress);
                 }
                 else{
-
                     exp.setProgress(currentexp);
                     EXPtextview.setText(""+currentexp);
-                    setPlant(2,currentexp);
+                    setPlant(2,String.valueOf(currentexp));
                 }
                 effect.setImageResource(R.drawable.music);
                 effect.setVisibility(View.VISIBLE);
@@ -309,7 +343,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 else{
                     exp.setProgress(currentexp);
                     EXPtextview.setText(""+currentexp);
-                    setPlant(2,currentexp);
+                    setPlant(2,String.valueOf(currentexp));
                 }
                 effect.setImageResource(R.drawable.talk);
                 effect.setVisibility(View.VISIBLE);
@@ -327,7 +361,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 else{
                     exp.setProgress(currentexp);
                     EXPtextview.setText(""+currentexp);
-                    setPlant(2,currentexp);
+                    setPlant(2,String.valueOf(currentexp));
                 }
                 effect.setImageResource(R.drawable.scissor);
                 effect.setVisibility(View.VISIBLE);
@@ -339,15 +373,16 @@ public class PlantManagementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 currentexp = currentexp + 50;
-                Log.i("Up ++ "," "+currentexp);
+
                 if(maxEXPProgress<= currentexp){
                     LevelUp(currentexp-maxEXPProgress);
-                    Log.i("Up if "," "+currentexp);
+
                 }
                 else{
                     exp.setProgress(currentexp);
+                    Log.i("EXPview else",""+currentexp);
                     EXPtextview.setText(""+currentexp);
-                    setPlant(2,currentexp);
+                    setPlant(2,String.valueOf(currentexp));
                     Log.i("Up else "," "+currentexp);
                 }
                 effect.setImageResource(R.drawable.touch);
@@ -355,6 +390,46 @@ public class PlantManagementActivity extends AppCompatActivity {
                 delayA();
                 Log.i("Up if "," ----------------------");
             }//onClick
+        });
+
+        //----------기타버튼-------------------------
+        inform.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final PlantManagementInformActivity dialog = new PlantManagementInformActivity(PlantManagementActivity.this);
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        dialog.setname(flower.getName());
+                        Log.i("path","::"+flower.getRealImage());
+                        dialog.setimage(flower.getRealImage());
+                        dialog.setexplain(flower.getDexp());
+                    }
+                });
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dia) {
+                        //helloworld.setText(dialog.getMode());
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final PlantmanagementEntryActivity dialog = new PlantmanagementEntryActivity(PlantManagementActivity.this);
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dia) {
+                        int entrytype;
+                    }
+                });
+                dialog.show();
+            }
         });
     }
 
@@ -367,16 +442,58 @@ public class PlantManagementActivity extends AppCompatActivity {
         }, 1000);
     }
 
+    void delayB() {
+        Handler handler = new Handler();
+        levelupview.setVisibility(View.VISIBLE);
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                levelupview.setVisibility(View.INVISIBLE);
+            }
+        }, 1000);
+    }
+
+    void LevelUpGrowth() {
+        int[] step = new int[3];
+        step = flower.getGrowthStep();
+        Log.i("step", ":: "+step[0]);
+        Log.i("step", ":: "+step[1]);
+        Log.i("step", ":: "+step[2]);
+        if (plantinfomation.LV-1 == step[0]) {
+            setPlant(4,flower.getflowerImagePath()+"1");
+            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"1");
+            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+            return;
+        }else if (plantinfomation.LV-1 == step[1]) {
+            setPlant(4, flower.getflowerImagePath() + "2");
+            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"2");
+            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+            return;
+        }else if (plantinfomation.LV-1 == step[2]) {
+            setPlant(4, flower.getflowerImagePath() + "3");
+            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"3");
+            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+            return;
+        }else {
+            return;
+        }
+    }
+
     void LevelUp(int a){
         if(plantinfomation.LV < maxLevel) {
-            setPlant(3, plantinfomation.LV + 1);
-            setPlant(2,a);
+            delayB();
+            exp.setProgress(a);
+            Log.i("Up setOK "," "+a);
+            EXPtextview.setText(""+a);
+            Log.i("EXPview 1",""+currentexp);
+            setPlant(3, String.valueOf(plantinfomation.LV + 1));
+            setPlant(2, String.valueOf(a));
+            LevelUpGrowth();
             getPlant();
             Log.i("Up setOK "," "+plantinfomation.LV);
         }else{
             exp.setProgress(maxEXPProgress);
             EXPtextview.setText(""+maxEXPProgress);
-            setPlant(2,maxEXPProgress);
+            setPlant(2,String.valueOf(maxEXPProgress));
             Toast.makeText(getApplicationContext(), "응모창주세여 뀨우", Toast.LENGTH_LONG).show();
         }
     }
@@ -416,7 +533,8 @@ public class PlantManagementActivity extends AppCompatActivity {
      class FlowerInfomation{
 
         private int id;
-        private String[] flowerImagePath = new String[4];
+        private String flowerImagePath;
+         private int[] flowerGrowthStep = new int[3];
         private int maxHP;
         private int maxEXP;
         private int maxLevel;
@@ -425,8 +543,14 @@ public class PlantManagementActivity extends AppCompatActivity {
         private int fruitTerm;      //열매맺는시간
         private int fruitCost;      //열매가격
 
-        public void setFlowerInfomation(int id, String[] name, int maxHP, int maxEXP, int maxLevel,
-                                int waterTime, int flowerEffect, int fruitTerm, int fruitCost){
+         private String name;
+         private String Dexp;
+        private String realImage;
+
+
+        public void setFlowerInfomation(int id, String flowerImagePath, int maxHP, int maxEXP, int maxLevel,
+                                int waterTime, int flowerEffect, int fruitTerm, int fruitCost, String name, String realImage,
+                                        String dexp, int[] step){
             this.id = id;
             this.maxHP = maxHP;
             this.maxEXP = maxEXP;
@@ -436,6 +560,10 @@ public class PlantManagementActivity extends AppCompatActivity {
             this.fruitTerm = fruitTerm;
             this.fruitCost = fruitCost;
             this.flowerImagePath = flowerImagePath;
+            this.name = name;
+            this.Dexp = dexp;
+            this.realImage = realImage;
+            this.flowerGrowthStep = step;
         }
 
         public int getId(){ return this.id; }
@@ -446,6 +574,11 @@ public class PlantManagementActivity extends AppCompatActivity {
         public int getFlowerEffect(){ return this.flowerEffect; }
         public int getFruitTerm(){ return this.fruitTerm; }
         public int getFruitCost(){ return this.fruitCost; }
+         public String getflowerImagePath(){return this.flowerImagePath;}
+         public String getName(){return this.name;}
+         public String getDexp(){return this.Dexp;}
+         public String getRealImage(){return this.realImage;}
+         public int[] getGrowthStep(){return this.flowerGrowthStep;}
     }
 
      class PollenInfomation{
@@ -468,7 +601,7 @@ public class PlantManagementActivity extends AppCompatActivity {
          public int getEXPEffect(){ return this.EXPeffect; }
     }
 
-    private void setPlant(final int type, final int num) {
+    private void setPlant(final int type, final String num) {
 
         String url = "http://202.31.200.143/user/getplant";
 
@@ -496,7 +629,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put( "plant", Integer.toString(plantIDS));
                 params.put( "type", Integer.toString(type));
-                params.put( "num", Integer.toString(num));
+                params.put( "num", num);
                 return params;
             }
         };
@@ -533,22 +666,31 @@ public class PlantManagementActivity extends AppCompatActivity {
 
                             int plantId = getResources().getIdentifier(flowerImagePath, "drawable", getPackageName());
                             int plantpotId = getResources().getIdentifier(potImagePath, "drawable", getPackageName());
-
+                            Log.i("tlqkf exp ",""+PlantEXP);
+                            Log.i("tlqkf lv ",""+PlantLV);
+                            Log.i("tlqkf setflowetpath ",flowerImagePath);
                             plantflower.setImageResource(plantId);
                             plantpot.setImageResource(plantpotId);
 
                             currenthp = plantinfomation.getHP();
                             currentexp =  plantinfomation.getEXP();
 
-                            getFlowerInform(plantinfomation.getFlower());
-                            getPollenInform(plantinfomation.getPollen());
+                            if(informup[0]==0){  getFlowerInform(plantinfomation.getFlower()); };
+                            if(informup[1]==0){  getPollenInform(plantinfomation.getPollen()); };
 
                             level.setText("LV " + String.valueOf(plantinfomation.getLV()));
+                            Log.i("plantinfomation.LV()","::"+plantinfomation.getLV());
+                            if(30== plantinfomation.getLV()){
+                                Log.i("plantinfomation.EXP()","::"+plantinfomation.getEXP());
+                                if(100 == plantinfomation.getEXP()) {
+                                    entry.setVisibility(View.VISIBLE);
+                                }
+                            }
                             name.setText(plantinfomation.getFlowerImagePath());
 
                             HPtextview.setText(String.valueOf(plantinfomation.getHP()));
                             EXPtextview.setText(String.valueOf(plantinfomation.getEXP()));
-
+                            Log.i("EXPview 2",""+plantinfomation.getEXP());
                         }catch (JSONException e){
                             Log.i("PlantManagementActivity","JSONException :"+e.toString());
                         }
@@ -584,16 +726,28 @@ public class PlantManagementActivity extends AppCompatActivity {
                             int flowerEffect = response.getInt("purchaseType");
                             int fruitTerm = response.getInt("fruitTime");
                             int fruitCost = response.getInt("HowMuchFruit");
-                            String[] flowerImagePath = new String[4];
-                            flowerImagePath[0] = response.getString("flowerImagePath");
-                            flowerImagePath[1] = response.getString("flowerImagePath")+"1";
-                            flowerImagePath[2] = response.getString("flowerImagePath")+"2";
-                            flowerImagePath[3] = response.getString("flowerImagePath")+"3";
+                            String name = response.getString("flowerName");
+                            String realImage = response.getString("flowerRealImagePath");
+                            String detexplain = response.getString("flowerDetailedExplain");
+
+                            String growStep = response.getString("flowerGrowthStep");
+
+                            int[] growthStep = new int[3];
+                            growthStep[0] = Integer.parseInt(growStep.substring(0,2));
+                            growthStep[1] = Integer.parseInt(growStep.substring(2,4));
+                            growthStep[2] = Integer.parseInt(growStep.substring(4,6));
+
+                            Log.i("growthStep ", ":: "+growthStep[0]);
+                            Log.i("growthStep ", ":: "+growthStep[1]);
+                            Log.i("growthStep ", ":: "+growthStep[2]);
+                            String flowerImagePath = response.getString("flowerImagePath");
+                            flower.setFlowerInfomation(id,flowerImagePath,maxHP,100,maxLevel,waterTime,flowerEffect,fruitTerm,fruitCost,name,realImage,detexplain,growthStep);
                             maxLevel = Level;
-                            flower.setFlowerInfomation(id,flowerImagePath,maxHP,100,maxLevel,waterTime,flowerEffect,fruitTerm,fruitCost);
+                            setProgressResult = flower.getMaxHP()/100;
                             maxHPProgress = flower.getMaxHP();
                             maxEXPProgress = flower.getMaxEXP();
                             progressset();
+                            informup[0] =1;
 
                         }catch (JSONException e){
                             Log.i("PlantManagementActivity","JSONException :"+e.toString());
@@ -629,7 +783,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                             String pollenImagepath = response.getString("potImagePath");
 
                             pollen.setPollenInfomation(id,HPeffect,EXPeffect,pollenImagepath);
-
+                            informup[1] = 1;
                         }catch (JSONException e){
                             Log.i("PlantManagementActivity","JSONException :"+e.toString());
                         }
@@ -684,7 +838,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    private void setItem(final int itemID) {
+    private void setItem(final int itemID, final int type) {
 
         String url = "http://202.31.200.143/user/item";
 
@@ -713,6 +867,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("email",pref.getString("id",""));
                 params.put("itemID",Integer.toString(itemID));
+                    params.put("Type",Integer.toString(type));
                 return params;
             }
         };
@@ -730,9 +885,9 @@ public class PlantManagementActivity extends AppCompatActivity {
         //프로그레스 바의 현재 수치를 int 변수에 받아옴
         currenthp = Integer.parseInt(HPtextview.getText().toString());
         currentexp = Integer.parseInt(EXPtextview.getText().toString());
-
+        Log.i("EXPview 3",""+currentexp);
         //프로그레스 바를 현재 수치 값으로 갱신하여 보여줌
-        hp.setProgress(currenthp);
+        hp.setProgress(currenthp/setProgressResult);
         exp.setProgress(currentexp);
     }
 }
