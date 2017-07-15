@@ -30,7 +30,7 @@
             android:background="@drawable/back_corner">
 
             <TextView
-                android:id="@+id/txt_dialog_title"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -11,11 +11,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -25,7 +27,11 @@ public class EditBoxDialog extends Dialog {
         super(context);
     }
 
+    private String mode="";
+    private String text="";
     TextView explain;
+    TextView name;
+    ImageView image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +41,28 @@ public class EditBoxDialog extends Dialog {
         setContentView(R.layout.dialog_edit_box);
 
         explain = (TextView)findViewById(R.id.explain);
+        name = (TextView)findViewById(R.id.name);
 
         explain.setMovementMethod(new ScrollingMovementMethod());
 
     }
 
+    public String getMode(){
+        return mode;
+    }
+    public void setMode(String mode2){
+            Log.i("=======================", mode);
+            mode = mode2;
+            name.setText(mode);
+
+    }
+    public String getText(){
+        return text;
+    }
+    public void setText(String text2){
+        text = text2;
+        explain.setText(text);
+    }
 
 }
 
