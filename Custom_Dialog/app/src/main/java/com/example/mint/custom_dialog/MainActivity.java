@@ -9,27 +9,30 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    @Nullable
-    @Bind(R.id.d)
-    TextView txt_user_name;
+    TextView helloworld;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
+
+        helloworld = (TextView)findViewById(R.id.d);
+
+        helloworld.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final EditBoxDialog dialog = new EditBoxDialog(MainActivity.this);
+                dialog.show();
+            }
+        });
     }
 
-    @OnClick(R.id.d)
-    public void txt_user_name(){
-        final EditBoxDialog dialog = new EditBoxDialog(this);
-        dialog.show();
-    }
+
+
 }
 
