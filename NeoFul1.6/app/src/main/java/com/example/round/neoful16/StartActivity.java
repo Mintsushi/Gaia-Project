@@ -46,7 +46,7 @@ import java.util.ArrayList;
  * Created by Round on 2017-07-14.
  */
 
-public class StartActivity extends AppCompatActivity implements View.OnLongClickListener{
+public class StartActivity extends AppCompatActivity implements View.OnLongClickListener,View.OnClickListener{
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -57,9 +57,9 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     private RequestQueue requestQueue;
     private ArrayList<PlantInfo> mArray = new ArrayList<>();
 
-    private OverlayService mOverlayService;
+    public static OverlayService mOverlayService;
     private Intent overLayService;
-    private Boolean mConnected = false;
+    public static Boolean mConnected = false;
     private Boolean mClear = false;
     private static IBinder mOverlayBinder;
 
@@ -91,6 +91,17 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     }
 
     @Override
+    public void onClick(View view){
+        for(int i=0;i<mArray.size();i++){
+            if(mArray.get(i).getPlantId() == view.getId()){
+                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
+                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
+                startActivity(intent);
+            }
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
@@ -98,8 +109,8 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         overLayService = new Intent(StartActivity.this, OverlayService.class);
 
         if(!isServiceRunning(OverlayService.class)) {
-            bindService(overLayService, mServiceConnection, BIND_AUTO_CREATE);
             startService(overLayService);
+            bindService(overLayService, mServiceConnection, BIND_AUTO_CREATE);
         }
 
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
@@ -117,6 +128,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
             public void onClick(View view) {
                 Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -127,14 +139,19 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         Log.i("MainActivity","isServiceRunning : "+mOverlayService);
         for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("MainActivity", true+"");
-                Log.i("MainActivity","*************"+mOverlayBinder);
-                mOverlayService = ((OverlayService.LocalBinder) mOverlayBinder).getService();
-                mConnected = true;
-                return true;
+                if(mOverlayBinder != null){
+                    mOverlayService = ((OverlayService.LocalBinder) mOverlayBinder).getService();
+                    mConnected = true;
+                    return true;
+                }
+                else{
+                    //unbindService(mServiceConnection);
+                    //stopService(overLayService);
+                    return false;
+                }
             }
         }
-        Log.i ("MainActivity", false+"");
+        Log.i ("MainActivity", "false");
         return false;
     }
 
@@ -142,9 +159,11 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onResume(){
         super.onResume();
 
-        Log.i("MainActivity","onResume");
+        Log.i("MainActivity","onResume : "+mConnected);
         if(mConnected){
+            Log.i("MainActivity","Size : "+mOverlayService.getSize());
             if(mOverlayService.getSize() >0){
+                Log.i("MainActivity","Size : "+mOverlayService.getSize());
                 mOverlayService.invisible();
             }
         }
@@ -157,6 +176,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         Log.i("MainActivity","onPause");
         if(mConnected) {
             mOverlayService.visible();
+            mConnected=false;
         }
     }
 
@@ -164,11 +184,8 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onDestroy(){
         super.onDestroy();
         Log.i("MainActivity","onDestroy");
-        if(mConnected) {
-            //if(mOverlayService.getSize() == 0 && mClear == false)
-            //unbindService(mServiceConnection);
-            //unregisterReceiver(restartService);
-        }
+        mConnected=false;
+        //unbindService(mServiceConnection);
     }
 
     private void getUserInform(){
@@ -279,6 +296,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                                 gridLayout.addView(frameLayout,gridParam);
 
                                 imageView.setOnLongClickListener(StartActivity.this);
+                                imageView.setOnClickListener(StartActivity.this);
 
 //                                plant.setOnLongClickListener(StartActivity.this);
 //                                plant.setOnClickListener(StartActivity.this);

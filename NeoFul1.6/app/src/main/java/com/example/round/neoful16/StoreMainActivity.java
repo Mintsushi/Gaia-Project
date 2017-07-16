@@ -3,6 +3,7 @@ package com.example.round.neoful16;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,5 +36,18 @@ public class StoreMainActivity extends AppCompatActivity{
                 getSupportFragmentManager().beginTransaction().replace(R.id.FL,new StoreFlowerActivity()).commit();
             }
         });
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        if(StartActivity.mConnected){
+            Log.i("MainActivity","Size : "+StartActivity.mOverlayService.getSize());
+            if(StartActivity.mOverlayService.getSize() >0){
+                Log.i("MainActivity","Size : "+StartActivity.mOverlayService.getSize());
+                StartActivity.mOverlayService.invisible();
+            }
+        }
     }
 }
