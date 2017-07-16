@@ -30,7 +30,6 @@
         android:layout_marginTop="112dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/plant"
         android:layout_gravity="center"
         android:layout_marginStart="104dp" />
 
