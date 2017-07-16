@@ -1,6 +1,7 @@
 package com.example.round.neopul15;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,28 +11,45 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Round on 2017-06-13.
@@ -62,13 +80,16 @@ public class PlantManagementActivity extends AppCompatActivity {
     //-------------------가로 세로 관리 버튼 -------------------
     ImageButton itemMB;
     ImageButton touchMB;
-    LinearLayout item11;
+    ListView item11;
     LinearLayout EXPget11;
 
     //---------------------------가로 버튼---------------------------
-    Button water;       //물주기 버튼
-    Button energy;      //비료 버튼
-    Button medicine;    //물약 버튼
+    private ArrayList<ItemInfomation> mArray = new ArrayList<>();
+    private ListView mList;
+    private ItemAdapters mAdapter;
+    private ImageLoader mImageLoader;
+    private RequestQueue requestQueue;
+
     Button ONOFF;       //위젯 on/off 버튼
 
     //---------------------------세로 버튼---------------------------
@@ -93,11 +114,6 @@ public class PlantManagementActivity extends AppCompatActivity {
     //프로그레스 바 최대치
     TextView maxHPtextview;
     TextView maxEXPtextview;
-
-    //현재 아이템 수량
-    TextView waterNumtextview;
-    TextView energyNumtextview;
-    TextView medicienNumtextview;
 
     //프로그레스 바의 최대 수치 ()
     int maxHPProgress;
@@ -128,6 +144,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         // --------------데이터갱신---------------------
         getPlant();
         getUserInform();
+        requestItem();
         //--------------------------꽃 정보 --------------------------
         name = (TextView) findViewById(R.id.PlantName);
         level = (TextView) findViewById(R.id.PlantLV);
@@ -139,7 +156,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         //------------------아이템/이밴트----------------------------------
         itemMB = (ImageButton) findViewById(R.id.bagButton);
         touchMB = (ImageButton) findViewById(R.id.touchButton);
-        item11 = (LinearLayout)findViewById(R.id.ITEM11);
+        item11 = (ListView)findViewById(R.id.ITEM11);
         EXPget11 = (LinearLayout)findViewById(R.id.EXPGET11);
         item11.setVisibility(View.INVISIBLE);
         EXPget11.setVisibility(View.INVISIBLE);
@@ -148,9 +165,6 @@ public class PlantManagementActivity extends AppCompatActivity {
         levelupview = (ImageView)findViewById(R.id.levelupview);
         levelupview.setVisibility(View.INVISIBLE);
         //---------------------------가로 버튼---------------------------
-        water = (Button) findViewById(R.id.btnWater);
-        energy = (Button) findViewById(R.id.btnEnergy);
-        medicine = (Button) findViewById(R.id.btnMedicine);
         ONOFF = (Button) findViewById(R.id.ONOFF);
 
         //---------------------------세로 버튼---------------------------
@@ -178,12 +192,28 @@ public class PlantManagementActivity extends AppCompatActivity {
         HPtextview = (TextView)findViewById(R.id.currentHP);
         EXPtextview = (TextView)findViewById(R.id.currentEXP);
 
-        // -------------아이템 수량------------------------
-        waterNumtextview = (TextView)findViewById(R.id.waterNumText);
-        energyNumtextview = (TextView)findViewById(R.id.energyNumText);
-        medicienNumtextview = (TextView)findViewById(R.id.medicineNumText);
-        //-----------------------버튼 이벤트 --------------------------------------
+        //-----------------------아이템리스트 --------------------------------------
 
+        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
+        Network network = new BasicNetwork(new HurlStack());
+
+        requestQueue= Volley.newRequestQueue(this);
+        requestQueue.start();
+
+        mAdapter = new ItemAdapters(getApplicationContext(), R.layout.item_list);
+        mList = (ListView)findViewById(R.id.ITEM11);
+        mList.setAdapter(mAdapter);
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //mArray.get(i).getType();
+                //mArray.get(i).getItemEffect();
+                Log.i("Type :: ",":"+mArray.get(i).getType());
+                HPcurrent(mArray.get(i).getItemID(),mArray.get(i).getItemNum(),"str",mArray.get(i).getType(),10);
+            }
+        });
+
+        mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(this)));
 
         //관리버튼
         itemMB.setOnClickListener(new View.OnClickListener() {
@@ -225,93 +255,6 @@ public class PlantManagementActivity extends AppCompatActivity {
                 }
             }
 
-        });
-
-        //가로 버튼
-        water.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( currenthp==maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    if(waternum <= 0){
-                        return;
-                    }
-                    else {
-                        setItem(1,1);
-
-                        currenthp++;
-                        hp.setProgress(currenthp / setProgressResult);
-                        HPtextview.setText("" + currenthp);
-                        setPlant(1, String.valueOf(currenthp));
-                        effect.setImageResource(R.drawable.water);
-                        effect.setVisibility(View.VISIBLE);
-                        delayA();
-                    }
-                }
-            }//onClick
-        });
-
-        energy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if( currenthp == maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    if(energynum <= 0){
-                        return;
-                    }
-                    else {
-                        setItem(2,2);
-
-                        //체력 5증가
-                        if (currenthp + 5 > maxHPProgress) {
-                            currenthp = maxHPProgress;
-                        } else {
-                            currenthp = currenthp + 5;
-                        }
-
-                        hp.setProgress(currenthp / setProgressResult);
-                        HPtextview.setText("" + currenthp);
-                        setPlant(1, String.valueOf(currenthp));
-                        effect.setImageResource(R.drawable.energy);
-                        effect.setVisibility(View.VISIBLE);
-                        delayA();
-                    }
-                }
-            }//onClick
-        });
-
-        medicine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if( currenthp==maxHPProgress){
-                    Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    if(mediciennum <= 0){
-                        return;
-                    }
-                    else {
-                        setItem(3,3);
-                        //체력 10증가
-                        if (currenthp + 10 > maxHPProgress) {
-                            currenthp = maxHPProgress;
-                        } else {
-                            currenthp = currenthp + 10;
-                        }
-                        hp.setProgress(currenthp / setProgressResult);
-                        HPtextview.setText("" + currenthp);
-                        setPlant(1, String.valueOf(currenthp));
-                        effect.setImageResource(R.drawable.water);
-                        effect.setVisibility(View.VISIBLE);
-                        delayA();
-                    }
-                }
-            }//onClick
         });
 
         //세로 버튼
@@ -431,6 +374,28 @@ public class PlantManagementActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    void HPcurrent(int itemID, int itemNum, String str, int Type, int hpcur){
+        if( currenthp==maxHPProgress){
+            Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
+        }
+        else {
+            if(itemNum <= 0){
+                return;
+            }
+            else {
+                setItem(itemID,Type);
+
+                currenthp = currenthp + hpcur;
+                hp.setProgress(currenthp / setProgressResult);
+                HPtextview.setText("" + currenthp);
+                setPlant(1, String.valueOf(currenthp));
+                effect.setImageResource(R.drawable.water);
+                effect.setVisibility(View.VISIBLE);
+                delayA();
+            }
+        }
     }
 
     void delayA() {
@@ -599,6 +564,125 @@ public class PlantManagementActivity extends AppCompatActivity {
         public int getId(){ return this.id; }
         public int getHPEffect(){ return this.HPeffect; }
          public int getEXPEffect(){ return this.EXPeffect; }
+    }
+
+     class ItemInfomation{
+         private int itemID;
+         private String itemName;
+         private String itemPath;
+         private int itemEffect;
+         private int itemTime;
+         private int Type;
+         private int itemNum;
+
+         ItemInfomation(int id, String name, String path, int effect, int time, int type, int num){
+             this.itemID = id;
+             this.itemName = name;
+             this.itemPath = path;
+             this.itemEffect = effect;
+             this.itemTime = time;
+             this.Type = type;
+             this.itemNum = num;
+         }
+         public int getItemID(){return this.itemID;}
+         public String getItemName(){ return this.itemName;}
+         public String getItemPath(){ return this.itemPath;}
+         public int getItemEffect(){ return this.itemEffect;}
+         public int getItemTime(){ return this.itemTime;}
+         public int getType(){ return  this.Type;}
+         public int getItemNum(){ return this.itemNum;}
+     }
+
+    static class ItemViewList{
+        NetworkImageView item_listitem;
+        //TextView item_listName;
+        TextView item_listNum;
+    }
+
+    public class ItemAdapters extends ArrayAdapter<ItemInfomation> {
+        private LayoutInflater mInflater = null;
+
+        public ItemAdapters(Context context, int resource){
+            super(context,resource);
+            mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount(){
+            return mArray.size();
+        }
+
+        @Override
+        public View getView(int position, View v, ViewGroup parent){
+            ItemViewList viewHolder;
+
+            if(v == null){
+                v=mInflater.inflate(R.layout.item_list,parent,false);
+                viewHolder = new ItemViewList();
+
+                viewHolder.item_listitem=(NetworkImageView)v.findViewById(R.id.item_listitem);
+                //viewHolder.item_listName=(TextView) v.findViewById(R.id.item_listName);
+                viewHolder.item_listNum=(TextView) v.findViewById(R.id.item_listNum);
+                v.setTag(viewHolder);
+            }else{
+                viewHolder = (ItemViewList)v.getTag();
+            }
+
+            ItemInfomation info = mArray.get(position);
+
+            if(info != null){
+                Log.i("PlantManagementActivity",info.getItemPath() + info.getItemName() + info.getItemNum());
+                viewHolder.item_listitem.setImageUrl("http://202.31.200.143/"+info.getItemPath(),mImageLoader);
+                //viewHolder.item_listName.setText(info.getItemName());
+                viewHolder.item_listNum.setText(String.valueOf(info.getItemNum()));
+            }
+
+            return v;
+        }
+
+    }
+
+    private void requestItem(){
+
+        String url="http://202.31.200.143/item";
+
+        JsonArrayRequest request = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>(){
+
+                    @Override
+                    public void onResponse(JSONArray response){
+                        Log.i("PlantManagementActivity",response.toString());
+                        for(int i=0;i<response.length();i++){
+
+                            try{
+                                JSONObject object = response.getJSONObject(i);
+
+                                int[] arr = {waternum, energynum, mediciennum, 0, 0, 0, 0, 0, 0};
+                                int id = object.getInt("itemID");
+                                String name = object.getString("itemName");
+                                String path = object.getString("itemImagePath");
+                                int aeffect = 0;
+                                int time = object.getInt("itemTime");
+                                int type = object.getInt("Type");
+                                int num = arr[i];
+                                mArray.add(new ItemInfomation(id, name, path, aeffect, time, type, num));
+
+                            }catch (JSONException e){
+                                Log.i("PlantManagementActivity",e.toString());
+                            }
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+                },new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.i("PlantManagementActivity",error.toString());
+            }
+        });
+
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(request);
     }
 
     private void setPlant(final int type, final String num) {
@@ -816,10 +900,6 @@ public class PlantManagementActivity extends AppCompatActivity {
                             waternum = response.getInt("waterNum");
                             energynum = response.getInt("ferilizerNum");
                             mediciennum  = response.getInt("pesticideNum");
-
-                            waterNumtextview.setText(String.valueOf(waternum));
-                            energyNumtextview.setText(String.valueOf(energynum));
-                            medicienNumtextview.setText(String.valueOf(mediciennum));
 
                             // 아이템 연동
                         }catch (JSONException e){

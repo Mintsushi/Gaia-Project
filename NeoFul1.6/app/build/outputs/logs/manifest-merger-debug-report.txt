@@ -1,0 +1,155 @@
+-- Merging decision tree log ---
+manifest
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:2:1-36:12
+	package
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:3:5-41
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:2:11-69
+	android:versionCode
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:5:5-78
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:5:22-76
+uses-permission#android.permission.INTERNET
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:6:5-66
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:7:5-80
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:7:22-78
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:8:5-78
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:8:22-75
+uses-permission#android.permission.ACCESS_WIFI_STATE
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:10:5-75
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:10:22-73
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:12:5-80
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:12:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:13:5-78
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:13:22-76
+application
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:15:5-34:19
+MERGED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:transition:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\transition\25.3.1\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support.constraint\constraint-layout\1.0.2\AndroidManifest.xml:9:5-20
+MERGED from [com.mcxiaoke.volley:library-aar:1.0.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library-aar\1.0.1\AndroidManifest.xml:5:5-19
+MERGED from [de.hdodenhof:circleimageview:2.1.0] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\2.1.0\AndroidManifest.xml:9:5-20
+MERGED from [gun0912.ted:tedpermission:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\gun0912.ted\tedpermission\1.0.2\AndroidManifest.xml:9:5-13:19
+MERGED from [com.android.support:appcompat-v7:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-v4:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-fragment:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-media-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-ui:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:support-core-utils:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.1\AndroidManifest.xml:29:5-20
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.1\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.1\AndroidManifest.xml:26:5-20
+MERGED from [com.android.support:support-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.1\AndroidManifest.xml:29:5-20
+	android:label
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:18:9-41
+	android:supportsRtl
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:19:9-35
+	android:allowBackup
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:16:9-35
+	android:icon
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:17:9-43
+	android:theme
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:20:9-52
+activity#com.example.round.neoful16.MainActivity
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:21:9-27:20
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:21:19-47
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:22:13-26:29
+action#android.intent.action.MAIN
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:23:17-69
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:23:25-66
+category#android.intent.category.LAUNCHER
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:25:17-77
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:25:27-74
+activity#com.example.round.neoful16.SignActivity
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:28:9-49
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:28:19-47
+activity#com.example.round.neoful16.LoginActivity
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:29:9-50
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:29:19-48
+activity#com.example.round.neoful16.StartActivity
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:30:9-50
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:30:19-48
+activity#com.example.round.neoful16.StoreMainActivity
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:31:9-54
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:31:19-52
+service#com.example.round.neoful16.OverlayService
+ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:32:9-33:37
+	android:enabled
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:33:13-35
+	android:name
+		ADDED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml:32:18-48
+uses-sdk
+INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+MERGED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:21:5-23:62
+MERGED from [com.android.support:recyclerview-v7:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.3.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:transition:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\transition\25.3.1\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support.constraint:constraint-layout:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support.constraint\constraint-layout\1.0.2\AndroidManifest.xml:5:5-7:41
+MERGED from [com.mcxiaoke.volley:library-aar:1.0.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library-aar\1.0.1\AndroidManifest.xml:3:5-72
+MERGED from [de.hdodenhof:circleimageview:2.1.0] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\2.1.0\AndroidManifest.xml:5:5-7:41
+MERGED from [gun0912.ted:tedpermission:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\gun0912.ted\tedpermission\1.0.2\AndroidManifest.xml:5:5-7:41
+MERGED from [com.android.support:appcompat-v7:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.1\AndroidManifest.xml:21:5-23:78
+MERGED from [com.android.support:support-v4:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.1\AndroidManifest.xml:21:5-23:54
+MERGED from [com.android.support:support-fragment:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.1\AndroidManifest.xml:21:5-23:60
+MERGED from [com.android.support:support-media-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.1\AndroidManifest.xml:21:5-23:63
+MERGED from [com.android.support:support-core-ui:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.1\AndroidManifest.xml:21:5-23:58
+MERGED from [com.android.support:support-core-utils:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.1\AndroidManifest.xml:21:5-23:61
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.1\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.1\AndroidManifest.xml:20:5-43
+MERGED from [com.android.support:support-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.1\AndroidManifest.xml:21:5-23:58
+	tools:overrideLibrary
+		ADDED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:23:9-59
+	android:targetSdkVersion
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+		INJECTED from E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\src\main\AndroidManifest.xml
+meta-data#android.support.VERSION
+ADDED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:recyclerview-v7:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\25.3.1\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:transition:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\transition\25.3.1\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:appcompat-v7:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-v4:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-v4\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-fragment:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-fragment\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-media-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-media-compat\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-ui:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:support-core-utils:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\25.3.1\AndroidManifest.xml:25:5-27:34
+MERGED from [com.android.support:animated-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\25.3.1\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-vector-drawable:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\25.3.1\AndroidManifest.xml:22:5-24:34
+MERGED from [com.android.support:support-compat:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\support-compat\25.3.1\AndroidManifest.xml:25:5-27:34
+	android:value
+		ADDED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:27:9-31
+	android:name
+		ADDED from [com.android.support:design:25.3.1] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\com.android.support\design\25.3.1\AndroidManifest.xml:26:9-47
+activity#com.gun0912.tedpermission.TedPermissionActivity
+ADDED from [gun0912.ted:tedpermission:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\gun0912.ted\tedpermission\1.0.2\AndroidManifest.xml:10:9-12:56
+	android:theme
+		ADDED from [gun0912.ted:tedpermission:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\gun0912.ted\tedpermission\1.0.2\AndroidManifest.xml:12:13-53
+	android:name
+		ADDED from [gun0912.ted:tedpermission:1.0.2] E:\2017\WebMo\Gaia_Github\NeoFul1.6\app\build\intermediates\exploded-aar\gun0912.ted\tedpermission\1.0.2\AndroidManifest.xml:11:13-75

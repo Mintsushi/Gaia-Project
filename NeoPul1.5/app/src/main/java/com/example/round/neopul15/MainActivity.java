@@ -58,60 +58,59 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        else {
+        else{
             setContentView(R.layout.activity_main);
 
             //사용자가 입력한 id,password 정보와 autoLogin CheckBox check 유무에 대한 정보
-//            id = (EditText)findViewById(R.id.login_email);
-//            password = (EditText)findViewById(R.id.login_password);
-//            autoLogin = (CheckBox)findViewById(R.id.checkBox);
-//
-//            Button sign =(Button)findViewById(R.id.sign); //회원가입 버튼
-//            Button login = (Button)findViewById(R.id.login); //로그인 버튼
-//
-//            //회원가입 버튼을 클릭하였을 때
-//            //회원가입 Activity 로 이동
-//            //회원가입 Page 에서 BackButton 을 눌렀을 시 다시 login 화면으로 돌아올수 있도록 Activity 는 종료시키지 않음.
-//            sign.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(MainActivity.this, SignActivity.class);
-//                    startActivity(intent);
-//                }
-//            });
-//
-//            //로그인 버튼을 클릭하였을 때
-//            login.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    //사용자가 입력한 id와 password 정보를 가져옴.
-//                    userid = id.getText().toString();
-//                    userpassword = password.getText().toString();
-//
-//                    //server로 id와 password를 전송해 로그인 가능 여부 진단
-//                    sendUserInform();
-//                }
-//            });
-//
-//            //autoLogin CheckBox
-//            autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                @Override
-//                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-//                    //check
-//                    if(isChecked){
-//                        loginChecked = true;
-//                    }
-//
-//                    //non check
-//                    else{
-//                        loginChecked = false;
-//                        //SharedPreference 초기화
-//                        editor.clear();
-//                        editor.commit();
-//                    }
-//                }
-//            });
-//        }
+            id = (EditText)findViewById(R.id.login_email);
+            password = (EditText)findViewById(R.id.login_password);
+            autoLogin = (CheckBox)findViewById(R.id.checkBox);
+
+            Button sign =(Button)findViewById(R.id.sign); //회원가입 버튼
+            Button login = (Button)findViewById(R.id.login); //로그인 버튼
+
+            //회원가입 버튼을 클릭하였을 때
+            //회원가입 Activity 로 이동
+            //회원가입 Page 에서 BackButton 을 눌렀을 시 다시 login 화면으로 돌아올수 있도록 Activity 는 종료시키지 않음.
+            sign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, SignActivity.class);
+                    startActivity(intent);
+                }
+            });
+
+            //로그인 버튼을 클릭하였을 때
+            login.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //사용자가 입력한 id와 password 정보를 가져옴.
+                    userid = id.getText().toString();
+                    userpassword = password.getText().toString();
+
+                    //server로 id와 password를 전송해 로그인 가능 여부 진단
+                    sendUserInform();
+                }
+            });
+
+            //autoLogin CheckBox
+            autoLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    //check
+                    if(isChecked){
+                        loginChecked = true;
+                    }
+
+                    //non check
+                    else{
+                        loginChecked = false;
+                        //SharedPreference 초기화
+                        editor.clear();
+                        editor.commit();
+                    }
+                }
+            });
         }
     }
 

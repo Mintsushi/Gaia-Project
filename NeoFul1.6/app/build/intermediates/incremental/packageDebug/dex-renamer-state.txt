@@ -1,0 +1,7 @@
+#Sun Jul 16 21:48:00 KST 2017
+base.0=E\:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_98f2144a410a5f9b05ce10c8f9d0af2d961e02b8
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=E\:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4eae2701900f9693fc9cb11a8ec512b26aae1eaa\\classes.dex
+base.1=E\:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_4eae2701900f9693fc9cb11a8ec512b26aae1eaa
+file.0=E\:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_98f2144a410a5f9b05ce10c8f9d0af2d961e02b8\\classes.dex
