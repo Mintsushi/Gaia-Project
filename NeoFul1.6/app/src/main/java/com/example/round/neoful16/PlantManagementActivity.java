@@ -1,5 +1,6 @@
 package com.example.round.neoful16;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,9 +49,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
- * Created by Round on 2017-07-16.
+ * Created by Round on 2017-06-13.
  */
+
 public class PlantManagementActivity extends AppCompatActivity {
 
     int plantIDS;
@@ -58,6 +64,9 @@ public class PlantManagementActivity extends AppCompatActivity {
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+
+    //-------------------------------------------------------
+    NetworkImageView itemEffectImage;
 
     //--------------------------꽃 정보 --------------------------
     TextView name;
@@ -71,6 +80,8 @@ public class PlantManagementActivity extends AppCompatActivity {
     ImageButton inform;
     ImageButton entry;
 
+    NetworkImageView plantflower;
+    NetworkImageView plantpot;
     //-------------------가로 세로 관리 버튼 -------------------
     ImageButton itemMB;
     ImageButton touchMB;
@@ -116,7 +127,7 @@ public class PlantManagementActivity extends AppCompatActivity {
     int setProgressResult;
     //---------------------------기타 보조 변수---------------------------
     int a; //위젯 ON/OFF 변경 용 변수
-    int informup[] = {0,0};
+    int informup[] = {0,0,0};
     //-------------------아이템 변수----------------------------------------
     int waternum = 0;
     int energynum = 0;
@@ -146,7 +157,8 @@ public class PlantManagementActivity extends AppCompatActivity {
         //------------------------------------------------------------------
         effect = (ImageView) findViewById(R.id.buttonEffectImage);
         effect.setVisibility(View.INVISIBLE);
-
+        itemEffectImage = (NetworkImageView)findViewById(R.id.itemEffectImage);
+        itemEffectImage.setVisibility(View.INVISIBLE);
         //------------------아이템/이밴트----------------------------------
         itemMB = (ImageButton) findViewById(R.id.bagButton);
         touchMB = (ImageButton) findViewById(R.id.touchButton);
@@ -188,8 +200,6 @@ public class PlantManagementActivity extends AppCompatActivity {
 
         //-----------------------아이템리스트 --------------------------------------
 
-        Cache cache = new DiskBasedCache(getCacheDir(),1024*1024);
-        Network network = new BasicNetwork(new HurlStack());
 
         requestQueue= Volley.newRequestQueue(this);
         requestQueue.start();
@@ -203,7 +213,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 //mArray.get(i).getType();
                 //mArray.get(i).getItemEffect();
                 Log.i("Type :: ",":"+mArray.get(i).getType());
-                HPcurrent(mArray.get(i).getItemID(),mArray.get(i).getItemNum(),"str",mArray.get(i).getType(),10);
+                HPcurrent(mArray.get(i).getItemID(),mArray.get(i).getItemNum(),mArray.get(i).getItemPath(),mArray.get(i).getType(),mArray.get(i).getItemEffect());
             }
         });
 
@@ -319,6 +329,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                     exp.setProgress(currentexp);
                     Log.i("EXPview else",""+currentexp);
                     EXPtextview.setText(""+currentexp);
+                    Log.i("EXPtextview.setText4",""+currentexp);
                     setPlant(2,String.valueOf(currentexp));
                     Log.i("Up else "," "+currentexp);
                 }
@@ -380,14 +391,22 @@ public class PlantManagementActivity extends AppCompatActivity {
             }
             else {
                 setItem(itemID,Type);
+                getUserInform();
+                requestItem();
 
                 currenthp = currenthp + hpcur;
                 hp.setProgress(currenthp / setProgressResult);
                 HPtextview.setText("" + currenthp);
                 setPlant(1, String.valueOf(currenthp));
-                effect.setImageResource(R.drawable.chagename);
-                effect.setVisibility(View.VISIBLE);
-                delayA();
+                itemEffectImage.setImageUrl("http://202.31.200.143/"+str,mImageLoader);
+                itemEffectImage.setVisibility(View.VISIBLE);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        itemEffectImage.setVisibility(View.INVISIBLE);
+                    }
+                }, 1000);
             }
         }
     }
@@ -417,20 +436,25 @@ public class PlantManagementActivity extends AppCompatActivity {
         Log.i("step", ":: "+step[0]);
         Log.i("step", ":: "+step[1]);
         Log.i("step", ":: "+step[2]);
-        if (plantinfomation.LV-1 == step[0]) {
-            setPlant(4,flower.getflowerImagePath()+"1");
-            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"1");
-            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+        String str = flower.getflowerImagePath();
+        int x = str.indexOf(".");
+        str = str.substring(0,x);
+        Log.i("ImageChainge No", "LV:: "+plantinfomation.LV);
+        Log.i("ImageChainge No",str+"1.png");
+        if (plantinfomation.LV+1 == step[0]) {
+            setPlant(4,str+"1.png");
+            Log.i("ImageChainge Yes", "LV:: "+plantinfomation.LV);
+            getPlant();
             return;
-        }else if (plantinfomation.LV-1 == step[1]) {
-            setPlant(4, flower.getflowerImagePath() + "2");
-            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"2");
-            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+        }else if (plantinfomation.LV+1 == step[1]) {
+            setPlant(4, str+"2.png");
+            Log.i("ImageChainge Yes", "LV:: "+plantinfomation.LV);
+            getPlant();
             return;
-        }else if (plantinfomation.LV-1 == step[2]) {
-            setPlant(4, flower.getflowerImagePath() + "3");
-            Log.i("ImageChainge", "Path:: "+flower.getflowerImagePath()+"3");
-            Log.i("ImageChainge", "LV:: "+plantinfomation.LV);
+        }else if (plantinfomation.LV+1 == step[2]) {
+            setPlant(4, str+"3.png");
+            Log.i("ImageChainge Yes", "LV:: "+plantinfomation.LV);
+            getPlant();
             return;
         }else {
             return;
@@ -443,7 +467,7 @@ public class PlantManagementActivity extends AppCompatActivity {
             exp.setProgress(a);
             Log.i("Up setOK "," "+a);
             EXPtextview.setText(""+a);
-            Log.i("EXPview 1",""+currentexp);
+            Log.i("EXPtextview.setText1",""+a);
             setPlant(3, String.valueOf(plantinfomation.LV + 1));
             setPlant(2, String.valueOf(a));
             LevelUpGrowth();
@@ -452,6 +476,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         }else{
             exp.setProgress(maxEXPProgress);
             EXPtextview.setText(""+maxEXPProgress);
+            Log.i("EXPtextview.setText2",""+maxEXPProgress);
             setPlant(2,String.valueOf(maxEXPProgress));
             Toast.makeText(getApplicationContext(), "응모창주세여 뀨우", Toast.LENGTH_LONG).show();
         }
@@ -655,7 +680,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                                 int id = object.getInt("itemID");
                                 String name = object.getString("itemName");
                                 String path = object.getString("itemImagePath");
-                                int aeffect = 0;
+                                int aeffect = object.getInt("itemEffect");
                                 int time = object.getInt("itemTime");
                                 int type = object.getInt("Type");
                                 int num = arr[i];
@@ -739,22 +764,24 @@ public class PlantManagementActivity extends AppCompatActivity {
 
                             plantinfomation.setInfo(plantID,flower,pollen,PlantHP,PlantEXP,PlantLV,flowerImagePath,potImagePath);
 
-                            ImageView plantflower = (ImageView) findViewById(R.id.plantflowerImage);
-                            ImageView plantpot = (ImageView) findViewById(R.id.plantpotImage);
+                            plantflower = (NetworkImageView) findViewById(R.id.plantflowerImage);
+                            plantpot = (NetworkImageView) findViewById(R.id.plantpotImage);
 
-                            int plantId = getResources().getIdentifier(flowerImagePath, "drawable", getPackageName());
-                            int plantpotId = getResources().getIdentifier(potImagePath, "drawable", getPackageName());
-                            Log.i("tlqkf exp ",""+PlantEXP);
-                            Log.i("tlqkf lv ",""+PlantLV);
-                            Log.i("tlqkf setflowetpath ",flowerImagePath);
-                            plantflower.setImageResource(plantId);
-                            plantpot.setImageResource(plantpotId);
+                            Log.i("whwrkxsptlqkf",""+flowerImagePath+"::"+potImagePath);
+                            plantflower.setImageUrl("http://202.31.200.143/"+flowerImagePath,mImageLoader);
+                            plantpot.setImageUrl("http://202.31.200.143/"+potImagePath,mImageLoader);
 
                             currenthp = plantinfomation.getHP();
                             currentexp =  plantinfomation.getEXP();
 
                             if(informup[0]==0){  getFlowerInform(plantinfomation.getFlower()); };
                             if(informup[1]==0){  getPollenInform(plantinfomation.getPollen()); };
+                            if(informup[2]==0){
+                                HPtextview.setText(String.valueOf(plantinfomation.getHP()));
+                                EXPtextview.setText(String.valueOf(plantinfomation.getEXP()));
+                                informup[2] = 1;
+                                //Log.i("EXPtextview.setText3",String.valueOf(plantinfomation.getEXP()));
+                            };
 
                             level.setText("LV " + String.valueOf(plantinfomation.getLV()));
                             Log.i("plantinfomation.LV()","::"+plantinfomation.getLV());
@@ -765,10 +792,6 @@ public class PlantManagementActivity extends AppCompatActivity {
                                 }
                             }
                             name.setText(plantinfomation.getFlowerImagePath());
-
-                            HPtextview.setText(String.valueOf(plantinfomation.getHP()));
-                            EXPtextview.setText(String.valueOf(plantinfomation.getEXP()));
-                            Log.i("EXPview 2",""+plantinfomation.getEXP());
                         }catch (JSONException e){
                             Log.i("PlantManagementActivity","JSONException :"+e.toString());
                         }
