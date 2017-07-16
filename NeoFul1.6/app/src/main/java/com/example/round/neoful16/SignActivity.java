@@ -45,6 +45,7 @@ public class SignActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //사용자가 입력한 id, nickname,password에 대한 정보를 가져옴.
+                Log.i("SignActivity","SignUp Button Click");
                 userid = id.getText().toString();
                 nickname = username.getText().toString();
                 userpassword = password.getText().toString();
@@ -103,5 +104,11 @@ public class SignActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
+    }
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(SignActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
