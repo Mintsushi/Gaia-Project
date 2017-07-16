@@ -32,8 +32,10 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -46,7 +48,7 @@ import java.util.ArrayList;
  * Created by Round on 2017-07-14.
  */
 
-public class StartActivity extends AppCompatActivity implements View.OnLongClickListener{
+public class StartActivity extends AppCompatActivity implements View.OnLongClickListener,View.OnClickListener{
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -55,13 +57,16 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     private GridLayout gridLayout;
 
     private RequestQueue requestQueue;
+    private ImageLoader mImageLoader;
     private ArrayList<PlantInfo> mArray = new ArrayList<>();
 
-    private OverlayService mOverlayService;
+    public static OverlayService mOverlayService;
     private Intent overLayService;
-    private Boolean mConnected = false;
+    public static Boolean mConnected = false;
     private Boolean mClear = false;
     private static IBinder mOverlayBinder;
+
+    private static Boolean nonStopApp = false;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -91,21 +96,33 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     }
 
     @Override
+    public void onClick(View view){
+        for(int i=0;i<mArray.size();i++){
+            if(mArray.get(i).getViewID() == view.getId()){
+//                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
+//                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
+//                startActivity(intent);
+            }
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
         overLayService = new Intent(StartActivity.this, OverlayService.class);
 
+        requestQueue= Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getApplicationContext())));
+
         if(!isServiceRunning(OverlayService.class)) {
-            bindService(overLayService, mServiceConnection, BIND_AUTO_CREATE);
             startService(overLayService);
+            bindService(overLayService, mServiceConnection, BIND_AUTO_CREATE);
         }
 
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
-
-        requestQueue= Volley.newRequestQueue(this);
 
         getUserInform();
         getPlant();
@@ -115,6 +132,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         store.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                nonStopApp = true;
                 Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
                 startActivity(intent);
             }
@@ -127,14 +145,19 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         Log.i("MainActivity","isServiceRunning : "+mOverlayService);
         for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("MainActivity", true+"");
-                Log.i("MainActivity","*************"+mOverlayBinder);
-                mOverlayService = ((OverlayService.LocalBinder) mOverlayBinder).getService();
-                mConnected = true;
-                return true;
+                if(mOverlayBinder != null){
+                    mOverlayService = ((OverlayService.LocalBinder) mOverlayBinder).getService();
+                    mConnected = true;
+                    return true;
+                }
+                else{
+                    //unbindService(mServiceConnection);
+                    //stopService(overLayService);
+                    return false;
+                }
             }
         }
-        Log.i ("MainActivity", false+"");
+        Log.i ("MainActivity", "false");
         return false;
     }
 
@@ -142,11 +165,18 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onResume(){
         super.onResume();
 
-        Log.i("MainActivity","onResume");
-        if(mConnected){
-            if(mOverlayService.getSize() >0){
-                mOverlayService.invisible();
+        Log.i("MainActivity","onResume : "+nonStopApp);
+        if(!nonStopApp) {
+            if (mConnected) {
+                Log.i("MainActivity", "Size : " + mOverlayService.getSize());
+                if (mOverlayService.getSize() > 0) {
+                    Log.i("MainActivity", "Size : " + mOverlayService.getSize());
+                    mOverlayService.invisible();
+                }
             }
+        }
+        else{
+            nonStopApp=false;
         }
     }
 
@@ -154,9 +184,12 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onPause(){
         super.onPause();
 
-        Log.i("MainActivity","onPause");
-        if(mConnected) {
-            mOverlayService.visible();
+        Log.i("MainActivity","onPause: "+nonStopApp);
+        if(!nonStopApp) {
+            if (mConnected) {
+                mOverlayService.visible();
+                //mConnected = false;
+            }
         }
     }
 
@@ -164,11 +197,8 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onDestroy(){
         super.onDestroy();
         Log.i("MainActivity","onDestroy");
-        if(mConnected) {
-            //if(mOverlayService.getSize() == 0 && mClear == false)
-            //unbindService(mServiceConnection);
-            //unregisterReceiver(restartService);
-        }
+        //mConnected=false;
+        //unbindService(mServiceConnection);
     }
 
     private void getUserInform(){
@@ -254,7 +284,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                                 int plantId = getResources().getIdentifier("plantflowerImage"+Integer.toString(i+1),"id",getPackageName());
                                 int plantpotId = getResources().getIdentifier("plantpotImage"+Integer.toString(i+1),"id",getPackageName());
 
-                                mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP));
+                                mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP,i));
 
                                 FrameLayout frameLayout = new FrameLayout(StartActivity.this);
                                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -262,10 +292,14 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
 
                                 params.setMargins(300,20,0,0);
 
-                                ImageView imageView = new ImageView(StartActivity.this);
-                                imageView.setImageResource(R.drawable.plant12);
+                                NetworkImageView imageView = new NetworkImageView(StartActivity.this);
+
+                                String plantPath = FIP+flower+pollen+".png";
+                                Log.i("MainActivity","plantPath : "+plantPath);
+
+                                imageView.setImageUrl("http://202.31.200.143/"+plantPath,mImageLoader);
                                 imageView.setLayoutParams(new DrawerLayout.LayoutParams(300,300));
-                                imageView.setTag(R.drawable.plant22);
+                                imageView.setTag("http://202.31.200.143/"+plantPath);
                                 imageView.setId(i);
 
                                 frameLayout.addView(imageView);
@@ -279,6 +313,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                                 gridLayout.addView(frameLayout,gridParam);
 
                                 imageView.setOnLongClickListener(StartActivity.this);
+                                imageView.setOnClickListener(StartActivity.this);
 
 //                                plant.setOnLongClickListener(StartActivity.this);
 //                                plant.setOnClickListener(StartActivity.this);
@@ -314,14 +349,16 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         private String flowerImagePath;
         private String potImagePath;
         private int plantId;
+        private int viewID;
 
-        public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP){
+        public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP,int viewID){
             this.id = id;
             this.flower = flower;
             this.pollen = pollen;
             this.plantId = plantId;
             this.flowerImagePath = FIP;
             this.potImagePath = PIP;
+            this.viewID = viewID;
         }
 
         public int getId(){return this.id;}
@@ -330,5 +367,6 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         public int getPlantId(){return this.plantId;}
         public String getFlowerImagePath(){return this.flowerImagePath;}
         public String getPotImagePath(){return this.potImagePath;}
+        public int getViewID(){return this.viewID;}
     }
 }

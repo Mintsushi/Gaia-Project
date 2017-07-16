@@ -7,6 +7,101 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg22">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/user"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="aurora32s"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="italic"
+                android:background="@drawable/drawable_email"
+                android:layout_width="wrap_content"
+                android:paddingRight="50dp"
+                android:paddingLeft="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/storeNickname" />
+
+            <TextView
+                android:text="aurora32s@naver.com"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:background="@drawable/drawable_email"
+                android:layout_width="wrap_content"
+                android:paddingRight="50dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/storeEmail" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/drawable_email"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="3dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="false"
+                    android:background="#ffbb1c"
+                    android:src="@drawable/seed"
+                    android:layout_margin="3dp"/>
+
+                <TextView
+                    android:text="1000"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:textAlignment="textEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/storeseed"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="false"
+                    android:background="#ffe11c"
+                    android:src="@drawable/fruit"
+                    android:layout_margin="3dp"/>
+
+                <TextView
+                    android:text="3000"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:textAlignment="textEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/storefruit"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

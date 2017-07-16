@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -35,11 +37,16 @@ public class StoreFlowerActivity extends Fragment{
     private ListView mList;
     private FlowerAdapter mAdapter;
 
-
+    private ImageLoader mImageLoader;
+    private RequestQueue requestQueue;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         View view = inflater.inflate(R.layout.activity_store_flower,container,false);
+
+        requestQueue= Volley.newRequestQueue(getContext());
+        requestQueue.start();
+        mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getContext())));
 
         mAdapter = new FlowerAdapter(getContext(),R.layout.item_item);
         mList = (ListView)view.findViewById(R.id.flowerlv);
@@ -48,11 +55,11 @@ public class StoreFlowerActivity extends Fragment{
         mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                StoreFlowerInformationActivity flowerInform = new StoreFlowerInformationActivity();
-//                flowerInform.setFlower(mArray.get(i));
-//                getActivity().getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.FL, flowerInform)
-//                        .commit();
+                StoreFlowerInformationActivity flowerInform = new StoreFlowerInformationActivity();
+                flowerInform.setFlower(mArray.get(i));
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.FL,flowerInform)
+                        .commit();
             }
         });
 
@@ -82,7 +89,13 @@ public class StoreFlowerActivity extends Fragment{
                                 String info = object.getString("flowerExplain");
                                 String path = object.getString("flowerImagePath");
                                 int cost = object.getInt("seedPrice");
-                                mArray.add(new FlowerInfo(id,name,info,path,cost));
+                                int max = object.getInt("maxHP");
+                                int level = object.getInt("maxLevel");
+                                int water = object.getInt("waterTime");
+                                int fruit = object.getInt("HowMuchFruit");
+                                String weather = object.getString("WeatherCondition");
+                                String explain = object.getString("flowerDetailedExplain");
+                                mArray.add(new FlowerInfo(id,name,info,path,cost,max,level,water,fruit,weather,explain));
 
                             }catch (JSONException e){
                                 Log.i("StoreItemActivity",e.toString());
@@ -109,13 +122,31 @@ public class StoreFlowerActivity extends Fragment{
         private String info;
         private String path;
         private int cost;
+        private int maxHP;
+        private int maxLevel;
+        private int waterTime;
+        private int fruit;
+        private String weather;
+        private String explain;
+        private String origianlPath;
 
-        public FlowerInfo(int id,String name, String info, String path,int cost){
+        public FlowerInfo(int id,String name, String info, String path,int cost,int maxHP, int maxLevel, int fruit,
+                          int waterTime, String weather,String explain){
             this.id = id;
             this.name = name;
             this.info = info;
-            this.path = path;
+            int x = path.indexOf(".");
+            path = path.substring(0,x);
+            this.origianlPath = path;
+            this.path = path+"3.png";
+            Log.i("StoreFlowerActivity",this.path);
             this.cost = cost;
+            this.maxHP = maxHP;
+            this.maxLevel = maxLevel;
+            this.fruit = fruit;
+            this.waterTime = waterTime;
+            this.weather = weather;
+            this.explain = explain;
         }
 
         public String getName(){return this.name;}
@@ -123,10 +154,17 @@ public class StoreFlowerActivity extends Fragment{
         public String getPath(){return this.path;}
         public int getCost(){return this.cost;}
         public int getId(){return this.id;}
+        public int getMaxHP(){return this.maxHP;}
+        public int getMaxLevel(){return this.maxLevel;}
+        public int getFruit(){return this.fruit;}
+        public int getWaterTime(){return this.waterTime;}
+        public String getWeather(){return this.weather;}
+        public String getExplain(){return this.explain;}
+        public String getOrigianlPath(){return this.origianlPath;}
     }
 
     static class FlowerViewHolder{
-        CircleImageView itemImage;
+        NetworkImageView itemImage;
         TextView itemName;
         TextView itemInfo;
         TextView itemCost;
@@ -153,7 +191,7 @@ public class StoreFlowerActivity extends Fragment{
                 v=mInflater.inflate(R.layout.item_item,parent,false);
                 viewHolder = new FlowerViewHolder();
 
-                viewHolder.itemImage=(CircleImageView)v.findViewById(R.id.item);
+                viewHolder.itemImage=(NetworkImageView)v.findViewById(R.id.item);
                 viewHolder.itemName=(TextView) v.findViewById(R.id.itemName);
                 viewHolder.itemInfo=(TextView)v.findViewById(R.id.itemInfo);
                 viewHolder.itemCost=(TextView)v.findViewById(R.id.itemCost);
@@ -167,7 +205,7 @@ public class StoreFlowerActivity extends Fragment{
 
             if(info != null){
                 int id = getResources().getIdentifier(info.getPath()+"3","drawable",getActivity().getPackageName());
-                viewHolder.itemImage.setImageResource(id);
+                viewHolder.itemImage.setImageUrl("http://202.31.200.143/"+info.getPath(),mImageLoader);
                 viewHolder.itemName.setText(info.getName());
                 viewHolder.itemInfo.setText(info.getInfo());
                 viewHolder.itemCost.setText(Integer.toString(info.getCost()));

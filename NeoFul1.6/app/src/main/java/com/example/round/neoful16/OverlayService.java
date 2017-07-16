@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,7 +31,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -63,7 +66,7 @@ public class OverlayService extends Service {
 
     private View topLeftView;
     private ImageView sky;
-    private TextView tv,currentSky,temp,rain,rate,wind;
+    private TextView tv,currentSky;
 
     protected LocationManager locationManager;
     private Boolean isGPSEnabled = false;
@@ -76,6 +79,9 @@ public class OverlayService extends Service {
 
     private int pageNo = 1;
     private int numOfRows = 10;
+
+    private RequestQueue requestQueue;
+    private ImageLoader mImageLoader;
 
     @Override
     public IBinder onBind(Intent intent){
@@ -134,6 +140,8 @@ public class OverlayService extends Service {
             //Acquire a refernce to the system location Manager
             locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
+            requestQueue= Volley.newRequestQueue(this);
+            mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getApplicationContext())));
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
             Log.i("Onclick","GPS : "+isGPSEnabled+" / Network : "+isNetworkEnabled);
@@ -141,13 +149,13 @@ public class OverlayService extends Service {
 //                setGPS();
 //            }
 //            else {
-                Log.i("onClick","Before Set LocationManager");
-                //통지사이의 최소 시간간격 : 100ms
-                //통지사이의 최소 변경거리 : 1m
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1, mLocationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
+            Log.i("onClick","Before Set LocationManager");
+            //통지사이의 최소 시간간격 : 100ms
+            //통지사이의 최소 변경거리 : 1m
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 1, mLocationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
 
-                Log.i("onClick","Set LocationManager OK");
+            Log.i("onClick","Set LocationManager OK");
 //            }
         }catch (SecurityException ex){
             Log.i("OnClick","SecurityException : "+ex.toString());
@@ -165,19 +173,22 @@ public class OverlayService extends Service {
 
         LinearLayout lv = new LinearLayout(this);
         lv.setOrientation(LinearLayout.VERTICAL);
+        lv.setBackgroundResource(R.drawable.shape);
+
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_TOAST,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
-        topLeftParams.x = 0;
-        topLeftParams.y = 700;
+        layoutParams.gravity= Gravity.TOP | Gravity.RIGHT;
+        layoutParams.x = 0;
+        layoutParams.y = 20;
 
         sky = new ImageView(this);
         sky.setImageResource(R.drawable.ic_weather_01);
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                500, 500,
+                700, 500,
                 WindowManager.LayoutParams.TYPE_TOAST,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
@@ -195,32 +206,10 @@ public class OverlayService extends Service {
         currentSky.setTextSize(15);
         currentSky.setTextColor(getResources().getColor(R.color.colorWhite));
 
-        temp= new TextView(this);
-        temp.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-        temp.setTextSize(15);
-        temp.setTextColor(getResources().getColor(R.color.colorWhite));
-
-        rain= new TextView(this);
-        rain.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-        rain.setTextSize(15);
-        rain.setTextColor(getResources().getColor(R.color.colorWhite));
-
-        rate= new TextView(this);
-        rate.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-        rate.setTextSize(15);
-        rate.setTextColor(getResources().getColor(R.color.colorWhite));
-
-        wind= new TextView(this);
-        wind.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-        wind.setTextSize(15);
-        wind.setTextColor(getResources().getColor(R.color.colorWhite));
-
         lv.addView(sky,params);
         lv.addView(tv);
         lv.addView(currentSky);
-        lv.addView(temp);
-        lv.addView(rate);
-        lv.addView(wind);
+
         mWindowManager.addView(lv, layoutParams);
 
         mArray.add(new PlantInfo(layoutParams,lv,10));
@@ -303,6 +292,7 @@ public class OverlayService extends Service {
             this.plant.setOnTouchListener(this);
             this.plant.setOnClickListener(this);
             this.id = id;
+            Log.i("PlantInfo",Integer.toString(id));
             // mWindowManager.addView(this.plant,this.params);
         }
 
@@ -312,53 +302,57 @@ public class OverlayService extends Service {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent){
-            Log.i(TAG,"*************"+motionEvent);
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                float x = motionEvent.getRawX();
-                float y = motionEvent.getRawY();
+            Toast.makeText(getApplicationContext(),"ID: "+id,Toast.LENGTH_LONG).show();
+            if(-1<id && id<10){
+                Log.i(TAG,"*************"+motionEvent);
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    float x = motionEvent.getRawX();
+                    float y = motionEvent.getRawY();
 
-                moving = false;
+                    moving = false;
 
-                int[] location = new int[2];
-                //overlayedButton.getLocationOnScreen(location);
-                view.getLocationOnScreen(location);
+                    int[] location = new int[2];
+                    //overlayedButton.getLocationOnScreen(location);
+                    view.getLocationOnScreen(location);
 
-                originalXPos = location[0];
-                originalYPos = location[1];
+                    originalXPos = location[0];
+                    originalYPos = location[1];
 
-                offsetX = originalXPos - x;
-                offsetY = originalYPos - y;
+                    offsetX = originalXPos - x;
+                    offsetY = originalYPos - y;
 
-            } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                int[] topLeftLocationOnScreen = new int[2];
-                topLeftView.getLocationOnScreen(topLeftLocationOnScreen);
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                    int[] topLeftLocationOnScreen = new int[2];
+                    topLeftView.getLocationOnScreen(topLeftLocationOnScreen);
 
-                System.out.println("topLeftY="+topLeftLocationOnScreen[1]);
-                System.out.println("originalY="+originalYPos);
+                    System.out.println("topLeftY="+topLeftLocationOnScreen[1]);
+                    System.out.println("originalY="+originalYPos);
 
-                float x = motionEvent.getRawX();
-                float y = motionEvent.getRawY();
+                    float x = motionEvent.getRawX();
+                    float y = motionEvent.getRawY();
 
-                WindowManager.LayoutParams params = (WindowManager.LayoutParams) view.getLayoutParams();
+                    WindowManager.LayoutParams params = (WindowManager.LayoutParams) view.getLayoutParams();
 
-                int newX = (int) (offsetX + x);
-                int newY = (int) (offsetY + y);
+                    int newX = (int) (offsetX + x);
+                    int newY = (int) (offsetY + y);
 
-                if (Math.abs(newX - originalXPos) < 1 && Math.abs(newY - originalYPos) < 1 && !moving) {
-                    return false;
+                    if (Math.abs(newX - originalXPos) < 1 && Math.abs(newY - originalYPos) < 1 && !moving) {
+                        return false;
+                    }
+
+                    params.x = newX - (topLeftLocationOnScreen[0]);
+                    params.y = newY - (topLeftLocationOnScreen[1]);
+
+                    mWindowManager.updateViewLayout(view, params);
+                    moving = true;
+                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    if (moving) {
+                        return true;
+                    }
                 }
 
-                params.x = newX - (topLeftLocationOnScreen[0]);
-                params.y = newY - (topLeftLocationOnScreen[1]);
-
-                mWindowManager.updateViewLayout(view, params);
-                moving = true;
-            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                if (moving) {
-                    return true;
-                }
+                return false;
             }
-
             return false;
         }
 
@@ -410,8 +404,8 @@ public class OverlayService extends Service {
         Log.i(TAG,"************1  "+flower.toString()+"/"+mWindowManager.toString());
         int [] location = new int[2];
         flower.getLocationOnScreen(location);
-        final ImageView overlayButton = new ImageView(this);
-        overlayButton.setImageResource((Integer)flower.getTag());
+        final NetworkImageView overlayButton = new NetworkImageView(this);
+        overlayButton.setImageUrl(flower.getTag().toString(),mImageLoader);
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 flower.getWidth(), flower.getHeight(),
                 WindowManager.LayoutParams.TYPE_TOAST,
@@ -499,22 +493,33 @@ public class OverlayService extends Service {
 
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
+//
+//        if(minutes < 45){
+//            if( (hour - 1) <0){
+//                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE)-1);
+//            }
+//
+//            int newHour = (hour - 1) < 0 ? 24 + (hour - 3) : (hour - 3);
+//            if(mForecastGridRetry == 2){
+//                newHour = (newHour -1) <0 ? 24+(newHour - 3):(newHour - 3);
+//            }
+//
+//            day= "&"+"base_time="+((newHour) < 10 ? "0"+newHour : newHour)+"00";
+//        }else{
+//            hour = (hour - 1) <0 ? 24+(hour-2) : (hour - 2);
+//            day= "&"+"base_time="+((hour)<10 ? "0"+hour:hour)+"00";
+//        }
 
-        if(minutes < 45){
-            if( (hour - 1) <0){
-                calendar.set(Calendar.DATE, calendar.get(Calendar.DATE)-1);
-            }
-
-            int newHour = (hour - 1) < 0 ? 24 + (hour - 2) : (hour - 2);
-            if(mForecastGridRetry == 2){
-                newHour = (newHour -1) <0 ? 24+(newHour - 2):(newHour - 2);
-            }
-
-            day= "&"+"base_time="+((newHour) < 10 ? "0"+newHour : newHour)+"00";
-        }else{
-            hour = (hour - 1) <0 ? 24+(hour-1) : (hour - 1);
-            day= "&"+"base_time="+((hour)<10 ? "0"+hour:hour)+"00";
+        if( (hour - 1) <0){
+            calendar.set(Calendar.DATE, calendar.get(Calendar.DATE)-1);
         }
+
+        int newHour = (hour - 1) < 0 ? 24 + (hour - 2) : (hour - 2);
+
+        if(mForecastGridRetry == 2){
+            newHour = (newHour -1) <0 ? 24+(newHour - 2):(newHour - 2);
+        }
+        day= "&"+"base_time="+((newHour) < 10 ? "0"+newHour : newHour)+"00";
 
         SimpleDateFormat sdf;
         sdf = new SimpleDateFormat("yyyyMMdd");
@@ -593,13 +598,10 @@ public class OverlayService extends Service {
 
             if(item !=null){
                 int rainStaus = Integer.parseInt(item.obsrValue);
-                Log.i(TAG,"SKY : "+skyStatusArray[skyStatusValue-1]);
                 if(rainStaus > 0) {
                     skyStatusValue = BASE_SKY_STATUS_END_VALUE + rainStaus;
-                    rain.setText("강수상태 : "+skyStatusArray[skyStatusValue]);
                 }
                 item = getForecastItemCategory(mForecastGribItems,ForecastItem.RN1);
-                rate.setText("강수량 : "+item.obsrValue);
                 if (item != null) {
                     try {
                         if (rainStaus > 0)
@@ -642,18 +644,9 @@ public class OverlayService extends Service {
             currentSky.setText("현재 하늘 상태 : "+this.getString(R.string.sky_status,skyStatus,rainValueString));
         }
 
-        item = getForecastItemCategory(mForecastGribItems,ForecastItem.T1H);
-        temp.setText(item.obsrValue);
-
-        item = getForecastItemCategory(mForecastGribItems,ForecastItem.WSD);
-        wind.setText(item.obsrValue);
-
-        String[] backgroudArray = res.getStringArray(R.array.sky_status_bg_port_drawable);
+        String[] backgroudArray  = res.getStringArray(R.array.sky_status_drawable);
+        Log.i(TAG,"SKY Status Value : "+skyStatusValue);
         String name = backgroudArray[skyStatusValue];
-        Log.i(TAG,"id : "+name);
-
-        backgroudArray = res.getStringArray(R.array.sky_status_drawable);
-        name = backgroudArray[skyStatusValue];
         int id = getResources().getIdentifier(name,"drawable",getPackageName());
         sky.setImageResource(id);
 
