@@ -31,7 +31,13 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+<<<<<<< HEAD
 import com.android.volley.toolbox.JsonObjectRequest;
+=======
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
 import com.android.volley.toolbox.Volley;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -78,6 +84,12 @@ public class OverlayService extends Service {
     private int pageNo = 1;
     private int numOfRows = 10;
 
+<<<<<<< HEAD
+=======
+    private RequestQueue requestQueue;
+    private ImageLoader mImageLoader;
+
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
     @Override
     public IBinder onBind(Intent intent){
 
@@ -135,6 +147,11 @@ public class OverlayService extends Service {
             //Acquire a refernce to the system location Manager
             locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
+<<<<<<< HEAD
+=======
+            requestQueue= Volley.newRequestQueue(this);
+            mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getApplicationContext())));
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
             Log.i("Onclick","GPS : "+isGPSEnabled+" / Network : "+isNetworkEnabled);
@@ -142,6 +159,7 @@ public class OverlayService extends Service {
 //                setGPS();
 //            }
 //            else {
+<<<<<<< HEAD
                 Log.i("onClick","Before Set LocationManager");
                 //통지사이의 최소 시간간격 : 100ms
                 //통지사이의 최소 변경거리 : 1m
@@ -149,6 +167,15 @@ public class OverlayService extends Service {
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
 
                 Log.i("onClick","Set LocationManager OK");
+=======
+            Log.i("onClick","Before Set LocationManager");
+            //통지사이의 최소 시간간격 : 100ms
+            //통지사이의 최소 변경거리 : 1m
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50, 1, mLocationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 100, 1, mLocationListener);
+
+            Log.i("onClick","Set LocationManager OK");
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
 //            }
         }catch (SecurityException ex){
             Log.i("OnClick","SecurityException : "+ex.toString());
@@ -174,7 +201,11 @@ public class OverlayService extends Service {
                 WindowManager.LayoutParams.TYPE_TOAST,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
+<<<<<<< HEAD
         layoutParams.gravity= Gravity.TOP | Gravity.LEFT;
+=======
+        layoutParams.gravity= Gravity.TOP | Gravity.RIGHT;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         layoutParams.x = 0;
         layoutParams.y = 20;
 
@@ -285,6 +316,10 @@ public class OverlayService extends Service {
             this.plant.setOnTouchListener(this);
             this.plant.setOnClickListener(this);
             this.id = id;
+<<<<<<< HEAD
+=======
+            Log.i("PlantInfo",Integer.toString(id));
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
             // mWindowManager.addView(this.plant,this.params);
         }
 
@@ -294,7 +329,12 @@ public class OverlayService extends Service {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent){
+<<<<<<< HEAD
             if(0<view.getId() && view.getId()<10){
+=======
+            Toast.makeText(getApplicationContext(),"ID: "+id,Toast.LENGTH_LONG).show();
+            if(-1<id && id<10){
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
                 Log.i(TAG,"*************"+motionEvent);
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     float x = motionEvent.getRawX();
@@ -395,8 +435,13 @@ public class OverlayService extends Service {
         Log.i(TAG,"************1  "+flower.toString()+"/"+mWindowManager.toString());
         int [] location = new int[2];
         flower.getLocationOnScreen(location);
+<<<<<<< HEAD
         final ImageView overlayButton = new ImageView(this);
         overlayButton.setImageResource((Integer)flower.getTag());
+=======
+        final NetworkImageView overlayButton = new NetworkImageView(this);
+        overlayButton.setImageUrl(flower.getTag().toString(),mImageLoader);
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 flower.getWidth(), flower.getHeight(),
                 WindowManager.LayoutParams.TYPE_TOAST,

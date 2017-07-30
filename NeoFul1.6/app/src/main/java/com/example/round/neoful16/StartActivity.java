@@ -32,8 +32,15 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+<<<<<<< HEAD
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+=======
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -55,6 +62,10 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     private GridLayout gridLayout;
 
     private RequestQueue requestQueue;
+<<<<<<< HEAD
+=======
+    private ImageLoader mImageLoader;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
     private ArrayList<PlantInfo> mArray = new ArrayList<>();
 
     public static OverlayService mOverlayService;
@@ -63,6 +74,11 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     private Boolean mClear = false;
     private static IBinder mOverlayBinder;
 
+<<<<<<< HEAD
+=======
+    private static Boolean nonStopApp = false;
+
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -93,10 +109,17 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     @Override
     public void onClick(View view){
         for(int i=0;i<mArray.size();i++){
+<<<<<<< HEAD
             if(mArray.get(i).getPlantId() == view.getId()){
                 Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
                 intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
                 startActivity(intent);
+=======
+            if(mArray.get(i).getViewID() == view.getId()){
+//                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
+//                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
+//                startActivity(intent);
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
             }
         }
     }
@@ -108,6 +131,12 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
 
         overLayService = new Intent(StartActivity.this, OverlayService.class);
 
+<<<<<<< HEAD
+=======
+        requestQueue= Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getApplicationContext())));
+
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         if(!isServiceRunning(OverlayService.class)) {
             startService(overLayService);
             bindService(overLayService, mServiceConnection, BIND_AUTO_CREATE);
@@ -116,8 +145,11 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
 
+<<<<<<< HEAD
         requestQueue= Volley.newRequestQueue(this);
 
+=======
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         getUserInform();
         getPlant();
 
@@ -126,9 +158,15 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         store.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
                 startActivity(intent);
                 finish();
+=======
+                nonStopApp = true;
+                Intent intent = new Intent(StartActivity.this,StoreMainActivity.class);
+                startActivity(intent);
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
             }
         });
     }
@@ -159,6 +197,7 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onResume(){
         super.onResume();
 
+<<<<<<< HEAD
         Log.i("MainActivity","onResume : "+mConnected);
         if(mConnected){
             Log.i("MainActivity","Size : "+mOverlayService.getSize());
@@ -167,16 +206,40 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                 mOverlayService.invisible();
             }
         }
+=======
+        Log.i("MainActivity","onResume : "+nonStopApp);
+        if(!nonStopApp) {
+            if (mConnected) {
+                Log.i("MainActivity", "Size : " + mOverlayService.getSize());
+                if (mOverlayService.getSize() > 0) {
+                    Log.i("MainActivity", "Size : " + mOverlayService.getSize());
+                    mOverlayService.invisible();
+                }
+            }
+        }
+        else{
+            nonStopApp=false;
+        }
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
     }
 
     @Override
     protected void onPause(){
         super.onPause();
 
+<<<<<<< HEAD
         Log.i("MainActivity","onPause");
         if(mConnected) {
             mOverlayService.visible();
             mConnected=false;
+=======
+        Log.i("MainActivity","onPause: "+nonStopApp);
+        if(!nonStopApp) {
+            if (mConnected) {
+                mOverlayService.visible();
+                //mConnected = false;
+            }
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         }
     }
 
@@ -184,7 +247,11 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     protected void onDestroy(){
         super.onDestroy();
         Log.i("MainActivity","onDestroy");
+<<<<<<< HEAD
         mConnected=false;
+=======
+        //mConnected=false;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         //unbindService(mServiceConnection);
     }
 
@@ -271,7 +338,11 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                                 int plantId = getResources().getIdentifier("plantflowerImage"+Integer.toString(i+1),"id",getPackageName());
                                 int plantpotId = getResources().getIdentifier("plantpotImage"+Integer.toString(i+1),"id",getPackageName());
 
+<<<<<<< HEAD
                                 mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP));
+=======
+                                mArray.add(new PlantInfo(id,flower,pollen,plantId,FIP,PIP,i));
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
 
                                 FrameLayout frameLayout = new FrameLayout(StartActivity.this);
                                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -279,10 +350,21 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
 
                                 params.setMargins(300,20,0,0);
 
+<<<<<<< HEAD
                                 ImageView imageView = new ImageView(StartActivity.this);
                                 imageView.setImageResource(R.drawable.plant12);
                                 imageView.setLayoutParams(new DrawerLayout.LayoutParams(300,300));
                                 imageView.setTag(R.drawable.plant22);
+=======
+                                NetworkImageView imageView = new NetworkImageView(StartActivity.this);
+
+                                String plantPath = FIP+flower+pollen+".png";
+                                Log.i("MainActivity","plantPath : "+plantPath);
+
+                                imageView.setImageUrl("http://202.31.200.143/"+plantPath,mImageLoader);
+                                imageView.setLayoutParams(new DrawerLayout.LayoutParams(300,300));
+                                imageView.setTag("http://202.31.200.143/"+plantPath);
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
                                 imageView.setId(i);
 
                                 frameLayout.addView(imageView);
@@ -332,14 +414,24 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         private String flowerImagePath;
         private String potImagePath;
         private int plantId;
+<<<<<<< HEAD
 
         public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP){
+=======
+        private int viewID;
+
+        public PlantInfo(int id, String flower,String pollen,int plantId, String FIP, String PIP,int viewID){
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
             this.id = id;
             this.flower = flower;
             this.pollen = pollen;
             this.plantId = plantId;
             this.flowerImagePath = FIP;
             this.potImagePath = PIP;
+<<<<<<< HEAD
+=======
+            this.viewID = viewID;
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         }
 
         public int getId(){return this.id;}
@@ -348,5 +440,9 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         public int getPlantId(){return this.plantId;}
         public String getFlowerImagePath(){return this.flowerImagePath;}
         public String getPotImagePath(){return this.potImagePath;}
+<<<<<<< HEAD
+=======
+        public int getViewID(){return this.viewID;}
+>>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
     }
 }
