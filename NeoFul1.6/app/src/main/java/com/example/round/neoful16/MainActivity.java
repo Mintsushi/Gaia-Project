@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
 
-//        editor.putBoolean("autoLogin", true);
-//        editor.putString("nickname","Round");
-//        editor.commit();
+        editor.putBoolean("autoLogin", true);
+        editor.putString("nickname","Round");
+        editor.commit();
 
         if(pref.getBoolean("autoLogin",false)){
             //App의 Main Activity를 실행

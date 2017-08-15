@@ -19,7 +19,7 @@ android {
     }
     dexOptions{
         jumboMode true
-        javaMaxHeapSize "4g"
+        javaMaxHeapSize "10g"
     }
 }
 

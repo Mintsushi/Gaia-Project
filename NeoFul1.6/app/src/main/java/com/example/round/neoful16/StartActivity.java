@@ -2,31 +2,25 @@ package com.example.round.neoful16;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -53,13 +47,14 @@ import java.util.ArrayList;
  * Created by Round on 2017-07-14.
  */
 
-public class StartActivity extends AppCompatActivity implements View.OnLongClickListener,View.OnClickListener{
+public class StartActivity extends AppCompatActivity
+        implements View.OnLongClickListener,View.OnClickListener,View.OnTouchListener{
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
     private TextView nickname, email, seed, fruit;
-    private GridLayout gridLayout;
+    private RelativeLayout relativeLayout;
 
     private RequestQueue requestQueue;
 <<<<<<< HEAD
@@ -78,7 +73,14 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
 =======
     private static Boolean nonStopApp = false;
 
+<<<<<<< HEAD
 >>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
+=======
+    private Boolean move = false;
+    private int originalXPos, originalYPos;
+    private float offsetX, offsetY;
+
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -97,11 +99,13 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
     @Override
     public boolean onLongClick(View view){
 
-        if(mOverlayService.onTest(view)) {
-            Log.i("StartActivity",view.toString());
-            mOverlayService.onLongClick(view);
-            finish();
-        }
+        Log.i("onTouch","onLongClick Event");
+//
+//        if(mOverlayService.onTest(view) && !move) {
+//            Log.i("StartActivity",view.toString());
+//            mOverlayService.onLongClick(view);
+//            finish();
+//        }
 
         return false;
     }
@@ -116,12 +120,68 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                 startActivity(intent);
 =======
             if(mArray.get(i).getViewID() == view.getId()){
+<<<<<<< HEAD
 //                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
 //                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
 //                startActivity(intent);
 >>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
+=======
+                nonStopApp = true;
+                Intent intent = new Intent(StartActivity.this,PlantManagementActivity.class);
+                intent.putExtra("plantNewID",String.valueOf(mArray.get(i).getId()));
+                startActivity(intent);
+                finish();
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent){
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+            Log.i("onTouch","ImageView Touch Down");
+
+            float x = motionEvent.getRawX();
+            float y = motionEvent.getRawY();
+
+            move = false;
+
+            int [] location = new int[2];
+            view.getLocationOnScreen(location);
+
+            originalXPos = location[0];
+            originalYPos = location[1];
+
+            offsetX = originalXPos - x;
+            offsetY = originalYPos - y;
+        }
+        else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+            Log.i("onTouch","ImageView Touch Move");
+
+            float x = motionEvent.getRawX();
+            float y = motionEvent.getRawY();
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
+
+            int newX = (int)(x);
+            int newY = (int)(y);
+
+            if (Math.abs(newX - originalXPos) < 1 && Math.abs(newY - originalYPos) < 1 && !move) {
+                return false;
+            }
+
+            params.leftMargin = newX-170;
+            params.topMargin = newY-500;
+
+            relativeLayout.updateViewLayout(view,params);
+
+            move = true;
+        }
+        else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+            Log.i("onTouch","ImageView Touch Up");
+            move = false;
+        }
+        return false;
     }
 
     @Override
@@ -146,14 +206,21 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         editor = pref.edit();
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         requestQueue= Volley.newRequestQueue(this);
 
 =======
 >>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
         getUserInform();
         getPlant();
+=======
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
-        gridLayout = (GridLayout)findViewById(R.id.grid);
+        //getUserInform();
+        //getPlant();
+        testSource();
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
         Button store = (Button)findViewById(R.id.shop);
         store.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +238,23 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
         });
     }
 
+    private void testSource(){
+
+        ImageView imageView = new ImageView(this);
+
+        imageView.setImageResource(R.drawable.plant12);
+        imageView.setId(0);
+
+        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
+
+        //위치는 후에 random으로 바꾸자
+        relParams.leftMargin = 0;
+        relParams.topMargin = 0;
+        imageView.setOnTouchListener(this);
+        imageView.setOnLongClickListener(this);
+
+        relativeLayout.addView(imageView,relParams);
+    }
     private boolean isServiceRunning(Class<?> serviceClass){
         ActivityManager manager = (ActivityManager)getSystemService(getApplicationContext().ACTIVITY_SERVICE);
 
@@ -311,20 +395,10 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                     public void onResponse(JSONArray response){
                         Log.i("StartActivity",response.toString());
 
-                        gridLayout.removeAllViews();
+                        relativeLayout.removeAllViews();
 
-                        int column = 3;
-                        int row = 3;
+                        for(int i=0; i<response.length();i++){
 
-                        gridLayout.setColumnCount(column);
-                        gridLayout.setRowCount(row);
-
-                        for(int i=0,c=0,r=0;i<response.length();i++,c++){
-
-                            if(c == column){
-                                c=0;
-                                r++;
-                            }
                             try{
                                 JSONObject object = response.getJSONObject(i);
 
@@ -370,12 +444,14 @@ public class StartActivity extends AppCompatActivity implements View.OnLongClick
                                 frameLayout.addView(imageView);
 
                                 frameLayout.setLayoutParams(params);
+                                frameLayout.setOnTouchListener(StartActivity.this);
 
-                                GridLayout.Spec rowSpan = GridLayout.spec(r);
-                                GridLayout.Spec colSpan = GridLayout.spec(c);
+                                ConstraintLayout.LayoutParams conParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                                conParams.editorAbsoluteX = 0;
+                                conParams.editorAbsoluteY = 0;
 
-                                GridLayout.LayoutParams gridParam = new GridLayout.LayoutParams(rowSpan,colSpan);
-                                gridLayout.addView(frameLayout,gridParam);
+                                relativeLayout.addView(frameLayout,conParams);
 
                                 imageView.setOnLongClickListener(StartActivity.this);
                                 imageView.setOnClickListener(StartActivity.this);

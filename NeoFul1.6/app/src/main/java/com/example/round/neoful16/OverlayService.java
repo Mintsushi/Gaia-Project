@@ -202,10 +202,14 @@ public class OverlayService extends Service {
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT);
 <<<<<<< HEAD
+<<<<<<< HEAD
         layoutParams.gravity= Gravity.TOP | Gravity.LEFT;
 =======
         layoutParams.gravity= Gravity.TOP | Gravity.RIGHT;
 >>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
+=======
+        layoutParams.gravity= Gravity.TOP | Gravity.CENTER;
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
         layoutParams.x = 0;
         layoutParams.y = 20;
 
@@ -314,7 +318,6 @@ public class OverlayService extends Service {
             this.params = params;
             this.plant = image;
             this.plant.setOnTouchListener(this);
-            this.plant.setOnClickListener(this);
             this.id = id;
 <<<<<<< HEAD
 =======
@@ -333,8 +336,11 @@ public class OverlayService extends Service {
             if(0<view.getId() && view.getId()<10){
 =======
             Toast.makeText(getApplicationContext(),"ID: "+id,Toast.LENGTH_LONG).show();
+<<<<<<< HEAD
             if(-1<id && id<10){
 >>>>>>> 36d62bcdd2c85009bbc462f81d4a19be8e5fca9c
+=======
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
                 Log.i(TAG,"*************"+motionEvent);
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     float x = motionEvent.getRawX();
@@ -381,9 +387,6 @@ public class OverlayService extends Service {
                         return true;
                     }
                 }
-
-                return false;
-            }
             return false;
         }
 
@@ -459,7 +462,6 @@ public class OverlayService extends Service {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    Log.i(TAG,"************"+motionEvent.toString());
                     float x = motionEvent.getRawX();
                     float y = motionEvent.getRawY();
 

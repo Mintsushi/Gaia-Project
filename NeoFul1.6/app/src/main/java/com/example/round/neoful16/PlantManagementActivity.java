@@ -58,12 +58,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class PlantManagementActivity extends AppCompatActivity {
 
     int plantIDS;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+    private ImageLoader mImageLoader;
+    private RequestQueue requestQueue;
+
     private PlantInfomation plantinfomation = new PlantInfomation();
     private FlowerInfomation flower = new FlowerInfomation();
     private PollenInfomation pollen = new PollenInfomation();
 
-    private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
+    //-------------------------------------------------------
+    NetworkImageView itemEffectImage;
 
     //-------------------------------------------------------
     NetworkImageView itemEffectImage;
@@ -72,6 +77,7 @@ public class PlantManagementActivity extends AppCompatActivity {
     TextView name;
     TextView level;
     ImageView effect;
+    TextView userNickname,userEmail,userSeed,userFruit;
     int maxLevel;
 
     ImageView levelupview;
@@ -92,10 +98,9 @@ public class PlantManagementActivity extends AppCompatActivity {
     private ArrayList<ItemInfomation> mArray = new ArrayList<>();
     private ListView mList;
     private ItemAdapters mAdapter;
-    private ImageLoader mImageLoader;
-    private RequestQueue requestQueue;
 
-    Button ONOFF;       //위젯 on/off 버튼
+
+    CircleImageView ONOFF;       //위젯 on/off 버튼
 
     //---------------------------세로 버튼---------------------------
     Button music;       //음악 버튼
@@ -124,7 +129,7 @@ public class PlantManagementActivity extends AppCompatActivity {
     int maxHPProgress;
     int maxEXPProgress;
     //프로그레스 바의 체력당비율
-    int setProgressResult;
+    float setProgressResult;
     //---------------------------기타 보조 변수---------------------------
     int a; //위젯 ON/OFF 변경 용 변수
     int informup[] = {0,0,0};
@@ -137,8 +142,12 @@ public class PlantManagementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plant_management);
+
         pref = getApplicationContext().getSharedPreferences("Login", getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
+
+        requestQueue= Volley.newRequestQueue(this);
+        mImageLoader = new ImageLoader(requestQueue,new LruBitmapCache(LruBitmapCache.getCacheSize(getApplicationContext())));
 
         // -----------------인턴트----------------------
         Intent intent = getIntent();
@@ -150,6 +159,13 @@ public class PlantManagementActivity extends AppCompatActivity {
         getPlant();
         getUserInform();
         requestItem();
+
+        //----------------사용자 정보------------------------------
+        userNickname = (TextView)findViewById(R.id.plant_Nickname);
+        userEmail = (TextView)findViewById(R.id.plant_Email);
+        userSeed = (TextView)findViewById(R.id.plant_seed);
+        userFruit = (TextView)findViewById(R.id.plant_fruit);
+
         //--------------------------꽃 정보 --------------------------
         name = (TextView) findViewById(R.id.PlantName);
         level = (TextView) findViewById(R.id.PlantLV);
@@ -171,7 +187,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         levelupview = (ImageView)findViewById(R.id.levelupview);
         levelupview.setVisibility(View.INVISIBLE);
         //---------------------------가로 버튼---------------------------
-        ONOFF = (Button) findViewById(R.id.ONOFF);
+        ONOFF = (CircleImageView) findViewById(R.id.ONOFF);
 
         //---------------------------세로 버튼---------------------------
         music = (Button) findViewById(R.id.btnMusic);
@@ -381,6 +397,13 @@ public class PlantManagementActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(PlantManagementActivity.this, StartActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     void HPcurrent(int itemID, int itemNum, String str, int Type, int hpcur){
         if( currenthp==maxHPProgress){
             Toast.makeText(getApplicationContext(), "Pull P", Toast.LENGTH_LONG).show();
@@ -395,7 +418,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                 requestItem();
 
                 currenthp = currenthp + hpcur;
-                hp.setProgress(currenthp / setProgressResult);
+                hp.setProgress((int)((float)currenthp / setProgressResult));
                 HPtextview.setText("" + currenthp);
                 setPlant(1, String.valueOf(currenthp));
                 itemEffectImage.setImageUrl("http://202.31.200.143/"+str,mImageLoader);
@@ -426,6 +449,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 levelupview.setVisibility(View.INVISIBLE);
+                level.setText("Plant LV : "+Integer.toString(plantinfomation.LV+1));
             }
         }, 1000);
     }
@@ -612,6 +636,7 @@ public class PlantManagementActivity extends AppCompatActivity {
         public int getItemNum(){ return this.itemNum;}
     }
 
+<<<<<<< HEAD
     static class ItemViewList{
         NetworkImageView item_listitem;
         //TextView item_listName;
@@ -741,6 +766,8 @@ public class PlantManagementActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
+=======
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
     private void getPlant(){
 
         String url = "http://202.31.200.143/user/setplant/" + String.valueOf(plantIDS);
@@ -762,6 +789,7 @@ public class PlantManagementActivity extends AppCompatActivity {
                             String flowerImagePath = response.getString("flowerImagePath");
                             String potImagePath = response.getString("potImagePath");
 
+<<<<<<< HEAD
                             plantinfomation.setInfo(plantID,flower,pollen,PlantHP,PlantEXP,PlantLV,flowerImagePath,potImagePath);
 
                             plantflower = (NetworkImageView) findViewById(R.id.plantflowerImage);
@@ -770,10 +798,18 @@ public class PlantManagementActivity extends AppCompatActivity {
                             Log.i("whwrkxsptlqkf",""+flowerImagePath+"::"+potImagePath);
                             plantflower.setImageUrl("http://202.31.200.143/"+flowerImagePath,mImageLoader);
                             plantpot.setImageUrl("http://202.31.200.143/"+potImagePath,mImageLoader);
+=======
+                            NetworkImageView plantflower = (NetworkImageView) findViewById(R.id.plantflowerImage);
+                            String plantPath = flowerImagePath+flower+pollen+".png";
+                            Log.i("MainActivity","plantPath : "+plantPath);
 
-                            currenthp = plantinfomation.getHP();
-                            currentexp =  plantinfomation.getEXP();
+                            plantflower.setImageUrl("http://202.31.200.143/"+plantPath,mImageLoader);
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
 
+                            currenthp = PlantHP;
+                            currentexp = PlantEXP;
+
+<<<<<<< HEAD
                             if(informup[0]==0){  getFlowerInform(plantinfomation.getFlower()); };
                             if(informup[1]==0){  getPollenInform(plantinfomation.getPollen()); };
                             if(informup[2]==0){
@@ -782,16 +818,32 @@ public class PlantManagementActivity extends AppCompatActivity {
                                 informup[2] = 1;
                                 //Log.i("EXPtextview.setText3",String.valueOf(plantinfomation.getEXP()));
                             };
-
-                            level.setText("LV " + String.valueOf(plantinfomation.getLV()));
-                            Log.i("plantinfomation.LV()","::"+plantinfomation.getLV());
-                            if(30== plantinfomation.getLV()){
-                                Log.i("plantinfomation.EXP()","::"+plantinfomation.getEXP());
-                                if(100 == plantinfomation.getEXP()) {
-                                    entry.setVisibility(View.VISIBLE);
-                                }
+=======
+                            if(informup[0] == 0)
+                                getFlowerInform(flower);
+                            if(informup[1] == 0)
+                                getPollenInform(pollen);
+                            if(informup[2] == 0){
+                                HPtextview.setText(Integer.toString(currenthp));
+                                EXPtextview.setText(Integer.toString(currentexp));
+                                informup[2] = 1;
                             }
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+                            level.setText("LV. "+Integer.toString(PlantLV));
+                            if(PlantLV == 30){
+                                if(PlantEXP == 100)
+                                    entry.setVisibility(View.VISIBLE);
+                            }
+<<<<<<< HEAD
                             name.setText(plantinfomation.getFlowerImagePath());
+=======
+
+                            name.setText(flowerImagePath);
+
+                            plantinfomation.setInfo(plantID,flower,pollen,PlantHP,PlantEXP,PlantLV,flowerImagePath,potImagePath);
+
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
                         }catch (JSONException e){
                             Log.i("PlantManagementActivity","JSONException :"+e.toString());
                         }
@@ -807,7 +859,6 @@ public class PlantManagementActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(request);
     }
-
     private void getFlowerInform(int flowerNo){
 
         String url = "http://202.31.200.143/user/setflowerinform/" + String.valueOf(flowerNo);
@@ -901,6 +952,21 @@ public class PlantManagementActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
+    private void progressset(){
+
+        // 체력 경험치 최대치 설정
+        maxHPtextview.setText("/ " + maxHPProgress);
+        maxEXPtextview.setText("/ " + maxEXPProgress);
+
+        //프로그레스 바의 현재 수치를 int 변수에 받아옴
+        currenthp = Integer.parseInt(HPtextview.getText().toString());
+        currentexp = Integer.parseInt(EXPtextview.getText().toString());
+        Log.i("EXPview 3",""+currentexp);
+        //프로그레스 바를 현재 수치 값으로 갱신하여 보여줌
+        hp.setProgress((int)((float)currenthp/setProgressResult));
+        exp.setProgress(currentexp);
+    }
+
     private void getUserInform(){
 
         String url="http://202.31.200.143/user/"+pref.getString("id","");
@@ -917,6 +983,10 @@ public class PlantManagementActivity extends AppCompatActivity {
                             waternum = response.getInt("waterNum");
                             energynum = response.getInt("ferilizerNum");
                             mediciennum  = response.getInt("pesticideNum");
+                            userNickname.setText(response.getString("nickname"));
+                            userEmail.setText(response.getString("userEmail"));
+                            userSeed.setText(Integer.toString(response.getInt("seed")));
+                            userFruit.setText(Integer.toString(response.getInt("fruit")));
 
                             // 아이템 연동
                         }catch (JSONException e){
@@ -932,6 +1002,135 @@ public class PlantManagementActivity extends AppCompatActivity {
         });
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    private void requestItem(){
+
+        String url="http://202.31.200.143/item";
+
+        JsonArrayRequest request = new JsonArrayRequest(url,
+                new Response.Listener<JSONArray>(){
+
+                    @Override
+                    public void onResponse(JSONArray response){
+                        Log.i("PlantManagementActivity",response.toString());
+                        for(int i=0;i<response.length();i++){
+
+                            try{
+                                JSONObject object = response.getJSONObject(i);
+
+                                int[] arr = {waternum, energynum, mediciennum, 0, 0, 0, 0, 0, 0};
+                                int id = object.getInt("itemID");
+                                String name = object.getString("itemName");
+                                String path = object.getString("itemImagePath");
+                                int aeffect = object.getInt("itemEffect");
+                                int time = object.getInt("itemTime");
+                                int type = object.getInt("Type");
+                                int num = arr[i];
+                                mArray.add(new ItemInfomation(id, name, path, aeffect, time, type, num));
+
+                            }catch (JSONException e){
+                                Log.i("PlantManagementActivity",e.toString());
+                            }
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+                },new Response.ErrorListener(){
+
+            @Override
+            public void onErrorResponse(VolleyError error){
+                Log.i("PlantManagementActivity",error.toString());
+            }
+        });
+
+        RequestQueue requestQueue= Volley.newRequestQueue(this);
+        requestQueue.add(request);
+    }
+
+    static class ItemViewList{
+        NetworkImageView item_listitem;
+        //TextView item_listName;
+        TextView item_listNum;
+    }
+
+    public class ItemAdapters extends ArrayAdapter<ItemInfomation> {
+        private LayoutInflater mInflater = null;
+
+        public ItemAdapters(Context context, int resource){
+            super(context,resource);
+            mInflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount(){
+            return mArray.size();
+        }
+
+        @Override
+        public View getView(int position, View v, ViewGroup parent){
+            ItemViewList viewHolder;
+
+            if(v == null){
+                v=mInflater.inflate(R.layout.item_list,parent,false);
+                viewHolder = new ItemViewList();
+
+                viewHolder.item_listitem=(NetworkImageView)v.findViewById(R.id.item_listitem);
+                //viewHolder.item_listName=(TextView) v.findViewById(R.id.item_listName);
+                viewHolder.item_listNum=(TextView) v.findViewById(R.id.item_listNum);
+                v.setTag(viewHolder);
+            }else{
+                viewHolder = (ItemViewList)v.getTag();
+            }
+
+            ItemInfomation info = mArray.get(position);
+
+            if(info != null){
+                Log.i("PlantManagementActivity",info.getItemPath() + info.getItemName() + info.getItemNum());
+                viewHolder.item_listitem.setImageUrl("http://202.31.200.143/"+info.getItemPath(),mImageLoader);
+                //viewHolder.item_listName.setText(info.getItemName());
+                viewHolder.item_listNum.setText(String.valueOf(info.getItemNum()));
+            }
+
+            return v;
+        }
+
+    }
+
+    private void setPlant(final int type, final String num) {
+
+        String url = "http://202.31.200.143/user/getplant";
+
+        StringRequest request = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i("PlantManagementActivity", "setPlant : " + response);
+
+                        if (response.equals("true")) {
+                            Toast.makeText(getApplicationContext(), "Success Plant Infomation", Toast.LENGTH_LONG).show();
+
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Failed Plant Infomatiom", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("PlantManagementActivity", "onErrorResponse : " + error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put( "plant", Integer.toString(plantIDS));
+                params.put( "type", Integer.toString(type));
+                params.put( "num", num);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
     }
 
@@ -971,20 +1170,5 @@ public class PlantManagementActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         requestQueue.add(request);
-    }
-
-    private void progressset(){
-
-        // 체력 경험치 최대치 설정
-        maxHPtextview.setText("/ " + maxHPProgress);
-        maxEXPtextview.setText("/ " + maxEXPProgress);
-
-        //프로그레스 바의 현재 수치를 int 변수에 받아옴
-        currenthp = Integer.parseInt(HPtextview.getText().toString());
-        currentexp = Integer.parseInt(EXPtextview.getText().toString());
-        Log.i("EXPview 3",""+currentexp);
-        //프로그레스 바를 현재 수치 값으로 갱신하여 보여줌
-        hp.setProgress(currenthp/setProgressResult);
-        exp.setProgress(currentexp);
     }
 }
