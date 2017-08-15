@@ -42,18 +42,18 @@ public class LoginActivity extends AppCompatActivity {
 
         else {
             //로그인 없이 게임 시작
-            Button start = (Button) findViewById(R.id.start);
-            start.setOnClickListener(new View.OnClickListener() {
+            Button normalLoginButton = (Button) findViewById(R.id.start);
+            normalLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    getID();
+                    requestID();
                 }
             });
         }
     }
 
     //서버로부터 사용자 Unique Number를 받아오는 함수
-    private void getID( ){
+    private void requestID( ){
 
         //사용자 Unique Number를 발급받아오는 URL
         String url = null;
@@ -69,7 +69,8 @@ public class LoginActivity extends AppCompatActivity {
                         //Response = 사용자의 Unique Number(String)
                         //Response = "false" -> Unique Number 발급 실패
                         if(!response.equals("false")){
-                            editor.putString("ID",response);
+                            editor.putBoolean("successLogin",true);
+                            editor.putString("id",response);
 
                             //Unique Number 발급 성공 후 MainActivity로 이동
                             //LoginActivity는 종료
