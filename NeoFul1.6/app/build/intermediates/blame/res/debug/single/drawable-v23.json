@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v23\\abc_control_background_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable-v23\\abc_control_background_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v23\\abc_control_background_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable-v23\\abc_control_background_material.xml"
     }

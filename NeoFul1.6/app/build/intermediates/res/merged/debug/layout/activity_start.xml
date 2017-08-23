@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg4">
+    android:background="@drawable/bg41">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -102,16 +102,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <GridLayout
-        android:id="@+id/grid"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnCount="3"
-        android:rowCount="3"
-        android:padding="10dp"
-        android:layout_weight="1">
-    </GridLayout>
-
+        android:layout_weight="1"
+        android:id="@+id/relativeLayout"></RelativeLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -119,25 +114,34 @@
         android:gravity="bottom">
 
         <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="Move"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/move"
-            android:layout_weight="1" />
+            android:background="@drawable/move"
+            android:layout_marginLeft="10dp"/>
 
         <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="Inventory"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/inventory"
-            android:layout_weight="1" />
+            android:background="@drawable/bag"
+            android:layout_marginLeft="10dp"/>
 
         <Button
-            android:text="Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="Shop"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/shop"
-            android:layout_weight="1" />
+            android:background="@drawable/shop"
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 
 </LinearLayout>

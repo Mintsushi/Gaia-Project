@@ -40,13 +40,16 @@
             android:id="@+id/item_Cost" />
     </LinearLayout>
 
-    <com.android.volley.toolbox.NetworkImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:scaleType="fitXY"
-        android:background="@drawable/shape"
-        android:id="@+id/item_Image"/>
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            android:minHeight="200dp"
+            android:minWidth="200dp"
+            android:background="@drawable/shape"
+            android:id="@+id/item_Image"/>
 
     <TextView
         android:layout_width="match_parent"

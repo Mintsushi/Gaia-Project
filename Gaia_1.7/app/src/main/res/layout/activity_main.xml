@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="14dp"
+        android:id="@+id/seed" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/seed"
+        android:layout_toRightOf="@+id/seed"
+        android:layout_toEndOf="@+id/seed"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:id="@+id/fruit" />
+
+    <Button
+        android:text="Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/menu" />
+
+    <Button
+        android:text="Move"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/menu"
+        android:layout_toRightOf="@+id/fruit"
+        android:layout_toEndOf="@+id/fruit"
+        android:id="@+id/move" />
+
+    <Button
+        android:text="Goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/move"
+        android:layout_toLeftOf="@+id/move"
+        android:layout_toStartOf="@+id/move"
+        android:layout_marginRight="22dp"
+        android:layout_marginEnd="22dp"
+        android:id="@+id/goal" />
+</RelativeLayout>

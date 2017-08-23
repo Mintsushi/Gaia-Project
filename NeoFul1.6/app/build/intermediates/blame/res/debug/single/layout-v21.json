@@ -1,5 +1,9 @@
 [
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\layout-v21\\notification_action.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout-v21\\notification_action.xml"
     },
@@ -8,8 +12,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\layout-v21\\notification_template_custom_big.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",

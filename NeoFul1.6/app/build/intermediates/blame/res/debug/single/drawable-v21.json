@@ -4,6 +4,14 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable-v21\\avd_hide_password.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\avd_hide_password.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable-v21\\avd_hide_password.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\notification_action_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
     },
@@ -14,6 +22,22 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\notification_action_background.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable-v21\\notification_action_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\design_password_eye.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable-v21\\design_password_eye.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable-v21\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\design_bottom_navigation_item_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable-v21\\design_bottom_navigation_item_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\avd_show_password.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable-v21\\avd_show_password.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\avd_show_password.xml",
@@ -28,7 +52,15 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable-v21\\abc_edit_text_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_action_bar_item_background_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable-v21\\abc_action_bar_item_background_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\design_bottom_navigation_item_background.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable-v21\\design_bottom_navigation_item_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable-v21\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable-v21\\abc_edit_text_material.xml"
     }
 ]

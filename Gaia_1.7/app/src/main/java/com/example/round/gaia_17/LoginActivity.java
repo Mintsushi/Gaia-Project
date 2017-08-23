@@ -32,6 +32,9 @@ public class LoginActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
 
+        editor.putBoolean("successLogin",true);
+        editor.putString("id","1");
+
         //기존에 로그인 성공
         if(pref.getBoolean("successLogin",false)){
             //바로 MainActivity로 이동, LoginActivity 종료
