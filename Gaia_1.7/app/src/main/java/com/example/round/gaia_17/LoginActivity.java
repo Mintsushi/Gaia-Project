@@ -34,13 +34,14 @@ public class LoginActivity extends AppCompatActivity {
 
         editor.putBoolean("successLogin",true);
         editor.putString("id","1");
+        editor.commit();
 
         //기존에 로그인 성공
-        if(pref.getBoolean("successLogin",false)){
+        if(pref.getBoolean("successLogin",true)){
             //바로 MainActivity로 이동, LoginActivity 종료
-            //Intent intent = new Intent(LoginActivity.this,MainActivty.class);
-            //startActivity(intent);
-            //finish();
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         else {
