@@ -14,8 +14,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Round on 2017-08-15.
@@ -31,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<PlantInfo> plantArray = new ArrayList<>();
     private float score;
+
+    private TimerTask mTask;
+    private Timer mTimer;
 
     @Override
     public void onClick(View view){
@@ -54,6 +60,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relLayout.setOnClickListener(this);
 
         //getUserInform();
+
+        mTask = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i(TAG,"Timer Task Run");
+                //서버로 사용자 정보 서버에 저장
+                Toast.makeText(getApplicationContext(),"서버에 저장되었습니다.",Toast.LENGTH_LONG).show();
+            }
+        };
+
+        //1분 후에 mTask를 실행하고, 1분 후에 다시 시작
+        mTimer = new Timer();
+        mTimer.schedule(mTask,60000,60000);
 
         //식물 이동 버튼
         move = (Button)findViewById(R.id.move);
