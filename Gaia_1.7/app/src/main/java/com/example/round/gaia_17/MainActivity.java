@@ -29,10 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button goal, menu, move;
     private RelativeLayout relLayout;
 
-    private Boolean moving = false;
-    private int originalXPos, originalYPos;
-    private float offsetX, offsetY;
-
     private ArrayList<PlantInfo> plantArray = new ArrayList<>();
     private float score;
 
@@ -125,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private int id;
         private ImageView plant;
 
+        private Boolean moving = false;
+        private int originalXPos, originalYPos;
+
         public PlantInfo(int id, ImageView plant){
             this.id = id;
             this.plant = plant;
@@ -147,9 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
 
                 Log.i(TAG,"ImageVeiw Touch Down");
-
-                float x = motionEvent.getRawX();
-                float y = motionEvent.getRawY();
 
                 moving = false;
 
