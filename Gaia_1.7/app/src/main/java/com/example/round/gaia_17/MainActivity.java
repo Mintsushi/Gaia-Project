@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by Round on 2017-08-15.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener,View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
 
@@ -34,56 +34,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private float offsetX, offsetY;
 
     private ArrayList<PlantInfo> plantArray = new ArrayList<>();
+    private float score;
 
     @Override
     public void onClick(View view){
-
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent){
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-
-            Log.i(TAG,"ImageVeiw Touch Down");
-
-            float x = motionEvent.getRawX();
-            float y = motionEvent.getRawY();
-
-            moving = false;
-
-            int [] location = new int[2];
-            view.getLocationOnScreen(location);
-
-            originalXPos = location[0];
-            originalYPos = location[1];
-        }
-        else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
-
-            moving = true;
-
-            Log.i(TAG,"ImageView Touch Move");
-
-            int x = (int)motionEvent.getRawX();
-            int y = (int)motionEvent.getRawY();
-
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
-
-//            if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
-//                return false;
-//            }
-
-            params.leftMargin = x-170;
-            params.topMargin = y-150;
-
-            relLayout.updateViewLayout(view,params);
-
-        }
-        else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-
-            Log.i(TAG,"ImageView Touch Up");
-            moving = false;
-        }
-        return false;
+        score++;
+        seed.setText(Float.toString(score));
+        Log.i(TAG,"Score : "+Float.toString(score));
     }
 
     @Override
@@ -92,6 +49,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
 
         relLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
+        seed = (TextView)findViewById(R.id.seed);
+
+        //서버 구축 이후에는 사용자 데이터에서 정보 받아오기
+        score = 0;
+
+        //화면 클릭
+        relLayout.setOnClickListener(this);
 
         //getUserInform();
 
@@ -107,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //연속 클릭 기능 제한 및 식물 이동 기능 ON
                 if(move.getText().equals("Move")) {
                     move.setText("Finish");
+
+                    relLayout.setOnClickListener(null);
                     for(int i = 0 ; i<plantArray.size();i++){
                         plantArray.get(i).setTouchistener();
                     }
@@ -115,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 //식물 이동 제한 및 연속 클릭 기능 ON
                 else {
                     move.setText("Move");
+
+                    relLayout.setOnClickListener(MainActivity.this);
                     for(int i = 0 ; i<plantArray.size();i++){
                         plantArray.get(i).clearTouchListener();
                     }
@@ -153,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return resized;
     }
 
-    protected class PlantInfo{
+    protected class PlantInfo implements View.OnTouchListener,View.OnClickListener{
         private int id;
         private ImageView plant;
 
@@ -163,12 +131,61 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         public void setTouchistener(){
-            plant.setOnTouchListener(MainActivity.this);
-            plant.setOnClickListener(MainActivity.this);
+            plant.setOnTouchListener(this);
+            plant.setOnClickListener(this);
         }
 
         public void clearTouchListener(){
             plant.setOnTouchListener(null);
+        }
+
+        @Override
+        public void onClick(View view){}
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent){
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+
+                Log.i(TAG,"ImageVeiw Touch Down");
+
+                float x = motionEvent.getRawX();
+                float y = motionEvent.getRawY();
+
+                moving = false;
+
+                int [] location = new int[2];
+                view.getLocationOnScreen(location);
+
+                originalXPos = location[0];
+                originalYPos = location[1];
+            }
+            else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+
+                moving = true;
+
+                Log.i(TAG,"ImageView Touch Move");
+
+                int x = (int)motionEvent.getRawX();
+                int y = (int)motionEvent.getRawY();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
+
+//            if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
+//                return false;
+//            }
+
+                params.leftMargin = x-170;
+                params.topMargin = y-150;
+
+                relLayout.updateViewLayout(view,params);
+
+            }
+            else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+
+                Log.i(TAG,"ImageView Touch Up");
+                moving = false;
+            }
+            return false;
         }
     }
 }
