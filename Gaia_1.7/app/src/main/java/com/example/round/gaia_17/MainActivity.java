@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TimerTask mTask;
     private Timer mTimer;
 
+    Button menuUpButton;
+
     @Override
     public void onClick(View view){
         score++;
@@ -109,6 +111,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         testSource();
+
+        // 메뉴버튼 활성화
+        menuUpButton = (Button)findViewById(R.id.menu);
+        menuUpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.menuFragment, new menuFlowerActivity())
+                        .commit();
+            }
+        });
     }
 
     private void testSource(){
