@@ -33,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout relLayout;
 
     private ArrayList<PlantInfo> plantArray = new ArrayList<>();
+    //클릭 개수 : 0~999
     private float score;
+    //클릭 개수 : A,B,C,D.....
+    private int clickLevel;
 
     private TimerTask mTask;
     private Timer mTimer;
