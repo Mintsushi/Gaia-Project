@@ -1,17 +1,29 @@
 package com.example.round.gaia_17;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.app.ActivityManagerCompat;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +43,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView seed, fruit;
     private Button goal, menu, move;
     private RelativeLayout relLayout;
+    private LinearLayout linearLayout;
 
-    private ArrayList<PlantInfo> plantArray = new ArrayList<>();
+    private ImageButton menuFlowerButton;
+    private ImageButton menuASkillButton;
+    private ImageButton menuPSkillButton;
+    private ImageButton menuOverlayButton;
+    private ImageButton menuStoreButton;
+    private ImageButton menuDownBuootn;
+
+    public static ArrayList<PlantInfo> plantArray = new ArrayList<>();
     //클릭 개수 : 0~999
     private float score;
     //클릭 개수 : A,B,C,D.....
@@ -41,7 +61,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TimerTask mTask;
     private Timer mTimer;
 
-    Button menuUpButton;
+    //Overlay Service
+    public static OverlayService mOverlayService;
+    private Intent overlayService;
+    public static Boolean mConnected = false;
+    private Boolean mClear = false;
+    private static IBinder mOverlayBinder;
+
+    private Boolean nonStopApp = false;
+
+    private final ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.i(TAG,"ServieConnected");
+            mOverlayBinder = iBinder;
+            mOverlayService = ((OverlayService.LocalBinder)iBinder).getService();
+            mConnected = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.i(TAG,"Service DisConnected");
+        }
+    };
 
     @Override
     public void onClick(View view){
@@ -51,12 +93,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+
+        if(!nonStopApp){
+            if(mConnected){
+                if(mOverlayService.getSize() > 0){
+                    mOverlayService.invisible();
+                }
+            }
+        }
+        else{
+            nonStopApp = false;
+        }
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        if(!nonStopApp){
+            if(mConnected){
+                mOverlayService.visible();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        mConnected = false;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         relLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
+        linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
         seed = (TextView)findViewById(R.id.seed);
+
+        //Menu Fragement
+        menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
+        menuASkillButton = (ImageButton)findViewById(R.id.menuASkillButton);
+        menuPSkillButton = (ImageButton)findViewById(R.id.menuPSkillButton);
+        menuOverlayButton = (ImageButton)findViewById(R.id.menuOverlayButton);
+        menuStoreButton = (ImageButton)findViewById(R.id.menuStoreButton);
+        menuDownBuootn = (ImageButton)findViewById(R.id.menuDownButton);
+        setImageButtonClick();
+
+        //OverlayServie
+        overlayService = new Intent(MainActivity.this, OverlayService.class);
+
+        if(!isServiceRunning(OverlayService.class)){
+            Log.i(TAG,"Starting Service");
+            startService(overlayService);
+            bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
+        }
 
         //서버 구축 이후에는 사용자 데이터에서 정보 받아오기
         score = 0;
@@ -71,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 Log.i(TAG,"Timer Task Run");
                 //서버로 사용자 정보 서버에 저장
-                Toast.makeText(getApplicationContext(),"서버에 저장되었습니다.",Toast.LENGTH_LONG).show();
             }
         };
 
@@ -110,26 +204,101 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        plantArray.clear();
         testSource();
 
         // 메뉴버튼 활성화
-        menuUpButton = (Button)findViewById(R.id.menu);
-        menuUpButton.setOnClickListener(new View.OnClickListener() {
+        menu = (Button)findViewById(R.id.menu);
+        menu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                getSupportFragmentManager()
+                ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                params.height = 900;
+                linearLayout.setLayoutParams(params);
+
+                MainActivity.this.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.menuFragment, new menuFlowerActivity())
+                        .replace(R.id.list_layout, new menuFlowerActivity())
                         .commit();
             }
         });
     }
 
+    private boolean isServiceRunning(Class<?> serviceClass){
+        ActivityManager manager = (ActivityManager)getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+
+        for(ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)){
+            if(serviceClass.getName().equals(service.service.getClassName())){
+                if(mOverlayBinder != null){
+                    mOverlayService = ((OverlayService.LocalBinder)mOverlayBinder).getService();
+                    mConnected = true;
+                    return true;
+                }
+                else return false;
+            }
+        }
+        return false;
+    }
+
+    private void setImageButtonClick(){
+        menuFlowerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                MainActivity.this.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_layout, new menuFlowerActivity())
+                        .commit();
+            }
+        });
+
+        menuASkillButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, new menuActiveSkillActivity())
+                        .commit();
+            }
+        });
+
+        menuPSkillButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, new menuPassiveSkillActivity())
+                        .commit();
+            }
+        });
+
+        menuOverlayButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, new menuOverlayActivity())
+                        .commit();
+            }
+        });
+
+        menuStoreButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, new menuStoreActivity())
+                        .commit();
+            }
+        });
+
+        menuDownBuootn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                params.height = 0;
+                linearLayout.setLayoutParams(params);
+            }
+        });
+    }
     private void testSource(){
 
         ImageView imageView = new ImageView(this);
 
         imageView.setImageResource(R.drawable.image);
         imageView.setId(0);
+        imageView.setTag(R.drawable.image);
 
         RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
 
@@ -138,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relParams.topMargin = 0;
 
         relLayout.addView(imageView,relParams);
-        plantArray.add(new PlantInfo(0,imageView));
+        plantArray.add(new PlantInfo(0,imageView,"길냥이"));
     }
 
     //bitmap으로 image 용량 관리
@@ -155,13 +324,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected class PlantInfo implements View.OnTouchListener,View.OnClickListener{
         private int id;
         private ImageView plant;
+        private String name;
+        //state == 0 : overlayview에 없음
+        //state == 1 : overlayview에 있음
+        private int state;
 
         private Boolean moving = false;
         private int originalXPos, originalYPos;
 
-        public PlantInfo(int id, ImageView plant){
+        public PlantInfo(int id, ImageView plant, String name){
             this.id = id;
             this.plant = plant;
+            this.name = name;
+            //서버에서 받아온 정보로 수정
+            this.state = 0;
+            if(state == 1){
+                mOverlayService.addPlant(this);
+            }
+        }
+
+        public int getId(){return this.id;}
+        public String getName(){return this.name;}
+        public ImageView getPlant(){return this.plant;}
+        public int getState(){return this.state;}
+        public void setState(int state){
+            this.state = state;
         }
 
         public void setTouchistener(){
@@ -201,9 +388,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
 
-//            if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
-//                return false;
-//            }
+            if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
+                return false;
+            }
 
                 params.leftMargin = x-170;
                 params.topMargin = y-150;

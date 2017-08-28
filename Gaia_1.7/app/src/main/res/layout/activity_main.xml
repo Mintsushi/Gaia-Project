@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
->
-
-
-    <FrameLayout
-        android:id="@+id/menuFragment"
-        android:layout_width="374dp"
-        android:layout_height="220dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="5dp">
-
-    </FrameLayout>
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp"
         android:id="@+id/linearLayout">
 
         <TextView
@@ -52,13 +40,17 @@
             android:text="TextView" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"></RelativeLayout>
+
     <LinearLayout
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteX="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/linearLayout2">
 
         <Button
@@ -80,16 +72,67 @@
             android:text="Goal" />
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="368dp"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="220dp"
-        android:layout_marginTop="30dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        tools:layout_editor_absoluteX="8dp"
-        app:layout_constraintVertical_bias="0.333"></RelativeLayout>
+    <LinearLayout
+        android:id="@+id/menuLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="#4c8dff">
 
-</android.support.constraint.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/menuFlowerButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
+
+            <ImageButton
+                android:id="@+id/menuASkillButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/stat_sys_vp_phone_call" />
+
+            <ImageButton
+                android:id="@+id/menuPSkillButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/stat_sys_phone_call_forward" />
+
+            <ImageButton
+                android:id="@+id/menuOverlayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+            <ImageButton
+                android:id="@+id/menuStoreButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/ic_menu_always_landscape_portrait" />
+
+            <ImageButton
+                android:id="@+id/menuDownButton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                app:srcCompat="@android:drawable/arrow_down_float" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_layout">
+        </FrameLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

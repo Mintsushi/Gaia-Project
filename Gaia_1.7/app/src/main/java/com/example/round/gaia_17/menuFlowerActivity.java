@@ -30,8 +30,12 @@ public class menuFlowerActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
         View view = inflater.inflate(R.layout.menu_flower_fragment,container,false);
-        // Button fragment 활성화
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.menuButtonFrameLayout, new menuManagerButtonAcitivity()).commit();
+
+//        // Button fragment 활성화
+//        getActivity().getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.menuButtonFrameLayout, new menuManagerButtonAcitivity())
+//                .commit();
 
         mAdapter = new FlowerAdapter(getContext(),R.layout.menu_flower_list);
         mList = (ListView)view.findViewById(R.id.menuFlowerList);

@@ -15,7 +15,6 @@ public class menuPassiveSkillActivity extends Fragment {
         // fragment 화면 활성화
         View view = inflater.inflate(R.layout.menu_passive_skill_fragment,container,false);
         // Button fragment 활성화
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.menuButtonFrameLayout, new menuManagerButtonAcitivity()).commit();
 
         return view;
     }
