@@ -11,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.ActivityManagerCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
@@ -28,9 +29,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 /**
  * Created by Round on 2017-08-15.
@@ -324,15 +327,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected class PlantInfo implements View.OnTouchListener,View.OnClickListener{
         private int id;
         private ImageView plant;
+        private ImageView water;
         private String name;
+        private int time; //물을 줘야하는 시간
         //state == 0 : overlayview에 없음
         //state == 1 : overlayview에 있음
         private int state;
+        //waterState == 0 : 물을 준 상태
+        //waterState == 1 : 물을 주지 않은 상태
+        private int waterState = 0;
 
         private Boolean moving = false;
         private int originalXPos, originalYPos;
 
         public PlantInfo(int id, ImageView plant, String name){
+
+            mHandler.sendEmptyMessage(0);
+
             this.id = id;
             this.plant = plant;
             this.name = name;
@@ -341,7 +352,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(state == 1){
                 mOverlayService.addPlant(this);
             }
+
+            //나중에 식물 정보 받아오면 그 때 넣자
+            time = 600000;
+            water = new ImageView(MainActivity.this);
+            water.setImageResource(R.drawable.image);
+
+            water.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i(TAG,"물을 준다.");
+                    //물을 준다.
+                    waterState = 0;
+                    water.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            int [] location = new int[2];
+            plant.getLocationOnScreen(location);
+            params.leftMargin = location[0]+100;
+            params.topMargin = location[1]-20;
+
+            relLayout.addView(water,params);
+            water.setVisibility(View.INVISIBLE);
         }
+
 
         public int getId(){return this.id;}
         public String getName(){return this.name;}
@@ -358,6 +394,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         public void clearTouchListener(){
             plant.setOnTouchListener(null);
+        }
+
+        public void updateWaterLocation(){
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            int [] location = new int[2];
+            plant.getLocationOnScreen(location);
+            params.leftMargin = location[0]+100;
+            params.topMargin = location[1]-170;
+
+            relLayout.updateViewLayout(water,params);
         }
 
         @Override
@@ -388,14 +435,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
 
-            if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
-                return false;
-            }
+                if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
+                    return false;
+                }
 
                 params.leftMargin = x-170;
                 params.topMargin = y-150;
-
                 relLayout.updateViewLayout(view,params);
+                updateWaterLocation();
 
             }
             else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
@@ -405,5 +452,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return false;
         }
+
+        private android.os.Handler mHandler = new android.os.Handler(){
+            public void handleMessage(Message msg){
+                Log.i(TAG,"Handler Message : "+waterState);
+
+                //나중에 image가 확립되면 좀더 세부적으로 위치 조정
+                if(waterState == 0) {
+                    water.setVisibility(View.VISIBLE);
+                    waterState = 1;
+                }
+                else{
+                    //시간 내에 물을 주지 않으면
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"물 줘 이뇬아!",Toast.LENGTH_LONG).show();
+                }
+                mHandler.sendEmptyMessageDelayed(0,time);
+            }
+        };
     }
 }
