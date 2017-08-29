@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView seed, fruit;
     private Button goal, menu, move;
-    private RelativeLayout relLayout;
+    public static RelativeLayout relLayout;
     private LinearLayout linearLayout;
 
     private ImageButton menuFlowerButton;
@@ -57,8 +57,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static ArrayList<PlantInfo> plantArray = new ArrayList<>();
     //클릭 개수 : 0~999
-    private float score;
+
+    public static ArrayList<menuFlowerActivity.FlowerInform> mArray = new ArrayList<>();
+
+
+    ////////////// 테스트용 임시값  /////////////////////
+    public static float score = 0;
     //클릭 개수 : A,B,C,D.....
+    /////////////////////////////////////////////////////
+
     private int clickLevel;
 
     private TimerTask mTask;
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view){
-        score++;
+        score= score+1000;
         seed.setText(Float.toString(score));
         Log.i(TAG,"Score : "+Float.toString(score));
     }
@@ -324,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return resized;
     }
 
-    protected class PlantInfo implements View.OnTouchListener,View.OnClickListener{
+    protected static class PlantInfo implements View.OnTouchListener,View.OnClickListener{
         private int id;
         private ImageView plant;
         private ImageView water;

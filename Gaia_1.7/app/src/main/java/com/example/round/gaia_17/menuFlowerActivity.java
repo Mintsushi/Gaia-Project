@@ -12,18 +12,23 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.round.gaia_17.MainActivity.plantArray;
+import static com.example.round.gaia_17.MainActivity.relLayout;
+import static com.example.round.gaia_17.MainActivity.score;
+import static com.example.round.gaia_17.MainActivity.mArray;
 /**
  * Created by 리제 on 2017-08-26.
  */
 
 public class menuFlowerActivity extends Fragment {
 
-    private ArrayList<FlowerInform> mArray = new ArrayList<>();
+    //private ArrayList<FlowerInform> mArray = new ArrayList<>();
     private ListView mList;
     private FlowerAdapter mAdapter;
 
@@ -41,8 +46,19 @@ public class menuFlowerActivity extends Fragment {
         mList = (ListView)view.findViewById(R.id.menuFlowerList);
         mList.setAdapter(mAdapter);
 
-        mArray.add(new FlowerInform(1,"flower1","EXP Bar","222","콩 콩","22.22B"));
-        mArray.add(new FlowerInform(1,"flower2","EXP Bar","650","비 버","399.99A"));
+        // 모든 꽃 데이터 저장 (서버에서 받아올경우
+
+        mArray.add(new FlowerInform(0,"flower1","EXP Bar","0","콩 콩","222",0));
+        mArray.add(new FlowerInform(1,"flower2","EXP Bar","0","비 버","39",0));
+        mArray.add(new FlowerInform(2,"flower2","EXP Bar","0","핑크비버","80",0));
+        mArray.add(new FlowerInform(3,"flower2","EXP Bar","0","빨강비버","245",0));
+        mArray.add(new FlowerInform(4,"flower2","EXP Bar","0","적색비버","399",0));
+        mArray.add(new FlowerInform(5,"flower2","EXP Bar","0","붉은비버","654",0));
+        mArray.add(new FlowerInform(6,"flower2","EXP Bar","0","빨간비버","3333",0));
+
+        // 사용자의 꽃정보 받아오기
+        mArray.set(0,new FlowerInform(0,"flower1","EXP Bar","222","콩 콩","222",1));
+
         return view;
     }
 
@@ -55,14 +71,16 @@ public class menuFlowerActivity extends Fragment {
         private String flowerLvText;
         private String flowerNameText;
         private String flowerLvUpText;
+        private int buyType;
 
-        public FlowerInform(int id, String flowerImagePath, String flowerExpBar, String flowerLvText, String flowerNameText, String flowerLvUpText){
+        public FlowerInform(int id, String flowerImagePath, String flowerExpBar, String flowerLvText, String flowerNameText, String flowerLvUpText, int buyType){
              this.id = id;
              this.flowerImagePath = flowerImagePath;
              this.flowerExpBar = flowerExpBar;
              this.flowerLvText = flowerLvText;
              this.flowerNameText = flowerNameText;
              this.flowerLvUpText = flowerLvUpText;
+             this.buyType = buyType;
         }
 
         public int getId(){return this.id;}
@@ -120,17 +138,84 @@ public class menuFlowerActivity extends Fragment {
             FlowerInform info = mArray.get(position);
 
             if(info != null){
-                int id = info.getId();
-                viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
+                final int id = info.getId();
+
+                //buyType ==0 이면 잠긴이미지
+                if(info.buyType == 0) {
+                    viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
+                }else {
+                    viewHolder.flowerImage.setImageResource(R.drawable.image);
+                }
                 viewHolder.flowerExpBar.setText(info.getFlowerExpBar());
                 viewHolder.flowerLvText.setText("LV . " + info.getFlowerLvText());
                 viewHolder.flowerNameText.setText(info.getFlowerNameText());
-                viewHolder.flowerLvUpButton.setImageResource(R.mipmap.ic_launcher);
                 viewHolder.flowerLvUpText.setText(info.flowerLvUpText);
+
+                //buyType ==0 이면 잠긴이미지
+                if(info.buyType == 0) {
+                    viewHolder.flowerLvUpButton.setImageResource(R.drawable.buy);
+                }else{
+                    viewHolder.flowerLvUpButton.setImageResource(R.drawable.levelup);
+                }
+
+                //버튼 이밴트
+                viewHolder.flowerLvUpButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Log.i("id :", String.valueOf(id));
+                        FlowerInform temp = mArray.get(id);
+
+                        // 스코어로 레벨 올리기
+
+                        if(scoreDoun(Float.parseFloat(temp.getFlowerLvUpText()))){
+                            Log.i("레벨업 이벤트 발동!" ,"ㅇ");
+                            //임의의 숫자로 증가 시켰으나 데이터에 맞게 할꺼임
+                            temp.flowerLvUpText = String.valueOf(Float.parseFloat(temp.getFlowerLvUpText()) + 100);
+                            temp.flowerLvText = String.valueOf(Integer.parseInt(temp.getFlowerLvText()) + 1);
+                            // 새로생긴놈이면 이미지 생성해주기
+                            if(temp.buyType==0){ testSource(temp.getFlowerNameText()); }
+                            temp.buyType = 1;
+
+                            // 새 정보로 업데이트후 갱신
+                            mArray.set(id, temp);
+                            mAdapter.notifyDataSetChanged();
+                            mList.setAdapter(mAdapter);
+                        }
+                    }
+                });
             }
 
             return v;
         }
 
+    }
+
+    // 점수 감소 함수
+    boolean scoreDoun(float desSeed){
+        if(score - desSeed > 0){
+            //score 감소
+            score = score - desSeed;
+            return true;
+        }else {
+            //scre 감소 실패
+            return false;
+        }
+
+    }
+    public void testSource(String name){
+
+        ImageView imageView = new ImageView(getContext());
+
+        imageView.setImageResource(R.drawable.image);
+        imageView.setId(0);
+        imageView.setTag(R.drawable.image);
+
+        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
+
+        //위치는 후에 Random 값으로 배치
+        relParams.leftMargin = 0;
+        relParams.topMargin = 0;
+
+        relLayout.addView(imageView,relParams);
+        plantArray.add(new MainActivity.PlantInfo(0,imageView,name));
     }
 }
