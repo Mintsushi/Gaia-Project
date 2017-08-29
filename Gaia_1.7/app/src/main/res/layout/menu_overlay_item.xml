@@ -10,9 +10,10 @@
 
     <ImageView
         android:id="@+id/flowerImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:scaleType="fitXY"
+        android:layout_margin="5dp"
         android:src="@drawable/image"/>
 
     <TextView
@@ -20,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize = "20dp"
+        android:textSize = "16dp"
         android:textColor="#ffffff"
         android:layout_marginLeft="20dp"
         android:layout_gravity="center_vertical"/>

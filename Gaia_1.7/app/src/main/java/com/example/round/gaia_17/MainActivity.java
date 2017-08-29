@@ -2,26 +2,24 @@ package com.example.round.gaia_17;
 
 import android.app.ActivityManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.app.ActivityManagerCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,21 +27,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
 /**
  * Created by Round on 2017-08-15.
  */
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity
+        implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
 
-    private TextView seed, fruit;
+    private static TextView seed, fruit;
     private Button goal, menu, move;
     public static RelativeLayout relLayout;
     private LinearLayout linearLayout;
@@ -56,17 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton menuDownBuootn;
 
     public static ArrayList<PlantInfo> plantArray = new ArrayList<>();
-    //클릭 개수 : 0~999
-
-    public static ArrayList<menuFlowerActivity.FlowerInform> mArray = new ArrayList<>();
-
 
     ////////////// 테스트용 임시값  /////////////////////
     public static float score = 0;
-    //클릭 개수 : A,B,C,D.....
     /////////////////////////////////////////////////////
-
-    private int clickLevel;
 
     private TimerTask mTask;
     private Timer mTimer;
@@ -79,6 +69,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static IBinder mOverlayBinder;
 
     private Boolean nonStopApp = false;
+    public static Context context;
+
+    private android.app.AlertDialog alertDialog=null;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -87,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mOverlayBinder = iBinder;
             mOverlayService = ((OverlayService.LocalBinder)iBinder).getService();
             mConnected = true;
+            if(mOverlayService.getGPS()){
+                setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n 설정하시겠습니까?\n" +
+                        "(설정하지 않으시면 외부기능 이용에 불편함이 있으실 수 있습니다.)");
+            }
         }
 
         @Override
@@ -136,6 +133,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mConnected = false;
     }
 
+    private void setGPS(String message){
+       android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_gps, null);
+
+        TextView warn = (TextView)dialogView.findViewById(R.id.warn);
+        warn.setText(message);
+        Button cancel = (Button)dialogView.findViewById(R.id.cancel);
+        Button submit = (Button)dialogView.findViewById(R.id.submit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOverlayService.enableOverlayService = true;
+                alertDialog.cancel();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -144,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
         linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
         seed = (TextView)findViewById(R.id.seed);
+        context = this.getApplicationContext();
 
         //Menu Fragement
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
@@ -161,6 +191,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i(TAG,"Starting Service");
             startService(overlayService);
             bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
+        }
+        if(mOverlayService != null){
+            if(mOverlayService.getGPS()){
+                setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n 설정하시겠습니까?\n" +
+                        "(설정하지 않으시면 외부기능 이용에 불편함이 있으실 수 있습니다.)");
+            }
         }
 
         //서버 구축 이후에는 사용자 데이터에서 정보 받아오기
@@ -317,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relParams.topMargin = 0;
 
         relLayout.addView(imageView,relParams);
-        plantArray.add(new PlantInfo(0,imageView,"길냥이"));
+        plantArray.add(new PlantInfo(0,imageView,"길냥이",0));
     }
 
     //bitmap으로 image 용량 관리
@@ -336,6 +372,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private ImageView plant;
         private ImageView water;
         private String name;
+        private int lv;
         private int time; //물을 줘야하는 시간
         //state == 0 : overlayview에 없음
         //state == 1 : overlayview에 있음
@@ -347,11 +384,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         private Boolean moving = false;
         private int originalXPos, originalYPos;
 
-        public PlantInfo(int id, ImageView plant, String name){
+        public PlantInfo(int id, ImageView plant, String name,int lv){
 
             mHandler.sendEmptyMessage(0);
 
             this.id = id;
+            this.lv = lv;
             this.plant = plant;
             this.name = name;
             //서버에서 받아온 정보로 수정
@@ -362,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             //나중에 식물 정보 받아오면 그 때 넣자
             time = 600000;
-            water = new ImageView(MainActivity.this);
+            water = new ImageView(context);
             water.setImageResource(R.drawable.image);
 
             water.setOnClickListener(new View.OnClickListener() {
@@ -392,6 +430,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public int getState(){return this.state;}
         public void setState(int state){
             this.state = state;
+        }
+        public void setLv(){this.lv += 1;}
+
+        public void remove(){
+            relLayout.removeView(this.plant);
+            relLayout.removeView(this.water);
+            state = 1;
+        }
+
+        public void setView(){
+            relLayout.addView(this.plant);
+            relLayout.addView(this.water);
         }
 
         public void setTouchistener(){
@@ -471,10 +521,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else{
                     //시간 내에 물을 주지 않으면
-                    Toast.makeText(MainActivity.this.getApplicationContext(),"물 줘 이뇬아!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"물 줘 이뇬아!",Toast.LENGTH_LONG).show();
                 }
                 mHandler.sendEmptyMessageDelayed(0,time);
             }
         };
+    }
+
+    public static void buyNewPlant(int id, int lv, String name,String imagePath){
+        ImageView plant = new ImageView(context);
+        //이부분은 추후에 imagePath로 변경
+        plant.setImageResource(R.drawable.image);
+        plant.setId(id);
+        //이부분은 추후에 imagePath로 변경
+        plant.setTag(R.drawable.image);
+
+        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
+
+        //위치는 후에 Random 값으로 배치
+        relParams.leftMargin = 0;
+        relParams.topMargin = 0;
+
+        relLayout.addView(plant,relParams);
+        plantArray.add(new PlantInfo(id,plant,name,lv));
+    }
+
+    public static void updatePlant(int id){
+        for(int i =0;i<plantArray.size();i++){
+            if(plantArray.get(i).getId() == id){
+                plantArray.get(i).setLv();
+            }
+        }
+    }
+
+    public static void updateSeed(float score){
+        seed.setText(Float.toString(score));
     }
 }

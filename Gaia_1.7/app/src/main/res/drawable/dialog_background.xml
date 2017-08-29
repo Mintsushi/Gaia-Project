@@ -4,6 +4,6 @@
         android:dashWidth="1dp" android:dashGap="0dp"/>
     <padding android:left="7dp" android:top="7dp"
         android:right="7dp" android:bottom="7dp"/>
-    <solid android:color="#743deafa"/>
+    <solid android:color="#7c7c7c"/>
     <!--corners android:radius="10dp"/-->
- </shape>
+</shape>

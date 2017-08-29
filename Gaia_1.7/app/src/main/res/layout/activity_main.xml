@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/bg41">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seed"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/seed"
@@ -25,19 +28,23 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:text="TextView"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Fruit"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/fruit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -77,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:background="#4c8dff">
+        android:background="#a08d8f8c">
 
         <LinearLayout
             android:layout_width="match_parent"

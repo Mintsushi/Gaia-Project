@@ -13,4 +13,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="windowActionBar">true</item>
+    </style>
+
 </resources>
