@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.location.Criteria;
 import android.location.Location;
@@ -18,6 +19,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.view.ContextThemeWrapper;
@@ -37,6 +39,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ public class OverlayService extends Service{
 
     private ArrayList<OverLayPlantInfo> mArray = new ArrayList<OverLayPlantInfo>();
 
+    //Location Service
     //GPS Service
     private LocationManager locationManager;
     String provider;
@@ -72,44 +76,6 @@ public class OverlayService extends Service{
         return mBinder;
     }
 
-    private class GetWeather extends AsyncTask<String,Void,String>{
-        //ProgressDialog pd = new ProgressDialog(getApplicationContext());
-
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-            //pd.setTitle("Please wait...");
-            //pd.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params){
-            String stream = null;
-            String urlString = params[0];
-
-            Helper http = new Helper();
-            stream = http.getHTTPData(urlString);
-
-            return stream;
-        }
-
-        @Override
-        protected void onPostExecute(String s){
-            super.onPostExecute(s);
-            if(s.contains("Error: Not found city")){
-                //pd.dismiss();
-                return;
-            }
-            Gson gson = new Gson();
-            Type mType = new TypeToken<OpenWeatherMap>(){}.getType();
-            openWeatherMap = gson.fromJson(s,mType);
-            //pd.dismiss();
-        }
-    }
-
-    public OpenWeatherMap getOpenWeatherMap(){return openWeatherMap;}
-
     public class LocalBinder extends Binder {
         OverlayService getService(){
             return OverlayService.this;
@@ -120,11 +86,10 @@ public class OverlayService extends Service{
         @Override
         public void onLocationChanged(Location location) {
             Log.i(TAG,"경도 : "+location.getLongitude()+" / 위도 : "+location.getLatitude());
-            Log.i("onLocationChanged",location.toString());
             lat = location.getLatitude();
             lng = location.getLongitude();
 
-            new GetWeather().execute(Common.apiRequest(String.valueOf(lat),String.valueOf(lng)));
+            new GetWeather().execute(Common.apiRequest(String.valueOf(lat), String.valueOf(lng)));
         }
 
         @Override
@@ -134,9 +99,6 @@ public class OverlayService extends Service{
         @Override
         public void onProviderDisabled(String s) {
             enableOverlayService = false;
-            Log.i(TAG,"GPS 연결이 끊김.");
-//            setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n GPS를 설정해야 Service를 이용하실수 있습니다.\n" +
-//                    "설정창으로 이동하시겠습니까?");
         }
     };
 
@@ -160,6 +122,8 @@ public class OverlayService extends Service{
     public void onCreate(){
         super.onCreate();
 
+        getGPS();
+
         Log.i(TAG,"onCreateService");
 
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -182,56 +146,74 @@ public class OverlayService extends Service{
     }
 
     public Boolean getGPS(){
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                Toast.makeText(getApplicationContext(),"권한 허가",Toast.LENGTH_LONG).show();
+
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        Boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        Log.i(TAG,"GPS : "+isGPSEnabled);
+        if(!isGPSEnabled){
+            return true;
+        }
+        else {
+            //통지사이의 최소 시간간격 : 100ms
+            //통지사이의 최소 변경거리 : 1m
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                PermissionListener permissionListener = new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted() {
+                        Toast.makeText(getApplicationContext(),"권한 허가",Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                        Toast.makeText(getApplicationContext(),"권한 거부",Toast.LENGTH_LONG).show();
+                    }
+                };
+
+                new TedPermission(this).setPermissionListener(permissionListener)
+                        .setRationaleMessage("GPS를 사용하기 위해서는 GPS 접근 권한이 필요합니다.")
+                        .setDeniedMessage("거부하셨습니다...\n[설정]>[권한]에서 권한을 허용할 수 있습니다.")
+                        .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        .check();
+
             }
-
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                Toast.makeText(getApplicationContext(),"권한 거부",Toast.LENGTH_LONG).show();
-            }
-        };
-
-        new TedPermission(this).setPermissionListener(permissionListener)
-                .setRationaleMessage("GPS를 사용하기 위해서는 GPS 접근 권한이 필요합니다.")
-                .setDeniedMessage("거부하셨습니다...\n[설정]>[권한]에서 권한을 허용할 수 있습니다.")
-                .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)
-                .setPermissions(Manifest.permission.INTERNET)
-                .setPermissions(Manifest.permission.ACCESS_COARSE_LOCATION)
-                .setPermissions(Manifest.permission.SYSTEM_ALERT_WINDOW)
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .setPermissions(Manifest.permission.ACCESS_NETWORK_STATE)
-                .check();
-
-        try{
-            //Acquire a refernce to the system location Manager
-            //Get Coordinates
-            locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-            Boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            Log.i(TAG,"GPS : "+isGPSEnabled);
-            if(!isGPSEnabled){
-                return true;
-            }
-            else {
-                Log.i(TAG,"Before Set LocationManager");
-                provider = locationManager.getBestProvider(new Criteria(),false);
-
-                Location location = locationManager.getLastKnownLocation(provider);
-                if(location == null){
-                    Log.i(TAG,"No Location");
-                }
-                //통지사이의 최소 시간간격 : 100ms
-                //통지사이의 최소 변경거리 : 1m
-                locationManager.requestLocationUpdates(provider, 400, 1,mLocationListener);
-            }
-        }catch (SecurityException ex){
-            Log.i("OnClick","SecurityException : "+ex.toString());
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1,mLocationListener);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1,mLocationListener);
         }
         return false;
+    }
+
+    private class GetWeather extends AsyncTask<String,Void,String> {
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params){
+            String stream = null;
+            String urlString = params[0];
+
+            Helper http = new Helper();
+            stream = http.getHTTPData(urlString);
+
+            return stream;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            if(s.contains("Error: Not found city")){
+                return;
+            }
+            Gson gson = new Gson();
+            Type mType = new TypeToken<OpenWeatherMap>(){}.getType();
+            openWeatherMap = gson.fromJson(s,mType);
+
+        }
     }
 
     public class OverLayPlantInfo implements View.OnTouchListener,View.OnClickListener{

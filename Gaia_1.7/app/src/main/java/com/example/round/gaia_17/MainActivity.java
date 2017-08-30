@@ -1,17 +1,25 @@
 package com.example.round.gaia_17;
 
+import android.Manifest;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,9 +36,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_17.Common.Common;
+import com.example.round.gaia_17.Helper.Helper;
 import com.example.round.gaia_17.model.OpenWeatherMap;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = ".MainActivity";
 
     private static TextView seed, fruit;
-    private Button goal, menu, move, weather;
+    private Button goal, menu, move;
     public static RelativeLayout relLayout;
     private LinearLayout linearLayout;
 
@@ -77,8 +91,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private android.app.AlertDialog alertDialog=null;
 
     //Weather View
-    TextView txtCity,txtLastUpdate,txtDescription,txtHumidity,txtTime,txtCelsius;
-    ImageView imageView;
+    private ImageView weather;
+    private TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
+    private ImageView imageView;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -91,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n 설정하시겠습니까?\n" +
                         "(설정하지 않으시면 외부기능 이용에 불편함이 있으실 수 있습니다.)");
             }
+            new GetWeather().execute(Common.apiRequest(String.valueOf(mOverlayService.lat), String.valueOf(mOverlayService.lng)));
         }
 
         @Override
@@ -110,8 +126,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume(){
         super.onResume();
 
+        Log.i(TAG,"onResume()");
         if(!nonStopApp){
             if(mConnected){
+                new GetWeather().execute(Common.apiRequest(String.valueOf(mOverlayService.lat), String.valueOf(mOverlayService.lng)));
                 if(mOverlayService.getSize() > 0){
                     mOverlayService.invisible();
                 }
@@ -187,16 +205,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtCelsius = (TextView)dialogView.findViewById(R.id.txtCelsius);
         imageView = (ImageView)dialogView.findViewById(R.id.imageView);
 
-        OpenWeatherMap openWeatherMap = mOverlayService.getOpenWeatherMap();
-        txtCity.setText(String.format("%s, %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
+        OpenWeatherMap openWeatherMap = mOverlayService.openWeatherMap;
+        txtCity.setText(String.format("도시 : %s, 국가 : %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
         txtLastUpdate.setText(String.format("Last Updated : %s", Common.getDateNow()));
-        txtDescription.setText(String.format("%s",openWeatherMap.getWeatherList().get(0).getDescription()));
-        txtHumidity.setText(String.format("%d%%",openWeatherMap.getMain().getHumidity()));
+        txtDescription.setText(String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
+        txtHumidity.setText(String.format("습도 : %d%%",openWeatherMap.getMain().getHumidity()));
         txtTime.setText(String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
                 ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
         txtCelsius.setText(String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
         Picasso.with(MainActivity.this)
-                .load(Common.getImage(openWeatherMap.getWeatherList().get(0).getIcon()))
+                .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                 .into(imageView);
 
         dialogBuilder.setView(dialogView);
@@ -209,11 +227,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.SYSTEM_ALERT_WINDOW,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            },0);
+        }
+
         relLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
         linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
         seed = (TextView)findViewById(R.id.seed);
         context = this.getApplicationContext();
-        weather = (Button)findViewById(R.id.weather);
+        weather = (ImageView)findViewById(R.id.weather);
 
         //Menu Fragement
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
@@ -233,13 +263,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startService(overlayService);
             bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
         }
-        if(mOverlayService != null){
-            if(mOverlayService.getGPS()){
-                setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n 설정하시겠습니까?\n" +
-                        "(설정하지 않으시면 외부기능 이용에 불편함이 있으실 수 있습니다.)");
-            }
-        }
-
         //서버 구축 이후에는 사용자 데이터에서 정보 받아오기
         score = 0;
 
@@ -604,5 +627,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void updateSeed(float score){
         seed.setText(Float.toString(score));
+    }
+
+    private class GetWeather extends AsyncTask<String,Void,String> {
+        ProgressDialog pd = new ProgressDialog(MainActivity.this);
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            pd.setTitle("Please Wait...");
+            pd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params){
+            String stream = null;
+            String urlString = params[0];
+
+            Helper http = new Helper();
+            stream = http.getHTTPData(urlString);
+
+            return stream;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            super.onPostExecute(s);
+            if(s.contains("Error: Not found city")){
+                pd.dismiss();
+                return;
+            }
+            Gson gson = new Gson();
+            Type mType = new TypeToken<OpenWeatherMap>(){}.getType();
+            mOverlayService.openWeatherMap = gson.fromJson(s,mType);
+            pd.dismiss();
+            Picasso.with(MainActivity.this)
+                .load(Common.getImage(mOverlayService.openWeatherMap.getWeather().get(0).getIcon()))
+                .into(weather);
+        }
     }
 }

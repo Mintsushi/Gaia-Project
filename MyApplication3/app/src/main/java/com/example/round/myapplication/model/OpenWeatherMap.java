@@ -1,5 +1,4 @@
-package com.example.round.gaia_17.model;
-
+package com.example.round.myapplication.model;
 import android.util.Log;
 
 import java.util.List;

@@ -4,15 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:layout_margin="40dp"
-    android:background="@drawable/dialog_background">
+    android:layout_margin="40dp">
 
     <TextView
         android:id="@+id/txtCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="20dp"/>
 
     <TextView
@@ -20,7 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="15dp"
         android:gravity="center"/>
 
@@ -35,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="15dp"
         android:gravity="center"/>
 
@@ -44,7 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="15dp"
         android:gravity="center"/>
 
@@ -53,7 +48,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="15dp"
         android:gravity="center"/>
 
@@ -62,7 +56,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:textColor="#ffffff"
         android:textSize="15dp"
         android:gravity="center"/>
 

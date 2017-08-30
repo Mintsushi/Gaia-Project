@@ -1,5 +1,4 @@
-package com.example.round.gaia_17.Common;
-
+package com.example.round.myapplication.Common;
 import android.support.annotation.NonNull;
 
 import java.text.DateFormat;
@@ -9,6 +8,7 @@ import java.util.Date;
 /**
  * Created by Round on 2017-08-29.
  */
+
 public class Common {
     public static String API_KEY = "a12591880643cbc0fdfbcb4f2c00b6f4";
     public static String API_LINK = "http://api.openweathermap.org/data/2.5/weather";
