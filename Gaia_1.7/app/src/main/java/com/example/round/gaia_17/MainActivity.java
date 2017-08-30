@@ -27,6 +27,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.round.gaia_17.Common.Common;
+import com.example.round.gaia_17.model.OpenWeatherMap;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,13 +39,12 @@ import java.util.TimerTask;
  * Created by Round on 2017-08-15.
  */
 
-public class MainActivity extends AppCompatActivity
-        implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
 
     private static TextView seed, fruit;
-    private Button goal, menu, move;
+    private Button goal, menu, move, weather;
     public static RelativeLayout relLayout;
     private LinearLayout linearLayout;
 
@@ -72,6 +75,10 @@ public class MainActivity extends AppCompatActivity
     public static Context context;
 
     private android.app.AlertDialog alertDialog=null;
+
+    //Weather View
+    TextView txtCity,txtLastUpdate,txtDescription,txtHumidity,txtTime,txtCelsius;
+    ImageView imageView;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -165,6 +172,38 @@ public class MainActivity extends AppCompatActivity
         alertDialog.show();
     }
 
+    private void getWeather(){
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.activity_weather, null);
+
+        txtCity = (TextView)dialogView.findViewById(R.id.txtCity);
+        txtLastUpdate = (TextView)dialogView.findViewById(R.id.txtLastUpdate);
+        txtDescription = (TextView)dialogView.findViewById(R.id.txtDescription);
+        txtHumidity = (TextView)dialogView.findViewById(R.id.txtHumidity);
+        txtTime = (TextView)dialogView.findViewById(R.id.txtTime);
+        txtCelsius = (TextView)dialogView.findViewById(R.id.txtCelsius);
+        imageView = (ImageView)dialogView.findViewById(R.id.imageView);
+
+        OpenWeatherMap openWeatherMap = mOverlayService.getOpenWeatherMap();
+        txtCity.setText(String.format("%s, %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
+        txtLastUpdate.setText(String.format("Last Updated : %s", Common.getDateNow()));
+        txtDescription.setText(String.format("%s",openWeatherMap.getWeatherList().get(0).getDescription()));
+        txtHumidity.setText(String.format("%d%%",openWeatherMap.getMain().getHumidity()));
+        txtTime.setText(String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
+                ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
+        txtCelsius.setText(String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
+        Picasso.with(MainActivity.this)
+                .load(Common.getImage(openWeatherMap.getWeatherList().get(0).getIcon()))
+                .into(imageView);
+
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -174,6 +213,7 @@ public class MainActivity extends AppCompatActivity
         linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
         seed = (TextView)findViewById(R.id.seed);
         context = this.getApplicationContext();
+        weather = (Button)findViewById(R.id.weather);
 
         //Menu Fragement
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
@@ -182,6 +222,7 @@ public class MainActivity extends AppCompatActivity
         menuOverlayButton = (ImageButton)findViewById(R.id.menuOverlayButton);
         menuStoreButton = (ImageButton)findViewById(R.id.menuStoreButton);
         menuDownBuootn = (ImageButton)findViewById(R.id.menuDownButton);
+
         setImageButtonClick();
 
         //OverlayServie
@@ -265,6 +306,13 @@ public class MainActivity extends AppCompatActivity
                         .beginTransaction()
                         .replace(R.id.list_layout, new menuFlowerActivity())
                         .commit();
+            }
+        });
+
+        weather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getWeather();
             }
         });
     }

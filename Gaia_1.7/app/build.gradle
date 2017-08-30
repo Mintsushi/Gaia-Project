@@ -33,4 +33,6 @@ dependencies {
     compile 'com.mcxiaoke.volley:library-aar:1.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'gun0912.ted:tedpermission:1.0.2'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
