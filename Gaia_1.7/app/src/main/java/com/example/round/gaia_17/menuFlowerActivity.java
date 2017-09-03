@@ -12,13 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import static com.example.round.gaia_17.MainActivity.plantArray;
-import static com.example.round.gaia_17.MainActivity.relLayout;
 import static com.example.round.gaia_17.MainActivity.score;
 /**
  * Created by 리제 on 2017-08-26.
@@ -29,7 +27,7 @@ public class menuFlowerActivity extends Fragment {
     private static final String TAG = ".menuFlowerActivity";
     private ListView mList;
     private FlowerAdapter mAdapter;
-    private ArrayList<FlowerInform> mArray = new ArrayList<>();
+    public static ArrayList<FlowerInform> mFlowerArray = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
@@ -40,21 +38,21 @@ public class menuFlowerActivity extends Fragment {
         mList.setAdapter(mAdapter);
 
         // 모든 꽃 데이터 저장 (서버에서 받아올경우)
-        //id, flowerImagePath,flowerExp,flowerLv,flowerName,flowerLvUp,buyType
-        mArray.add(new FlowerInform(0,"flower1",0,"길냥이",10,0));
-        mArray.add(new FlowerInform(1,"flower1",0,"콩 콩",222,0));
-        mArray.add(new FlowerInform(2,"flower2",0,"비 버",39,0));
-        mArray.add(new FlowerInform(3,"flower2",0,"핑크비버",80,0));
-        mArray.add(new FlowerInform(4,"flower2",0,"빨강비버",245,0));
-        mArray.add(new FlowerInform(5,"flower2",0,"적색비버",399,0));
-        mArray.add(new FlowerInform(6,"flower2",0,"붉은비버",654,0));
-        mArray.add(new FlowerInform(7,"flower2",0,"빨간비버",3333,0));
+        //id, flowerImagePath,flowerLv,flowerName,flowerLvUp,buyType
+        mFlowerArray.add(new FlowerInform(0,"flower1",500,"길냥이",10,1));
+        mFlowerArray.add(new FlowerInform(1,"flower1",0,"콩 콩",222,0));
+        mFlowerArray.add(new FlowerInform(2,"flower2",0,"비 버",39,0));
+        mFlowerArray.add(new FlowerInform(3,"flower2",500,"핑크비버",80,1));
+        mFlowerArray.add(new FlowerInform(4,"flower2",0,"빨강비버",245,0));
+        mFlowerArray.add(new FlowerInform(5,"flower2",0,"적색비버",399,0));
+        mFlowerArray.add(new FlowerInform(6,"flower2",0,"붉은비버",654,0));
+        mFlowerArray.add(new FlowerInform(7,"flower2",0,"빨간비버",3333,0));
 
         //plantArray = 사용자가 가지고 있는 꽃에 대한 정보
-        for(int i =0;i<mArray.size();i++){
+        for(int i =0;i<mFlowerArray.size();i++){
             for(int j =0;j<plantArray.size();j++){
-                if(plantArray.get(j).getId() == mArray.get(i).getId()){
-                    mArray.get(i).setBuyType(1);
+                if(plantArray.get(j).getId() == mFlowerArray.get(i).getId()){
+                    mFlowerArray.get(i).setBuyType(1);
                 }
             }
         }
@@ -117,15 +115,15 @@ public class menuFlowerActivity extends Fragment {
 
         @Override
         public int getCount(){
-            return mArray.size();
+            return mFlowerArray.size();
         }
 
         @Override
         public View getView(int position, View v, ViewGroup parent){
-            FlowerViewHolder viewHolder;
+            final FlowerViewHolder viewHolder;
 
 
-            final FlowerInform info = mArray.get(position);
+            final FlowerInform info = mFlowerArray.get(position);
 
             Log.i(TAG,"이름 : "+info.getFlowerName()+" , 구매 상태 : "+info.buyType);
             if(v == null){
@@ -178,7 +176,7 @@ public class menuFlowerActivity extends Fragment {
                         if(downScore(info.getFlowerLvUp())){
                             info.setFlowerLvUp(info.getFlowerLvUp()+100);
                             info.setFlowerLv();
-
+                            viewHolder.flowerExpBar.setProgress(info.getFlowerLv());
                             if(info.getBuyType() == 0){
                                 MainActivity.buyNewPlant(info.getId(),info.getFlowerLv(),info.getFlowerName(),info.getFlowerImagePath());
                                 info.setBuyType(1);
