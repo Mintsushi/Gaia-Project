@@ -16,6 +16,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -30,8 +33,11 @@ import static com.example.round.gaia_17.MainActivity.updateSeed;
  */
 
 public class menuActiveSkillActivity extends Fragment {
-    private static final int SEND_THREAD_RUN = 0;
-    private static final int SEND_THREAD_STOP = 1;
+    DB_Exception db;
+
+    private int mHandleControl;
+    private static final int SEND_THREAD_RUN = 1;
+    private static final int SEND_THREAD_STOP = 0;
 
     private static final String TAG = ".ActiveSkillActivity";
     private ListView mList;
@@ -47,12 +53,13 @@ public class menuActiveSkillActivity extends Fragment {
         mList.setAdapter(mAdapter);
 
         // 스킬정보 저장 임시
-        mActivityArray.add(new ActiveSkillInform(0,"flower1",1,"물주기",10,1));
-        mActivityArray.add(new ActiveSkillInform(1,"flower1",1,"비버고기",10,1));
-        mActivityArray.add(new ActiveSkillInform(2,"flower1",0,"랍스타",10,0));
-        mActivityArray.add(new ActiveSkillInform(3,"flower1",0,"음어음",10,0));
-        mActivityArray.add(new ActiveSkillInform(4,"flower1",0,"뀨뀨꺄꺄",10,0));
+        db = new DB_Exception(getActivity());
 
+        mActivityArray.add(db.getActiveSkillInform(1,0));
+        mActivityArray.add(db.getActiveSkillInform(2,0));
+        mActivityArray.add(db.getActiveSkillInform(3,0));
+        mActivityArray.add(db.getActiveSkillInform(4,0));
+        mActivityArray.add(db.getActiveSkillInform(5,0));
 
         /*
         for(int i =0;i<mActivityArray.size();i++){
@@ -68,33 +75,43 @@ public class menuActiveSkillActivity extends Fragment {
     }
 
     // 엑티브스킬 정보 포멧
-    public class ActiveSkillInform{
+    public static class ActiveSkillInform{
 
         private int id;
-        private String activeSkillImagePath;
         private int activeSkillLv;
+        private float activeUseCost;
+        private int costType;
+        private float activeSkillEffect;
         private String activeSkillName;
-        private float activeSkillLvUp;
+        private String activeSkillImagePath;
+
         private int buyType;
 
-        public ActiveSkillInform(int id, String activeSkillImagePath, int activeSkillLv, String activeSkillName, float activeSkillLvUp, int buyType){
+        public ActiveSkillInform(int id, int activeSkillLv, int costType, float activeUseCost, float activeEffect, String activeSkillName,  String activeSkillImagePath){
             this.id = id;
-            this.activeSkillImagePath = activeSkillImagePath;
             this.activeSkillLv = activeSkillLv;
+            this.activeUseCost = activeUseCost;
+            this.costType = costType;
+            this.activeSkillEffect = activeEffect;
             this.activeSkillName = activeSkillName;
-            this.activeSkillLvUp = activeSkillLvUp;
-            this.buyType = buyType;
+            this.activeSkillImagePath = activeSkillImagePath;
+            if(activeSkillLv ==0) {
+                this.buyType = 0;
+            }
+            else{
+                this.buyType = 1;
+            }
         }
 
         public int getId(){return this.id;}
         public String getActiveSkillImagePath(){return this.activeSkillImagePath;}
         public int getActiveSkillLv(){return this.activeSkillLv;}
         public String getActiveSkillName(){return this.activeSkillName;}
-        public float getActiveSkillLvUp(){return this.activeSkillLvUp;}
+        public float getactiveUseCost(){return this.activeUseCost;}
         public int getBuyType(){return this.buyType;}
 
         public void setActiveSkillLv(){this.activeSkillLv += 1;}
-        public void setActiveSkillLvUp(float lvUp){this.activeSkillLvUp = lvUp;}
+        public void setactiveUseCost(float lvUp){this.activeUseCost = lvUp;}
 
         public void setBuyType(int buyType){
             this.buyType = buyType;
@@ -146,6 +163,9 @@ public class menuActiveSkillActivity extends Fragment {
                 viewHolder.useTimeText = (TextView)v.findViewById(R.id.useTimeText);
                 viewHolder.skillLvUpButton=(ImageButton) v.findViewById(R.id.skillLvUpButton);
                 viewHolder.skillLvUpText=(TextView)v.findViewById(R.id.skillLvUpText);
+
+                viewHolder.useSkillButton.setImageResource(R.drawable.use);
+
                 v.setTag(viewHolder);
             }else{
                 viewHolder = (ActiveSkillViewHolder) v.getTag();
@@ -179,10 +199,10 @@ public class menuActiveSkillActivity extends Fragment {
                 }
 
                 viewHolder.useTimeText.setVisibility(View.INVISIBLE);
-                viewHolder.useSkillButton.setImageResource(R.drawable.use);
+                //viewHolder.useSkillButton.setImageResource(R.drawable.use);
                 viewHolder.skillLvText.setText("LV . " + info.getActiveSkillLv());
                 viewHolder.skillNameText.setText(info.getActiveSkillName());
-                viewHolder.skillLvUpText.setText(Float.toString(info.getActiveSkillLvUp()));
+                viewHolder.skillLvUpText.setText(Float.toString(info.getactiveUseCost()));
 
                 viewHolder.useSkillButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -201,8 +221,8 @@ public class menuActiveSkillActivity extends Fragment {
                         Log.i(TAG,"id :"+id);
 
                         // 스코어로 레벨 올리기
-                        if(downScore(info.getActiveSkillLvUp())){
-                            info.setActiveSkillLvUp((info.getActiveSkillLvUp()+100));
+                        if(downScore(info.getactiveUseCost())){
+                            info.setactiveUseCost((info.getactiveUseCost()+100));
                             if(info.getActiveSkillLv()==0){
                                 info.setBuyType(1);
                             }
@@ -234,48 +254,59 @@ public class menuActiveSkillActivity extends Fragment {
     }
 
     void useActiveSkill(final int times, final int incScore, final TextView textView){
-        final customhandler handler = new customhandler();
 
+        int timeCount = 0;
         Timer mTimer = new Timer();
         TimerTask mTask = new TimerTask() {
             @Override
             public void run() {
                 int timeCount = 0;
-
-                if(timeCount<times){
+                mHandleControl = 1;
+                while (timeCount < times) {
+                    Log.i("had : ", "" + timeCount + "cont" + mHandleControl);
+                    mHandler.sendEmptyMessage(1);
                     timeCount++;
-                    Message msg = handler.obtainMessage();
-                    handler.sendEmptyMessage(SEND_THREAD_RUN);
-                }else{
-                    Message msg = handler.obtainMessage();
-                    handler.sendEmptyMessage(SEND_THREAD_STOP);
-                    cancel();
                 }
+                mHandleControl = 0;
+                mHandler.sendEmptyMessage(0);
+                cancel();
             }
         };
         mTimer.schedule(mTask,0,1000);
     }
 
-    public class customhandler extends Handler {
-        public void handleMessage(Message msg, int timeCount, int incScore, TextView textView) {
-            super.handleMessage(msg);
+    private android.os.Handler mHandler = new android.os.Handler(){
+        public void handleMessage(Message msg){
 
-            switch (msg.what) {
-                case SEND_THREAD_RUN:
-                    updateSeed(incScore + score);
-                    textView.setText(String.valueOf(timeCount));
-                    break;
+            //나중에 image가 확립되면 좀더 세부적으로 위치 조정
+            if(msg.what == 1) {
+                Log.i(TAG,"Handler Message : 1");
+                score = score + 100;
 
-                case SEND_THREAD_STOP:
-                    textView.setVisibility(View.INVISIBLE);
-                    break;
-
-                default:
-                    break;
             }
-
-
+            else{
+                Log.i(TAG,"Handler Message : 0");
+            }
         }
-    }
+    };
+
+/*
+    private android.os.Handler mHandler = new android.os.Handler(){
+        public void handleMessage(Message msg){
+            Log.i(TAG,"Handler Message : "+msg);
+            TextView textView = (TextView)msg.obj;
+            if(msg.what == SEND_THREAD_RUN) {
+                Log.i("had","on");
+                score = score + msg.arg2;
+                updateSeed(score);
+                textView.setText(String.valueOf(msg.arg1));
+            }
+            else{
+
+                textView.setVisibility(View.INVISIBLE);
+            }
+        }
+    };
+*/
 
 }

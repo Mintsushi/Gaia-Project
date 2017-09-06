@@ -3,6 +3,7 @@ package com.example.round.gaia_17;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
@@ -317,7 +318,13 @@ public class MainActivity extends AppCompatActivity
         goal = (Button)findViewById(R.id.goal);
         goal.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-
+                final goalListDialog dialog = new goalListDialog(v.getContext());
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                    }
+                });
+                dialog.show();
             }
         });
     }
