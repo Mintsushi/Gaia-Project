@@ -27,6 +27,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.round.gaia_17.Data.Plant;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -169,26 +170,26 @@ public class OverlayService extends Service {
     }
 
     public class OverLayPlantInfo implements View.OnTouchListener,View.OnClickListener{
-
+//
         private WindowManager.LayoutParams params;
         private ImageView plant;
         private int id;
-        private MainActivity.PlantInfo plantInfo;
+        //private MainActivity.PlantInfo plantInfo;
 
 
-        public OverLayPlantInfo(WindowManager.LayoutParams params, ImageView image, int id, MainActivity.PlantInfo plantInfo){
-            Log.i(TAG,"ADD OverLayPlantInfo");
-            this.params = params;
-            this.plant = image;
-            this.plant.setOnTouchListener(this);
-            this.plantInfo = plantInfo;
-            this.id = id;
-        }
+//        public OverLayPlantInfo(WindowManager.LayoutParams params, ImageView image, int id, MainActivity.PlantInfo plantInfo){
+//            Log.i(TAG,"ADD OverLayPlantInfo");
+//            this.params = params;
+//            this.plant = image;
+//            this.plant.setOnTouchListener(this);
+//            //this.plantInfo = plantInfo;
+//            this.id = id;
+//        }
 
         public WindowManager.LayoutParams getParams(){return this.params;}
         public View getPlant(){return this.plant;}
         public int getId(){return this.id;}
-        public MainActivity.PlantInfo getPlantInfo(){return this.plantInfo;}
+        //public MainActivity.PlantInfo getPlantInfo(){return this.plantInfo;}
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent){
@@ -268,7 +269,7 @@ public class OverlayService extends Service {
     public void removePlant(int id){
         for(int i =0 ;i<mArray.size();i++){
             if(mArray.get(i).getId() == id){
-                mArray.get(i).getPlantInfo().setView();
+                //mArray.get(i).getPlantInfo().setView();
                 mArray.remove(i);
             }
         }
@@ -290,30 +291,30 @@ public class OverlayService extends Service {
         mArray.clear();
     }
 
-    public Boolean addPlant(MainActivity.PlantInfo plant){
+    public Boolean addPlant(Plant plant){
 
         if(enableOverlayService) {
 
-            plant.remove();
-            View flower = plant.getPlant();
+            //plant.remove();
+            //View flower = plant.getPlant();
             int[] location = new int[2];
-            flower.getLocationOnScreen(location);
+            //flower.getLocationOnScreen(location);
 
             ImageView overlayPlant = new ImageView(this);
-            overlayPlant.setImageResource((Integer) flower.getTag());
+            //overlayPlant.setImageResource((Integer) flower.getTag());
 
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                    flower.getWidth(), flower.getHeight(),
-                    WindowManager.LayoutParams.TYPE_TOAST,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                    PixelFormat.TRANSLUCENT
-            );
-            params.gravity = Gravity.LEFT | Gravity.TOP;
-            params.x = location[0];
-            params.y = location[1];
+//            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+//                    flower.getWidth(), flower.getHeight(),
+//                    WindowManager.LayoutParams.TYPE_TOAST,
+//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//                    PixelFormat.TRANSLUCENT
+//            );
+            //params.gravity = Gravity.LEFT | Gravity.TOP;
+            //params.x = location[0];
+            //params.y = location[1];
 
-            mArray.add(new OverLayPlantInfo(params, overlayPlant, plant.getId(), plant));
+            //mArray.add(new OverLayPlantInfo(params, overlayPlant, plant.getId(), plant));
             return true;
         }
         else{
