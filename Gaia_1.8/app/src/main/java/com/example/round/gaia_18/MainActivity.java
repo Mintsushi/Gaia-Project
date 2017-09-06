@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static Context context;
 
     //DataBase
-    public static DataBaseHelper dataBaseHelper;
+    public DataBaseHelper dataBaseHelper;
     public static DataList dataList;
 
     //Layout / View

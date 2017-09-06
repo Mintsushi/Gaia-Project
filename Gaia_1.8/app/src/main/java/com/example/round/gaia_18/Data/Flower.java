@@ -2,8 +2,6 @@ package com.example.round.gaia_18.Data;
 
 import com.example.round.gaia_18.MainActivity;
 
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-
 /**
  * Created by Round on 2017-09-06.
  */
