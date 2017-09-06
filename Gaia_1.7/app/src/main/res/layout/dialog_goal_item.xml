@@ -46,7 +46,7 @@
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/goalCountText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="10 / 2"
@@ -54,7 +54,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/goalReward"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
@@ -64,7 +64,7 @@
     </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/goalProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="20dp"
