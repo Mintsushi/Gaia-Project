@@ -14,9 +14,6 @@ public class Flower {
     private int flowerCost, flowerScore;
     private int flowerTab, flowerLevel;
     private boolean buyType;
-    private int time; //물을 줘야하는 시간
-    private int waterPassiveTime; //물을 주지 않을 시 패시브
-    private int passiveRate;
     private int level;
 
     public Flower(){
@@ -24,7 +21,7 @@ public class Flower {
     }
 
     public Flower(int flowerNo, String flowerName, String flowerImage, String flowerButtonImage, int flowerCost,
-                  int flowerScore, int flowerTab, int flowerLevel, int time, int waterPassiveTime, int passiveRate) {
+                  int flowerScore, int flowerTab, int flowerLevel) {
         this.flowerNo = flowerNo;
         this.flowerName = flowerName;
         this.flowerImage = flowerImage;
@@ -33,9 +30,6 @@ public class Flower {
         this.flowerScore = flowerScore;
         this.flowerTab = flowerTab;
         this.flowerLevel = flowerLevel;
-        this.time = time;
-        this.waterPassiveTime = waterPassiveTime;
-        this.passiveRate = passiveRate;
     }
 
     public int getFlowerNo() {
@@ -116,29 +110,5 @@ public class Flower {
 
     public void setLevel(int level) {
         this.level = level;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public int getWaterPassiveTime() {
-        return waterPassiveTime;
-    }
-
-    public void setWaterPassiveTime(int waterPassiveTime) {
-        this.waterPassiveTime = waterPassiveTime;
-    }
-
-    public int getPassiveRate() {
-        return passiveRate;
-    }
-
-    public void setPassiveRate(int passiveRate) {
-        this.passiveRate = passiveRate;
     }
 }

@@ -36,17 +36,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String waterPassiveTime = "waterPassiveTime";
     private static final String passiveRate = "passiveRate";
 
-    //Active Skill Table
-    private static final String ACTIVE_SKILL_TABLE_NAME = "ACTIVE_SKILL_TABLE";
-    private static final String ActiveSkillId = "KEY_ID";
-    private static final String ActiveSkillName = "KEY_NAME";
-    private static final String ActiveSkillLevel = "KEY_LV";
-    private static final String ActiveSkillImage = "KEY_IMAGE";
-    private static final String activeSkillSkillImage = "KEY_SKILL_IMAGE";
-    private static final String ActiveSkillCostType= "KEY_COST_TYPE";
-    private static final String ActiveSkillUseCost = "KEY_USE_COST";
-    private static final String ActiveSkillEffect = "KEY_EFFECT";
-
+    //Weather Table
+    private static final String WEATHER_TABLE = "water";
+    private static final String flowerNo = "flowerNo";
+    private static final String sun = "time";
+    private static final String Rcloudy = "Rcloudy";
+    private static final String rain = "rain";
+    private static final String Mcloudy = "Mcloudy";
+    private static final String Lcloudy = "Lcloudy";
 
 
     public DataBaseHelper(Context context) {
@@ -58,6 +55,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         //flower Table 구축
         flowerTable(sqLiteDatabase);
+        //Weather Table 구축
+        weatherTable(sqLiteDatabase);
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -70,20 +69,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + flowerCost + " DOUBLE NOT NULL,"
                 + flowerScore + " INTEGER NOT NULL,"
                 + flowerTab + " INTEGER NOT NULL,"
-                + flowerLevel + " INTEGER NOT NULL,"
-                + waterTime + " INTEGER NOT NULL,"
-                + waterPassiveTime + " INTEGER NOT NULL,"
-                + passiveRate + " INTEGER NOT NULL" + ")";
+                + flowerLevel + " INTEGER NOT NULL" + ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
         //Insert Flower Data
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0, "민들레", " ", " ", 50, 1, 0, 0, 300, 120, 1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1, "나팔꽃", " ", " ", 900000000, 3000, 200, 200, 480, 192, 1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2, "장미", " ", " ", 999999999, 100000, 400, 200,900, 360, 2));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0, "민들레", " ", " ", 50, 1, 0, 0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1, "나팔꽃", " ", " ", 900000000, 3000, 200, 200));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2, "장미", " ", " ", 999999999, 100000, 400, 200));
     }
 
     private ContentValues getFlowerValues(int id, String name, String image, String buttonImage,
-                                          long cost, int score, int tab, int level, int time, int passiveTime, int passive) {
+                                          long cost, int score, int tab, int level) {
 
         ContentValues values = new ContentValues();
 
@@ -95,12 +91,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(flowerScore, score);
         values.put(flowerTab, tab);
         values.put(flowerLevel, level);
-        values.put(waterTime, time);
-        values.put(waterPassiveTime, passiveTime);
-        values.put(passiveRate, passive);
 
         return values;
 
+    }
+
+    private void weatherTable(SQLiteDatabase sqLiteDatabase){
+        //Weather Table
+        String CREATE_TABLE = "CREATE TABLE " + FLOWER_TABLE_NAME + "("
+                + flowerId + " INTEGER NOT NULL PRIMARY KEY,"
+                + flowerName + " TEXT NOT NULL,"
+                + flowerImage + " TEXT NOT NULL,"
+                + flowerButtonImage + " TEXT NOT NULL,"
+                + flowerCost + " DOUBLE NOT NULL,"
+                + flowerScore + " INTEGER NOT NULL,"
+                + flowerTab + " INTEGER NOT NULL,"
+                + flowerLevel + " INTEGER NOT NULL" + ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        //Insert Flower Data
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0, "민들레", " ", " ", 50, 1, 0, 0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1, "나팔꽃", " ", " ", 900000000, 3000, 200, 200));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2, "장미", " ", " ", 999999999, 100000, 400, 200));
     }
 
     @Override
