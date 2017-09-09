@@ -32,10 +32,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String flowerScore = "flowerScore";
     private static final String flowerTab = "flowerTab";
     private static final String flowerLevel = "flowerLevel";
-    private static final String waterTime = "waterTime";
-    private static final String waterPassiveTime = "waterPassiveTime";
-    private static final String passiveRate = "passiveRate";
 
+    //skill info data 1
     //Weather Table
     private static final String WEATHER_TABLE = "water";
     private static final String flowerNo = "flowerNo";
@@ -117,6 +115,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        
     }
 
     //getter

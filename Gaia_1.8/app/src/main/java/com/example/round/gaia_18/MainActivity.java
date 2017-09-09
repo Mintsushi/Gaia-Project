@@ -85,10 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         if(mOverlayService != null){
-
-            if(mOverlayService.getSize() > 0){
-                mOverlayService.invisible();
-            }
+            mOverlayService.invisible();
         }
     }
 
@@ -269,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //후에 식물을 따른 점수들을 계산해서 구현
             score = score + 1000000;
             seed.setText(Integer.toString(score));
+            mOverlayService.setSeed(score);
         }
     }
 

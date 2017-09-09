@@ -27,8 +27,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_18.Common.Common;
@@ -48,6 +51,7 @@ import java.util.ArrayList;
 import static com.example.round.gaia_18.MainActivity.context;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
+import static com.example.round.gaia_18.MainActivity.score;
 import static com.example.round.gaia_18.MainActivity.weather;
 
 public class OverlayService extends Service implements View.OnClickListener,View.OnTouchListener,LocationListener{
@@ -79,6 +83,28 @@ public class OverlayService extends Service implements View.OnClickListener,View
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
 
     private final int MY_PERMISSION = 0;
+
+    //Screen Click
+    private LinearLayout linearLayout;
+    private LinearLayout skill;
+    private Button open;
+    private Button click;
+    private TextView seed;
+    private WindowManager.LayoutParams clickLayout;
+    private WindowManager.LayoutParams skillWindow;
+    private Button removeAll;
+
+    //0 닫혀있는 상태
+    //1 열려있는 상태
+    private int skillWindowState = 0;
+    //0 : click stop
+    //1 : click available
+    private int clickState = 0;
+
+    //Error Solution
+    //0: overlayScreen Off
+    //1: overlayScreen On
+    private int visible = 0;
 
     @Override
     public IBinder onBind(Intent intent){ return mBinder; }
@@ -154,6 +180,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         mWindowManager.addView(toLeftView, params);
 
+        setLayout();
     }
 
     private void setLocation(){
@@ -187,19 +214,90 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     }
 
-    public void invisible(){
-        ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+    public void setSeed(int score){
+        seed.setText(Integer.toString(score));
+    }
 
-        for(int i = 0 ; i<plants.size();i++){
-            mWindowManager.removeView(plants.get(i).getOverlayPlant());
+    private void setLayout(){
+        linearLayout = new LinearLayout(this);
+        linearLayout.setOnClickListener(this);
+
+        skill = new LinearLayout(this);
+        skill.setOrientation(LinearLayout.VERTICAL);
+        skill.setBackgroundResource(R.drawable.brown_background);
+
+        seed = new TextView(this);
+        seed.setText(Integer.toString(score));
+
+        open = new Button(this);
+        open.setText("OPEN");
+
+        click = new Button(this);
+        click.setText("Click");
+
+        removeAll = new Button(this);
+        removeAll.setText("Remove");
+
+        open.setOnClickListener(this);
+        click.setOnClickListener(this);
+        removeAll.setOnClickListener(this);
+
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        skill.addView(seed,buttonParams);
+        skill.addView(open,buttonParams);
+        skill.addView(click,buttonParams);
+        skill.addView(removeAll,buttonParams);
+
+        skillWindow = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,200,
+                WindowManager.LayoutParams.TYPE_TOAST,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT
+        );
+        skillWindow.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+
+        clickLayout = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.TYPE_TOAST,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
+
+    }
+
+    private void removeLayout(){
+
+    }
+    public void invisible(){
+
+        if(visible == 1) {
+            ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+            for (int i = 0; i < plants.size(); i++) {
+                mWindowManager.removeView(plants.get(i).getOverlayPlant());
+            }
+
+            if (clickState == 1) {
+                mWindowManager.removeView(linearLayout);
+                clickState = 0;
+            }
+            mWindowManager.removeView(skill);
+            visible = 0;
         }
     }
 
     public void visible(){
-        ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
 
-        for(int i =0 ; i<plants.size();i++){
-            mWindowManager.addView(plants.get(i).getOverlayPlant(),plants.get(i).getParams());
+        if(visible == 0) {
+            ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+            for (int i = 0; i < plants.size(); i++) {
+                mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
+            }
+
+            mWindowManager.addView(skill, skillWindow);
+
+            visible = 1;
         }
     }
 
@@ -298,7 +396,61 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     @Override
-    public void onClick(View view){}
+    public void onClick(View view){
+        if(view == linearLayout){
+
+            //후에 식물을 따른 점수들을 계산해서 구현
+            score = score + 1000000;
+            seed.setText(Integer.toString(score));
+
+        }else if(view == open){
+
+            WindowManager.LayoutParams params = (WindowManager.LayoutParams)skill.getLayoutParams();
+            if(skillWindowState == 0){
+                params.height = WindowManager.LayoutParams.MATCH_PARENT;
+                mWindowManager.updateViewLayout(skill,params);
+
+                open.setText("Close");
+                skillWindowState = 1;
+            }
+            else{
+                params.height = 200;
+                mWindowManager.updateViewLayout(skill,params);
+
+                open.setText("Open");
+                skillWindowState = 0;
+            }
+
+        }else if(view == click){
+
+            if(clickState == 0){
+                mWindowManager.addView(linearLayout,clickLayout);
+                mWindowManager.removeView(skill);
+                mWindowManager.addView(skill,(WindowManager.LayoutParams)skill.getLayoutParams());
+                click.setText("Stop");
+                clickState = 1;
+            }
+            else{
+                mWindowManager.removeView(linearLayout);
+                click.setText("Click");
+                clickState = 0;
+            }
+
+        }else if(view == removeAll){
+
+            if(visible == 1){
+                invisible();
+                visible = 0;
+                removeAll.setText("Create");
+            }
+
+            else if(visible == 0){
+                visible();
+                visible = 1;
+                removeAll.setText("Remove");
+            }
+        }
+    }
 
     public class GetWeather extends AsyncTask<String, Void, String> {
 
@@ -321,32 +473,34 @@ public class OverlayService extends Service implements View.OnClickListener,View
         @Override
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            if(s.contains("Error: Not found city")){
-                return;
+            if(s != null){
+                if(s.contains("Error: Not found city")){
+                    return;
+                }
+
+                Gson gson = new Gson();
+                Type type = new TypeToken<OpenWeatherMap>(){}.getType();
+                openWeatherMap = gson.fromJson(s, type);
+
+                remoteView.setTextViewText(R.id.txtCity,String.format("도시 : %s, 국가 : %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
+                remoteView.setTextViewText(R.id.txtLastUpdate,String.format("Last Updated : %s", Common.getDateNow()));
+                remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
+                remoteView.setTextViewText(R.id.txtHumidity,String.format("습도 : %d%%",openWeatherMap.getMain().getHumidity()));
+                remoteView.setTextViewText(R.id.txtTime,String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
+                        ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
+                remoteView.setTextViewText(R.id.txtCelsius,String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
+
+                Picasso.with(context)
+                        .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
+                        .into(remoteView,R.id.imageView,notification_id,noti);
+                noti.contentView = remoteView;
+
+                notificationManager.notify(notification_id,noti);
+
+                Picasso.with(context)
+                        .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
+                        .into(weather);
             }
-
-            Gson gson = new Gson();
-            Type type = new TypeToken<OpenWeatherMap>(){}.getType();
-            openWeatherMap = gson.fromJson(s, type);
-
-            remoteView.setTextViewText(R.id.txtCity,String.format("도시 : %s, 국가 : %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
-            remoteView.setTextViewText(R.id.txtLastUpdate,String.format("Last Updated : %s", Common.getDateNow()));
-            remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
-            remoteView.setTextViewText(R.id.txtHumidity,String.format("습도 : %d%%",openWeatherMap.getMain().getHumidity()));
-            remoteView.setTextViewText(R.id.txtTime,String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
-                    ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
-            remoteView.setTextViewText(R.id.txtCelsius,String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
-
-            Picasso.with(context)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(remoteView,R.id.imageView,notification_id,noti);
-            noti.contentView = remoteView;
-
-            notificationManager.notify(notification_id,noti);
-
-            Picasso.with(context)
-                    .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
-                    .into(weather);
         }
     }
 
