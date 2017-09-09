@@ -74,8 +74,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         //Insert Flower Data
         sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0, "민들레", " ", " ", 50, 1, 0, 0));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1, "나팔꽃", " ", " ", 900000000, 3000, 200, 200));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2, "장미", " ", " ", 999999999, 100000, 400, 200));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1, "나팔꽃", " ", " ", 2000000, 3000, 200, 200));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2, "장미", " ", " ", 100000000, 100000, 400, 200));
     }
 
     private ContentValues getFlowerValues(int id, String name, String image, String buttonImage,

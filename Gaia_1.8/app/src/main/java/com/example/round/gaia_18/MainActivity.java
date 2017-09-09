@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
-    private static Context context;
+    public static Context context;
 
     //DataBase
     public DataBaseHelper dataBaseHelper;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout linearLayout;
     private Button goal, menu;
     private static TextView seed, fruit;
+    public static ImageView weather;
 
     //FragementButton
     private ImageButton menuFlowerButton;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         if(mOverlayService != null){
+
             if(mOverlayService.getSize() > 0){
                 mOverlayService.invisible();
             }
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fruit = (TextView)findViewById(R.id.fruit);
         menu = (Button)findViewById(R.id.menu);
         goal = (Button)findViewById(R.id.goal);
+        weather = (ImageView)findViewById(R.id.weather);
 
         //Fragement Button
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
