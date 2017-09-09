@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static RelativeLayout relativeLayout;
     private LinearLayout linearLayout;
     private Button goal, menu;
-    private static TextView seed, fruit;
+    public static TextView seed, fruit;
     public static ImageView weather;
 
     //FragementButton

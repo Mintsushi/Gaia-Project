@@ -52,6 +52,7 @@ import static com.example.round.gaia_18.MainActivity.context;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.score;
+import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.MainActivity.weather;
 
 public class OverlayService extends Service implements View.OnClickListener,View.OnTouchListener,LocationListener{
@@ -89,7 +90,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
     private LinearLayout skill;
     private Button open;
     private Button click;
-    private TextView seed;
+    private TextView seedOverlay;
     private WindowManager.LayoutParams clickLayout;
     private WindowManager.LayoutParams skillWindow;
     private Button removeAll;
@@ -105,6 +106,10 @@ public class OverlayService extends Service implements View.OnClickListener,View
     //0: overlayScreen Off
     //1: overlayScreen On
     private int visible = 0;
+
+    //1 : 화면에서 view들을 임시로 remove
+    //0 : 임시로 remove한 view들을 다시 overlay로 가지고 옴.
+    private int removeState = 0;
 
     @Override
     public IBinder onBind(Intent intent){ return mBinder; }
@@ -215,7 +220,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     public void setSeed(int score){
-        seed.setText(Integer.toString(score));
+        seedOverlay.setText(Integer.toString(score));
     }
 
     private void setLayout(){
@@ -226,8 +231,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
         skill.setOrientation(LinearLayout.VERTICAL);
         skill.setBackgroundResource(R.drawable.brown_background);
 
-        seed = new TextView(this);
-        seed.setText(Integer.toString(score));
+        seedOverlay = new TextView(this);
+        seedOverlay.setText(Integer.toString(score));
 
         open = new Button(this);
         open.setText("OPEN");
@@ -243,7 +248,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         removeAll.setOnClickListener(this);
 
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        skill.addView(seed,buttonParams);
+        skill.addView(seedOverlay,buttonParams);
         skill.addView(open,buttonParams);
         skill.addView(click,buttonParams);
         skill.addView(removeAll,buttonParams);
@@ -270,11 +275,14 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
     public void invisible(){
 
-        if(visible == 1) {
-            ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+        if(visible == 1){
 
-            for (int i = 0; i < plants.size(); i++) {
-                mWindowManager.removeView(plants.get(i).getOverlayPlant());
+            if(removeState == 0) {
+                ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                for (int i = 0; i < plants.size(); i++) {
+                    mWindowManager.removeView(plants.get(i).getOverlayPlant());
+                }
             }
 
             if (clickState == 1) {
@@ -401,6 +409,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
             //후에 식물을 따른 점수들을 계산해서 구현
             score = score + 1000000;
+            seedOverlay.setText(Integer.toString(score));
             seed.setText(Integer.toString(score));
 
         }else if(view == open){
@@ -438,16 +447,25 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         }else if(view == removeAll){
 
-            if(visible == 1){
-                invisible();
-                visible = 0;
+            if(removeState == 0){
+                ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                for (int i = 0; i < plants.size(); i++) {
+                    mWindowManager.removeView(plants.get(i).getOverlayPlant());
+                }
+
                 removeAll.setText("Create");
+                removeState = 1;
             }
 
-            else if(visible == 0){
-                visible();
-                visible = 1;
+            else{
+                ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                for (int i = 0; i < plants.size(); i++) {
+                    mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
+                }
                 removeAll.setText("Remove");
+                removeState = 0;
             }
         }
     }
