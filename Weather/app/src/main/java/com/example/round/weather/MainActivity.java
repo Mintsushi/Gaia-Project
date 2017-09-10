@@ -1,5 +1,6 @@
 package com.example.round.weather;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +20,11 @@ import android.widget.ToggleButton;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.jar.Manifest;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     protected LocationManager locationManager;
     private Boolean isGPSEnabled = false;
     private Boolean isNetworkEnabled = false;
+    private TextView td;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 .setDeniedMessage("거부하셨습니다...\n[설정]>[권한]에서 권한을 허용할 수 있습니다.")
                 .setPermissions(android.Manifest.permission.ACCESS_FINE_LOCATION)
                 .check();
+        td = (TextView)findViewById(R.id.dateNow);
 
         tv = (TextView)findViewById(R.id.textView2);
         tv.setText("위치정보 미수신중");
@@ -114,6 +122,14 @@ public class MainActivity extends AppCompatActivity {
                     "\n경도 : "+latitude+
                     "\n고도 : "+altitude+
                     "\n정확도 : "+accuracy);
+
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            String formatDate = format.format(date);
+
+            td.setText(formatDate);
+
         }
 
         @Override
@@ -177,4 +193,5 @@ public class MainActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
+
 }

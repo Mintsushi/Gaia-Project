@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+<<<<<<< HEAD
+    android:background="@drawable/bg4">
+=======
+    android:background="@drawable/bg44">
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/plantflowerImage"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:paddingTop="50dp"
+        android:adjustViewBounds="false"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.46"
+        android:layout_marginTop="120dp" />
+
+<<<<<<< HEAD
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/plantpotImage"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="302dp"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+=======
+    <ImageView
+        android:id="@+id/buttonEffectImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/itemEffectImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="visible"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/EXPGET11"
+        android:layout_width="80dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginStart="70dp"
+        android:background="@drawable/backg2"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <Button
+            android:id="@+id/btnTouch"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/touch"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnScissors" />
+
+        <Button
+            android:id="@+id/btnScissors"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/scissor"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnTalk" />
+
+        <Button
+            android:id="@+id/btnTalk"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/talk"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnMusic" />
+
+        <Button
+            android:id="@+id/btnMusic"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+
+            android:background="@drawable/music"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/ONOFF"
+<<<<<<< HEAD
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/on"
+=======
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/on"
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <ListView
+        android:id="@+id/ITEM11"
+        android:layout_width="83dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="74dp"
+<<<<<<< HEAD
+        android:layout_marginLeft="-33dp"
+        android:background="@drawable/backg2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <ImageView
+        android:id="@+id/buttonEffectImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="166dp"
+        android:layout_marginStart="166dp"
+        android:layout_marginTop="65dp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/itemEffectImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="166dp"
+        android:layout_marginStart="166dp"
+        android:layout_marginTop="65dp"
+        android:visibility="visible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/hp11"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="59dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/ONOFF">
+=======
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/EXP11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/ONOFF"
+        app:layout_constraintRight_toRightOf="parent">
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+        <ProgressBar
+            android:id="@+id/EXPbar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+<<<<<<< HEAD
+            android:layout_marginTop="0dp"
+            android:progressDrawable="@drawable/hp_progressbar"
+=======
+            android:progressDrawable="@drawable/exp_progressbar"
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <TextView
+            android:id="@+id/currentEXP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/EXPbar"
+            app:layout_constraintHorizontal_bias="0.625"
+            app:layout_constraintLeft_toLeftOf="@+id/EXPbar"
+            app:layout_constraintRight_toLeftOf="@+id/maxEXP" />
+
+        <TextView
+            android:id="@+id/maxEXP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginRight="19dp"
+            android:text="/100"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/EXPbar"
+            app:layout_constraintRight_toRightOf="@+id/EXPbar" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="EXP"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/maxEXP"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintLeft_toLeftOf="@+id/EXPbar"
+            app:layout_constraintRight_toRightOf="@+id/EXPbar"
+            app:layout_constraintTop_toTopOf="@+id/EXPbar"
+            app:layout_constraintVertical_bias="0.78" />
+
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+<<<<<<< HEAD
+        android:id="@+id/EXP11"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/ONOFF"
+        app:layout_constraintRight_toRightOf="parent">
+=======
+        android:id="@+id/hp11"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="59dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/ONOFF"
+        android:layout_marginRight="98dp"
+        android:layout_marginEnd="98dp">
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+        <ProgressBar
+            android:id="@+id/HPbar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerInParent="true"
+<<<<<<< HEAD
+            android:layout_marginTop="0dp"
+            android:progressDrawable="@drawable/exp_progressbar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+=======
+            android:progressDrawable="@drawable/hp_progressbar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="24dp" />
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+        <TextView
+            android:id="@+id/currentHP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="0"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/HPbar"
+            app:layout_constraintHorizontal_bias="0.625"
+            app:layout_constraintLeft_toLeftOf="@+id/HPbar"
+            app:layout_constraintRight_toLeftOf="@+id/maxHP" />
+
+        <TextView
+            android:id="@+id/maxHP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="34dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginRight="19dp"
+            android:text="/100"
+            android:textSize="15dp"
+            app:layout_constraintBottom_toBottomOf="@+id/HPbar"
+            app:layout_constraintRight_toRightOf="@+id/HPbar" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="HP"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/maxHP"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintLeft_toLeftOf="@+id/HPbar"
+            app:layout_constraintRight_toRightOf="@+id/HPbar"
+            app:layout_constraintTop_toTopOf="@+id/HPbar"
+            app:layout_constraintVertical_bias="0.78" />
+
+    </android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+<<<<<<< HEAD
+        app:layout_constraintLeft_toLeftOf="parent">
+=======
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="20dp">
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+        <ImageButton
+            android:id="@+id/bagButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:background="@drawable/bag" />
+
+        <ImageButton
+            android:id="@+id/touchButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:background="@drawable/touch_icon" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/flowerEntryBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/messege"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flowerInfoBut" />
+
+    <ImageButton
+        android:id="@+id/flowerInfoBut"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+<<<<<<< HEAD
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/entry"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+=======
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/entry"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+
+>>>>>>> -Gaia_1.7v 로그인 없이 게임 시작 기능 추가
+
+    <ImageView
+        android:id="@+id/levelupview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/up"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
+
+    <TextView
+        android:text="TextView"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PlantName"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="@+id/linearLayout" />
+
+    <TextView
+        android:text="TextView"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/colorWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/PlantLV"
+        app:layout_constraintTop_toBottomOf="@+id/PlantName"
+        app:layout_constraintLeft_toLeftOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/user"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:text="aurora32s"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="italic"
+                android:background="@drawable/drawable_email"
+                android:layout_width="wrap_content"
+                android:paddingRight="50dp"
+                android:paddingLeft="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/plant_Nickname" />
+
+            <TextView
+                android:text="aurora32s@naver.com"
+                android:textColor="@color/colorWhite"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:background="@drawable/drawable_email"
+                android:layout_width="wrap_content"
+                android:paddingRight="50dp"
+                android:paddingLeft="10dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/plant_Email" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/drawable_email"
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="3dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="false"
+                    android:background="#ffbb1c"
+                    android:src="@drawable/seed"
+                    android:layout_margin="3dp"/>
+
+                <TextView
+                    android:text="1000"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:textAlignment="textEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/plant_seed"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:adjustViewBounds="false"
+                    android:background="#ffe11c"
+                    android:src="@drawable/fruit"
+                    android:layout_margin="3dp"/>
+
+                <TextView
+                    android:text="3000"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/colorWhite"
+                    android:textAlignment="textEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/plant_fruit"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

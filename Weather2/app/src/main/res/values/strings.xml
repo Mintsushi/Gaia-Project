@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Weather2</string>
+    <string name="weather_title">%1$s 현재날씨</string>
+    <string name="celsius">%1$s°C</string>
+    <string name="sky_status">%1$s | %2$s</string>
+    <string name="weather_day">%1$02d(%2$s)</string>
+    <string name="humidity">Humidity : %1$s</string>
+    <string name="rainfall">1H Rainfall : %1$dmm</string>
+    <string name="snowfall">1H Snowfall : %1$dmm</string>
+</resources>
