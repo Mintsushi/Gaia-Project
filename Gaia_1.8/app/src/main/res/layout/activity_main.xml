@@ -8,43 +8,68 @@
     android:background="@drawable/bg41">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/brown_background"
         android:orientation="horizontal"
-        android:id="@+id/linearLayout">
+        android:gravity="center"
+        android:padding="10dp">
 
-        <TextView
-            android:text="@string/seed"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/White"/>
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/flower_buy_available">
 
-        <TextView
-            android:id="@+id/seed"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/White" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/seed"
+                android:textColor="@color/White"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:text="@string/fruit"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/White"/>
-        <TextView
-            android:id="@+id/fruit"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/White"/>
+            <TextView
+                android:id="@+id/seed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20sp"
+                android:layout_weight="1"
+                android:textColor="@color/White"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/fruit"
+                android:textColor="@color/White"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/fruit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/White" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/weather"
+            android:layout_width="70sp"
+            android:layout_height="70sp"
+            android:scaleType="fitXY"/>
+
+        <Button
+            android:id="@+id/setting"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:text="Button" />
     </LinearLayout>
 
     <RelativeLayout

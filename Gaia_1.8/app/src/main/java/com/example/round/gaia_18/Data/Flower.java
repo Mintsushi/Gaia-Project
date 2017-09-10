@@ -2,8 +2,6 @@ package com.example.round.gaia_18.Data;
 
 import com.example.round.gaia_18.MainActivity;
 
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-
 /**
  * Created by Round on 2017-09-06.
  */
@@ -15,18 +13,17 @@ public class Flower {
     private String flowerImage, flowerButtonImage;
     private int flowerCost, flowerScore;
     private int flowerTab, flowerLevel;
+    private int cost, score;
     private boolean buyType;
-    private int time; //물을 줘야하는 시간
-    private int waterPassiveTime; //물을 주지 않을 시 패시브
-    private int passiveRate;
-    private int level;
+    private boolean buyPossible;
+    private int level = 0;
 
     public Flower(){
 
     }
 
     public Flower(int flowerNo, String flowerName, String flowerImage, String flowerButtonImage, int flowerCost,
-                  int flowerScore, int flowerTab, int flowerLevel, int time, int waterPassiveTime, int passiveRate) {
+                  int flowerScore, int flowerTab, int flowerLevel,int cost,int score) {
         this.flowerNo = flowerNo;
         this.flowerName = flowerName;
         this.flowerImage = flowerImage;
@@ -35,9 +32,8 @@ public class Flower {
         this.flowerScore = flowerScore;
         this.flowerTab = flowerTab;
         this.flowerLevel = flowerLevel;
-        this.time = time;
-        this.waterPassiveTime = waterPassiveTime;
-        this.passiveRate = passiveRate;
+        this.cost = cost;
+        this.score = score;
     }
 
     public int getFlowerNo() {
@@ -120,27 +116,27 @@ public class Flower {
         this.level = level;
     }
 
-    public int getTime() {
-        return time;
+    public int getCost() {
+        return cost;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setCost(int cost) {
+        this.cost = cost;
     }
 
-    public int getWaterPassiveTime() {
-        return waterPassiveTime;
+    public int getScore() {
+        return score;
     }
 
-    public void setWaterPassiveTime(int waterPassiveTime) {
-        this.waterPassiveTime = waterPassiveTime;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public int getPassiveRate() {
-        return passiveRate;
+    public boolean isBuyPossible() {
+        return buyPossible;
     }
 
-    public void setPassiveRate(int passiveRate) {
-        this.passiveRate = passiveRate;
+    public void setBuyPossible(boolean buyPossible) {
+        this.buyPossible = buyPossible;
     }
 }

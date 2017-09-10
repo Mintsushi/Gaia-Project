@@ -31,17 +31,18 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
-    private static Context context;
+    public static Context context;
 
     //DataBase
-    public static DataBaseHelper dataBaseHelper;
+    public DataBaseHelper dataBaseHelper;
     public static DataList dataList;
 
     //Layout / View
     public static RelativeLayout relativeLayout;
     private LinearLayout linearLayout;
     private Button goal, menu;
-    private static TextView seed, fruit;
+    public static TextView seed, fruit;
+    public static ImageView weather;
 
     //FragementButton
     private ImageButton menuFlowerButton;
@@ -84,9 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
         if(mOverlayService != null){
-            if(mOverlayService.getSize() > 0){
-                mOverlayService.invisible();
-            }
+            mOverlayService.invisible();
         }
     }
 
@@ -118,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fruit = (TextView)findViewById(R.id.fruit);
         menu = (Button)findViewById(R.id.menu);
         goal = (Button)findViewById(R.id.goal);
+        weather = (ImageView)findViewById(R.id.weather);
 
         //Fragement Button
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Boolean already = false;
         int plantNo = 0;
-        int plantLevel = 10;
+        int plantLevel = 190;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
         dataList.compareFlowers();
+        dataList.setBuyPossible();
     }
 
     private void setImageButtonClick(){
@@ -266,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //후에 식물을 따른 점수들을 계산해서 구현
             score = score + 1000000;
             seed.setText(Integer.toString(score));
+            mOverlayService.setSeed(score);
         }
     }
 

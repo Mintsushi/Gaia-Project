@@ -16,12 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.round.gaia_18.Data.DataList;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static com.example.round.gaia_18.MainActivity.dataList;
@@ -84,7 +82,7 @@ public class MenuFlower extends Fragment {
         }
 
         @Override
-        public View getView(int position, View v, ViewGroup parent){
+        public View getView(final int position, View v, ViewGroup parent){
 
             final Flower flower = flowers.get(position);
 
@@ -111,13 +109,17 @@ public class MenuFlower extends Fragment {
             if(flower != null){
                 //buyType ==0 이면 잠긴이미지
                 if(flower.isBuyType()) {
-                    viewHolder.background.setBackgroundResource(R.drawable.shape);
+                    viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
                     viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
                     viewHolder.flowerImage.setImageResource(R.drawable.image);
                     viewHolder.flowerLevel.setText("Level . " + flower.getLevel());
-                }else{
-                    viewHolder.background.setBackgroundResource(R.drawable.lock_background);
+                }else if(flower.isBuyPossible()){
+                    viewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     viewHolder.flowerLevelUp.setImageResource(R.drawable.buy);
+                    viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
+                    viewHolder.flowerLevel.setText("Level . ???");
+                }else{
+                    viewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
                     viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
                     viewHolder.flowerLevel.setText("Level . ???");
                 }
@@ -125,39 +127,45 @@ public class MenuFlower extends Fragment {
                 viewHolder.flowerName.setText(flower.getFlowerName());
                 viewHolder.flowerLevelUpScore.setText(Float.toString(flower.getFlowerCost()));
 
-                //버튼 이밴트
-                viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int id = flower.getFlowerNo();
+                    //버튼 이밴트
+                    viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (flower.isBuyPossible()) {
 
-                        // 스코어로 레벨 올리기
-                        if(downScore(flower.getFlowerCost())){
-                            //수식에 맞춰서 고칠것
-                            //표현방식도 수정(A,B,C,D....)
-                            flower.setFlowerCost(flower.getFlowerCost()+100);
-                            viewHolder.flowerExp.setProgress(flower.getLevel());
+                                // 스코어로 레벨 올리기
+                                if (downScore(flower.getFlowerCost())) {
+                                    //수식에 맞춰서 고칠것
+                                    //표현방식도 수정(A,B,C,D....)
+                                    flower.setFlowerCost(flower.getFlowerCost() + 100);
+                                    viewHolder.flowerExp.setProgress(flower.getLevel());
 
-                            //구입하지 않은 꽃은 PlantArray에 추가 및 main view에 추가
-                            if(!flower.isBuyType()){
-                                MainActivity.buyPlant(flower);
-                                flower.setBuyType(true);
-                                flower.setLevel(1);
+                                    //구입하지 않은 꽃은 PlantArray에 추가 및 main view에 추가
+                                    if (!flower.isBuyType()) {
+                                        MainActivity.buyPlant(flower);
+                                        flower.setBuyType(true);
+                                        flower.setLevel(1);
+                                    } else {
+                                        MainActivity.updatePlantLevel(flower.getFlowerNo());
+                                        flower.setLevel(flower.getLevel() + 1);
+                                        Log.i("Flower",flower.getLevel() + " / "+flowers.get(position+1).getFlowerLevel());
+                                        if(flower.getLevel() == flowers.get(position+1).getFlowerLevel()){
+                                            flowers.get(position+1).setBuyPossible(true);
+                                        }
+                                    }
+
+                                    flowerAdapter.notifyDataSetChanged();
+                                } else {
+                                    //이 부분은 좀 더 시각적으로 표현하자
+                                    Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(getActivity(), flowers.get(position - 1).getFlowerName() + "의 레벨이 부족합니다.\n" +
+                                        "레벨 " + flower.getFlowerLevel() + " 까지 달성한 이후에 시도하세요.", Toast.LENGTH_SHORT).show();
                             }
-                            else{
-                                MainActivity.updatePlantLevel(flower.getFlowerNo());
-                                flower.setLevel(flower.getLevel()+1);
-                            }
-
-                            flowerAdapter.notifyDataSetChanged();
                         }
-                        else{
-                            //이 부분은 좀 더 시각적으로 표현하자
-                            Toast.makeText(getActivity(), "Score가 부족합니다!!!" , Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+                    });
             }
 
             return v;
