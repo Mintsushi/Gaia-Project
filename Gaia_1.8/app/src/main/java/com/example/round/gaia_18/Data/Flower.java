@@ -13,15 +13,17 @@ public class Flower {
     private String flowerImage, flowerButtonImage;
     private int flowerCost, flowerScore;
     private int flowerTab, flowerLevel;
+    private int cost, score;
     private boolean buyType;
-    private int level;
+    private boolean buyPossible;
+    private int level = 0;
 
     public Flower(){
 
     }
 
     public Flower(int flowerNo, String flowerName, String flowerImage, String flowerButtonImage, int flowerCost,
-                  int flowerScore, int flowerTab, int flowerLevel) {
+                  int flowerScore, int flowerTab, int flowerLevel,int cost,int score) {
         this.flowerNo = flowerNo;
         this.flowerName = flowerName;
         this.flowerImage = flowerImage;
@@ -30,6 +32,8 @@ public class Flower {
         this.flowerScore = flowerScore;
         this.flowerTab = flowerTab;
         this.flowerLevel = flowerLevel;
+        this.cost = cost;
+        this.score = score;
     }
 
     public int getFlowerNo() {
@@ -110,5 +114,29 @@ public class Flower {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public boolean isBuyPossible() {
+        return buyPossible;
+    }
+
+    public void setBuyPossible(boolean buyPossible) {
+        this.buyPossible = buyPossible;
     }
 }

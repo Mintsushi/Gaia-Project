@@ -5,4 +5,11 @@
     <string name="menu">Menu</string>
     <string name="Goal">Goal</string>
     <string name="level">Level . </string>
+
+    <string name="skillCase0">%2$d동안 점수 2배 증가</string>
+    <string name="skillCase1">%2$d 만큼의 점수 획득</string>
+    <string name="skillCase2">%2$d동안 초당 10회 자동 탭</string>
+    <string name="skillCase3">탭 당 %2$d만큼의 점수 증가</string>
+    <string name="skillCase4">분당 %2$d회 자동 탭</string>
+    <string name="skillCase5"></string>
 </resources>

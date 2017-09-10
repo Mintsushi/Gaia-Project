@@ -58,4 +58,18 @@ public class DataList {
             }
         }
     }
+
+    public void setBuyPossible(){
+
+        flowers.get(0).setBuyPossible(true);
+
+        for(int i =1; i < flowers.size();i++){
+            if(flowers.get(i-1).getLevel() == flowers.get(i).getFlowerLevel()){
+                flowers.get(i).setBuyPossible(true);
+            }
+            else{
+                return;
+            }
+        }
+    }
 }

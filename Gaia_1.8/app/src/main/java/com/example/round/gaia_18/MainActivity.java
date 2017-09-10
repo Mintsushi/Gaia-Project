@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Boolean already = false;
         int plantNo = 0;
-        int plantLevel = 10;
+        int plantLevel = 190;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
         dataList.compareFlowers();
+        dataList.setBuyPossible();
     }
 
     private void setImageButtonClick(){
