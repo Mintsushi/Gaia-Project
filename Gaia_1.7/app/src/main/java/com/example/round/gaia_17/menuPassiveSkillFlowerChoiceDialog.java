@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import static com.example.round.gaia_17.menuFlowerActivity.mFlowerArray;
@@ -33,7 +34,10 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
     private DialogFlowerAdapter mAdapter;
     private ArrayList<DialogFlowerInform> mDialogFlowerArray = new ArrayList<>();
     ImageButton back;
+    ImageButton diaYesButton;
+    ImageButton diaNoButton;
     int dialogtoActid;
+    int cheakBoxInspection =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +46,39 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.menu_passive_skill_flower_choice_dialog);
 
+        diaYesButton = (ImageButton)findViewById(R.id.dialogyesButton);
+        diaNoButton = (ImageButton)findViewById(R.id.dialognoButton);
+
         mAdapter = new DialogFlowerAdapter(getContext(),R.layout.menu_passive_skill_dialog_item);
         mList = (ListView)findViewById(R.id.dialogFlowerChoiceList);
         mList.setAdapter(mAdapter);
 
         for(int i = 0; i<8; i++){
             if(500 == mFlowerArray.get(i).getFlowerLv()){
-                mDialogFlowerArray.add(new DialogFlowerInform(mFlowerArray.get(i).getId(), mFlowerArray.get(i).getFlowerImagePath(),
+                mDialogFlowerArray.add(new DialogFlowerInform(mFlowerArray.get(i).getId(), 0, mFlowerArray.get(i).getFlowerImagePath(),
                         mFlowerArray.get(i).getFlowerName(), mFlowerArray.get(i).getFlowerName()));
             }
         }
+        diaYesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext().getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
+                if(cheakBoxInspection==0){
+                    dialogtoActid = -1;
+                }
+                dismiss();
+            }
+        });
+
+        diaNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext().getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
+                dialogtoActid = -1;
+                dismiss();
+            }
+        });
+
 
         back = (ImageButton) findViewById(R.id.Diaback);
         back.setOnClickListener(new View.OnClickListener() {
@@ -67,14 +94,16 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
         public class DialogFlowerInform{
 
             private int id;
+            private int cheaktype;
             private String flowerImagePath;
 
             private String flowerName;
             private String flowerEffect;
 
 
-            public DialogFlowerInform(int id, String flowerImagePath, String flowerName, String flowerEffect){
+            public DialogFlowerInform(int id, int cheaktype, String flowerImagePath, String flowerName, String flowerEffect){
                 this.id = id;
+                this.cheaktype = cheaktype;
                 this.flowerImagePath = flowerImagePath;
                 this.flowerName = flowerName;
                 this.flowerEffect = flowerEffect;
@@ -84,7 +113,8 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
             public String getFlowerImagePath(){return this.flowerImagePath;}
             public String getFlowerName(){return this.flowerName;}
             public String getFlowerEffect(){return this.flowerEffect;}
-
+            public int getCheaktype(){return this.cheaktype;}
+            public void setCheaktype(int cheaktype){this.cheaktype = cheaktype;}
         }
 
     // 꽃선택창 리스트 포멧
@@ -92,6 +122,7 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
         ImageView dialogFlowerImage;
         TextView dialogFlowerNameText;
         TextView dialogFlowerEffectText;
+        ImageView dialogFlowerCheakBox;
     }
 
         // 꽃선택창 리스트 어뎁터
@@ -125,23 +156,48 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
                     viewHolder.dialogFlowerImage=(ImageView) v.findViewById(R.id.dialogFlowerImage);
                     viewHolder.dialogFlowerNameText=(TextView)v.findViewById(R.id.dialogFlowerNameText);
                     viewHolder.dialogFlowerEffectText=(TextView)v.findViewById(R.id.dialogFlowerEffectText);
-
+                    viewHolder.dialogFlowerCheakBox=(ImageView) v.findViewById(R.id.cheakBox);
                     v.setTag(viewHolder);
                 }else{
                     viewHolder = (DialogFlowerViewHolder) v.getTag();
                 }
 
                 if(info != null){
-                    viewHolder.dialogFlowerImage.setImageResource(R.mipmap.ic_launcher);
-                    viewHolder.dialogFlowerNameText.setText(info.getFlowerName());
-                    viewHolder.dialogFlowerEffectText.setText(info.getFlowerEffect());
-                    v.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            dialogtoActid = info.getId();
-                            Log.i("getid",""+info.getId());
-                            dismiss();
+                    if(info.getCheaktype()==0) {
+
+                        v.setBackgroundResource(R.drawable.lock_background);
+                        v.setOnClickListener(null);
+                        viewHolder.dialogFlowerImage.setImageResource(R.mipmap.ic_launcher);
+                        viewHolder.dialogFlowerNameText.setText(info.getFlowerName());
+                        viewHolder.dialogFlowerEffectText.setText(info.getFlowerEffect());
+                        viewHolder.dialogFlowerCheakBox.setVisibility(View.INVISIBLE);
+                        if(cheakBoxInspection ==0) {
+                            v.setOnClickListener(new View.OnClickListener() {
+                                public void onClick(View v) {
+                                    cheakBoxInspection = 1;
+                                    info.setCheaktype(1);
+                                    dialogtoActid = info.getId();
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
                         }
-                    });
+                    }
+                    else{
+
+                        v.setBackgroundResource(R.drawable.shape);
+                        viewHolder.dialogFlowerImage.setImageResource(R.mipmap.ic_launcher);
+                        viewHolder.dialogFlowerNameText.setText(info.getFlowerName());
+                        viewHolder.dialogFlowerEffectText.setText(info.getFlowerEffect());
+                        viewHolder.dialogFlowerCheakBox.setVisibility(View.VISIBLE);
+                        v.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                cheakBoxInspection = 0;
+                                dialogtoActid = -1;
+                                info.setCheaktype(0);
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
                 }
 
                 return v;
@@ -154,7 +210,6 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
     public void id(int id) {
         //name.setText(str);
     }
-
     int getDiaid(){
         return dialogtoActid;
     }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by 리제 on 2017-09-06.
@@ -45,18 +46,19 @@ public class DB_Exception extends SQLiteOpenHelper {
 
     private void ActiveSkillTable(SQLiteDatabase sqLiteDatabase){
 
-        String CREATE_TABLE = "CREATE TABLE "+ACTIVE_SKILL_TABLE_NAME+"("
-                +activeSkillId +" INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,"
-                +activeSkillLv +" INTEGER NOT NULL"
-                +activeSkillCostType +" INTEGER NOT NULL"
-                +activeSkillUseCost +" TEXT NOT NULL"
-                +activeSkillEffect +" INTEGER NOT NULL"+")";
+        String CREATE_TABLE = "CREATE TABLE " + ACTIVE_SKILL_TABLE_NAME + "("
+                + activeSkillId + " INTEGER NOT NULL PRIMARY KEY,"
+                + activeSkillLv + " INTEGER NOT NULL,"
+                + activeSkillCostType + " INTEGER NOT NULL,"
+                + activeSkillUseCost + " INTEGER NOT NULL,"
+                + activeSkillEffect + " INTEGER NOT NULL" + ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
         //+activeSkillName +" TEXT NOT NULL"
         //+activeSkillImage +" TEXT NOT NULL"
         //+activeSkillSkillImage +" TEXT NOT NULL"
 
+        sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	0	,	2	,	100	,	12));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	1	,	2	,	100	,	12));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	2	,	2	,	500	,	14));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	3	,	2	,	1000	,	16));
@@ -87,6 +89,8 @@ public class DB_Exception extends SQLiteOpenHelper {
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	28	,	1	,	180	,	84));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	29	,	1	,	190	,	87));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(1	,	30	,	1	,	200	,	90));
+
+        sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	0	,	2	,	100	,	50));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	1	,	2	,	100	,	50));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	2	,	2	,	500	,	100));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	3	,	2	,	1000	,	150));
@@ -117,6 +121,8 @@ public class DB_Exception extends SQLiteOpenHelper {
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	28	,	1	,	180	,	2300));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	29	,	1	,	190	,	2400));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(2	,	30	,	1	,	200	,	2500));
+
+        sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	0	,	2	,	100	,	12));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	1	,	2	,	100	,	12));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	2	,	2	,	500	,	14));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	3	,	2	,	1000	,	16));
@@ -147,6 +153,8 @@ public class DB_Exception extends SQLiteOpenHelper {
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	28	,	1	,	180	,	84));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	29	,	1	,	190	,	87));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(3	,	30	,	1	,	200	,	90));
+
+        sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,   0	,	1	,	50	,	2));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	1	,	1	,	50	,	2));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	2	,	1	,	60	,	4));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	3	,	1	,	70	,	6));
@@ -177,6 +185,8 @@ public class DB_Exception extends SQLiteOpenHelper {
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	28	,	1	,	200	,	56));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	29	,	1	,	200	,	58));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(4	,	30	,	1	,	200	,	60));
+
+        sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(5	,	0	,	1	,	50	,	10));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(5	,	1	,	1	,	50	,	10));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(5	,	2	,	1	,	60	,	20));
         sqLiteDatabase.insert(ACTIVE_SKILL_TABLE_NAME	,	null	,	getActiveSkillValues(5	,	3	,	1	,	70	,	30));
@@ -214,7 +224,7 @@ public class DB_Exception extends SQLiteOpenHelper {
     }
 
     //String name, String image, String skillImage, 제외
-    private ContentValues getActiveSkillValues(int id,  int lv, int costType, float useCost, int effect){
+    private ContentValues getActiveSkillValues(int id,  int lv, int costType, int useCost, int effect){
 
         ContentValues values = new ContentValues();
         //values.put(activeSkillName,name);
@@ -236,6 +246,8 @@ public class DB_Exception extends SQLiteOpenHelper {
         if(cursor != null){
             cursor.moveToFirst();
         }
+
+        Log.i(" SQL ", ""+cursor.getInt(0)+" , "+cursor.getInt(1)+ " , "+cursor.getInt(2)+" , "+cursor.getInt(3) + " , "+cursor.getInt(4));
 
         return new menuActiveSkillActivity.ActiveSkillInform(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getFloat(3), cursor.getInt(4),imagePath, skillnaeme);
     }

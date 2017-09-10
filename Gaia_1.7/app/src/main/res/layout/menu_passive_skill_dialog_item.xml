@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:background="@drawable/lock_background"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:weightSum="1">
 
     <ImageView
         android:id="@+id/dialogFlowerImage"
@@ -14,10 +15,11 @@
         app:srcCompat="@android:color/background_light" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginLeft="15dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1.02">
 
         <TextView
             android:id="@+id/dialogFlowerNameText"
@@ -36,5 +38,20 @@
             android:layout_marginTop="2dp"
             android:text="Effect"
             android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="5dp">
+
+        <ImageView
+            android:id="@+id/cheakBox"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/ic_delete"
+            android:text="Button" />
     </LinearLayout>
 </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +18,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import static com.example.round.gaia_17.MainActivity.fruitScore;
 import static com.example.round.gaia_17.MainActivity.score;
+import static com.example.round.gaia_17.MainActivity.updateFruit;
+import static com.example.round.gaia_17.MainActivity.usePassiveSkill;
 import static com.example.round.gaia_17.menuFlowerActivity.mFlowerArray;
 
 /**
@@ -33,6 +39,10 @@ public class menuPassiveSkillActivity extends Fragment {
     private ArrayList<PassiveSkillInform> mPassiveArray = new ArrayList<>();
     // 임시로 꽃정보 저장용
     private FlowerInfomations[] flowerInfomations = new FlowerInfomations[3];
+    int bin_cost = 100;
+
+    //임시 변수 지속스킬점수증가 DB에서 불러올 내용.
+    int arrSocre[] = {100,2000,4000,5000,70000};
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
@@ -42,24 +52,17 @@ public class menuPassiveSkillActivity extends Fragment {
         mList = (ListView)view.findViewById(R.id.menuPassiveSkillList);
         mList.setAdapter(mAdapter);
 
-        // 임시로 꽃정보 저장용
+        // 임시로 꽃정보 // 실제로는 꽃DB에서 받아옴
         flowerInfomations[0] = new FlowerInfomations("flower1","imaga1","imaga1");
         // 스킬정보 저장 임시
-        mPassiveArray.add(new PassiveSkillInform(0,"이미지1","스킬명1","초당 seed 50", 2));
-        mPassiveArray.add(new PassiveSkillInform(1,"","","", 1));
-        mPassiveArray.add(new PassiveSkillInform(2,"","","", 0));
 
+        // 패시브스킬이름, 드라이꽃이름, 드라이꽃 이미지경로, 드리아꽃설명, 패시브스킬 상태, 드라이꽃 아이디
+        mPassiveArray.add(new PassiveSkillInform(0,"","","", 1,0));
+        mPassiveArray.add(new PassiveSkillInform(1,"","","", 1,0));
+        mPassiveArray.add(new PassiveSkillInform(2,"","","", 0,0));
+        mPassiveArray.add(new PassiveSkillInform(3,"","","", 0,0));
+        mPassiveArray.add(new PassiveSkillInform(4,"","","", 0,0));
 
-
-        /*
-        for(int i =0;i<mPassiveArray.size();i++){
-            for(int j =0;j<plantArray.size();j++){
-                if(plantArray.get(j).getId() == mPassiveArray.get(i).getId()){
-                    mPassiveArray.get(i).setBuyType(1);
-                }
-            }
-        }
-        */
 
         return view;
     }
@@ -74,13 +77,15 @@ public class menuPassiveSkillActivity extends Fragment {
         private String passiveSkillName;
         private String passiveSkilleffect;
         private int buyType;
+        private int insScore;
 
-        public PassiveSkillInform(int id, String passiveSkillImagePath, String passiveSkillName, String passiveSkilleffect, int buyType){
+        public PassiveSkillInform(int id, String passiveSkillImagePath, String passiveSkillName, String passiveSkilleffect, int buyType,int insScore){
             this.id = id;
             this.passiveSkillImagePath = passiveSkillImagePath;
             this.passiveSkilleffect = passiveSkilleffect;
             this.passiveSkillName = passiveSkillName;
             this.buyType = buyType;
+            this.insScore = insScore;
         }
 
         public int getId(){return this.id;}
@@ -88,7 +93,11 @@ public class menuPassiveSkillActivity extends Fragment {
         public String getPassiveSkilleffect(){return this.passiveSkilleffect;}
         public String getPassiveSkillName(){return this.passiveSkillName;}
         public int getBuyType(){return this.buyType;}
+        public int getInsScore() {
+            return insScore;
+        }
 
+        public void setInsScore(int insScore){this.insScore = insScore;}
         public void setBuyType(int buyType){
             this.buyType = buyType;
         }
@@ -138,6 +147,7 @@ public class menuPassiveSkillActivity extends Fragment {
                 //buyType ==0 // 잠긴이미지  //1 사용가능이미지 // 2 사용중이미지
                 if (info.buyType == 2) {
                     // 각 메소드 활성화
+                    usePassiveSkill(arrSocre[info.getInsScore()]);
                     viewHolder.skillImage.setVisibility(View.VISIBLE);
                     viewHolder.skillNameText.setVisibility(View.VISIBLE);
                     viewHolder.skillEffectText.setVisibility(View.VISIBLE);
@@ -179,6 +189,7 @@ public class menuPassiveSkillActivity extends Fragment {
 
                     // 각 메소스 값 설정
                     v.setBackgroundResource(R.drawable.lock_background);
+
                     v.setOnClickListener(null);
                     viewHolder.skillImage.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
@@ -195,11 +206,13 @@ public class menuPassiveSkillActivity extends Fragment {
                             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dia) {
-                                    int entryid = dialog.getDiaid();
-                                    menuFlowerActivity.FlowerInform flowetTemp =  mFlowerArray.get(entryid);
-                                    mPassiveArray.set(info.getId(), new PassiveSkillInform(entryid, flowetTemp.getFlowerImagePath(),
-                                            flowetTemp.getFlowerName(), String.valueOf(flowetTemp.getFlowerLv()), 2));
-                                    mAdapter.notifyDataSetChanged();
+                                    if(dialog.getDiaid()!=-1) {
+                                        int entryid = dialog.getDiaid();
+                                        menuFlowerActivity.FlowerInform flowetTemp = mFlowerArray.get(entryid);
+                                        mPassiveArray.set(info.getId(), new PassiveSkillInform(entryid, flowetTemp.getFlowerImagePath(),
+                                                flowetTemp.getFlowerName(), String.valueOf(flowetTemp.getFlowerLv()), 2,arrSocre[info.getId()]));
+                                        mAdapter.notifyDataSetChanged();
+                                    }
                                 }
                             });
                             dialog.show();
@@ -213,16 +226,48 @@ public class menuPassiveSkillActivity extends Fragment {
                     viewHolder.addInfomationButton.setVisibility(View.INVISIBLE);
 
                     // 각 메소스 값 설정
+
                     v.setOnClickListener(null);
                     v.setBackgroundResource(R.drawable.lock_map);
 
                     // 필요 메소드 이밴트
                     //버튼 이밴트
                     v.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
+                        public void onClick(final View v) {
                             final int id = info.getId();
+
+                            final menuPassiveSkilllistBuyDialog dialog = new menuPassiveSkilllistBuyDialog(getContext());
+                            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    dialog.setBuyCost(bin_cost,fruitScore);
+                                }
+                            });
+                            dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dia) {
+
+                                    if(dialog.num==1) {
+                                        mPassiveArray.set(id, new PassiveSkillInform(id, "", "", "", 1,0));
+                                        fruitScore = fruitScore - bin_cost;
+                                        MainActivity.updateFruit(fruitScore);
+                                        mAdapter.notifyDataSetChanged();
+                                    }else {
+                                        final falseDialog dialog = new falseDialog(getContext());
+                                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                            @Override
+                                            public void onShow(DialogInterface dialogInterface) {
+                                                dialog.setMassageBoxA1("Fruit 가 부족합니다.");
+                                                dialog.setMassageBoxA2("Fruit을 더 구매해 주세요");
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                            dialog.show();
                         }
                     });
+
                 }
             }
 
@@ -250,6 +295,7 @@ public class menuPassiveSkillActivity extends Fragment {
         private String explain;
         private String image;
 
+
         FlowerInfomations(){}
         FlowerInfomations(String name, String explain, String image){
             this.explain = explain;
@@ -267,5 +313,6 @@ public class menuPassiveSkillActivity extends Fragment {
             return name;
         }
     }
-}
 
+
+}

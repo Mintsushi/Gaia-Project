@@ -29,12 +29,35 @@
             android:layout_centerInParent="true"
             android:background="@drawable/dialog_back_corner">
 
-
             <ListView
                 android:id="@+id/dialogFlowerChoiceList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="400dp"
                 android:layout_margin="5dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="400dp"
+                android:orientation="horizontal">
+
+
+                <ImageButton
+                    android:id="@+id/dialogyesButton"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/check_dialog" />
+
+                <ImageButton
+                    android:id="@+id/dialognoButton"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/no_dialog" />
+            </LinearLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>

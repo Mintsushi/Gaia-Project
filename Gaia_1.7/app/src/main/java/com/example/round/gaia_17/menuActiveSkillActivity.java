@@ -194,7 +194,7 @@ public class menuActiveSkillActivity extends Fragment {
 
 
                 // 첫번째 물주기 아이템은 사용하기 버튼이 없음
-                if(info.getId()==0){
+                if(info.getId()==1){
                     viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
                 }
 
@@ -222,11 +222,10 @@ public class menuActiveSkillActivity extends Fragment {
 
                         // 스코어로 레벨 올리기
                         if(downScore(info.getactiveUseCost())){
-                            info.setactiveUseCost((info.getactiveUseCost()+100));
+                            mActivityArray.set(info.getId(),db.getActiveSkillInform(info.getId(),info.getActiveSkillLv()+1));
                             if(info.getActiveSkillLv()==0){
                                 info.setBuyType(1);
                             }
-                            info.setActiveSkillLv();
                             mAdapter.notifyDataSetChanged();
                         }
                     }
@@ -264,7 +263,7 @@ public class menuActiveSkillActivity extends Fragment {
                 mHandleControl = 1;
                 while (timeCount < times) {
                     Log.i("had : ", "" + timeCount + "cont" + mHandleControl);
-                    mHandler.sendEmptyMessage(1);
+                    mHandler.sendEmptyMessage(incScore);
                     timeCount++;
                 }
                 mHandleControl = 0;
@@ -279,9 +278,9 @@ public class menuActiveSkillActivity extends Fragment {
         public void handleMessage(Message msg){
 
             //나중에 image가 확립되면 좀더 세부적으로 위치 조정
-            if(msg.what == 1) {
+            if(msg.what != 0) {
                 Log.i(TAG,"Handler Message : 1");
-                score = score + 100;
+                score = score + msg.what;
 
             }
             else{
