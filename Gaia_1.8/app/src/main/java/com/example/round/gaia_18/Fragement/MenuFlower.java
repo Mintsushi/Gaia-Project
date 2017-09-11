@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import static com.example.round.gaia_18.MainActivity.clickScore;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.seed;
 
@@ -129,6 +130,7 @@ public class MenuFlower extends Fragment {
 
                                 dataList.flowerLevelUp(flower);
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
                                 //이 부분은 좀 더 시각적으로 표현하자
@@ -173,7 +175,7 @@ public class MenuFlower extends Fragment {
 
                 viewHolder.flowerName.setText(flower.getFlowerName());
                 viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
-                viewHolder.flowerExp.setProgress(flower.getLevel());
+                viewHolder.flowerExp.setProgress(flower.getLevel()/4);
             }
             return v;
         }
@@ -193,7 +195,8 @@ public class MenuFlower extends Fragment {
             int key = iterator.next();
             int value = cost.get(key);
 
-            if(!dataList.minusScore(key,value)){
+            Log.i("BuyFlower",key+" / "+value);
+            if(!dataList.minusScore(key,value,dataList.getScoreHashMap())){
                 return false;
             }
         }

@@ -27,6 +27,7 @@ import com.example.round.gaia_18.Fragement.MenuFlower;
 import com.example.round.gaia_18.Fragement.MenuOverlay;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //ImageView(Plant) Moving
     private static Boolean moving;
     private static int originalXPos,originalYPos;
+
+    //Click Score
+    public static HashMap<Integer, Integer> clickScore;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -153,53 +157,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //여기서부터 json을 읽어드리는 for문 시작
         //Server가 구축되면 Volley를 사용
 
-        dataList.setScore(0,3);
-        dataList.setScore(1,374);
-
+        dataList.setScore(0,50);
         gameMoney = 1000;
 
         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         fruit.setText(Float.toString(gameMoney));
 
         Boolean already = false;
-        int plantNo = 0;
-        int plantLevel = 1;
-
-        ArrayList<Flower> flowers = dataList.getFlowers();
-        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
-
-        for(int i =0 ; i<overlayPlants.size() ; i++){
-            if(overlayPlants.get(i).getPlant().getPlantNo() == plantNo){
-                plants.add(overlayPlants.get(i).getPlant());
-                already = true;
-            }
-        }
-
-        if(!already) {
-            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
-            for (int i = 0; i < flowers.size(); i++) {
-                if (flowers.get(i).getFlowerNo() == plantNo) {
-
-                    ImageView plant = new ImageView(this);
-
-                    //plant.setImageResource(flower.get(i).getImage())
-                    plant.setImageResource(R.drawable.image);
-
-                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
-
-                    //위치는 후에 Random 값으로 배치
-                    relParams.leftMargin = 0;
-                    relParams.topMargin = 0;
-
-                    plant.setOnLongClickListener(onLongClick);
-                    plant.setOnTouchListener(onTouch);
-
-                    relativeLayout.addView(plant, relParams);
-                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant));
-                    break;
-                }
-            }
-        }
+//        int plantNo = 0;
+//        int plantLevel = 1;
+//
+//        ArrayList<Flower> flowers = dataList.getFlowers();
+//        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
+//
+//        for(int i =0 ; i<overlayPlants.size() ; i++){
+//            if(overlayPlants.get(i).getPlant().getPlantNo() == plantNo){
+//                plants.add(overlayPlants.get(i).getPlant());
+//                already = true;
+//            }
+//        }
+//
+//        if(!already) {
+//            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
+//            for (int i = 0; i < flowers.size(); i++) {
+//                if (flowers.get(i).getFlowerNo() == plantNo) {
+//
+//                    ImageView plant = new ImageView(this);
+//
+//                    //plant.setImageResource(flower.get(i).getImage())
+//                    plant.setImageResource(R.drawable.image);
+//
+//                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
+//
+//                    //위치는 후에 Random 값으로 배치
+//                    relParams.leftMargin = 0;
+//                    relParams.topMargin = 0;
+//
+//                    plant.setOnLongClickListener(onLongClick);
+//                    plant.setOnTouchListener(onTouch);
+//
+//                    relativeLayout.addView(plant, relParams);
+//                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant));
+//                    break;
+//                }
+//            }
+//        }
 
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
@@ -271,9 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            seed.setText(Integer.toString(score));
 //            mOverlayService.setSeed(score);
 
-            for(int i =0;i<dataList.getFlowers().size();i++){
-                dataList.clickScore(dataList.getFlowers().get(i).getScore());
-            }
+            dataList.clickScore();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
         }

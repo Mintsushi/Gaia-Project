@@ -21,6 +21,7 @@ public class DataList {
     private static ArrayList<OverlayPlant> overlayPlants = new ArrayList<>();
     private static ArrayList<FlowerData> flowerDatas = new ArrayList<>();
 
+    public static HashMap<Integer, Integer> clickScore = new HashMap<>();
     private static HashMap<Integer, Integer> score = new HashMap<>();
 
     public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas) {
@@ -141,15 +142,17 @@ public class DataList {
         return scoreString;
     }
 
-    public Boolean minusScore(int type, int score){
+    public Boolean minusScore(int type, int score,HashMap<Integer, Integer> hashMap){
 
-        HashMap<Integer, Integer> fakeScore = this.score;
+        HashMap<Integer, Integer> fakeScore = hashMap;
 
+        Log.i("BuyFlower","Score Contain Key: " + fakeScore.containsKey(type));
         //해당 타입에서 구입할 수 있을 때
         if(fakeScore.containsKey(type)) {
-            if (fakeScore.get(type) > score) {
+            if (fakeScore.get(type) >= score) {
+                Log.i("BuyFlower",type+" : "+fakeScore.get(type));
                 int newScore = fakeScore.get(type) - score;
-                this.score.put(type,newScore);
+                hashMap.put(type,newScore);
                 return true;
             }
         }
@@ -162,16 +165,24 @@ public class DataList {
             int scoreType = iterator.next();
             int value = fakeScore.get(scoreType);
             if(scoreType > type){
-                this.score.put(scoreType,value-1);
+                if(value-1 < 1){
+                    Log.i("BuyFlower","Value-1 = 0 -> value : "+value);
+                    hashMap.remove(scoreType);
+                }
+                else{
+                    Log.i("BuyFlower","Value-1 != 0 -> value : "+value);
+                    hashMap.put(scoreType,value-1);
+                }
+
                 while(true){
                     if(scoreType - 1 == type){
-                        int newScore = 1000+this.score.get(type)-score;
-                        this.score.put(type,newScore);
+                        int newScore = 1000+hashMap.get(type)-score;
+                        hashMap.put(type,newScore);
                         break;
                     }
                     else{
-                        this.score.put(scoreType-1,999);
-                        scoreType -=1;
+                        hashMap.put(scoreType-1,999);
+                        scoreType --;
                     }
                 }
                 return true;
@@ -183,6 +194,9 @@ public class DataList {
 
     public void plusScore(int type, int score, HashMap<Integer, Integer> hashMap){
 
+        if(score == 0){
+            return;
+        }
             if (hashMap.containsKey(type)) {
                 if (hashMap.get(type) + score > 999) {
                     while (true) {
@@ -190,15 +204,16 @@ public class DataList {
                         int nameogi = (hashMap.get(type) + score) % 1000;
 
                         hashMap.put(type, nameogi);
-                        type += 1;
+                        type ++;
                         if (hashMap.containsKey(type)) {
                             int newScore = hashMap.get(type) + mok;
-                            if (newScore < 999) {
+                            if (newScore <= 999) {
                                 hashMap.put(type, newScore);
                                 return;
                             }
                         } else {
                             hashMap.put(type, mok);
+                            return;
                         }
                     }
                 } else {
@@ -210,26 +225,15 @@ public class DataList {
             }
     }
 
-    public void clickScore(HashMap<Integer,Integer> flower){
+    public void clickScore(){
 
-        Iterator<Integer> iterator = flower.keySet().iterator();
+        Iterator<Integer> iterator = clickScore.keySet().iterator();
 
         while(iterator.hasNext()){
             int type = iterator.next();
-            int score = flower.get(type);
+            int score = clickScore.get(type);
 
             plusScore(type,score,this.score);
-        }
-    }
-    public void plusTapScore(HashMap<Integer, Integer> flowerTap){
-
-        Iterator<Integer> iterator = flowerTap.keySet().iterator();
-
-        while(iterator.hasNext()){
-            int key = iterator.next();
-            int value = flowerTap.get(key);
-
-            plusScore(key,value,this.score);
         }
     }
 
@@ -270,9 +274,27 @@ public class DataList {
 
     public void flowerLevelUp(Flower flower){
 
+        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+        while (iterator.hasNext()){
+            int key = iterator.next();
+            int value = flower.getScore().get(key);
+
+            minusScore(key,value,this.clickScore);
+        }
+
         Log.i("LevelUp","******************************");
         newCost(flower);
         newScore(flower);
+
+        iterator = flower.getScore().keySet().iterator();
+
+        while (iterator.hasNext()){
+            int key = iterator.next();
+            int value = flower.getScore().get(key);
+
+            plusScore(key,value,this.clickScore);
+        }
     }
 
     private void newCost(Flower flower){
@@ -287,15 +309,21 @@ public class DataList {
         if(num2 == (double)0) num2 = 1;
         if(num3 == (double)0) num3 = 1;
 
+        double num4 = num1*num2*flowerData.getNum4()*num3;
+
         while(true){
-            if((((num1*num2*flowerData.getNum4()*num3) % Math.pow(1000,type+1)) / Math.pow(1000,type)) != 0){
-                plusScore(type,(int)(((num1*num2*flowerData.getNum4()*num3) % Math.pow(1000,type+1)) / Math.pow(1000,type)),flower.getCost());
+            double nameogi = num4 % 1000;
+            double mok = num4 / 1000;
+
+            if(nameogi != 0){
+                plusScore(type,(int)nameogi,flower.getCost());
             }
-            if((num1*num2*flowerData.getNum4()*num3 / Math.pow(1000,type+1)) <1000){
-                if(((int)(num1*num2*flowerData.getNum4()*num3 / Math.pow(1000,type+1))) != 0)
-                    plusScore(type + 1, (int) (num1 * num2 * flowerData.getNum4() * num3 / Math.pow(1000, type + 1)), flower.getCost());
+            if(mok <1000){
+                plusScore(type + 1, (int)mok, flower.getCost());
                 break;
             }
+
+            num4 = mok;
             type ++;
         }
     }
@@ -305,15 +333,23 @@ public class DataList {
         FlowerData flowerData = flowerDatas.get(flower.getFlowerNo());
         double num1 = Math.pow(2,Math.floor((flower.getLevel()+flowerData.getNum7())/50));
         double num2 = Math.ceil((flower.getLevel()+flowerData.getNum8()) / flowerData.getNum9());
+
+        double num3 = num1*num2/(flowerData.getNum9()*flowerData.getNum10());
+
         while(true){
-            if(((num1*num2/(flowerData.getNum9()*flowerData.getNum10())) % Math.pow(1000,(type+1)) / Math.pow(1000,type))!= 0){
-                plusScore(type,(int)((num1*num2/(flowerData.getNum9()*flowerData.getNum10())) % Math.pow(1000,(type+1)) / Math.pow(1000,type)),flower.getScore());
+            double nameogi = num3 %1000;
+            double mok = num3 / 1000;
+
+            if(nameogi != 0){
+                plusScore(type,(int)nameogi,flower.getScore());
             }
-            if(((num1*num2/(flowerData.getNum9()*flowerData.getNum10())) / Math.pow(1000,(type+1))) <1000){
-                if((int)((num1*num2/(flowerData.getNum9()*flowerData.getNum10())) / Math.pow(1000,(type+1))) != 0)
-                    plusScore(type+1,(int)((num1*num2/(flowerData.getNum9()*flowerData.getNum10())) / Math.pow(1000,(type+1))),flower.getCost());
+            if(mok <1000){
+                if(mok != 0)
+                    plusScore(type+1,(int)mok,flower.getCost());
                 break;
             }
+
+            num3 = mok;
             type ++;
         }
     }
