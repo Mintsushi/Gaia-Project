@@ -1,6 +1,10 @@
 package com.example.round.gaia_18.Data;
 
+import android.util.Log;
+
 import com.example.round.gaia_18.MainActivity;
+
+import java.util.HashMap;
 
 /**
  * Created by Round on 2017-09-06.
@@ -11,9 +15,12 @@ public class Flower {
     private int flowerNo;
     private String flowerName;
     private String flowerImage, flowerButtonImage;
-    private int flowerCost, flowerScore;
+    //꽃을 사려면 필요한 탭 점수랑, 이전 꽃의 레벨
     private int flowerTab, flowerLevel;
-    private int cost, score;
+    //현재 꽃의 cost와 score
+    private HashMap<Integer,Integer> cost = new HashMap<>();
+    private HashMap<Integer,Integer> score = new HashMap<>();
+
     private boolean buyType;
     private boolean buyPossible;
     private int level = 0;
@@ -28,12 +35,10 @@ public class Flower {
         this.flowerName = flowerName;
         this.flowerImage = flowerImage;
         this.flowerButtonImage = flowerButtonImage;
-        this.flowerCost = flowerCost;
-        this.flowerScore = flowerScore;
         this.flowerTab = flowerTab;
         this.flowerLevel = flowerLevel;
-        this.cost = cost;
-        this.score = score;
+        this.cost.put(cost,flowerCost);
+        this.score.put(score,flowerScore);
     }
 
     public int getFlowerNo() {
@@ -68,22 +73,6 @@ public class Flower {
         this.flowerButtonImage = flowerButtonImage;
     }
 
-    public int getFlowerCost() {
-        return flowerCost;
-    }
-
-    public void setFlowerCost(int flowerCost) {
-        this.flowerCost = flowerCost;
-    }
-
-    public int getFlowerScore() {
-        return flowerScore;
-    }
-
-    public void setFlowerScore(int flowerScore) {
-        this.flowerScore = flowerScore;
-    }
-
     public int getFlowerTab() {
         return flowerTab;
     }
@@ -116,22 +105,6 @@ public class Flower {
         this.level = level;
     }
 
-    public int getCost() {
-        return cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public boolean isBuyPossible() {
         return buyPossible;
     }
@@ -139,4 +112,38 @@ public class Flower {
     public void setBuyPossible(boolean buyPossible) {
         this.buyPossible = buyPossible;
     }
+
+    public void setCost(int type, int cost){
+        int fakeType = 0;
+        while(true){
+            if(((cost % Math.pow(1000,fakeType+1)) / Math.pow(1000,fakeType)) != 0) {
+                this.cost.put(type, (int) (cost % Math.pow(1000, fakeType + 1) / Math.pow(1000, fakeType)));
+            }
+            if(cost / Math.pow(1000,fakeType)<1000) {
+                if((int)(cost / Math.pow(1000,fakeType+1)) !=0)
+                    this.cost.put(type + 1, (int)(cost / Math.pow(1000,fakeType+1)));
+                break;
+            }
+            fakeType++;
+            type++;
+        }
+    }
+
+    public HashMap<Integer, Integer> getCost(){return this.cost;}
+
+    public void setScore(int type, int score){
+        int fakeType = 0;
+        while(true){
+        if((score % Math.pow(1000,fakeType+1) / Math.pow(1000,fakeType)) != 0)
+            this.score.put(type,(int)(score % Math.pow(1000,fakeType+1) / Math.pow(1000,fakeType)));
+        if(score / Math.pow(1000,fakeType+1) <1000 ) {
+            if((int)(score / Math.pow(1000,fakeType+1)) != 0)
+                this.score.put(type + 1,(int)(score / Math.pow(1000,fakeType+1)));
+            break;
+        }
+        fakeType++;
+        type++;
+    }}
+
+    public HashMap<Integer, Integer> getScore(){return this.score;}
 }

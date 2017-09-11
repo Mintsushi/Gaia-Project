@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.round.gaia_18.Data.Flower;
+import com.example.round.gaia_18.Data.FlowerData;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String flowerLevel = "flowerLevel";
     private static final String flowerCostType = "flowerCostType";
     private static final String flowerScoreType = "flowerScoreType";
+
+    //flowerAlgorithm Table
+    private static final String FLOWER_ALGORITHM_NAME = "flowerData";
+    private static final String num1 = "one";
+    private static final String num2 = "two";
+    private static final String num3 = "three";
+    private static final String num4 = "four";
+    private static final String num5 = "five";
+    private static final String num6 = "six";
+    private static final String num7 = "seven";
+    private static final String num8 = "eight";
+    private static final String num9 = "nine";
+    private static final String num10 = "ten";
 
     //skill info data 1
     private static final String SKILL_INFO_TABLE_NAME = "skillInfo";
@@ -56,8 +70,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+FLOWER_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+FLOWER_ALGORITHM_NAME);
         //flower Table 구축
         flowerTable(sqLiteDatabase);
+        //flower 수식 data DB 구축
+        flowerDateTable(sqLiteDatabase);
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -76,11 +93,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
         //Insert Flower Data
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0,"민들레", " ", " ", 50, 1, 0, 0,0,1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1,"나팔꽃", " ", " ", 2000, 3000, 200, 200,3,1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2,"장미", " ", " ", 100000, 100000, 400, 200,3,1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(3,"철쭉", " ", " ", 12000, 2500000, 600, 200,6,1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(4,"호야", " ", " ", 500000, 50000, 800, 200,6,3));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(0,"민들레", " ", " ", 50, 1, 0, 0,0,0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(1,"나팔꽃", " ", " ", 2000, 3000, 200, 200,1,0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(2,"장미", " ", " ", 100000, 100000, 400, 200,1,0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(3,"철쭉", " ", " ", 12000, 2500000, 600, 200,2,0));
+        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getFlowerValues(4,"호야", " ", " ", 500000, 50000, 800, 200,2,1));
     }
 
     private ContentValues getFlowerValues(int id,String name, String image, String buttonImage,
@@ -98,6 +115,52 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(flowerLevel, level);
         values.put(flowerCostType,costType);
         values.put(flowerScoreType,scoreType);
+
+        return values;
+
+    }
+
+    //flower 수식과 관련된 DB 구축
+    private void flowerDateTable(SQLiteDatabase sqLiteDatabase){
+        //Flower Table
+        String CREATE_TABLE = "CREATE TABLE " + FLOWER_ALGORITHM_NAME + "("
+                + flowerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                + num1 + " INTEGER NOT NULL,"
+                + num2 + " INTEGER NOT NULL,"
+                + num3 + " INTEGER NOT NULL,"
+                + num4 + " INTEGER NOT NULL,"
+                + num5 + " INTEGER NOT NULL,"
+                + num6 + " INTEGER NOT NULL,"
+                + num7 + " INTEGER NOT NULL,"
+                + num8 + " INTEGER NOT NULL,"
+                + num9 + " INTEGER NOT NULL,"
+                + num10 + " INTEGER NOT NULL" + ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getFlowerData(0,0,0,25,5,-1,2,0,0,1,1));
+        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getFlowerData(1,100,100,50,1,100,20,200,200,1,1));
+        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getFlowerData(2,200,100,25,1,200,10,400,400,1,1));
+        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getFlowerData(3,200,200,50,1,10000,5000,600,600,1,1));
+        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getFlowerData(4,400,400,25,1,10000,9500,400,200,400,400));
+
+    }
+
+    private ContentValues getFlowerData(int id, int n1, int n2, int n3, int n4, int n5, int n6, int n7,
+                                        int n8, int n9, int n10) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(flowerId, id);
+        values.put(num1, n1);
+        values.put(num2, n2);
+        values.put(num3, n3);
+        values.put(num4, n4);
+        values.put(num5, n5);
+        values.put(num6, n6);
+        values.put(num7, n7);
+        values.put(num8,n8);
+        values.put(num9,n9);
+        values.put(num10,n10);
 
         return values;
 
@@ -161,18 +224,46 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 flower.setFlowerName(cursor.getString(1));
                 flower.setFlowerImage(cursor.getString(2));
                 flower.setFlowerButtonImage(cursor.getString(3));
-                flower.setFlowerCost(cursor.getInt(4));
-                flower.setFlowerScore(cursor.getInt(5));
                 flower.setFlowerTab(cursor.getInt(6));
                 flower.setFlowerLevel(cursor.getInt(7));
-                flower.setCost(cursor.getInt(8));
-                flower.setScore(cursor.getInt(9));
+                flower.setCost(cursor.getInt(8),cursor.getInt(4));
+                flower.setScore(cursor.getInt(9),cursor.getInt(5));
 
                 flowers.add(flower);
             } while (cursor.moveToNext());
         }
 
         return flowers;
+    }
+
+    //getter
+    public ArrayList<FlowerData> getAllFlowerDatas() {
+        ArrayList<FlowerData> flowerDatas = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + FLOWER_ALGORITHM_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                FlowerData flowerData = new FlowerData();
+                flowerData.setFlowerNo(cursor.getInt(0));
+                flowerData.setNum1(cursor.getInt(1));
+                flowerData.setNum2(cursor.getInt(2));
+                flowerData.setNum3(cursor.getInt(3));
+                flowerData.setNum4(cursor.getInt(4));
+                flowerData.setNum5(cursor.getInt(5));
+                flowerData.setNum6(cursor.getInt(6));
+                flowerData.setNum7(cursor.getInt(7));
+                flowerData.setNum8(cursor.getInt(8));
+                flowerData.setNum9(cursor.getInt(9));
+                flowerData.setNum10(cursor.getInt(10));
+
+                flowerDatas.add(flowerData);
+            } while (cursor.moveToNext());
+        }
+
+        return flowerDatas;
     }
 
     private ContentValues getSkillDataValues(int id, int level, int buyType,int cost, int effect) {

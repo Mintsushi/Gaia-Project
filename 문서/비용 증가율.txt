@@ -1,0 +1,154 @@
+09-10 22:08:22.848 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:22.848 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /2 /// 5.0
+09-10 22:08:27.268 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:27.268 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /3 /// 5.0
+09-10 22:08:29.721 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:29.721 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /4 /// 5.0
+09-10 22:08:30.622 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:30.623 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /5 /// 10.0
+09-10 22:08:31.397 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:31.397 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /6 /// 10.0
+09-10 22:08:32.026 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:32.026 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /7 /// 15.0
+09-10 22:08:32.244 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:32.244 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /8 /// 15.0
+09-10 22:08:32.444 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:32.445 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /9 /// 20.0
+09-10 22:08:32.627 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:32.627 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /10 /// 20.0
+09-10 22:08:32.828 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:32.828 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /11 /// 25.0
+09-10 22:08:33.011 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.011 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /12 /// 25.0
+09-10 22:08:33.194 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.194 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /13 /// 30.0
+09-10 22:08:33.395 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.395 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /14 /// 30.0
+09-10 22:08:33.597 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.597 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /15 /// 35.0
+09-10 22:08:33.779 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.779 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /16 /// 35.0
+09-10 22:08:33.980 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:33.980 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /17 /// 40.0
+09-10 22:08:34.180 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:34.180 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /18 /// 40.0
+09-10 22:08:34.380 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:34.380 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /19 /// 45.0
+09-10 22:08:34.567 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:34.567 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /20 /// 45.0
+09-10 22:08:34.764 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:34.765 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /21 /// 50.0
+09-10 22:08:35.048 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:35.048 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /22 /// 50.0
+09-10 22:08:35.232 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:35.232 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /23 /// 55.0
+09-10 22:08:41.161 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:41.161 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /24 /// 55.0
+09-10 22:08:41.344 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:41.345 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /25 /// 60.0
+09-10 22:08:41.529 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:41.529 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /26 /// 60.0
+09-10 22:08:41.714 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:41.714 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /27 /// 65.0
+09-10 22:08:41.897 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:41.898 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /28 /// 65.0
+09-10 22:08:42.066 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.067 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /29 /// 70.0
+09-10 22:08:42.263 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.263 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /30 /// 70.0
+09-10 22:08:42.447 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.447 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /31 /// 75.0
+09-10 22:08:42.630 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.630 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /32 /// 75.0
+09-10 22:08:42.816 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.816 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /33 /// 80.0
+09-10 22:08:42.965 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:42.965 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /34 /// 80.0
+09-10 22:08:43.149 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:43.149 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /35 /// 85.0
+09-10 22:08:44.067 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:44.067 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /36 /// 85.0
+09-10 22:08:44.250 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:44.250 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /37 /// 90.0
+09-10 22:08:44.451 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:44.451 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /38 /// 90.0
+09-10 22:08:44.634 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:44.634 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /39 /// 95.0
+09-10 22:08:44.836 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:44.836 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /40 /// 95.0
+09-10 22:08:45.036 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:45.036 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /41 /// 100.0
+09-10 22:08:45.236 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:45.236 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /42 /// 100.0
+09-10 22:08:45.437 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:45.437 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /43 /// 105.0
+09-10 22:08:45.623 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:45.623 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /44 /// 105.0
+09-10 22:08:45.821 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:45.821 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /45 /// 110.0
+09-10 22:08:46.023 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:46.023 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /46 /// 110.0
+09-10 22:08:46.222 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:46.222 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /47 /// 115.0
+09-10 22:08:46.422 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:46.422 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /48 /// 115.0
+09-10 22:08:46.646 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:46.646 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /49 /// 120.0
+09-10 22:08:46.841 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:46.841 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /50 /// 480.0
+09-10 22:08:47.057 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:47.057 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /51 /// 500.0
+09-10 22:08:47.225 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:47.225 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /52 /// 500.0
+09-10 22:08:47.415 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:47.416 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /53 /// 520.0
+09-10 22:08:47.609 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:47.609 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /54 /// 520.0
+09-10 22:08:47.808 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:47.808 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /55 /// 540.0
+09-10 22:08:48.009 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.009 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /56 /// 540.0
+09-10 22:08:48.205 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.206 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /57 /// 560.0
+09-10 22:08:48.393 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.393 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /58 /// 560.0
+09-10 22:08:48.612 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.612 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /59 /// 580.0
+09-10 22:08:48.795 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.795 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /60 /// 580.0
+09-10 22:08:48.994 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:48.994 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /61 /// 600.0
+09-10 22:08:49.200 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:49.200 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /62 /// 600.0
+09-10 22:08:49.391 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:49.392 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /63 /// 620.0
+09-10 22:08:49.579 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:49.579 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /64 /// 620.0
+09-10 22:08:49.797 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:49.797 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /65 /// 640.0
+09-10 22:08:49.990 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:49.990 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /66 /// 640.0
+09-10 22:08:50.181 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:50.181 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /67 /// 660.0
+09-10 22:08:50.373 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:50.373 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /68 /// 660.0
+09-10 22:08:50.580 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:50.580 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /69 /// 680.0
+09-10 22:08:50.791 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:50.791 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /70 /// 680.0
+09-10 22:08:51.004 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.004 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /71 /// 700.0
+09-10 22:08:51.196 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.196 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /72 /// 700.0
+09-10 22:08:51.422 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.422 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /73 /// 720.0
+09-10 22:08:51.613 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.613 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /74 /// 720.0
+09-10 22:08:51.799 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.799 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /75 /// 110.0
+09-10 22:08:51.987 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:51.987 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /76 /// 110.0
+09-10 22:08:52.191 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:52.191 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /77 /// 140.0
+09-10 22:08:52.403 32608-32608/com.example.round.gaia_18 I/LevelUp: ******************************
+09-10 22:08:52.404 32608-32608/com.example.round.gaia_18 I/LevelUp: 0 : /78 /// 140.0

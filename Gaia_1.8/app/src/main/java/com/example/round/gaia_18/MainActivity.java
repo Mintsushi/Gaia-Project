@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton menuDownButton;
 
     //Data
-    public static int score, gameMoney;
+    public int gameMoney;
 
     //Fragment Activity
     private MenuFlower menuFlower = new MenuFlower();
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //DataBase
         dataBaseHelper = new DataBaseHelper(this);
-        dataList = new DataList(dataBaseHelper.getAllFlowers());
+        dataList = new DataList(dataBaseHelper.getAllFlowers(), dataBaseHelper.getAllFlowerDatas());
 
         //Layout / View
         relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
@@ -153,15 +153,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //여기서부터 json을 읽어드리는 for문 시작
         //Server가 구축되면 Volley를 사용
 
-        score = 1000;
+        dataList.setScore(0,3);
+        dataList.setScore(1,374);
+
         gameMoney = 1000;
 
-        seed.setText(Float.toString(score));
+        seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         fruit.setText(Float.toString(gameMoney));
 
         Boolean already = false;
         int plantNo = 0;
-        int plantLevel = 190;
+        int plantLevel = 1;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
@@ -265,9 +267,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .commit();
         }else if(view == relativeLayout){
             //후에 식물을 따른 점수들을 계산해서 구현
-            score = score + 1000000;
-            seed.setText(Integer.toString(score));
-            mOverlayService.setSeed(score);
+//            score = score + 1000000;
+//            seed.setText(Integer.toString(score));
+//            mOverlayService.setSeed(score);
+
+            for(int i =0;i<dataList.getFlowers().size();i++){
+                dataList.clickScore(dataList.getFlowers().get(i).getScore());
+            }
+            seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
         }
     }
 
