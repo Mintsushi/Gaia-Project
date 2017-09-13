@@ -51,7 +51,6 @@ import java.util.ArrayList;
 import static com.example.round.gaia_18.MainActivity.context;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
-import static com.example.round.gaia_18.MainActivity.score;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.MainActivity.weather;
 
@@ -232,7 +231,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         skill.setBackgroundResource(R.drawable.brown_background);
 
         seedOverlay = new TextView(this);
-        seedOverlay.setText(Integer.toString(score));
+//        seedOverlay.setText(Integer.toString(score));
 
         open = new Button(this);
         open.setText("OPEN");
@@ -407,10 +406,10 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public void onClick(View view){
         if(view == linearLayout){
 
-            //후에 식물을 따른 점수들을 계산해서 구현
-            score = score + 1000000;
-            seedOverlay.setText(Integer.toString(score));
-            seed.setText(Integer.toString(score));
+//            //후에 식물을 따른 점수들을 계산해서 구현
+//            score = score + 1000000;
+//            seedOverlay.setText(Integer.toString(score));
+//            seed.setText(Integer.toString(score));
 
         }else if(view == open){
 

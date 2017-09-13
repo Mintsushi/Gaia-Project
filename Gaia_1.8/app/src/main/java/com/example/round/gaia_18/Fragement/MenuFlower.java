@@ -21,9 +21,14 @@ import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeMap;
 
+import static com.example.round.gaia_18.MainActivity.clickScore;
 import static com.example.round.gaia_18.MainActivity.dataList;
-import static com.example.round.gaia_18.MainActivity.score;
+import static com.example.round.gaia_18.MainActivity.seed;
 
 /**
  * Created by Round on 2017-09-06.
@@ -113,61 +118,65 @@ public class MenuFlower extends Fragment {
                     viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
                     viewHolder.flowerImage.setImageResource(R.drawable.image);
                     viewHolder.flowerLevel.setText("Level . " + flower.getLevel());
+                    viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (downScore(flower.getCost())) {
+                                MainActivity.updatePlantLevel(flower.getFlowerNo());
+                                flower.setLevel(flower.getLevel() + 1);
+                                if (flower.getLevel() == flowers.get(position + 1).getFlowerLevel()) {
+                                    flowers.get(position + 1).setBuyPossible(true);
+                                }
+
+                                dataList.flowerLevelUp(flower);
+                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+                                flowerAdapter.notifyDataSetChanged();
+                            }else {
+                                //이 부분은 좀 더 시각적으로 표현하자
+                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }else if(flower.isBuyPossible()){
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     viewHolder.flowerLevelUp.setImageResource(R.drawable.buy);
                     viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
                     viewHolder.flowerLevel.setText("Level . ???");
+                    viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (downScore(flower.getCost())) {
+                                MainActivity.buyPlant(flower);
+                                flower.setBuyType(true);
+                                flower.setLevel(1);
+
+                                dataList.flowerLevelUp(flower);
+                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+                                flowerAdapter.notifyDataSetChanged();
+                            }else {
+                                //이 부분은 좀 더 시각적으로 표현하자
+                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }else{
                     viewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
                     viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
                     viewHolder.flowerLevel.setText("Level . ???");
-                }
-
-                viewHolder.flowerName.setText(flower.getFlowerName());
-                viewHolder.flowerLevelUpScore.setText(Float.toString(flower.getFlowerCost()));
-
-                    //버튼 이밴트
                     viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (flower.isBuyPossible()) {
-
-                                // 스코어로 레벨 올리기
-                                if (downScore(flower.getFlowerCost())) {
-                                    //수식에 맞춰서 고칠것
-                                    //표현방식도 수정(A,B,C,D....)
-                                    flower.setFlowerCost(flower.getFlowerCost() + 100);
-                                    viewHolder.flowerExp.setProgress(flower.getLevel());
-
-                                    //구입하지 않은 꽃은 PlantArray에 추가 및 main view에 추가
-                                    if (!flower.isBuyType()) {
-                                        MainActivity.buyPlant(flower);
-                                        flower.setBuyType(true);
-                                        flower.setLevel(1);
-                                    } else {
-                                        MainActivity.updatePlantLevel(flower.getFlowerNo());
-                                        flower.setLevel(flower.getLevel() + 1);
-                                        Log.i("Flower",flower.getLevel() + " / "+flowers.get(position+1).getFlowerLevel());
-                                        if(flower.getLevel() == flowers.get(position+1).getFlowerLevel()){
-                                            flowers.get(position+1).setBuyPossible(true);
-                                        }
-                                    }
-
-                                    flowerAdapter.notifyDataSetChanged();
-                                } else {
-                                    //이 부분은 좀 더 시각적으로 표현하자
-                                    Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
-                                }
-
-                            } else {
-                                Toast.makeText(getActivity(), flowers.get(position - 1).getFlowerName() + "의 레벨이 부족합니다.\n" +
-                                        "레벨 " + flower.getFlowerLevel() + " 까지 달성한 이후에 시도하세요.", Toast.LENGTH_SHORT).show();
-                            }
+                            Toast.makeText(getActivity(), flowers.get(position - 1).getFlowerName() + "의 레벨이 부족합니다.\n" +
+                                    "레벨 " + flower.getFlowerLevel() + " 까지 달성한 이후에 시도하세요.", Toast.LENGTH_SHORT).show();
                         }
                     });
-            }
+                }
 
+                viewHolder.flowerName.setText(flower.getFlowerName());
+                viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
+                viewHolder.flowerExp.setProgress(flower.getLevel()/4);
+            }
             return v;
         }
     }
@@ -175,19 +184,26 @@ public class MenuFlower extends Fragment {
     // 현재 점수 < 꽃 레벨업(구입)에 필요한 점수 -> false
     //          >                            -> true
 
-    boolean downScore(int flowerLevelUpScore){
+    boolean downScore(HashMap<Integer, Integer> cost){
 
-        Log.i(TAG,"Flowr Level Up Score : "+flowerLevelUpScore);
+        TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
+        treeMap.putAll(cost);
 
-        if(score - flowerLevelUpScore > 0){
-            //score 감소
-            score = score - flowerLevelUpScore;
-            MainActivity.updateScore(score);
-            return true;
-        }else {
-            //scre 감소 실패
-            return false;
+        Iterator<Integer> iterator = treeMap.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = cost.get(key);
+
+            Log.i("BuyFlower",key+" / "+value);
+            if(!dataList.minusScore(key,value,dataList.getScoreHashMap())){
+                return false;
+            }
         }
 
+        return true;
+
     }
+
+
 }

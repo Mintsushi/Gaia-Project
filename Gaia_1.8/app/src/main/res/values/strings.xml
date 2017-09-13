@@ -11,5 +11,5 @@
     <string name="skillCase2">%2$d동안 초당 10회 자동 탭</string>
     <string name="skillCase3">탭 당 %2$d만큼의 점수 증가</string>
     <string name="skillCase4">분당 %2$d회 자동 탭</string>
-    <string name="skillCase5"></string>
+    <string name="skillCase5">날씨가 흐릴 때 %2$d개의 물 획득</string>
 </resources>
