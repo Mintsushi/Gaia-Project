@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,10 +51,23 @@ public class MainActivity extends AppCompatActivity
     private ImageButton menuOverlayButton;
     private ImageButton menuStoreButton;
     private ImageButton menuDownBuootn;
+    ///////////////////DB//////////////////////////////
+    public static DB_Exception db;
+
+    public static ArrayList<DB_Exception.Flower> flowerActivityArray = new ArrayList<>();
+    public static  ArrayList<menuActiveSkillActivity.ActiveSkillInform> mActivityArray = new ArrayList<>();
+    public static  ArrayList<menuActiveSkillActivity.ActiveSkillFormatInform> mActivityFormatArray = new ArrayList<>();
+
+    public static ArrayList<menuPassiveSkillActivity.DryFlower> dryFlowerList = new ArrayList<>();
+
+    /////////////////////////////////////////////////
 
     public static ArrayList<PlantInfo> plantArray = new ArrayList<>();
 
     ////////////// 테스트용 임시값  /////////////////////
+    public static float skill0Effect = 1;
+    public static float skill4Effect = 1;
+    public static float skillup = 100;
     public static float score = 1000;
     public static int fruitScore = 200;
     /////////////////////////////////////////////////////
@@ -96,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view){
-        score= score+1000;
+        score = score + skill4Effect*((skillup)*skill0Effect);
         seed.setText(Float.toString(score));
         Log.i(TAG,"Score : "+Float.toString(score));
     }
@@ -171,6 +183,15 @@ public class MainActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ///////////////////DB//////////////////////////////
+        db = new DB_Exception(this);
+
+        mActivityArray = db.getActiveSkillInform();
+        mActivityFormatArray = db.getActiveSkillFormatInform();
+        flowerActivityArray = db.getAllFlowers();
+        dryFlowerList = db.getPassiveSkillFormatInform();
+        /////////////////////////////////////////////////////
 
         relLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
         linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
@@ -580,20 +601,4 @@ public class MainActivity extends AppCompatActivity
         fruit.setText(Float.toString(num));
     }
 
-    public static void usePassiveSkill(final int incScore){
-
-        Timer mTimer = new Timer();
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-                while (true) {
-                    Log.i("had : ", "");
-                    score = score + incScore;
-                   // updateSeed(score);
-                }
-            }
-        };
-        mTimer.scheduleAtFixedRate(mTask,0,1000);
-
-    }
 }
