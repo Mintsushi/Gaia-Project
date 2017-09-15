@@ -16,12 +16,20 @@ import java.util.TreeMap;
 
 public class DataList {
 
+    //flower DataBase
     private static ArrayList<Flower> flowers = new ArrayList<>();
+    //사용자가 가지고 있는 식물 정보
     private static ArrayList<Plant> plants = new ArrayList<>();
+    //사용자가 가지고 있는 식물들 중 외부화면에 있는 식물 정보
     private static ArrayList<OverlayPlant> overlayPlants = new ArrayList<>();
+    //각 식물들의 비용과 점수를 계산하는데 필요한 상수들
     private static ArrayList<FlowerData> flowerDatas = new ArrayList<>();
 
+    //식물에 따른 클릭 수
     public static HashMap<Integer, Integer> clickScore = new HashMap<>();
+    //식물에 따른 클릭 수 + 날씨에 따른 식물의 클릭 수 -> 실제 클릭 수
+    public static HashMap<Integer , Integer> totalScore = new HashMap<>();
+    //사용자가 가지고 있는 점수
     private static HashMap<Integer, Integer> score = new HashMap<>();
 
     public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas) {
@@ -142,7 +150,7 @@ public class DataList {
         return scoreString;
     }
 
-    public Boolean minusScore(int type, int score,HashMap<Integer, Integer> hashMap){
+    public Boolean minusScore(int type, int score, HashMap<Integer, Integer> hashMap){
 
         HashMap<Integer, Integer> fakeScore = hashMap;
 
@@ -225,13 +233,13 @@ public class DataList {
             }
     }
 
-    public void clickScore(){
+    public void windowClick(){
 
-        Iterator<Integer> iterator = clickScore.keySet().iterator();
+        Iterator<Integer> iterator = totalScore.keySet().iterator();
 
         while(iterator.hasNext()){
             int type = iterator.next();
-            int score = clickScore.get(type);
+            int score = totalScore.get(type);
 
             plusScore(type,score,this.score);
         }
@@ -280,7 +288,8 @@ public class DataList {
             int key = iterator.next();
             int value = flower.getScore().get(key);
 
-            minusScore(key,value,this.clickScore);
+            minusScore(key,value,clickScore);
+            minusScore(key, value,totalScore);
         }
 
         Log.i("LevelUp","******************************");
@@ -293,7 +302,8 @@ public class DataList {
             int key = iterator.next();
             int value = flower.getScore().get(key);
 
-            plusScore(key,value,this.clickScore);
+            plusScore(key,value,clickScore);
+            plusScore(key,value,totalScore);
         }
     }
 
@@ -301,19 +311,19 @@ public class DataList {
 
         int type = 0;
         FlowerData flowerData = flowerDatas.get(flower.getFlowerNo());
-        double num1 = Math.pow(2,Math.ceil((flower.getLevel()+flowerData.getNum1())/50));
-        double num2 = Math.ceil((flower.getLevel()+flowerData.getNum2()) / flowerData.getNum3());
-        double num3 = (flower.getLevel()+flowerData.getNum5()) / flowerData.getNum6();
+        long num1 = (long)Math.pow(2,Math.ceil((flower.getLevel()+flowerData.getNum1())/50));
+        long num2 = (long)Math.ceil((flower.getLevel()+flowerData.getNum2()) / flowerData.getNum3());
+        long num3 = (long)(flower.getLevel()+flowerData.getNum5()) / flowerData.getNum6();
 
-        if(num1 == (double)0) num1 = 1;
-        if(num2 == (double)0) num2 = 1;
-        if(num3 == (double)0) num3 = 1;
+        if(num1 == (long)0) num1 = 1;
+        if(num2 == (long)0) num2 = 1;
+        if(num3 == (long)0) num3 = 1;
 
         double num4 = num1*num2*flowerData.getNum4()*num3;
 
         while(true){
-            double nameogi = num4 % 1000;
-            double mok = num4 / 1000;
+            long nameogi = (long)num4 % 1000;
+            long mok = (long)num4 / 1000;
 
             if(nameogi != 0){
                 plusScore(type,(int)nameogi,flower.getCost());
@@ -331,14 +341,14 @@ public class DataList {
     private void newScore(Flower flower){
         int type = 0;
         FlowerData flowerData = flowerDatas.get(flower.getFlowerNo());
-        double num1 = Math.pow(2,Math.floor((flower.getLevel()+flowerData.getNum7())/50));
-        double num2 = Math.ceil((flower.getLevel()+flowerData.getNum8()) / flowerData.getNum9());
+        long num1 = (long)Math.pow(2,Math.floor((flower.getLevel()+flowerData.getNum7())/50));
+        long num2 = (long)Math.ceil((flower.getLevel()+flowerData.getNum8()) / flowerData.getNum9());
 
-        double num3 = num1*num2/(flowerData.getNum9()*flowerData.getNum10());
+        long num3 = (long)num1*num2/(flowerData.getNum9()*flowerData.getNum10());
 
         while(true){
-            double nameogi = num3 %1000;
-            double mok = num3 / 1000;
+            long nameogi =(long)num3 %1000;
+            long mok = (long)num3 / 1000;
 
             if(nameogi != 0){
                 plusScore(type,(int)nameogi,flower.getScore());
@@ -351,6 +361,58 @@ public class DataList {
 
             num3 = mok;
             type ++;
+        }
+    }
+
+    public void setTotalScore(HashMap<Integer, Integer> weatherScore){
+
+        Iterator<Integer> iterator = weatherScore.keySet().iterator();
+
+        totalScore.clear();
+        while(iterator.hasNext()){
+            int type = iterator.next();
+            int score = totalScore.get(type);
+
+            plusTotalScore(type,score);
+        }
+    }
+
+    public void plusTotalScore(int type, int score){
+
+        if(score == 0){
+            return;
+        }
+
+        if (clickScore.containsKey(type)) {
+            if (clickScore.get(type) + score > 999) {
+                while (true) {
+                    int mok = (clickScore.get(type) + score) / 1000;
+                    int nameogi = (clickScore.get(type) + score) % 1000;
+
+                    //total Score
+                    totalScore.put(type, nameogi);
+                    type ++;
+                    if (clickScore.containsKey(type)) {
+                        int newScore = clickScore.get(type) + mok;
+                        if (newScore <= 999) {
+                            //total Score
+                            totalScore.put(type, newScore);
+                            return;
+                        }
+                    } else {
+                        //total Score
+                        totalScore.put(type, mok);
+                        return;
+                    }
+                }
+            } else {
+                //total Score
+                int newScore = clickScore.get(type) + score;
+                totalScore.put(type, newScore);
+            }
+        } else {
+            //total Score
+            totalScore.put(type, score);
         }
     }
 }

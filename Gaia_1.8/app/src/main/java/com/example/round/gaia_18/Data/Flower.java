@@ -21,6 +21,11 @@ public class Flower {
     private HashMap<Integer,Integer> cost = new HashMap<>();
     private HashMap<Integer,Integer> score = new HashMap<>();
 
+    //꽃 레벨1이 되기 위해 필요한 cost, costType
+    private int flowerCost, costType;
+    //꽃 레벨1일 때 score, scoreType
+    private int flowerScore, scoreType;
+
     private boolean buyType;
     private boolean buyPossible;
     private int level = 0;
@@ -114,6 +119,9 @@ public class Flower {
     }
 
     public void setCost(int type, int cost){
+        this.costType = type;
+        this.flowerCost = cost;
+
         int fakeType = 0;
         while(true){
             if(((cost % Math.pow(1000,fakeType+1)) / Math.pow(1000,fakeType)) != 0) {
@@ -132,6 +140,9 @@ public class Flower {
     public HashMap<Integer, Integer> getCost(){return this.cost;}
 
     public void setScore(int type, int score){
+        this.scoreType = type;
+        this.flowerScore = score;
+
         int fakeType = 0;
         while(true){
         if((score % Math.pow(1000,fakeType+1) / Math.pow(1000,fakeType)) != 0)
@@ -146,4 +157,9 @@ public class Flower {
     }}
 
     public HashMap<Integer, Integer> getScore(){return this.score;}
+
+    public void reset(){
+        setCost(this.costType,this.flowerCost);
+        setScore(this.scoreType,this.flowerScore);
+    }
 }

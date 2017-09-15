@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_18.Common.Common;
+import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.OverlayPlant;
 import com.example.round.gaia_18.Data.Plant;
 import com.example.round.gaia_18.Helper.Helper;
@@ -47,8 +48,11 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import static com.example.round.gaia_18.MainActivity.context;
+import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
@@ -76,11 +80,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
     private int notification_id = 1;
     private RemoteViews remoteView;
 
-    //Location
+    //Location & Weather
     private LocationManager locationManager;
     private String provider;
     private double lat,lng;
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
+    private String weatherState = "";
 
     private final int MY_PERMISSION = 0;
 
@@ -501,11 +506,61 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
                 remoteView.setTextViewText(R.id.txtCity,String.format("도시 : %s, 국가 : %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
                 remoteView.setTextViewText(R.id.txtLastUpdate,String.format("Last Updated : %s", Common.getDateNow()));
-                remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
+
                 remoteView.setTextViewText(R.id.txtHumidity,String.format("습도 : %d%%",openWeatherMap.getMain().getHumidity()));
                 remoteView.setTextViewText(R.id.txtTime,String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
                         ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
                 remoteView.setTextViewText(R.id.txtCelsius,String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
+
+                //기존이랑 날씨가 다르면
+                if(!weatherState.equals(openWeatherMap.getWeather().get(0).getDescription())){
+                    remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
+
+                    ArrayList<Integer> weather = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
+                    HashMap<Integer, Integer> map = new HashMap<>();
+
+                    for(int i =0; i<dataList.getOverlayPlants().size(); i++){
+
+                            int id = dataList.getOverlayPlants().get(i).getPlant().getPlantNo();
+                            Flower flower = dataList.getOverlayPlants().get(i).getPlant().getFlower();
+                            //추가 점수
+                            if(weather.get(id) > 0){
+                                long score = 0;
+                                int scoreType = 0;
+
+                                Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+                                while(iterator.hasNext()){
+                                    int key = iterator.next();
+                                    int value = flower.getScore().get(key);
+
+                                    score += value*Math.pow(1000,key);
+                                }
+
+                                score = (long)(score*weather.get(i))/100;
+
+                                while(true){
+                                    long nameogi = (long)score % 1000;
+                                    long mok = (long)score / 1000;
+
+                                    if(nameogi != 0){
+                                        dataList.plusScore(scoreType,(int)nameogi,map);
+                                    }
+                                    if(mok < 1000){
+                                        dataList.plusScore(scoreType+1,(int)mok,map);
+                                    }
+
+                                    score = mok;
+                                    scoreType++;
+                                }
+                            }
+                            //패널티 <- HP 구현 이후에 추가
+                            else{
+
+                            }
+                        }
+                        dataList.setTotalScore(map);
+                }
 
                 Picasso.with(context)
                         .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
@@ -520,5 +575,4 @@ public class OverlayService extends Service implements View.OnClickListener,View
             }
         }
     }
-
 }
