@@ -18,7 +18,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static com.example.round.gaia_17.MainActivity.dryFlowerList;
 import static com.example.round.gaia_17.MainActivity.flowerActivityArray;
+import static com.example.round.gaia_17.MainActivity.scoreCalculaters;
 
 /**
  * Created by 리제 on 2017-09-03.
@@ -57,7 +59,7 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
             Log.i("Error ; ",""+flowerActivityArray.get(i).getFlowerNo() );
             if(400 == flowerActivityArray.get(i).getFlowerLevel()){
                 mDialogFlowerArray.add(new DialogFlowerInform(flowerActivityArray.get(i).getFlowerNo(), 0, flowerActivityArray.get(i).getFlowerImage(),
-                        flowerActivityArray.get(i).getFlowerName(), String.valueOf(flowerActivityArray.get(i).getFlowerScore())));
+                        flowerActivityArray.get(i).getFlowerName(), "초당 "+ scoreCalculaters(dryFlowerList.get(i).getIncScore(),dryFlowerList.get(i).getCostPower()) + "획득."));
                 Log.i("Error ; ",""+ flowerActivityArray.get(i).getFlowerName() +"//"+flowerActivityArray.get(i).getFlowerNo() );
             }
         }

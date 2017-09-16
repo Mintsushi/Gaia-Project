@@ -8,10 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by 리제 on 2017-09-09.
@@ -37,7 +35,6 @@ public class menuPassiveSkilllistBuyDialog extends Dialog{
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });
@@ -45,7 +42,6 @@ public class menuPassiveSkilllistBuyDialog extends Dialog{
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
                 num = gettype(0);
                 dismiss();
             }

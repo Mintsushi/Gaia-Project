@@ -28,6 +28,7 @@ public class goalListDialog extends Dialog{
     public goalListDialog(Context context){super(context);}
 
     private static final String TAG = ".GoalActivity";
+    private ImageButton back;
     private ListView mList;
     private GoalAdapter mAdapter;
     private ArrayList<GoalInform> mGoalArray = new ArrayList<>();
@@ -43,6 +44,14 @@ public class goalListDialog extends Dialog{
         mList = (ListView)findViewById(R.id.dialogGoalList);
         mList.setAdapter(mAdapter);
 
+        back = (ImageButton)findViewById(R.id.settingExit);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+
+        });
     }
 
     // 업적 정보 포멧

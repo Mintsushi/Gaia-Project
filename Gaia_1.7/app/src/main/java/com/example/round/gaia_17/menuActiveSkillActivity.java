@@ -4,7 +4,6 @@ package com.example.round.gaia_17;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,15 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.round.gaia_17.MainActivity.db;
 import static com.example.round.gaia_17.MainActivity.fruitScore;
 import static com.example.round.gaia_17.MainActivity.mActivityArray;
 import static com.example.round.gaia_17.MainActivity.mActivityFormatArray;
 import static com.example.round.gaia_17.MainActivity.score;
+import static com.example.round.gaia_17.MainActivity.scoreCalculaters;
 import static com.example.round.gaia_17.MainActivity.skill0Effect;
 import static com.example.round.gaia_17.MainActivity.skill4Effect;
 import static com.example.round.gaia_17.MainActivity.skillup;
@@ -38,25 +38,18 @@ import static com.example.round.gaia_17.MainActivity.updateSeed;
  *
  * */
 
-public class menuActiveSkillActivity extends Fragment {
+public class menuActiveSkillActivity extends android.support.v4.app.Fragment {
 
     private static final String TAG = ".ActiveSkillActivity";
     private ListView mList;
     private ActiveSkillAdapter mAdapter;
-    private ArrayList<ActiveSkillInform> ActSkill = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
         View view = inflater.inflate(R.layout.menu_active_skill_fragment,container,false);
-        ActSkill.add(mActivityArray.get(0));
-        ActSkill.add(mActivityArray.get(1));
-        ActSkill.add(mActivityArray.get(2));
-        ActSkill.add(mActivityArray.get(3));
-        ActSkill.add(mActivityArray.get(4));
         mAdapter = new ActiveSkillAdapter(getContext(),R.layout.menu_active_skill_item);
         mList = (ListView)view.findViewById(R.id.menuActiveSkillList);
         mList.setAdapter(mAdapter);
-
         // 스킬정보 저장 임시
 
         /*
@@ -128,17 +121,19 @@ public class menuActiveSkillActivity extends Fragment {
 
         private int id;
         private int activeSkillLv;
-        private float activeUseCost;
+        private int activeUseCost;
         private int costType;
         private float activeSkillEffect;
+        private int activeUseCostPower;
         private int buyType;
 
-        public ActiveSkillInform(int id, int activeSkillLv, int costType, float activeUseCost, float activeEffect){
+        public ActiveSkillInform(int id, int activeSkillLv, int costType, int activeUseCost, float activeEffect, int activeUseCostPower){
             this.id = id;
             this.activeSkillLv = activeSkillLv;
             this.costType = costType;
             this.activeUseCost = activeUseCost;
             this.activeSkillEffect = activeEffect;
+            this.activeUseCostPower = activeUseCostPower;
             if(activeSkillLv ==0) {
                 this.buyType = 0;
             }
@@ -152,16 +147,16 @@ public class menuActiveSkillActivity extends Fragment {
         public float getActiveSkillEffect() {
             return activeSkillEffect;
         }
-        public float getActiveUseCost() {
+        public int getActiveUseCost() {
             return activeUseCost;
         }
         public int getCostType() {
             return costType;
         }
         public int getBuyType(){return this.buyType;}
-
-        public void setActiveSkillLv(){this.activeSkillLv += 1;}
-        public void setactiveUseCost(float lvUp){this.activeUseCost = lvUp;}
+        public int getActiveUseCostPower() {
+            return activeUseCostPower;
+        }
 
         public void setBuyType(int buyType){
             this.buyType = buyType;
@@ -197,10 +192,9 @@ public class menuActiveSkillActivity extends Fragment {
         @Override
         public View getView(int position, View v, ViewGroup parent){
             final ActiveSkillViewHolder viewHolder;
-            final ActiveSkillInform info = ActSkill.get(position);
+            final ActiveSkillInform info = mActivityArray.get(position);
             final ActiveSkillFormatInform fomatinfo = mActivityFormatArray.get(position);
-
-            Log.i(TAG,"이름 : "+fomatinfo.getActiveSkillFormatName()+" , 구매 상태 : "+info.buyType);
+            Log.i(TAG,"이름 : "+fomatinfo.getActiveSkillFormatName()+" , 레벨 : "+info.getActiveSkillLv() +" , 구매 상태 : "+info.buyType);
 
             if(v == null){
 
@@ -229,7 +223,6 @@ public class menuActiveSkillActivity extends Fragment {
                     // 지속스킬인경우 버튼 빼기
                     if(fomatinfo.getActiveSkillFormatOnPassive()==1){
                         viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
-                        //skillEffect(fomatinfo.activeSkillFormatSkillType,10,10);
                         skillEffect(fomatinfo.activeSkillFormatSkillType,(int)info.getActiveSkillEffect(),(int)info.getActiveSkillEffect());
                     }else{
 
@@ -240,15 +233,11 @@ public class menuActiveSkillActivity extends Fragment {
                                 viewHolder.useTimeText.setVisibility(View.VISIBLE);
                                 viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
                                 Timemer cooldownTimemer = new Timemer();
-                                cooldownTimemer.skillCooldown(10,viewHolder.useTimeText,viewHolder.useSkillButton);
-                                skillEffect(fomatinfo.activeSkillFormatSkillType,1*10,1*10000);
-
-                                /*
                                 skillEffect(fomatinfo.activeSkillFormatSkillType,
                                         info.getActiveSkillLv()*(int)info.getActiveSkillEffect(),
                                         info.getActiveSkillLv()*(int)info.getActiveSkillEffect());
                                 cooldownTimemer.skillCooldown(fomatinfo.activeSkillFormatReuseTime, viewHolder.useTimeText, viewHolder.useSkillButton);
-                                */
+
                             }
                         });
                     }
@@ -282,19 +271,24 @@ public class menuActiveSkillActivity extends Fragment {
                 viewHolder.skillLvText.setText("LV . " + info.getActiveSkillLv());
                 viewHolder.skillNameText.setText(fomatinfo.getActiveSkillFormatName());
 
-                if(info.getCostType()==1){
-                    viewHolder.skillLvUpText.setText(Float.toString(info.getActiveUseCost()));
+                if(info.getCostType()==2){
+
+                    viewHolder.skillLvUpText.setText((scoreCalculaters(info.getActiveUseCost(),info.activeUseCostPower)));
                     //버튼 이밴트
                     viewHolder.skillLvUpButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             int id = info.getId();
                             Log.i(TAG,"id :"+id);
 
+
                             // 스코어로 레벨 올리기
                             if(downScore(info.getActiveUseCost())){
-                                //mActivityArray.set(info.getId(),db.getActiveSkillInform(info.getId(),info.getActiveSkillLv()+1));
+
+                                int nextLV = ((info.getId()-1)*30)+(info.getActiveSkillLv());
                                 if(info.getActiveSkillLv()==0){
-                                    info.setBuyType(1);
+                                    mActivityArray.set(info.getId(),db.getActiveSkillInform(nextLV));
+                                }else {
+                                    mActivityArray.set(info.getId(), db.getActiveSkillInform(nextLV));
                                 }
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -302,31 +296,29 @@ public class menuActiveSkillActivity extends Fragment {
                     });
                 }
                 else{
-                    viewHolder.skillLvUpText.setText(Float.toString(info.getActiveUseCost()));
+                    viewHolder.skillLvUpText.setText(scoreCalculaters(info.getActiveUseCost(),info.activeUseCostPower));
                     //버튼 이밴트
                     viewHolder.skillLvUpButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             int id = info.getId();
-                            Log.i(TAG,"id :"+id);
 
                             // 열매로로 레벨 올리기
-                        if(downFruit((int)info.getActiveUseCost())){
-                            //mActivityArray.set(info.getId(),db.getActiveSkillInform(info.getId(),info.getActiveSkillLv()+1));
-                            if(info.getActiveSkillLv()==0){
-                                info.setBuyType(1);
+                            if(downFruit(info.getActiveUseCost())){
+
+                                int nextLV = ((info.getId()-1)*30)+(info.getActiveSkillLv());
+                                Log.i(TAG,"id :"+id +nextLV);
+                                if(info.getActiveSkillLv()==0){
+                                    mActivityArray.set(info.getId(),db.getActiveSkillInform(nextLV));
+                                }else {
+                                    mActivityArray.set(info.getId(), db.getActiveSkillInform(nextLV));
+                                }
+                                mAdapter.notifyDataSetChanged();
                             }
-                            mAdapter.notifyDataSetChanged();
-                    }
                         }
                     });
                 }
 
-
-
-
-
             }
-
             return v;
         }
 
@@ -334,19 +326,21 @@ public class menuActiveSkillActivity extends Fragment {
 
     // 점수 감소 함수
     boolean downScore(float desSeed){
-        if(score - desSeed > 0){
+        if(score - desSeed >= 0){
             //score 감소
             score = score - desSeed;
             updateSeed(score);
+            Log.i("downScore","True");
             return true;
         }else {
             //scre 감소 실패
+            Log.i("downScore","False");
             return false;
         }
 
     }
     boolean downFruit(int desFruit){
-        if(fruitScore - desFruit > 0){
+        if(fruitScore - desFruit >= 0){
             //score 감소
             fruitScore = fruitScore - desFruit;
             updateFruit(fruitScore);
@@ -393,8 +387,7 @@ public class menuActiveSkillActivity extends Fragment {
         Log.i("skill4Effect",""+skill4Effect +"/"+incScore);
     }
 
-
-    class Timemer {
+    public static class Timemer {
         // 시간관련함수
         private TimerTask second;
         private final Handler handler = new Handler();
@@ -489,8 +482,7 @@ public class menuActiveSkillActivity extends Fragment {
             Runnable updater = new Runnable() {
 
                 public void run() {
-
-                    score = score + (score + skillup)+skill0Effect;
+                    score = score + skill4Effect*((skillup)*skill0Effect);
                     updateSeed(score);
                 }
 
@@ -519,7 +511,6 @@ public class menuActiveSkillActivity extends Fragment {
             Runnable updater = new Runnable() {
 
                 public void run() {
-
                     score = score + skill4Effect*((skillup)*skill0Effect);
                     updateSeed(score);
                 }
@@ -529,48 +520,37 @@ public class menuActiveSkillActivity extends Fragment {
             handler.post(updater);
 
         }
+
+        public void dryupScore(final int scores){
+            timer_sec = 0;
+            final Timer timer = new Timer();
+
+            second = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i("Timer ::", "skill4start");
+                    timer_sec++;
+                    dryupScoreUpdate(scores);
+                }
+            };
+            timer.schedule(second, 0, 1000);     //1분 60초 60000에 time만큼 이면 60000 / 10  6000
+        }
+        public void dryupScoreUpdate(final int scores) {
+
+            Runnable updater = new Runnable() {
+
+                public void run() {
+                    score = score + scores;
+                    updateSeed(score);
+                }
+
+            };
+
+            handler.post(updater);
+
+        }
+
     }
 }
 
-/*
-
-    void useActiveSkill(final int times, final int incScore, final TextView textView){
-
-        int timeCount = 0;
-        Timer mTimer = new Timer();
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-                int timeCount = 0;
-                mHandleControl = 1;
-                while (timeCount < times) {
-                    Log.i("had : ", "" + timeCount + "cont" + mHandleControl);
-                    mHandler.sendEmptyMessage(incScore);
-                    timeCount++;
-                }
-                mHandleControl = 0;
-                mHandler.sendEmptyMessage(0);
-                cancel();
-            }
-        };
-        mTimer.schedule(mTask,0,1000);
-    }
-
-    private android.os.Handler mHandler = new android.os.Handler(){
-        public void handleMessage(Message msg){
-            Log.i(TAG,"Handler Message : "+msg);
-            TextView textView = (TextView)msg.obj;
-            if(msg.what == SEND_THREAD_RUN) {
-                Log.i("had","on");
-                score = score + msg.arg2;
-                updateSeed(score);
-                textView.setText(String.valueOf(msg.arg1));
-            }
-            else{
-
-                textView.setVisibility(View.INVISIBLE);
-            }
-        }
-    };
-*/
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +17,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.example.round.gaia_17.MainActivity.dryFlowerList;
 import static com.example.round.gaia_17.MainActivity.flowerActivityArray;
 import static com.example.round.gaia_17.MainActivity.fruitScore;
 import static com.example.round.gaia_17.MainActivity.score;
+import static com.example.round.gaia_17.MainActivity.scoreCalculaters;
+import static com.example.round.gaia_17.MainActivity.updateSeed;
 import static com.example.round.gaia_17.menuFlowerActivity.mFlowerArray;
 
 /**
@@ -75,14 +80,16 @@ public class menuPassiveSkillActivity extends Fragment {
         private String name;
         private String explain;
         private String image;
-        private String incScore;
+        private int incScore;
+        private int costPower;
 
-        DryFlower(int id, String name, String explain, String image, String incScore){
+        DryFlower(int id, String name, String explain, String image, int incScore, int costPower){
             this.id = id;
             this.explain = explain;
             this.image = image;
             this.name = name;
             this.incScore = incScore;
+            this.costPower = costPower;
         }
 
         public int getId() {
@@ -97,9 +104,10 @@ public class menuPassiveSkillActivity extends Fragment {
         public String getName() {
             return name;
         }
-        public String getIncScore() {
+        public int getIncScore() {
             return incScore;
         }
+        public int getCostPower(){ return costPower; }
     }
 
     // 패시브 정보
@@ -272,13 +280,15 @@ public class menuPassiveSkillActivity extends Fragment {
                                         Log.i("tlqkftlqkf",""+ dryFlowerList.get(entryid).getIncScore()+"/ "+entryid);
 
                                         Log.i("tlqkftlqkf",+info.getId()+"/ "+entryid);
-                                        mPassiveArray.set(info.getId(),new PassiveSkillFormatInform(info.getId(),dryFlowerList.get(entryid).getName(),dryFlowerList.get(entryid).getImage(),
-                                                dryFlowerList.get(entryid).getExplain(),dryFlowerList.get(entryid).getIncScore(),2));
+                                        mPassiveArray.set(info.getId(),new PassiveSkillFormatInform(info.getId(),dryFlowerList.get(entryid).getName(),
+                                                dryFlowerList.get(entryid).getImage(), dryFlowerList.get(entryid).getExplain(),
+                                                "초당 "+ scoreCalculaters(dryFlowerList.get(entryid).getIncScore(),dryFlowerList.get(entryid).getCostPower()) + "획득.",2));
                                         mAdapter.notifyDataSetChanged();
                                         // 꽃정보 초기화
                                         flowerActivityArray.get(entryid).setFlowerLevel(1);
                                         mFlowerArray.get(entryid).setFlowerLvi(1);
                                         //flowerActivityArray.notifyAll();
+                                        dryupScore((dryFlowerList.get(entryid).getIncScore()*1000));
 
                                     }
                                 }
@@ -343,6 +353,41 @@ public class menuPassiveSkillActivity extends Fragment {
             return v;
         }
     }
+
+    final Handler handler = new Handler();
+    int timer_sec = 0;
+    public void dryupScore(final int scores){
+        timer_sec = 0;
+        TimerTask second;
+        final Timer timer = new Timer();
+
+        second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("Timer ::", "dryup!");
+                timer_sec++;
+                dryupScoreUpdate(scores);
+            }
+        };
+        timer.schedule(second, 0, 1000);
+    }
+    public void dryupScoreUpdate(final int upSco) {
+
+        Runnable updater = new Runnable() {
+
+            public void run() {
+
+                Log.i("Timer ::", "dryup!"+ ""+upSco+" / "+ score+upSco);
+                score = score + upSco;
+                updateSeed(score);
+            }
+
+        };
+
+        handler.post(updater);
+
+    }
+
 
     // 점수 감소 함수
     boolean downScore(float desSeed){
