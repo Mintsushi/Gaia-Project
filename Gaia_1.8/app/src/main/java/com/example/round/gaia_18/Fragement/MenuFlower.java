@@ -130,7 +130,6 @@ public class MenuFlower extends Fragment {
 
                                 dataList.flowerLevelUp(flower);
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
                                 //이 부분은 좀 더 시각적으로 표현하자

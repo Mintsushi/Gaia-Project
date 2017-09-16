@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Context context;
 
     //DataBase
-    public DataBaseHelper dataBaseHelper;
+    public static DataBaseHelper dataBaseHelper;
     public static DataList dataList;
 
     //Layout / View
@@ -165,17 +165,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Boolean already = false;
 //        int plantNo = 0;
-//        int plantLevel = 1;
+//        int plantLevel = 400;
 //
 //        ArrayList<Flower> flowers = dataList.getFlowers();
 //        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
 //
-//        for(int i =0 ; i<overlayPlants.size() ; i++){
-//            if(overlayPlants.get(i).getPlant().getPlantNo() == plantNo){
+//        for (int i = 0; i < overlayPlants.size(); i++) {
+//            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
 //                plants.add(overlayPlants.get(i).getPlant());
 //                already = true;
 //            }
 //        }
+//
+//
 //
 //        if(!already) {
 //            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
@@ -268,12 +270,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .replace(R.id.list_layout,menuFlower)
                     .commit();
         }else if(view == relativeLayout){
-            //후에 식물을 따른 점수들을 계산해서 구현
-//            score = score + 1000000;
-//            seed.setText(Integer.toString(score));
-//            mOverlayService.setSeed(score);
-
-            dataList.clickScore();
+            dataList.windowClick();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
         }
