@@ -4,8 +4,6 @@ package com.example.round.gaia_17;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,50 +14,43 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.example.round.gaia_17.MainActivity.plantArray;
+import static com.example.round.gaia_17.MainActivity.db;
+import static com.example.round.gaia_17.MainActivity.fruitScore;
+import static com.example.round.gaia_17.MainActivity.mActivityArray;
+import static com.example.round.gaia_17.MainActivity.mActivityFormatArray;
 import static com.example.round.gaia_17.MainActivity.score;
+import static com.example.round.gaia_17.MainActivity.scoreCalculaters;
+import static com.example.round.gaia_17.MainActivity.skill0Effect;
+import static com.example.round.gaia_17.MainActivity.skill4Effect;
+import static com.example.round.gaia_17.MainActivity.skillup;
+import static com.example.round.gaia_17.MainActivity.updateFruit;
 import static com.example.round.gaia_17.MainActivity.updateSeed;
 
 /**
- * Created by 리제 on 2017-08-26.
- */
+ * 김태우 액티브스킬창구현
+ * 스킬정보 모두연동
+ * 6번 스킬 제외하고 모두 게임점수에 영향을 받게 구현함
+ * 스킬 구매시 시드와 열매로 구매 가능하다.
+ *
+ * */
 
-public class menuActiveSkillActivity extends Fragment {
-    DB_Exception db;
-
-    private int mHandleControl;
-    private static final int SEND_THREAD_RUN = 1;
-    private static final int SEND_THREAD_STOP = 0;
+public class menuActiveSkillActivity extends android.support.v4.app.Fragment {
 
     private static final String TAG = ".ActiveSkillActivity";
     private ListView mList;
     private ActiveSkillAdapter mAdapter;
-    private ArrayList<ActiveSkillInform> mActivityArray = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
         View view = inflater.inflate(R.layout.menu_active_skill_fragment,container,false);
-
         mAdapter = new ActiveSkillAdapter(getContext(),R.layout.menu_active_skill_item);
         mList = (ListView)view.findViewById(R.id.menuActiveSkillList);
         mList.setAdapter(mAdapter);
-
         // 스킬정보 저장 임시
-        db = new DB_Exception(getActivity());
-
-        mActivityArray.add(db.getActiveSkillInform(1,0));
-        mActivityArray.add(db.getActiveSkillInform(2,0));
-        mActivityArray.add(db.getActiveSkillInform(3,0));
-        mActivityArray.add(db.getActiveSkillInform(4,0));
-        mActivityArray.add(db.getActiveSkillInform(5,0));
 
         /*
         for(int i =0;i<mActivityArray.size();i++){
@@ -74,27 +65,75 @@ public class menuActiveSkillActivity extends Fragment {
         return view;
     }
 
+
+    // 엑티브스킬 정보 포멧
+    public static class ActiveSkillFormatInform{
+
+        private int id;
+        private String activeSkillFormatName;
+        private String activeSkillFormatImagePath;
+        private String activeSkillFormatButtonImagePath;
+        private int activeSkillFormatReuseTime;
+        private int activeSkillFormatOnPassive;
+        private int activeSkillFormatSkillType;
+        private String activeSkillFormatSkillExplain;
+
+        public ActiveSkillFormatInform(int id, String activeSkillFormatName,  String activeSkillFomatImagePath, String activeSkillFormatButtonImagePath
+                ,int activeSkillFormatReuseTime,int activeSkillFormatOnPassive,int activeSkillFormatSkillType, String activeSkillFormatSkillExplain){
+            this.id = id;
+            this.activeSkillFormatName = activeSkillFormatName;
+            this.activeSkillFormatImagePath = activeSkillFomatImagePath;
+            this.activeSkillFormatButtonImagePath = activeSkillFormatButtonImagePath;
+            this.activeSkillFormatReuseTime = activeSkillFormatReuseTime;
+            this.activeSkillFormatOnPassive = activeSkillFormatOnPassive;
+            this.activeSkillFormatSkillType = activeSkillFormatSkillType;
+            this.activeSkillFormatSkillExplain = activeSkillFormatSkillExplain;
+
+        }
+
+        public int getId(){return this.id;}
+        public String getActiveSkillFormatName() {
+            return activeSkillFormatName;
+        }
+        public String getActiveSkillFormatImagePath() {
+            return activeSkillFormatImagePath;
+        }
+        public String getActiveSkillFormatButtonImagePath() {
+            return activeSkillFormatButtonImagePath;
+        }
+        public int getActiveSkillFormatOnPassive() {
+            return activeSkillFormatOnPassive;
+        }
+        public int getActiveSkillFormatReuseTime() {
+            return activeSkillFormatReuseTime;
+        }
+        public String getActiveSkillFormatSkillExplain() {
+            return activeSkillFormatSkillExplain;
+        }
+        public int getActiveSkillFormatSkillType() {
+            return activeSkillFormatSkillType;
+        }
+
+    }
+
     // 엑티브스킬 정보 포멧
     public static class ActiveSkillInform{
 
         private int id;
         private int activeSkillLv;
-        private float activeUseCost;
+        private int activeUseCost;
         private int costType;
         private float activeSkillEffect;
-        private String activeSkillName;
-        private String activeSkillImagePath;
-
+        private int activeUseCostPower;
         private int buyType;
 
-        public ActiveSkillInform(int id, int activeSkillLv, int costType, float activeUseCost, float activeEffect, String activeSkillName,  String activeSkillImagePath){
+        public ActiveSkillInform(int id, int activeSkillLv, int costType, int activeUseCost, float activeEffect, int activeUseCostPower){
             this.id = id;
             this.activeSkillLv = activeSkillLv;
-            this.activeUseCost = activeUseCost;
             this.costType = costType;
+            this.activeUseCost = activeUseCost;
             this.activeSkillEffect = activeEffect;
-            this.activeSkillName = activeSkillName;
-            this.activeSkillImagePath = activeSkillImagePath;
+            this.activeUseCostPower = activeUseCostPower;
             if(activeSkillLv ==0) {
                 this.buyType = 0;
             }
@@ -104,14 +143,20 @@ public class menuActiveSkillActivity extends Fragment {
         }
 
         public int getId(){return this.id;}
-        public String getActiveSkillImagePath(){return this.activeSkillImagePath;}
         public int getActiveSkillLv(){return this.activeSkillLv;}
-        public String getActiveSkillName(){return this.activeSkillName;}
-        public float getactiveUseCost(){return this.activeUseCost;}
+        public float getActiveSkillEffect() {
+            return activeSkillEffect;
+        }
+        public int getActiveUseCost() {
+            return activeUseCost;
+        }
+        public int getCostType() {
+            return costType;
+        }
         public int getBuyType(){return this.buyType;}
-
-        public void setActiveSkillLv(){this.activeSkillLv += 1;}
-        public void setactiveUseCost(float lvUp){this.activeUseCost = lvUp;}
+        public int getActiveUseCostPower() {
+            return activeUseCostPower;
+        }
 
         public void setBuyType(int buyType){
             this.buyType = buyType;
@@ -148,8 +193,8 @@ public class menuActiveSkillActivity extends Fragment {
         public View getView(int position, View v, ViewGroup parent){
             final ActiveSkillViewHolder viewHolder;
             final ActiveSkillInform info = mActivityArray.get(position);
-
-            Log.i(TAG,"이름 : "+info.getActiveSkillName()+" , 구매 상태 : "+info.buyType);
+            final ActiveSkillFormatInform fomatinfo = mActivityFormatArray.get(position);
+            Log.i(TAG,"이름 : "+fomatinfo.getActiveSkillFormatName()+" , 레벨 : "+info.getActiveSkillLv() +" , 구매 상태 : "+info.buyType);
 
             if(v == null){
 
@@ -174,13 +219,33 @@ public class menuActiveSkillActivity extends Fragment {
             if(info != null){
                 //buyType ==0 // 잠긴이미지
                 if(info.buyType == 1) {
-                    // 각 메소드 활성화
-                    viewHolder.useSkillButton.setVisibility(View.VISIBLE);
+
+                    // 지속스킬인경우 버튼 빼기
+                    if(fomatinfo.getActiveSkillFormatOnPassive()==1){
+                        viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
+                        skillEffect(fomatinfo.activeSkillFormatSkillType,(int)info.getActiveSkillEffect(),(int)info.getActiveSkillEffect());
+                    }else{
+
+                        viewHolder.useSkillButton.setVisibility(View.VISIBLE);
+                        viewHolder.useSkillButton.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                // 정보에 맞는 시간동안 정보에맞는 스코어가 초당 증가
+                                viewHolder.useTimeText.setVisibility(View.VISIBLE);
+                                viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
+                                Timemer cooldownTimemer = new Timemer();
+                                skillEffect(fomatinfo.activeSkillFormatSkillType,
+                                        info.getActiveSkillLv()*(int)info.getActiveSkillEffect(),
+                                        info.getActiveSkillLv()*(int)info.getActiveSkillEffect());
+                                cooldownTimemer.skillCooldown(fomatinfo.activeSkillFormatReuseTime, viewHolder.useTimeText, viewHolder.useSkillButton);
+
+                            }
+                        });
+                    }
                     // 각 메소스 값 설정
                     v.setBackgroundResource(R.drawable.shape);
                     viewHolder.skillLvUpButton.setImageResource(R.drawable.levelup);
+                    //viewHolder.skillImage.setImageResource("R.drawable."+fomatinfo.getActiveSkillFormatImagePath());
                     viewHolder.skillImage.setImageResource(R.drawable.image);
-
 
                 }else{
                     // 각 메소드 활성화
@@ -188,51 +253,72 @@ public class menuActiveSkillActivity extends Fragment {
                     // 각 메소스 값 설정
                     v.setBackgroundResource(R.drawable.lock_background);
                     viewHolder.skillLvUpButton.setImageResource(R.drawable.buy);
-                    viewHolder.skillImage.setImageResource(R.mipmap.ic_launcher);
+                    //viewHolder.skillImage.setImageResource("R.drawable."+fomatinfo.getActiveSkillFormatImagePath());
+                    viewHolder.skillImage.setImageResource(R.drawable.image);
 
                 }
 
 
+
+
                 // 첫번째 물주기 아이템은 사용하기 버튼이 없음
-                if(info.getId()==1){
+                if(info.getId()==0){
                     viewHolder.useSkillButton.setVisibility(View.INVISIBLE);
                 }
 
                 viewHolder.useTimeText.setVisibility(View.INVISIBLE);
-                //viewHolder.useSkillButton.setImageResource(R.drawable.use);
+                viewHolder.useSkillButton.setImageResource(R.drawable.use);
                 viewHolder.skillLvText.setText("LV . " + info.getActiveSkillLv());
-                viewHolder.skillNameText.setText(info.getActiveSkillName());
-                viewHolder.skillLvUpText.setText(Float.toString(info.getactiveUseCost()));
+                viewHolder.skillNameText.setText(fomatinfo.getActiveSkillFormatName());
 
-                viewHolder.useSkillButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // 정보에 맞는 시간동안 정보에맞는 스코어가 초당 증가
-                        viewHolder.useSkillButton.setImageResource(R.drawable.nullimage);
-                        viewHolder.useTimeText.setVisibility(View.VISIBLE);
-                        useActiveSkill(10,1000,viewHolder.useTimeText);
-                    }
-                });
+                if(info.getCostType()==2){
+
+                    viewHolder.skillLvUpText.setText((scoreCalculaters(info.getActiveUseCost(),info.activeUseCostPower)));
+                    //버튼 이밴트
+                    viewHolder.skillLvUpButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            int id = info.getId();
+                            Log.i(TAG,"id :"+id);
 
 
-                //버튼 이밴트
-                viewHolder.skillLvUpButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        int id = info.getId();
-                        Log.i(TAG,"id :"+id);
+                            // 스코어로 레벨 올리기
+                            if(downScore(info.getActiveUseCost())){
 
-                        // 스코어로 레벨 올리기
-                        if(downScore(info.getactiveUseCost())){
-                            mActivityArray.set(info.getId(),db.getActiveSkillInform(info.getId(),info.getActiveSkillLv()+1));
-                            if(info.getActiveSkillLv()==0){
-                                info.setBuyType(1);
+                                int nextLV = ((info.getId()-1)*30)+(info.getActiveSkillLv());
+                                if(info.getActiveSkillLv()==0){
+                                    mActivityArray.set(info.getId(),db.getActiveSkillInform(nextLV));
+                                }else {
+                                    mActivityArray.set(info.getId(), db.getActiveSkillInform(nextLV));
+                                }
+                                mAdapter.notifyDataSetChanged();
                             }
-                            mAdapter.notifyDataSetChanged();
                         }
-                    }
-                });
+                    });
+                }
+                else{
+                    viewHolder.skillLvUpText.setText(scoreCalculaters(info.getActiveUseCost(),info.activeUseCostPower));
+                    //버튼 이밴트
+                    viewHolder.skillLvUpButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            int id = info.getId();
+
+                            // 열매로로 레벨 올리기
+                            if(downFruit(info.getActiveUseCost())){
+
+                                int nextLV = ((info.getId()-1)*30)+(info.getActiveSkillLv());
+                                Log.i(TAG,"id :"+id +nextLV);
+                                if(info.getActiveSkillLv()==0){
+                                    mActivityArray.set(info.getId(),db.getActiveSkillInform(nextLV));
+                                }else {
+                                    mActivityArray.set(info.getId(), db.getActiveSkillInform(nextLV));
+                                }
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
 
             }
-
             return v;
         }
 
@@ -240,10 +326,24 @@ public class menuActiveSkillActivity extends Fragment {
 
     // 점수 감소 함수
     boolean downScore(float desSeed){
-        if(score - desSeed > 0){
+        if(score - desSeed >= 0){
             //score 감소
             score = score - desSeed;
-            MainActivity.updateSeed(score);
+            updateSeed(score);
+            Log.i("downScore","True");
+            return true;
+        }else {
+            //scre 감소 실패
+            Log.i("downScore","False");
+            return false;
+        }
+
+    }
+    boolean downFruit(int desFruit){
+        if(fruitScore - desFruit >= 0){
+            //score 감소
+            fruitScore = fruitScore - desFruit;
+            updateFruit(fruitScore);
             return true;
         }else {
             //scre 감소 실패
@@ -252,60 +352,205 @@ public class menuActiveSkillActivity extends Fragment {
 
     }
 
-    void useActiveSkill(final int times, final int incScore, final TextView textView){
 
-        int timeCount = 0;
-        Timer mTimer = new Timer();
-        TimerTask mTask = new TimerTask() {
-            @Override
-            public void run() {
-                int timeCount = 0;
-                mHandleControl = 1;
-                while (timeCount < times) {
-                    Log.i("had : ", "" + timeCount + "cont" + mHandleControl);
-                    mHandler.sendEmptyMessage(incScore);
-                    timeCount++;
-                }
-                mHandleControl = 0;
-                mHandler.sendEmptyMessage(0);
-                cancel();
-            }
-        };
-        mTimer.schedule(mTask,0,1000);
+    void skillEffect(int type, int time,int incScore){
+        switch (type){
+            case 0:
+                Timemer case0 = new Timemer();
+                case0.skill0start(time);
+                break;
+            case 1:
+                skill1start(incScore);
+                break;
+            case 2:
+                Timemer case2 = new Timemer();
+                case2.skill2start(time);
+                break;
+            case 3:
+                skill3start(incScore);
+                break;
+            case 4:
+                Timemer case4 = new Timemer();
+                case4.skill4start(60000/time);
+                break;
+
+            default:
+        }
     }
 
-    private android.os.Handler mHandler = new android.os.Handler(){
-        public void handleMessage(Message msg){
+    void skill1start(float incScore) {
+        score = score + incScore;
+        updateSeed(score);
+    }
+    void skill3start(int incScore) {
+        skill4Effect = (float)1+((float)incScore/(float)100);
+        Log.i("skill4Effect",""+skill4Effect +"/"+incScore);
+    }
 
-            //나중에 image가 확립되면 좀더 세부적으로 위치 조정
-            if(msg.what != 0) {
-                Log.i(TAG,"Handler Message : 1");
-                score = score + msg.what;
+    public static class Timemer {
+        // 시간관련함수
+        private TimerTask second;
+        private final Handler handler = new Handler();
+        public int getTimer_sec() {
+            return timer_sec;
+        }
+        int timer_sec = 0;
 
-            }
-            else{
-                Log.i(TAG,"Handler Message : 0");
+        public void skillCooldown(final int time, final TextView textView, final ImageButton button) {
+            timer_sec = 0;
+            final Timer timer = new Timer();
+
+            second = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i("Timer ::", "skillCooldown");
+                    Update(time,textView,button);
+                    timer_sec++;
+                    if(timer_sec == time) {
+                        timer.cancel();
+                    }
+                }
+            };
+            timer.schedule(second, 0, 1000);
+
+
+        }
+        protected void Update(final int time, final TextView textView, final ImageButton button) {
+
+            Runnable updater = new Runnable() {
+
+                public void run() {
+                    textView.setText(String.valueOf(time - getTimer_sec()));
+                    if(time - getTimer_sec()==0) {
+                        textView.setVisibility(View.INVISIBLE);
+                        button.setVisibility(View.VISIBLE);
+                    }
+                }
+
+            };
+
+            handler.post(updater);
+
+        }
+
+        public void skill0start(final int time){
+            timer_sec = 0;
+            final Timer timer = new Timer();
+
+            second = new TimerTask() {
+                @Override
+                public void run() {
+
+                    Log.i("Timer ::", "skill0start");
+                    skill0Update(1);
+                    timer_sec++;
+                    if(timer_sec == time) {
+                        skill0Update(0);
+                        timer.cancel();
+                    }
+                }
+            };
+            timer.schedule(second, 0, 1000);
+        }
+        public void skill0Update(int type){
+            if(type ==1){
+                skill0Effect = 2;
+            }else {
+                skill0Effect = 1;
             }
         }
-    };
 
-/*
-    private android.os.Handler mHandler = new android.os.Handler(){
-        public void handleMessage(Message msg){
-            Log.i(TAG,"Handler Message : "+msg);
-            TextView textView = (TextView)msg.obj;
-            if(msg.what == SEND_THREAD_RUN) {
-                Log.i("had","on");
-                score = score + msg.arg2;
-                updateSeed(score);
-                textView.setText(String.valueOf(msg.arg1));
-            }
-            else{
+        public void skill2start(final int time){
+            timer_sec = 0;
+            final Timer timer = new Timer();
 
-                textView.setVisibility(View.INVISIBLE);
-            }
+            second = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i("Timer ::", "skill2start");
+                    timer_sec++;
+                    skill2Update();
+                    if(timer_sec == time*10) {
+                        timer.cancel();
+                    }
+                }
+            };
+            timer.schedule(second, 0, 100);
         }
-    };
-*/
+        public void skill2Update() {
 
+            Runnable updater = new Runnable() {
+
+                public void run() {
+                    score = score + skill4Effect*((skillup)*skill0Effect);
+                    updateSeed(score);
+                }
+
+            };
+
+            handler.post(updater);
+
+        }
+
+        public void skill4start(final int time){
+            timer_sec = 0;
+            final Timer timer = new Timer();
+
+            second = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i("Timer ::", "skill4start");
+                    timer_sec++;
+                    skill4Update();
+                }
+            };
+            timer.schedule(second, 0, time);     //1분 60초 60000에 time만큼 이면 60000 / 10  6000
+        }
+        public void skill4Update() {
+
+            Runnable updater = new Runnable() {
+
+                public void run() {
+                    score = score + skill4Effect*((skillup)*skill0Effect);
+                    updateSeed(score);
+                }
+
+            };
+
+            handler.post(updater);
+
+        }
+
+        public void dryupScore(final int scores){
+            timer_sec = 0;
+            final Timer timer = new Timer();
+
+            second = new TimerTask() {
+                @Override
+                public void run() {
+                    Log.i("Timer ::", "skill4start");
+                    timer_sec++;
+                    dryupScoreUpdate(scores);
+                }
+            };
+            timer.schedule(second, 0, 1000);     //1분 60초 60000에 time만큼 이면 60000 / 10  6000
+        }
+        public void dryupScoreUpdate(final int scores) {
+
+            Runnable updater = new Runnable() {
+
+                public void run() {
+                    score = score + scores;
+                    updateSeed(score);
+                }
+
+            };
+
+            handler.post(updater);
+
+        }
+
+    }
 }
+
+

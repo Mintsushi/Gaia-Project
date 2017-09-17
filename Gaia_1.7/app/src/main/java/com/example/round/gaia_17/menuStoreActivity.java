@@ -17,4 +17,53 @@ public class menuStoreActivity extends Fragment {
 
         return view;
     }
+
+    class productInfomation{
+        private int itemId;
+        private String itemCode;
+        private String itemName;
+        private int itemSeedCost;
+        private int itemFruitCost;
+        private int itemEffect;
+        private String itemExplain;
+        private String itemImagePath;
+
+        productInfomation(int itemId, String itemCode, String itemName, int itemSeedCost, int itemFruitCost, int itemEffect, String itemExplain, String itemImagePath){
+            this.itemId = itemId;
+            this.itemCode = itemCode;
+            this.itemName = itemName;
+            this.itemSeedCost = itemSeedCost;
+            this.itemFruitCost = itemFruitCost;
+            this. itemEffect = itemEffect;
+            this.itemExplain = itemExplain;
+            this.itemImagePath = itemImagePath;
+        }
+
+        public int getItemId() {
+            return itemId;
+        }
+        public String getItemName() {
+            return itemName;
+        }
+        public String getItemCode() {
+            return itemCode;
+        }
+        public int getItemSeedCost() {
+            return itemSeedCost;
+        }
+        public int getItemFruitCost() {
+            return itemFruitCost;
+        }
+        public int getItemEffect() {
+            return itemEffect;
+        }
+        public String getItemExplain() {
+            return itemExplain;
+        }
+        public String getItemImagePath() {
+            return itemImagePath;
+        }
+
+
+    }
 }

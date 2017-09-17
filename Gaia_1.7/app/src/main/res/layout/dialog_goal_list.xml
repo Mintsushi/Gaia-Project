@@ -44,7 +44,7 @@
         </RelativeLayout>
 
         <ImageButton
-            android:id="@+id/Diaback"
+            android:id="@+id/GoalExit"
             android:layout_width="60dp"
             android:layout_height="65dp"
             android:layout_alignBottom="@+id/relativeLayout"

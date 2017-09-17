@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import static com.example.round.gaia_17.menuFlowerActivity.mFlowerArray;
+
+import static com.example.round.gaia_17.MainActivity.dryFlowerList;
+import static com.example.round.gaia_17.MainActivity.flowerActivityArray;
+import static com.example.round.gaia_17.MainActivity.scoreCalculaters;
 
 /**
  * Created by 리제 on 2017-09-03.
@@ -53,16 +53,19 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
         mList = (ListView)findViewById(R.id.dialogFlowerChoiceList);
         mList.setAdapter(mAdapter);
 
-        for(int i = 0; i<8; i++){
-            if(500 == mFlowerArray.get(i).getFlowerLv()){
-                mDialogFlowerArray.add(new DialogFlowerInform(mFlowerArray.get(i).getId(), 0, mFlowerArray.get(i).getFlowerImagePath(),
-                        mFlowerArray.get(i).getFlowerName(), mFlowerArray.get(i).getFlowerName()));
+        for(int i = 0; i<4; i++){
+            Log.i("Error ; ",""+ flowerActivityArray.get(i));
+            Log.i("Error ; ",""+flowerActivityArray.get(i).getFlowerLevel());
+            Log.i("Error ; ",""+flowerActivityArray.get(i).getFlowerNo() );
+            if(400 == flowerActivityArray.get(i).getFlowerLevel()){
+                mDialogFlowerArray.add(new DialogFlowerInform(flowerActivityArray.get(i).getFlowerNo(), 0, flowerActivityArray.get(i).getFlowerImage(),
+                        flowerActivityArray.get(i).getFlowerName(), "초당 "+ scoreCalculaters(dryFlowerList.get(i).getIncScore(),dryFlowerList.get(i).getCostPower()) + "획득."));
+                Log.i("Error ; ",""+ flowerActivityArray.get(i).getFlowerName() +"//"+flowerActivityArray.get(i).getFlowerNo() );
             }
         }
         diaYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "yes", Toast.LENGTH_SHORT).show();
                 if(cheakBoxInspection==0){
                     dialogtoActid = -1;
                 }
@@ -73,7 +76,7 @@ public class menuPassiveSkillFlowerChoiceDialog  extends Dialog {
         diaNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext().getApplicationContext(), "no", Toast.LENGTH_SHORT).show();
+
                 dialogtoActid = -1;
                 dismiss();
             }
