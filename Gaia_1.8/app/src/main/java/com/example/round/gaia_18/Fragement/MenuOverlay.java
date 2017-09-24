@@ -121,6 +121,7 @@ public class MenuOverlay extends Fragment {
                             mOverlayService.addPlantToOverlay(plant);
                             dataList.minusClickScore(plant.getFlower().getScore());
                             plant.getFlower().setWhere(1);
+                            dataList.getGoalDataByID(10).setGoalRate(1);
                         } //overlay에 있을 때
                         else{
                             //overlay에서 제거

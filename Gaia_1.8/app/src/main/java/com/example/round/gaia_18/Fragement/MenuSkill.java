@@ -89,8 +89,8 @@ public class MenuSkill extends Fragment {
         @Override
         public View getView(int position, View view, ViewGroup parent) {
 
-            final SkillInfo skillInfo = dataList.getSkillInfos().get(position);
-            final SkillData skillData = dataList.getSkillDatas().get(position);
+            SkillInfo skillInfo = dataList.getSkillInfos().get(position);
+            SkillData skillData = dataList.getSkillDatas().get(position);
             final SkillViewHolder skillViewHolder;
 
             if (skillInfo.getSkillView() == null) {
@@ -106,7 +106,9 @@ public class MenuSkill extends Fragment {
                 skillViewHolder.skillName = (TextView) view.findViewById(R.id.skillName);
                 skillViewHolder.coolTime = (TextView) view.findViewById(R.id.skillCoolTime);
                 skillViewHolder.skillUseButton = (ImageButton) view.findViewById(R.id.skillUseButton);
+                skillViewHolder.skillUseButton.setTag(skillData.getSkillNo());
                 skillViewHolder.skillLevelUp = (ImageButton) view.findViewById(R.id.skillLevelUpButton);
+                skillViewHolder.skillLevelUp.setTag(skillData.getSkillNo());
                 skillViewHolder.skillLevelUpScore = (TextView) view.findViewById(R.id.skillLevelUpScore);
                 skillViewHolder.skillExplain = (TextView) view.findViewById(R.id.skillExplain);
 
@@ -167,6 +169,11 @@ public class MenuSkill extends Fragment {
                                 @Override
                                 public void onClick(View view) {
 
+                                    int id = (int)view.getTag();
+
+                                    SkillInfo skillInfo = dataList.getSkillInfos().get(id);
+                                    SkillData skillData = dataList.getSkillDatas().get(id);
+
                                     skillViewHolder.coolTime.setVisibility(View.VISIBLE);
                                     SkillCoolTimer timer = new SkillCoolTimer();
                                     timer.skillCoolTime(skillInfo, skillViewHolder.coolTime, skillViewHolder.skillUseButton, skillViewHolder.background);
@@ -177,6 +184,10 @@ public class MenuSkill extends Fragment {
                                     skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
 
                                     useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
+
+                                    if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
+                                        dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
+                                    }
                                 }
                             });
                         }
@@ -192,8 +203,10 @@ public class MenuSkill extends Fragment {
                 skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        int id = (int)view.getTag();
 
-                        Log.i("SkillLevelUp", "SkillData : " + skillData.getSkillNo() + " / Skill Buy Type : " + skillData.getbuyType());
+                        SkillInfo skillInfo = dataList.getSkillInfos().get(id);
+                        SkillData skillData = dataList.getSkillDatas().get(id);
 
                         if (skillData.getSkillLevel() + 1 > skillInfo.getSkillMaxLevel()) {
                             Toast.makeText(getActivity(), "최대 레벨입니다!!!", Toast.LENGTH_SHORT).show();
@@ -206,6 +219,11 @@ public class MenuSkill extends Fragment {
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
                                 skillInfo.setSkillDataChange(true);
+
+                                if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()) {
+                                    dataList.getGoalDataByID(16 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
+                                }
+
                                 mAdapter.notifyDataSetChanged();
                             } else { //재화부족으로 구매 실패
                                 //이 부분은 좀 더 시각적으로 표현하자
@@ -217,6 +235,18 @@ public class MenuSkill extends Fragment {
                                 fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
                                 skillInfo.setSkillDataChange(true);
+
+                                if(skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
+                                    if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()){
+                                        dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).setGoalRate(1);
+                                    }
+                                }else{
+                                    Log.i("BuySkill","skill id : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalNo()+" / skillGoalRate : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate());
+                                    if (dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalCondition()) {
+                                        dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
+                                    }
+                                }
+
                                 mAdapter.notifyDataSetChanged();
                             } else {
                                 //이 부분은 좀 더 시각적으로 표현하자
@@ -332,7 +362,10 @@ public class MenuSkill extends Fragment {
         private void autoClick(){
             Runnable updater = new Runnable() {
                 public void run() {
-                    dataList.getClickView().performClick();
+                    if(dataList.getClickView()==relativeLayout) dataList.windowClick();
+                    else dataList.overlayWindowClick();
+                    mOverlayService.setSeed();
+                    seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
                 }
             };
 

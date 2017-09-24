@@ -18,10 +18,10 @@
     <string name="goalCase0">%d회 로그인하여 꽃과 친해지기</string>
     <string name="goalCase1">꽃 %d 개 구입하기!</string>
     <string name="goalCase2">민들레 %d 번 레벨업하기</string>
-    <string name="goalCase3">호야 %d 번 레벨업하기</string>
-    <string name="goalCase4">나팔꽃 %d 번 레벨업하기</string>
+    <string name="goalCase3">나팔꽃 %d 번 레벨업하기</string>
+    <string name="goalCase4">장미 %d 번 레벨업하기</string>
     <string name="goalCase5">철쭉 %d 번 레벨업하기</string>
-    <string name="goalCase6">장미 %d 번 레벨업하기</string>
+    <string name="goalCase6">호야 %d 번 레벨업하기</string>
     <string name="goalCase7">광고 %d 번 시청하기</string>
     <string name="goalCase8">터치 스킬 %d 번 레벨업하기</string>
     <string name="goalCase9">%d 번 화면 터치하기</string>
@@ -32,14 +32,12 @@
     <string name="goalCase14">다 키운 꽃 %d 개 말리기!</string>
     <string name="goalCase15">쓰다듬기 스킬 %d번 레벨업하기</string>
     <string name="goalCase16">쓰다듬기 스킬 %d번 사용하기</string>
-    <string name="goalCase17">바라보기 스킬 %d번 레벨업하기</string>
-    <string name="goalCase18">바라보기 스킬 %d번 사용하기</string>
-    <string name="goalCase19">가지치기 스킬 %d번 레벨업하기</string>
-    <string name="goalCase20">가지치기 스킬 %d번 사용하기</string>
+    <string name="goalCase17">가지치기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase18">가지치기 스킬 %d번 사용하기</string>
+    <string name="goalCase19">노래 들려주기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase20">노래들려주기 스킬 %d번 사용하기</string>
     <string name="goalCase21">말하기 스킬 %d번 레벨업하기</string>
-    <string name="goalCase22">말하기 스킬 %d번 사용하기</string>
-    <string name="goalCase23">노래 들려주기 스킬 %d번 레벨업하기</string>
-    <string name="goalCase24">노래들려주기 스킬 %d번 사용하기</string>
+    <string name="goalCase23">바라보기 스킬 %d번 레벨업하기</string>
     <string name="goalCase25">물받기 스킬 %d 번 레벨업하기</string>
     <string name="goalCase26">물받기 스킬 %d 번 사용하기</string>
 </resources>

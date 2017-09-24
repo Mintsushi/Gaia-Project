@@ -13,6 +13,7 @@ import com.example.round.gaia_18.Data.GoalData;
 import com.example.round.gaia_18.Data.GoalInfo;
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
+import com.example.round.gaia_18.Data.StoreProduct;
 
 import java.util.ArrayList;
 
@@ -106,6 +107,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String goalReward = "reward";
     private static final String goalRewardCostType = "rewardCostType";
 
+    //Store DataBase
+    private static final String STORE_TABLE_NAME ="store";
+    private static final String storeNo="productId";
+    private static final String storeName="productName";
+    private static final String storeSeed ="productSeed";
+    private static final String storeFruit="productFruit";
+    private static final String storeEffectType="productEffectType";
+    private static final String storeExplain="productExplain";
+    private static final String storeImage ="productImage";
+
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VER);
@@ -138,6 +149,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getGoalInfoTable(sqLiteDatabase);
         //GoalData DataBase 구축
         getGoalDataTable(sqLiteDatabase);
+        //Store DataBase 구축
+        getStoreTable(sqLiteDatabase);
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -812,10 +825,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(0,"꽃과 친해지기",0,11));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(1,"꽃 향기가나",1,5));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(2,"홀씨 날리기 작전",2,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(3,"별이 피는 바람에",3,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(4,"자주색 치맛자락",4,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(3,"자주색 치맛자락",3,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(4,"상처받아도 난 몰라요",4,8));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(5,"진달래 아니에요",5,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(6,"상처받아도 난 몰라요",6,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(6,"별이 피는 바람에",6,8));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(7,"애청자",7,20));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(8,"액정의 안부를 묻다",8,12));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(9,"불타는 액정",9,20));
@@ -826,16 +839,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(14,"영원히 보고싶어",14,10));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(15,"Touch My Body",15,8));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(16,"어멋! 지금 어딜 만져요!",16,20));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(17,"이글아이",17,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(18,"꽃이랑 눈싸움",18,20));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(19,"꼿꼿하게 핀 허리에",19,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(20,"새침한 똑 단발",20,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(17,"꼿꼿하게 핀 허리에",17,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(18,"새침한 똑 단발",18,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(19,"진정한 소리꾼",19,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(20,"가수해도 되겠어요",20,20));
         sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(21,"국어능력인증시험",21,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(22,"대화가 필요해",22,20));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(23,"진정한 소리꾼",23,8));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(24,"가수해도 되겠어요",24,20));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(25,"비구름을 그릴게요",25,5));
-        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(26,"비가 오려나.. 무릎이 쑤셔",26,5));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(22,"이글아이",23,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(23,"비구름을 그릴게요",25,5));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(24,"비가 오려나.. 무릎이 쑤셔",26,5));
     }
 
     private ContentValues getGoalInfo(int id, String name, int type, int maxLevel){
@@ -914,22 +925,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(21,3,6,300,0,1,50,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(22,3,7,350,0,1,70,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(23,3,8,400,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(24,4,1,50,0,2,50,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(25,4,2,100,0,2,200,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(26,4,3,150,0,5,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(27,4,4,200,0,1,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(28,4,5,250,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(29,4,6,300,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(30,4,7,350,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(31,4,8,400,0,3,10,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(32,5,1,50,0,2,400,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(33,5,2,100,0,2,1,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(34,5,3,150,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(35,5,4,200,0,1,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(36,5,5,250,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(37,5,6,300,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(38,5,7,350,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(39,5,8,400,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(32,4,1,50,0,2,400,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(33,4,2,100,0,2,1,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(34,4,3,150,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(35,4,4,200,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(36,4,5,250,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(37,4,6,300,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(38,4,7,350,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(39,4,8,400,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(48,5,1,50,0,2,5,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(49,5,2,100,0,2,500,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(50,5,3,150,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(51,5,4,200,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(52,5,5,250,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(53,5,6,300,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(54,5,7,350,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(55,5,8,400,0,4,5,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(40,6,1,50,0,2,100,3));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(41,6,2,100,0,5,120,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(42,6,3,150,0,1,30,0));
@@ -938,14 +949,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(45,6,6,300,0,1,100,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(46,6,7,350,0,1,120,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(47,6,8,400,0,4,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(48,7,1,50,0,2,5,4));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(49,7,2,100,0,2,500,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(50,7,3,150,0,1,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(51,7,4,200,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(52,7,5,250,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(53,7,6,300,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(54,7,7,350,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(55,7,8,400,0,4,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(24,7,1,50,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(25,7,2,100,0,2,200,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(26,7,3,150,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(27,7,4,200,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(28,7,5,250,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(29,7,6,300,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(30,7,7,350,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(31,7,8,400,0,3,10,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(56,8,1,1,0,5,30,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(57,8,2,2,0,5,50,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(58,8,3,3,0,5,100,0));
@@ -1097,62 +1108,62 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(204,17,18,567,0,1,120,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(205,17,19,658,0,1,150,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(206,17,20,760,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(207,18,1,1,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(208,18,2,3,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(209,18,3,5,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(210,18,4,7,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(211,18,5,10,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(212,18,6,15,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(213,18,7,20,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(214,18,8,30,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(215,19,1,1,0,2,10,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(216,19,2,2,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(217,19,3,4,0,5,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(218,19,4,8,0,3,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(219,19,5,15,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(220,19,6,25,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(221,19,7,40,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(222,19,8,60,0,2,50,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(223,19,9,88,0,5,80,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(224,19,10,120,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(225,19,11,155,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(226,19,12,191,0,2,25,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(227,19,13,235,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(228,19,14,288,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(229,19,15,349,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(230,19,16,415,0,5,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(231,19,17,488,0,4,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(232,19,18,567,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(233,19,19,658,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(234,19,20,760,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(235,20,1,1,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(236,20,2,3,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(237,20,3,5,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(238,20,4,7,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(239,20,5,10,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(240,20,6,15,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(241,20,7,20,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(242,20,8,30,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(243,21,1,1,0,2,10,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(244,21,2,2,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(245,21,3,4,0,5,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(246,21,4,8,0,3,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(247,21,5,15,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(248,21,6,25,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(249,21,7,40,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(250,21,8,60,0,2,50,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(251,21,9,88,0,5,80,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(252,21,10,120,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(253,21,11,155,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(254,21,12,191,0,2,25,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(255,21,13,235,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(256,21,14,288,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(257,21,15,349,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(258,21,16,415,0,5,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(259,21,17,488,0,4,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(260,21,18,567,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(261,21,19,658,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(262,21,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(235,18,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(236,18,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(237,18,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(238,18,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(239,18,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(240,18,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(241,18,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(242,18,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(243,19,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(244,19,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(245,19,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(246,19,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(247,19,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(248,19,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(249,19,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(250,19,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(251,19,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(252,19,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(253,19,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(254,19,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(255,19,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(256,19,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(257,19,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(258,19,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(259,19,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(260,19,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(261,19,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(262,19,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(291,20,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(292,20,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(293,20,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(294,20,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(295,20,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(296,20,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(297,20,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(298,20,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(299,21,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(300,21,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(301,21,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(302,21,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(303,21,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(304,21,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(305,21,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(306,21,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(307,21,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(308,21,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(309,21,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(310,21,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(311,21,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(312,21,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(313,21,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(314,21,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(315,21,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(316,21,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(317,21,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(318,21,20,760,0,1,200,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(263,22,1,1,0,1,50,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(264,22,2,3,0,2,100,1));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(265,22,3,5,0,1,70,0));
@@ -1161,64 +1172,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(268,22,6,15,0,1,120,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(269,22,7,20,0,1,150,0));
         sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(270,22,8,30,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(271,23,1,1,0,2,10,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(272,23,2,2,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(273,23,3,4,0,5,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(274,23,4,8,0,3,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(275,23,5,15,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(276,23,6,25,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(277,23,7,40,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(278,23,8,60,0,2,50,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(279,23,9,88,0,5,80,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(280,23,10,120,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(281,23,11,155,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(282,23,12,191,0,2,25,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(283,23,13,235,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(284,23,14,288,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(285,23,15,349,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(286,23,16,415,0,5,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(287,23,17,488,0,4,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(288,23,18,567,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(289,23,19,658,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(290,23,20,760,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(291,24,1,1,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(292,24,2,3,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(293,24,3,5,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(294,24,4,7,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(295,24,5,10,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(296,24,6,15,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(297,24,7,20,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(298,24,8,30,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(299,25,1,1,0,2,10,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(300,25,2,2,0,2,100,1));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(301,25,3,4,0,5,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(302,25,4,8,0,3,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(303,25,5,15,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(304,25,6,25,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(305,25,7,40,0,1,70,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(306,25,8,60,0,2,50,2));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(307,25,9,88,0,5,80,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(308,25,10,120,0,1,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(309,25,11,155,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(310,25,12,191,0,2,25,3));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(311,25,13,235,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(312,25,14,288,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(313,25,15,349,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(314,25,16,415,0,5,100,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(315,25,17,488,0,4,3,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(316,25,18,567,0,1,120,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(317,25,19,658,0,1,150,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(318,25,20,760,0,1,200,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(319,26,1,1,0,1,10,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(320,26,2,2,0,1,20,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(321,26,3,3,0,1,30,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(322,26,4,4,0,1,40,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(323,26,5,5,0,1,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(324,27,1,1,0,5,10,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(325,27,2,5,0,5,50,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(326,27,3,15,0,4,1,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(327,27,4,30,0,3,5,0));
-        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(328,27,5,50,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(207,23,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(208,23,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(209,23,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(210,23,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(211,23,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(212,23,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(213,23,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(214,23,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(319,24,1,1,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(320,24,2,2,0,1,20,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(321,24,3,3,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(322,24,4,4,0,1,40,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(323,24,5,5,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(324,25,1,1,0,5,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(325,25,2,5,0,5,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(326,25,3,15,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(327,25,4,30,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(328,25,5,50,0,4,3,0));
 
     }
 
@@ -1249,16 +1220,71 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                goalData.setGoalNo(cursor.getInt(0));
-                goalData.setGoalLevel(cursor.getInt(1));
-                goalData.setGoalCondition(cursor.getInt(2));
-                goalData.setGoalConditionType(cursor.getInt(3));
-                goalData.setGoalRewardType(cursor.getInt(4));
-                goalData.setGoalReward(cursor.getInt(5));
-                goalData.setGoalRewardCostType(cursor.getInt(6));
+                goalData.setGoalNo(cursor.getInt(1));
+                goalData.setGoalLevel(cursor.getInt(2));
+                goalData.setGoalCondition(cursor.getInt(3));
+                goalData.setGoalConditionType(cursor.getInt(4));
+                goalData.setGoalRewardType(cursor.getInt(5));
+                goalData.setGoalReward(cursor.getInt(6));
+                goalData.setGoalRewardCostType(cursor.getInt(7));
             } while (cursor.moveToNext());
         }
 
         return goalData;
+    }
+
+    private void getStoreTable(SQLiteDatabase sqLiteDatabase){
+
+        String CREATE_TABLE = "CREATE TABLE " + STORE_TABLE_NAME + "("
+                + storeNo + " INTEGER NOT NULL PRIMARY KEY,"
+                + storeName + " TEXT NOT NULL,"
+                + storeSeed + " INTEGER NOT NULL,"
+                + storeFruit + " INTEGER NOT NULL,"
+                + storeEffectType + " INTEGER NOT NULL,"
+                + storeImage + " TEXT NOT NULL"+ ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,"자동 클릭",0,300,1,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,"체력 포션",0,15,2,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,"부활 포션",0,100,3,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,"물",0,3,4,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,"물",10000,0,4,"ImagePath"));
+
+    }
+
+    private ContentValues getStoreProductValues(int id, String name, int seedCost, int fruitCost, int effect, String iamge){
+
+        ContentValues values = new ContentValues();
+        values.put(storeNo,id);
+        values.put(storeName,name);
+        values.put(storeSeed,seedCost);
+        values.put(storeFruit,fruitCost);
+        values.put(storeEffectType,effect);
+        values.put(storeImage,iamge);
+        return values;
+    }
+
+    public ArrayList<StoreProduct> getAllStoreProduct(){
+        ArrayList<StoreProduct> storeProducts = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + STORE_TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                StoreProduct storeProduct = new StoreProduct();
+                storeProduct.setItemId(cursor.getInt(0));
+                storeProduct.setItemName(cursor.getString(1));
+                storeProduct.setSeedCost(cursor.getInt(2));
+                storeProduct.setFruitCost(cursor.getInt(3));
+                storeProduct.setItemEffectType(cursor.getInt(4));
+                storeProduct.setImage(cursor.getString(5));
+
+                storeProducts.add(storeProduct);
+            } while (cursor.moveToNext());
+        }
+
+        return storeProducts;
     }
 }

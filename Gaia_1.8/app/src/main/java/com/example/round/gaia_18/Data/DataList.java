@@ -44,6 +44,10 @@ public class DataList {
     private ConcurrentHashMap<Integer, ArrayList<DryFlower>> dryPlants = new ConcurrentHashMap<>();
     //각 업적에 해당하는 업적 달성 조건, 보상 정보
     private static ArrayList<GoalData> goalDatas = new ArrayList<>();
+    //각 업적의 정보
+    private ArrayList<GoalInfo> goalInfos = dataBaseHelper.getAllGoalInfo();
+    //각 상정 아이템의 정보
+    private ArrayList<StoreProduct> storeProducts = new ArrayList<>();
 
     //식물에 따른 클릭 수
     public static ConcurrentHashMap<Integer, Integer> clickScore = new ConcurrentHashMap<>();
@@ -66,10 +70,11 @@ public class DataList {
     //사용자가 가지고 있는 현금성 재화
     private static ConcurrentHashMap<Integer, Integer> fruit = new ConcurrentHashMap<>();
 
-    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas, ArrayList<SkillInfo> skillInfos) {
+    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas, ArrayList<SkillInfo> skillInfos,ArrayList<StoreProduct> storeProducts) {
         this.flowers = flowers;
         this.flowerDatas = flowerDatas;
         this.skillInfos = skillInfos;
+        this.storeProducts = storeProducts;
     }
 
     public ArrayList<Flower> getFlowers() {
@@ -108,11 +113,32 @@ public class DataList {
         goalDatas.add(id,goalData);
     }
 
+    public void goalLevelUp(int id){
+
+        int level = goalDatas.get(id).getGoalLevel();
+
+        Log.i("LevelUp","id : "+id+" / goal Level : "+level);
+        goalDatas.remove(id);
+
+        GoalData goalData = dataBaseHelper.getGoalDataByID(id, level+1);
+        goalData.setGoalRate(0);
+
+        goalDatas.add(id, goalData);
+    }
+
     public GoalData getGoalDataByID(int id){
         return this.goalDatas.get(id);
     }
 
     public ArrayList<GoalData> getAllGoalData(){return this.goalDatas;}
+
+    public ArrayList<GoalInfo> getGoalInfos() {
+        return goalInfos;
+    }
+
+    public void setNumber(int id, int num){
+        this.storeProducts.get(id).setNumber(num);
+    }
 
     public void resetFlower(int id){
 
@@ -929,4 +955,33 @@ public class DataList {
         }
     }
 
+    public int getPartScore(ConcurrentHashMap<Integer, Integer> score){
+
+        int partScore = 0;
+
+        TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
+        treeMap.putAll(score);
+        int index = 0;
+
+        Iterator<Integer> iterator = treeMap.keySet().iterator();
+
+        if(iterator.hasNext()){
+            int key = iterator.next();
+            int value = score.get(key);
+
+            if(key >0)
+                partScore+= value*1000;
+            else {
+                partScore += value;
+            }
+        }
+        if(iterator.hasNext()){
+            int key = iterator.next();
+            int value = score.get(key);
+
+            partScore+= value;
+        }
+
+        return partScore;
+    }
 }

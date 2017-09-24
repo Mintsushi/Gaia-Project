@@ -156,6 +156,9 @@ public class MenuFlower extends Fragment {
                                 }
                                 MainActivity.updatePlantLevel(flower.getFlowerNo());
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+                                if(dataList.getGoalDataByID(flower.getFlowerNo() + 2).getGoalRate() < dataList.getGoalDataByID(flower.getFlowerNo() + 2).getGoalCondition()) {
+                                    dataList.getGoalDataByID(flower.getFlowerNo() + 2).setGoalRate(1);
+                                }
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
                                 //이 부분은 좀 더 시각적으로 표현하자
@@ -177,6 +180,9 @@ public class MenuFlower extends Fragment {
                                 MainActivity.buyPlant(flower);
                                 flower.setBuyType(true);
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+                                if(dataList.getGoalDataByID(1).getGoalRate() < dataList.getGoalDataByID(1).getGoalCondition()) {
+                                    dataList.getGoalDataByID(1).setGoalRate(1);
+                                }
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
                                 //이 부분은 좀 더 시각적으로 표현하자

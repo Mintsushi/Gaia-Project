@@ -2,10 +2,16 @@ package com.example.round.gaia_18.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +26,7 @@ import android.widget.TextView;
 
 import com.example.round.gaia_18.Data.GoalData;
 import com.example.round.gaia_18.Data.GoalInfo;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import org.w3c.dom.Text;
@@ -36,8 +43,8 @@ import static com.example.round.gaia_18.MainActivity.dataList;
 public class goalListDialog extends Dialog {
 
     private static final String TAG =".GoalActivity";
+    private static final float BYTES_PER_PX = 4.0f;
 
-    private ArrayList<GoalInfo> goalInfos;
     private ListView goalList;
     private GoalAdapter mAdapter;
 
@@ -52,10 +59,9 @@ public class goalListDialog extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(R.layout.goal_dialog);
 
-        goalInfos = dataBaseHelper.getAllGoalInfo();
-
         mAdapter = new GoalAdapter(getContext(),R.layout.goal_dialog_item);
         goalList = (ListView)findViewById(R.id.goal_list);
+
         goalList.setAdapter(mAdapter);
     }
 
@@ -66,6 +72,8 @@ public class goalListDialog extends Dialog {
         TextView goalCount;
         ProgressBar goalProgress;
         Button goalReward;
+        ImageView reward;
+        TextView rewardWeight;
     }
 
     public class GoalAdapter extends ArrayAdapter<GoalInfo>{
@@ -78,13 +86,13 @@ public class goalListDialog extends Dialog {
         }
 
         @Override
-        public int getCount(){return goalInfos.size();}
+        public int getCount(){return dataList.getGoalInfos().size();}
 
         @Override
         public View getView(int position, View view, ViewGroup parent){
 
             final GoalViewHolder viewHolder;
-            final GoalInfo goalInfo = goalInfos.get(position);
+            final GoalInfo goalInfo = dataList.getGoalInfos().get(position);
             final GoalData goalData = dataList.getAllGoalData().get(position);
 
             if(view == null){
@@ -100,6 +108,9 @@ public class goalListDialog extends Dialog {
                 viewHolder.goalProgress = (ProgressBar) view.findViewById(R.id.goalProgress);
                 viewHolder.goalProgress.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
                 viewHolder.goalReward = (Button)view.findViewById(R.id.goalReward);
+                viewHolder.goalReward.setTag(position);
+                viewHolder.reward = (ImageView)view.findViewById(R.id.reward);
+                viewHolder.rewardWeight = (TextView)view.findViewById(R.id.rewardWeight);
 
                 view.setTag(viewHolder);
             }
@@ -111,20 +122,27 @@ public class goalListDialog extends Dialog {
 
                 //후에 업적이미지로 변경
                 viewHolder.goalImageView.setImageResource(R.drawable.image);
+                int resourceId = getContext().getResources().getIdentifier("reward" + goalData.getGoalRewardType(), "drawable", getContext().getPackageName());
+                loadImage(viewHolder.reward,resourceId);
 
-                viewHolder.goalName.setText(goalInfo.getGoalName());
-                int resourceId = getContext().getResources().getIdentifier("goalCase" + goalInfo.getGoalType(), "string", getContext().getPackageName());
+                viewHolder.rewardWeight.setText(" X "+dataList.getAllScore(goalData.getReward()));
 
-                if(goalData.getGoalLevel() == goalInfo.getGoalMaxLevel()+1){
+                viewHolder.goalName.setText(goalInfo.getGoalName()+goalData.getGoalLevel());
+                resourceId = getContext().getResources().getIdentifier("goalCase" + goalInfo.getGoalType(), "string", getContext().getPackageName());
+
+                if(goalData.getGoalLevel() > goalInfo.getGoalMaxLevel()){
                     viewHolder.goalReward.setVisibility(View.INVISIBLE);
                     viewHolder.goalCount.setVisibility(View.INVISIBLE);
                     viewHolder.goalProgress.setVisibility(View.INVISIBLE);
-                    viewHolder.goalExplain.setVisibility(View.INVISIBLE);
+                    viewHolder.reward.setVisibility(View.INVISIBLE);
+                    viewHolder.rewardWeight.setVisibility(View.INVISIBLE);
+                    viewHolder.goalExplain.setText("업적 최대 레벨 달성!!!");
                 }
                 else{
                     //14번째 업적(점수 계산 필요)
                     if(goalInfo.getId() == 13){
                         viewHolder.goalExplain.setText(String.format(getContext().getString(resourceId),dataList.getAllScore(goalData.getConditionType())));
+
                         //얻은 점수가 얻어야 하는 점수보다 클 떄
                         if(!dataList.calculateGoal(dataList.getGoalClick(),goalData.getConditionType())){
                             viewHolder.goalReward.setVisibility(View.VISIBLE);
@@ -135,7 +153,11 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalRewardType(),goalData.getReward());
+                                    dialog.show();
 
+                                    dataList.goalLevelUp(goalData.getGoalNo());
+                                    mAdapter.notifyDataSetChanged();
                                 }
                             });
 
@@ -143,6 +165,7 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setVisibility(View.INVISIBLE);
                             viewHolder.goalCount.setVisibility(View.VISIBLE);
                             viewHolder.goalProgress.setVisibility(View.VISIBLE);
+                            viewHolder.goalProgress.setProgress(100*dataList.getPartScore(dataList.getGoalClick())/dataList.getPartScore(goalData.getConditionType()));
                             viewHolder.goalCount.setText(dataList.getAllScore(dataList.getGoalClick())+" / "+dataList.getAllScore(goalData.getConditionType()));
                         }
                     }
@@ -158,7 +181,18 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalRewardType(),goalData.getReward());
+                                    dialog.show();
 
+                                    Log.i("LevelUp","id : "+goalData.getGoalNo()+" / max Level : "+goalInfo.getGoalMaxLevel()+" / goal Level : "+goalData.getGoalLevel());
+                                    if(goalInfo.getGoalMaxLevel() != goalData.getGoalLevel()) {
+                                        dataList.goalLevelUp(goalData.getGoalNo()-1);
+                                    }
+                                    else{
+                                        goalData.setGoalLevel(goalData.getGoalLevel()+1);
+                                        Log.i("LevelUp","********************"+goalData.getGoalLevel());
+                                    }
+                                    mAdapter.notifyDataSetChanged();
                                 }
                             });
 
@@ -166,6 +200,7 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setVisibility(View.INVISIBLE);
                             viewHolder.goalCount.setVisibility(View.VISIBLE);
                             viewHolder.goalProgress.setVisibility(View.VISIBLE);
+                            viewHolder.goalProgress.setProgress(100*goalData.getGoalRate()/goalData.getGoalCondition());
                             viewHolder.goalCount.setText(goalData.getGoalRate()+" / "+goalData.getGoalCondition());
                         }
                     }
@@ -175,5 +210,43 @@ public class goalListDialog extends Dialog {
 
             return view;
         }
+
+    }
+
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId)*100 > MemUtils.megabytesFree()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

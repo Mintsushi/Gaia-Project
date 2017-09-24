@@ -423,6 +423,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
             dataList.overlayWindowClick();
             setSeed();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+            dataList.getGoalDataByID(9).setGoalRate(1);
         }else if(view == open){
 
             WindowManager.LayoutParams params = (WindowManager.LayoutParams)skill.getLayoutParams();

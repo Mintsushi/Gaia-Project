@@ -149,7 +149,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //DataBase
         dataBaseHelper = new DataBaseHelper(this);
-        dataList = new DataList(dataBaseHelper.getAllFlowers(), dataBaseHelper.getAllFlowerDatas(),dataBaseHelper.getAllSkillInfo());
+        dataList = new DataList(
+                dataBaseHelper.getAllFlowers(),
+                dataBaseHelper.getAllFlowerDatas(),
+                dataBaseHelper.getAllSkillInfo(),
+                dataBaseHelper.getAllStoreProduct()
+        );
+
         user = new User();
 
 
@@ -179,7 +185,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.setFruit(0,450);
         dataList.setFruit(1,100);
 
-
+        dataList.setNumber(0,0);
+        dataList.setNumber(1,0);
+        dataList.setNumber(2,0);
+        dataList.setNumber(3,2);
 
         user.setDryFlowerItem(2);
 
@@ -221,8 +230,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.setGoalDatas(22,1,0);
         dataList.setGoalDatas(23,1,0);
         dataList.setGoalDatas(24,1,0);
-        dataList.setGoalDatas(25,1,0);
-        dataList.setGoalDatas(26,1,0);
 
         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
@@ -343,6 +350,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(view == relativeLayout){
             dataList.windowClick();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+            dataList.getGoalDataByID(9).setGoalRate(1);
+
         }else if(view == goal){
             goalListDialog dialog = new goalListDialog(view.getContext());
             dialog.show();

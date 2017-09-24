@@ -43,7 +43,7 @@
                 <Button
                     android:id="@+id/goalReward"
                     android:layout_width="match_parent"
-                    android:layout_height="50sp"
+                    android:layout_height="30sp"
                     android:scaleType="fitXY"
                     android:layout_gravity="right"
                     android:background="@color/White"
@@ -73,13 +73,35 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/goalExplain"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2sp"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/goalExplain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2sp"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/reward"
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_gravity="right"/>
+
+            <TextView
+                android:id="@+id/rewardWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_gravity="right"/>
+        </LinearLayout>
+
 
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.example.round.gaia_18.Data;
 
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -95,6 +96,13 @@ public class GoalData {
 
         condition.put(this.goalConditionType, this.goalCondition);
         return condition;
+    }
+
+    public ConcurrentHashMap<Integer, Integer> getReward(){
+        ConcurrentHashMap<Integer, Integer> reward = new ConcurrentHashMap<>();
+
+        reward.put(this.goalRewardCostType,this.goalReward);
+        return reward;
     }
 
 }

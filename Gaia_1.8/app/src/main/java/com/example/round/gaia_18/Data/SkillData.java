@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
+import static com.example.round.gaia_18.MainActivity.seed;
 
 /**
  * Created by Round on 2017-09-17.
@@ -96,7 +97,10 @@ public class SkillData {
     private android.os.Handler mHandler = new android.os.Handler() {
         public void handleMessage(Message msg) {
 
-            dataList.getClickView().performClick();
+            if(dataList.getClickView()==relativeLayout) dataList.windowClick();
+            else dataList.overlayWindowClick();
+            mOverlayService.setSeed();
+            seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
             mHandler.sendEmptyMessageDelayed(0,60000/skillEffect);
         }
