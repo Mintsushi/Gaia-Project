@@ -50,7 +50,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.round.gaia_18.Data.DataList.overlayClickScore;
+import static com.example.round.gaia_18.Fragement.MenuOverlay.plantAdapter;
 import static com.example.round.gaia_18.MainActivity.context;
 import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
 import static com.example.round.gaia_18.MainActivity.dataList;
@@ -90,7 +93,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
     private final int MY_PERMISSION = 0;
 
     //Screen Click
-    private LinearLayout linearLayout;
+    public LinearLayout linearLayout;
     private LinearLayout skill;
     private Button open;
     private Button click;
@@ -115,11 +118,15 @@ public class OverlayService extends Service implements View.OnClickListener,View
     //0 : 임시로 remove한 view들을 다시 overlay로 가지고 옴.
     private int removeState = 0;
 
+    //날씨에 따른 passive / 패널티
+    public static ArrayList<Integer> weatherData;
+
     @Override
     public IBinder onBind(Intent intent){ return mBinder; }
 
     @Override
     public void onLocationChanged(Location location) {
+        Log.i("Weather**","Get Location");
         lat = location.getLatitude();
         lng = location.getLongitude();
 
@@ -223,8 +230,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     }
 
-    public void setSeed(int score){
-        seedOverlay.setText(Integer.toString(score));
+    public void setSeed(){
+        seedOverlay.setText(dataList.getAllScore(dataList.getScoreHashMap()));
     }
 
     private void setLayout(){
@@ -308,6 +315,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             }
 
             mWindowManager.addView(skill, skillWindow);
+            setSeed();
 
             visible = 1;
         }
@@ -323,6 +331,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         for(int i =0 ;i<plants.size();i++){
             if(plants.get(i).getPlant().getPlantNo() == id){
                 relativeLayout.addView(plants.get(i).getPlant().getPlant());
+                minusOverlayClickScore(plants.get(i).getPlant());
                 plants.remove(i);
             }
         }
@@ -357,6 +366,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         overlayPlant.setOnTouchListener(this);
 
         plant.setState(1);
+        plusOverlayClickScore(plant);
         dataList.addOverlayPlant(new OverlayPlant(plant,overlayPlant, params));
     }
 
@@ -410,12 +420,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
     @Override
     public void onClick(View view){
         if(view == linearLayout){
-
-//            //후에 식물을 따른 점수들을 계산해서 구현
-//            score = score + 1000000;
-//            seedOverlay.setText(Integer.toString(score));
-//            seed.setText(Integer.toString(score));
-
+            dataList.overlayWindowClick();
+            setSeed();
+            seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         }else if(view == open){
 
             WindowManager.LayoutParams params = (WindowManager.LayoutParams)skill.getLayoutParams();
@@ -438,6 +445,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
             if(clickState == 0){
                 mWindowManager.addView(linearLayout,clickLayout);
+                dataList.setClickView(linearLayout);
+                //수정필요
                 mWindowManager.removeView(skill);
                 mWindowManager.addView(skill,(WindowManager.LayoutParams)skill.getLayoutParams());
                 click.setText("Stop");
@@ -495,72 +504,32 @@ public class OverlayService extends Service implements View.OnClickListener,View
         @Override
         protected void onPostExecute(String s){
             super.onPostExecute(s);
-            if(s != null){
-                if(s.contains("Error: Not found city")){
+            if(s != null) {
+                if (s.contains("Error: Not found city")) {
                     return;
                 }
+            }
+            Gson gson = new Gson();
+            Type type = new TypeToken<OpenWeatherMap>(){}.getType();
+            openWeatherMap = gson.fromJson(s, type);
 
-                Gson gson = new Gson();
-                Type type = new TypeToken<OpenWeatherMap>(){}.getType();
-                openWeatherMap = gson.fromJson(s, type);
+            Log.i("Weather**","Get Weather");
 
+            //기존이랑 날씨가 다르면
+            if(!weatherState.equals(openWeatherMap.getWeather().get(0).getDescription())){
+                Log.i("Weather**","Diff Weather");
+
+                //현재 날씨 setting
+                weatherState = openWeatherMap.getWeather().get(0).getDescription();
+
+                //날씨 알림 view setting
                 remoteView.setTextViewText(R.id.txtCity,String.format("도시 : %s, 국가 : %s",openWeatherMap.getName(),openWeatherMap.getSys().getCountry()));
                 remoteView.setTextViewText(R.id.txtLastUpdate,String.format("Last Updated : %s", Common.getDateNow()));
-
                 remoteView.setTextViewText(R.id.txtHumidity,String.format("습도 : %d%%",openWeatherMap.getMain().getHumidity()));
                 remoteView.setTextViewText(R.id.txtTime,String.format("%s/%s",Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise())
-                        ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
+                            ,Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
                 remoteView.setTextViewText(R.id.txtCelsius,String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
-
-                //기존이랑 날씨가 다르면
-                if(!weatherState.equals(openWeatherMap.getWeather().get(0).getDescription())){
-                    remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
-
-                    ArrayList<Integer> weather = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
-                    HashMap<Integer, Integer> map = new HashMap<>();
-
-                    for(int i =0; i<dataList.getOverlayPlants().size(); i++){
-
-                            int id = dataList.getOverlayPlants().get(i).getPlant().getPlantNo();
-                            Flower flower = dataList.getOverlayPlants().get(i).getPlant().getFlower();
-                            //추가 점수
-                            if(weather.get(id) > 0){
-                                long score = 0;
-                                int scoreType = 0;
-
-                                Iterator<Integer> iterator = flower.getScore().keySet().iterator();
-
-                                while(iterator.hasNext()){
-                                    int key = iterator.next();
-                                    int value = flower.getScore().get(key);
-
-                                    score += value*Math.pow(1000,key);
-                                }
-
-                                score = (long)(score*weather.get(i))/100;
-
-                                while(true){
-                                    long nameogi = (long)score % 1000;
-                                    long mok = (long)score / 1000;
-
-                                    if(nameogi != 0){
-                                        dataList.plusScore(scoreType,(int)nameogi,map);
-                                    }
-                                    if(mok < 1000){
-                                        dataList.plusScore(scoreType+1,(int)mok,map);
-                                    }
-
-                                    score = mok;
-                                    scoreType++;
-                                }
-                            }
-                            //패널티 <- HP 구현 이후에 추가
-                            else{
-
-                            }
-                        }
-                        dataList.setTotalScore(map);
-                }
+                remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
 
                 Picasso.with(context)
                         .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
@@ -572,7 +541,148 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 Picasso.with(context)
                         .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                         .into(weather);
+
+                //해당 날씨에 따른 영향에 관한 datalist 받아오기
+                weatherData = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
+
+                Log.i("Weather**","Diff Weather : "+weatherData.toString());
+                //날씨에 따른 새로운 click 점수를 저장할 hashmap
+                ConcurrentHashMap<Integer, Integer> newTotalScore = new ConcurrentHashMap<>();
+//
+                dataList.overlayClickScore.clear();
+                for(int i =0; i<dataList.getOverlayPlants().size(); i++){
+
+                    //해당 꽃의 id(flowerNo)
+                    int id = dataList.getOverlayPlants().get(i).getPlant().getPlantNo();
+                    //해당 꽃의 N%를 계산하기 위해, 현재 꽃의 점수를 가져와야함 -> flower 객체에 있음.
+                    Flower flower = dataList.getOverlayPlants().get(i).getPlant().getFlower();
+
+                    //날씨에 따른 패널티 / 패시브
+                    int effect = weatherData.get(id);
+                    // effect>0일 경우는 추가 점수
+                    // effect<0일 경우는 hp 감소
+                    if(effect > 0) {
+
+                        //꽃의 현재 점수
+                        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+                        while (iterator.hasNext()) {
+                            int key = iterator.next();
+                            int value = flower.getScore().get(key);
+
+                            int newScore = value + (value * effect) / 100;
+                            if(newScore > 999){
+                                if(newScore-1000 >0)
+                                    dataList.plusScore(key,newScore%1000,newTotalScore);
+                                dataList.plusScore(key+1,newScore/1000,newTotalScore);
+                            }
+                            else{
+                              dataList.plusScore(key,newScore,newTotalScore);
+                            }
+                        }
+
+                        dataList.plusOverlayClickScore(newTotalScore);
+                    }
+                    else if(effect == 0){
+                        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+                        while (iterator.hasNext()) {
+                            int key = iterator.next();
+                            int value = flower.getScore().get(key);
+                            dataList.plusScore(key,value, newTotalScore);
+                        }
+                    }
+                    else{ //hp 감소
+
+                    }
+
+                }
             }
         }
     }
+
+    //꽃을 외부에서 내부로 옮길 때, 점수 삭감 및 hp 감소 취소
+    public void minusOverlayClickScore(Plant plant){
+
+        Log.i("OverlayClick","minusOverlayClickScore");
+
+        //해당 꽃의 id(flowerNo)
+        int id = plant.getPlantNo();
+        //해당 꽃의 N%를 계산하기 위해, 현재 꽃의 점수를 가져와야함 -> flower 객체에 있음.
+        Flower flower = plant.getFlower();
+
+        //꽃의 점수 5%값을 임시로 저장
+        ConcurrentHashMap<Integer, Integer> newTotalScore = new ConcurrentHashMap<>();
+
+        //날씨에 따른 패널티 / 패시브
+        int effect = weatherData.get(plant.getPlantNo());
+
+        // effect>0일 경우는 추가 점수
+        // effect<0일 경우는 hp 감소
+        if(effect > 0) {
+
+            //꽃의 현재 점수
+            Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+            while (iterator.hasNext()) {
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                Log.i("OverlayClick","key : "+key+" / value : "+value+" / effect : "+effect);
+
+                int newScore = value + (value * effect) / 100;
+                if(newScore > 999){
+                    if(newScore-1000 >0)
+                        dataList.plusScore(key,newScore%1000,newTotalScore);
+                    dataList.plusScore(key+1,newScore/1000,newTotalScore);
+                }
+                else{
+                    dataList.plusScore(key,newScore,newTotalScore);
+                }
+            }
+
+            dataList.minusOverlayClickScore(newTotalScore);
+        }
+        else if(effect == 0){
+            dataList.minusOverlayClickScore(flower.getScore());
+        }
+        else{ //hp 감소 취소
+
+        }
+    }
+
+    public void plusOverlayClickScore(Plant plant){
+
+        Flower flower = plant.getFlower();
+        int effect = weatherData.get(plant.getPlantNo());
+        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+        Log.i("OverlayClick", "Flower : "+flower.getFlowerName()+" / effect : "+effect);
+
+        if(effect > 0) {
+            while (iterator.hasNext()) {
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                Log.i("OverlayClick", "key : " + key + " / value : " + value + " / effect : " + effect);
+
+                int newScore = value + ((value * effect) / 100);
+                Log.i("OverlayClick", "key : " + key + " / value : " + newScore + " / effect : " + effect);
+                if (newScore > 999) {
+                    if (newScore - 1000 > 0)
+                        dataList.plusScore(key, newScore % 1000, overlayClickScore);
+                    dataList.plusScore(key + 1, newScore / 1000, overlayClickScore);
+                } else {
+                    dataList.plusScore(key, newScore, overlayClickScore);
+                }
+            }
+        }
+        else if(effect == 0){
+            dataList.plusOverlayClickScore(flower.getScore());
+        }
+        else { //hp 감소
+
+        }
+    }
+
 }

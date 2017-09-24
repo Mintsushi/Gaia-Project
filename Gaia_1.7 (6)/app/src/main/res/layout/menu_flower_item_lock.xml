@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/lock_background">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="20dp">
+
+        <ImageView
+            android:id="@+id/flowerImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"/>
+
+        <ProgressBar
+            android:id="@+id/flowerExpBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/flowerLvText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="LV . "
+            android:textSize="15dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/flowerNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/flowerLvUpButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/flowerLvUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/flowerLvUpButton"
+            android:layout_centerHorizontal="true"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:text="22.2A" />
+    </RelativeLayout>
+
+</LinearLayout>

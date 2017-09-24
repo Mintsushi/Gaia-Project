@@ -4,6 +4,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg44.JPG"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\talk.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\talk.png"
     },
@@ -24,6 +28,14 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\store.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag3.jpg",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag3.jpg"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\seed.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\seed.png"
     },
@@ -36,12 +48,12 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\scissor.png"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\change.jpg",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\change.jpg"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\change.jpg",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\change.jpg"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
@@ -60,16 +72,32 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\signbutton.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\signbutton.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag2.jpg",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag2.jpg"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\no_dialog.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\no_dialog.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant22.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant22.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_05.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_05.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_07.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_07.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ratingbar_small_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\fruit.png",
@@ -92,16 +120,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\exp_progressbar.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\loginbutton.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\loginbutton.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag2.jpg",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag2.jpg"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\progressbar_custom.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\progressbar_custom.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\progressbar_custom.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\progressbar_custom.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
@@ -124,6 +156,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg11.JPG"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\move.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\move.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_btn_colored_material.xml"
     },
@@ -132,8 +168,40 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\loginbutton.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg41.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg41.JPG"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_01.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_01.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plantmanager.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plantmanager.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_07.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_07.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_vector_test.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\talk.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\talk.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\exp_progressbar.xml",
@@ -142,6 +210,14 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\test1.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\test1.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\on.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\on.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
@@ -176,12 +252,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\drawable_email.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\touch_icon.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\touch_icon.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\user.PNG",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\user.PNG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant22.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant22.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_tile_bg.xml",
@@ -200,12 +284,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\buttonshape.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\check_dialog.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\check_dialog.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg1.JPG",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg1.JPG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_menu_seed.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_menu_seed.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg22.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg22.JPG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\pesticide.png",
@@ -220,20 +312,48 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_bg.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\energy.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\energy.png"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\move.png",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\move.png"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_voice_search_api_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\touch_icon.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\touch_icon.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\move.png",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\move.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\touch_icon.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\touch_icon.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_menu_seed.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_menu_seed.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg_low.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_bg_low.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\loginbgi1.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\loginbgi1.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg_low.xml",
@@ -244,8 +364,16 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_bg_low.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_track_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_menu_seed.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_menu_seed.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\fruit.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\fruit.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_small_material.xml",
@@ -256,12 +384,24 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\signbutton.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plantmanager2.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plantmanager2.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg22.JPG",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg22.JPG"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\back.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_icon_background.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\flower.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\flower.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shop.png",
@@ -296,6 +436,10 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_textfield_search_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\alertshape.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\alertshape.xml"
     },
@@ -306,6 +450,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant21.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant21.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\store.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\store.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg4.jpg",
@@ -320,6 +468,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\no_dialog.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_password_eye.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\design_password_eye.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\hp_progressbar.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\hp_progressbar.xml"
     },
@@ -328,8 +480,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back_corner.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\off.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\off.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messege.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\messege.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\pesticide.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\pesticide.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_bottom_navigation_item_background.xml",
@@ -338,6 +502,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\touch.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\touch.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ratingbar_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_fab_background.xml",
@@ -368,6 +536,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\shape.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\navigation_empty_icon.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable\\design_snackbar_background.xml"
     },
@@ -376,8 +548,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_05.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\option_icon.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\option_icon.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\sunflower.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\sunflower.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\up.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\up.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg41.JPG",
@@ -388,12 +568,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_06.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shape.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\shape.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_ab_back_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\move.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\move.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_seekbar_thumb_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\startbutton.png",
@@ -412,6 +600,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_fab_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\design_fab_background.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
     },
@@ -420,8 +612,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_01.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\shop.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\shop.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\user.PNG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\user.PNG"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\check_dialog.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\check_dialog.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\drawable_item.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\drawable_item.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_07.png",
@@ -436,6 +640,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\store.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg1.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg1.JPG"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\navigation_empty_icon.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\navigation_empty_icon.xml"
     },
@@ -444,8 +652,28 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_seekbar_thumb_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_03.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_03.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\change.jpg",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\change.jpg"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\itembutton.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\itembutton.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_bg.xml",
@@ -464,12 +692,24 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\loginbgi1.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messege.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\messege.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\hp_progressbar.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\hp_progressbar.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_clear_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_clear_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plantgarden.png",
@@ -478,6 +718,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_bottom_navigation_item_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\design_bottom_navigation_item_background.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\loginbutton2.png",
@@ -496,16 +740,32 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\talk.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\talk.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\flower.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\flower.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_04.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_04.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_text_cursor_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_text_cursor_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_edit_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\up.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\up.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg44.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg44.JPG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\neopullogo.png",
@@ -520,6 +780,14 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_list_selector_holo_light.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\music.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\music.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\buttonshape.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\buttonshape.xml"
     },
@@ -530,6 +798,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\on.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\on.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\yellow.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\yellow.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
@@ -556,6 +828,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\close_dialog.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\close_dialog.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\close_dialog.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\chagename.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\chagename.png"
     },
@@ -572,12 +848,28 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant11.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_02.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_02.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\back_corner.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back_corner.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_icon_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_icon_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plantgarden.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plantgarden.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg22.JPG",
@@ -604,8 +896,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag3.jpg"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\brown.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\brown.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg2.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg2.JPG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\drawable_item.xml",
@@ -616,8 +916,28 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ratingbar_indicator_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\brown.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\brown.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant12.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant12.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\hp_progressbar.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\hp_progressbar.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant21.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant21.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\neopullogo.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\neopullogo.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
@@ -630,6 +950,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\progressbar_custom.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\progressbar_custom.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\loginbutton2.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\loginbutton2.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_cab_background_top_material.xml",
@@ -648,6 +972,14 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\drawable\\design_password_eye.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_borderless_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\flowerbutton.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\flowerbutton.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\up.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\up.png"
     },
@@ -656,8 +988,24 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_06.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_tile_bg.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\notification_tile_bg.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant22.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant22.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\buttonshape.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\buttonshape.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\touch.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\touch.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_menu_overflow_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_05.png",
@@ -680,6 +1028,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\entry.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\seed.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\seed.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg4.jpg",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg4.jpg"
     },
@@ -690,6 +1042,14 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\startbutton.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\startbutton.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_switch_thumb_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_textfield_search_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_textfield_search_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_clear_material.xml",
@@ -704,6 +1064,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant12.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_colored_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\side_nav_bar.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\side_nav_bar.xml"
     },
@@ -714,6 +1078,10 @@
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\off.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\off.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\notification_tile_bg.xml",
@@ -732,8 +1100,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\yellow.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\progressbar_custom.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\progressbar_custom.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\yellow.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\yellow.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\startbutton.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\startbutton.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\messege.png",
@@ -752,8 +1128,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\side_nav_bar.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\back_corner.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\back_corner.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_02.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_02.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\entry.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\entry.png"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\sunflower.png",
@@ -784,8 +1168,32 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_03.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\drawable_email.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\drawable_email.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\exp_progressbar.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\exp_progressbar.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_tab_indicator_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\backg2.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\backg2.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\progressbar_custom_exp.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\progressbar_custom_exp.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_item_background_holo_light.xml",
@@ -824,6 +1232,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\pesticide.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_dialog_material_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_radio_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_btn_radio_material.xml"
     },
@@ -836,6 +1248,10 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\testbtn1.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_01.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_01.png"
     },
@@ -844,8 +1260,32 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_ratingbar_material.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\test1.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\test1.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\design_snackbar_background.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\drawable\\design_snackbar_background.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant21.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant21.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\sunflower.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\sunflower.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_seekbar_thumb_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_check_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\side_nav_bar.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\side_nav_bar.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\loginbutton.png",
@@ -868,8 +1308,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\backg2.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\energy.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\energy.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_borderless_material.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\alertshape.xml",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\alertshape.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\user.PNG",
@@ -892,12 +1340,24 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\itembutton.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\chagename.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\chagename.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\plant11.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plant11.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\test1.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\test1.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag2.jpg",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bag2.jpg"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\on.png",
@@ -936,8 +1396,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\plantmanager.png"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\testbtn1.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\testbtn1.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\ic_weather_06.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\ic_weather_06.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\entry.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\src\\main\\res\\drawable\\entry.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\gardenimage.jpg",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\gardenimage.jpg"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\abc_ic_search_api_material.xml",
@@ -948,8 +1420,20 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\scissor.png",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\scissor.png"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\no_dialog.png",
         "source": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\src\\main\\res\\drawable\\no_dialog.png"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg4.jpg",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg4.jpg"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bg11.JPG",
+        "source": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\src\\main\\res\\drawable\\bg11.JPG"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\drawable\\bag.png",

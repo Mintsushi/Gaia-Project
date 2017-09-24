@@ -25,9 +25,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.MainActivity.clickScore;
 import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.seed;
 
 /**
@@ -53,6 +55,12 @@ public class MenuFlower extends Fragment {
         //flowers : 모든 꽃 종류 / 사용자의 소유 type / level
         flowers = dataList.getFlowers();
 
+        for(int i =1 ;i< flowers.size() ; i++){
+            if(flowers.get(i).getFlowerLevel() < flowers.get(i-1).getLevel()){
+                flowers.get(i).setBuyPossible(true);
+            }
+        }
+
         flowerAdapter = new FlowerAdapter(getContext(),R.layout.menu_flower_item);
         flowerList = (ListView)view.findViewById(R.id.menu_flower_list);
         flowerList.setAdapter(flowerAdapter);
@@ -67,6 +75,7 @@ public class MenuFlower extends Fragment {
         ProgressBar flowerExp;
         TextView flowerLevel;
         TextView flowerName;
+        TextView flowerScore;
         ImageButton flowerLevelUp;
         TextView flowerLevelUpScore;
     }
@@ -101,6 +110,7 @@ public class MenuFlower extends Fragment {
                 viewHolder.flowerExp=(ProgressBar) v.findViewById(R.id.flowerExp);
                 viewHolder.flowerLevel=(TextView)v.findViewById(R.id.flowerLevel);
                 viewHolder.flowerName=(TextView)v.findViewById(R.id.flowerName);
+                viewHolder.flowerScore=(TextView)v.findViewById(R.id.flowerScore);
                 viewHolder.flowerLevelUp=(ImageButton) v.findViewById(R.id.flowerLevelUp);
                 viewHolder.flowerLevelUpScore=(TextView)v.findViewById(R.id.flowerLevelUpScore);
 
@@ -114,21 +124,37 @@ public class MenuFlower extends Fragment {
             if(flower != null){
                 //buyType ==0 이면 잠긴이미지
                 if(flower.isBuyType()) {
-                    viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
-                    viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
+
+                    if(flower.getLevel() == 400){
+                        viewHolder.flowerLevelUp.setImageResource(R.drawable.complete);
+                        viewHolder.background.setBackgroundResource(R.drawable.max_level_background);
+                        viewHolder.flowerLevelUpScore.setVisibility(View.INVISIBLE);
+                    }else{
+                        viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
+                        viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+                        viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
+                    }
+
                     viewHolder.flowerImage.setImageResource(R.drawable.image);
+                    viewHolder.flowerScore.setText("클릭 당 점수 : " + dataList.getAllScore(flower.getScore()));
                     viewHolder.flowerLevel.setText("Level . " + flower.getLevel());
                     viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            if(flower.getLevel()+1 >400){
+                                //이 부분은 좀 더 시각적으로 표현하자
+                                Toast.makeText(getActivity(), "최대레벨입니다!!!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                             if (downScore(flower.getCost())) {
-                                MainActivity.updatePlantLevel(flower.getFlowerNo());
-                                flower.setLevel(flower.getLevel() + 1);
-                                if (flower.getLevel() == flowers.get(position + 1).getFlowerLevel()) {
-                                    flowers.get(position + 1).setBuyPossible(true);
-                                }
 
                                 dataList.flowerLevelUp(flower);
+                                if(position+1 < flowers.size()) {
+                                    if (flower.getLevel() == flowers.get(position + 1).getFlowerLevel()) {
+                                        flowers.get(position + 1).setBuyPossible(true);
+                                    }
+                                }
+                                MainActivity.updatePlantLevel(flower.getFlowerNo());
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
@@ -138,6 +164,7 @@ public class MenuFlower extends Fragment {
                         }
                     });
                 }else if(flower.isBuyPossible()){
+                    viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     viewHolder.flowerLevelUp.setImageResource(R.drawable.buy);
                     viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
@@ -146,11 +173,9 @@ public class MenuFlower extends Fragment {
                         @Override
                         public void onClick(View view) {
                             if (downScore(flower.getCost())) {
+                                dataList.flowerLevelUp(flower);
                                 MainActivity.buyPlant(flower);
                                 flower.setBuyType(true);
-                                flower.setLevel(1);
-
-                                dataList.flowerLevelUp(flower);
                                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
                                 flowerAdapter.notifyDataSetChanged();
                             }else {
@@ -173,7 +198,6 @@ public class MenuFlower extends Fragment {
                 }
 
                 viewHolder.flowerName.setText(flower.getFlowerName());
-                viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
                 viewHolder.flowerExp.setProgress(flower.getLevel()/4);
             }
             return v;
@@ -183,7 +207,7 @@ public class MenuFlower extends Fragment {
     // 현재 점수 < 꽃 레벨업(구입)에 필요한 점수 -> false
     //          >                            -> true
 
-    boolean downScore(HashMap<Integer, Integer> cost){
+    boolean downScore(ConcurrentHashMap<Integer, Integer> cost){
 
         TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
         treeMap.putAll(cost);

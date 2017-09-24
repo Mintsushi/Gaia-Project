@@ -6,10 +6,40 @@
     <string name="Goal">Goal</string>
     <string name="level">Level . </string>
 
-    <string name="skillCase0">%2$d동안 점수 2배 증가</string>
-    <string name="skillCase1">%2$d 만큼의 점수 획득</string>
-    <string name="skillCase2">%2$d동안 초당 10회 자동 탭</string>
-    <string name="skillCase3">탭 당 %2$d만큼의 점수 증가</string>
-    <string name="skillCase4">분당 %2$d회 자동 탭</string>
-    <string name="skillCase5">날씨가 흐릴 때 %2$d개의 물 획득</string>
+    <!--Skill-->
+    <string name="skillCase0">%d초 동안 점수 2배 증가</string>
+    <string name="skillCase1">%d %%만큼의 점수 획득</string>
+    <string name="skillCase2">%d초 동안 초당 10회 자동 탭</string>
+    <string name="skillCase3">탭 당 %d %%만큼의 점수 증가</string>
+    <string name="skillCase4">분당 %d회 자동 탭</string>
+    <string name="skillCase5">날씨가 흐릴 때 %d개의 물 획득</string>
+
+    <!--Goal-->
+    <string name="goalCase0">%d회 로그인하여 꽃과 친해지기</string>
+    <string name="goalCase1">꽃 %d 개 구입하기!</string>
+    <string name="goalCase2">민들레 %d 번 레벨업하기</string>
+    <string name="goalCase3">호야 %d 번 레벨업하기</string>
+    <string name="goalCase4">나팔꽃 %d 번 레벨업하기</string>
+    <string name="goalCase5">철쭉 %d 번 레벨업하기</string>
+    <string name="goalCase6">장미 %d 번 레벨업하기</string>
+    <string name="goalCase7">광고 %d 번 시청하기</string>
+    <string name="goalCase8">터치 스킬 %d 번 레벨업하기</string>
+    <string name="goalCase9">%d 번 화면 터치하기</string>
+    <string name="goalCase10">꽃을 %d 번 밖에 내놓기</string>
+    <string name="goalCase11">%d 번 아이템 구입하기!</string>
+    <string name="goalCase12">%d 번 아이템 사용하기!</string>
+    <string name="goalCase13">점수 %s 점 쌓기!</string>
+    <string name="goalCase14">다 키운 꽃 %d 개 말리기!</string>
+    <string name="goalCase15">쓰다듬기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase16">쓰다듬기 스킬 %d번 사용하기</string>
+    <string name="goalCase17">바라보기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase18">바라보기 스킬 %d번 사용하기</string>
+    <string name="goalCase19">가지치기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase20">가지치기 스킬 %d번 사용하기</string>
+    <string name="goalCase21">말하기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase22">말하기 스킬 %d번 사용하기</string>
+    <string name="goalCase23">노래 들려주기 스킬 %d번 레벨업하기</string>
+    <string name="goalCase24">노래들려주기 스킬 %d번 사용하기</string>
+    <string name="goalCase25">물받기 스킬 %d 번 레벨업하기</string>
+    <string name="goalCase26">물받기 스킬 %d 번 사용하기</string>
 </resources>

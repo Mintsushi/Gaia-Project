@@ -6,10 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.round.gaia_18.Data.DryFlower;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.FlowerData;
+import com.example.round.gaia_18.Data.GoalData;
+import com.example.round.gaia_18.Data.GoalInfo;
+import com.example.round.gaia_18.Data.SkillData;
+import com.example.round.gaia_18.Data.SkillInfo;
 
 import java.util.ArrayList;
+
+import static com.example.round.gaia_18.MainActivity.dataList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -56,22 +63,49 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String WEATHER_ID = "weatherNo";
     private static final String WEATHER_NAME = "weatherName";
 
-    //skill info data 1
+    //skill info
     private static final String SKILL_INFO_TABLE_NAME = "skillInfo";
     private static final String skillId = "skillNo";
     private static final String skillName = "skillName";
     private static final String skillImage = "skillImage";
     private static final String skillButtonImage = "skillButtonImage";
     private static final String skillCoolTime = "coolTime";
-    private static final String activeSkill = "activeSkill";
-    private static final String skillCase = "skillCase";
+    private static final String passive = "activeSkill";
+    private static final String skillType = "skillCase";
+    private static final String skillMaxLevel = "skillMaxLevel";
 
-    //skill info data 2
+    //skill data
     private static final String SKILL_DATA_TABLE_NAME = "skillData";
+    private static final String skillPrimaryKey ="primaryKey";
     private static final String skillLevel = "level";
     private static final String skillBuyType = "buyType";
-    private static final String cost = "cost";
-    private static final String effect = "effect";
+    private static final String skillCost = "cost";
+    private static final String skillEffect = "effect";
+    private static final String skillCostType = "type";
+
+    //Dry Flower
+    private static final String DRY_FLOWER_TABLE_NAME = "dryFlower";
+    private static final String dryFlowerNo = "dryFlowerNo";
+    private static final String dryFlowerScore = "dryFlowerScore";
+    private static final String dryFlowerScoreType = "dryFlowerScoreType";
+
+    //Goal Info
+    private static final String GOAL_INFO_TABLE_NAME="goalInfo";
+    private static final String goalNo = "goalNo";
+    private static final String goalName ="goalName";
+    private static final String goalType ="goalType";
+    private static final String goalMaxLevel = "goalMaxLevel";
+
+    //Goal Data
+    private static final String GOAL_DATA_TABLE_NAME = "goalData";
+    private static final String goalPrimaryKey = "primaryKey";
+    private static final String goalLevel = "level";
+    private static final String goalCondition = "goalCondition";
+    private static final String goalConditionType = "goalType";
+    private static final String goalRewardType="rewardType";
+    private static final String goalReward = "reward";
+    private static final String goalRewardCostType = "rewardCostType";
+
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VER);
@@ -79,16 +113,31 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+//
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+FLOWER_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+FLOWER_ALGORITHM_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+WEATHER_TABLE);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+SKILL_INFO_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+SKILL_DATA_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DRY_FLOWER_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_INFO_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_DATA_TABLE_NAME);
         //flower Table 구축
         flowerTable(sqLiteDatabase);
         //flower 수식 data DB 구축
         flowerDateTable(sqLiteDatabase);
         //weather Table DataBase 구축
         weatherTable(sqLiteDatabase);
+        //Skill Information DataBase 구축
+        SkillInfoTable(sqLiteDatabase);
+        //Skill Data DataBase 구축
+        SkillDataTable(sqLiteDatabase);
+        //DryFlower DataBase 구축
+        DryFlowerTable(sqLiteDatabase);
+        //GoalInfo DataBase 구축
+        getGoalInfoTable(sqLiteDatabase);
+        //GoalData DataBase 구축
+        getGoalDataTable(sqLiteDatabase);
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -100,8 +149,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + flowerButtonImage + " TEXT NOT NULL,"
                 + flowerCost + " INTEGER NOT NULL,"
                 + flowerScore + " INTEGER NOT NULL,"
-                + flowerTab + " INTEGER NOT NULL,"
-                + flowerLevel + " INTEGER NOT NULL,"
+                + flowerTab + " INTEGER NOT NULL," // 선행스킬(TAB)
+                + flowerLevel + " INTEGER NOT NULL," //앞 꽃의 레벨
                 + flowerCostType + " INTEGER NOT NULL,"
                 + flowerScoreType + " INTEGER NOT NULL"+")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
@@ -175,37 +224,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put(num8,n8);
         values.put(num9,n9);
         values.put(num10,n10);
-
-        return values;
-
-    }
-
-    //flower 수식과 관련된 DB 구축
-    private void tempTable(SQLiteDatabase sqLiteDatabase){
-        //Flower Table
-        String CREATE_TABLE = "CREATE TABLE " + FLOWER_TEMP + "("
-                + flowerId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                + MAX_TEMP + " INTEGER NOT NULL,"
-                + MIN_TEMP + " INTEGER NOT NULL,"
-                + PASSIVE + " INTEGER NOT NULL"+ ")";
-        sqLiteDatabase.execSQL(CREATE_TABLE);
-
-        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getTemp(0,15,25,8));
-        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getTemp(1,25,30,12));
-        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getTemp(2,18,24,10));
-        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getTemp(3,16,30,4));
-        sqLiteDatabase.insert(FLOWER_ALGORITHM_NAME, null, getTemp(4,15,25,8));
-
-    }
-
-    private ContentValues getTemp(int id, int max, int min, int passive) {
-
-        ContentValues values = new ContentValues();
-
-        values.put(flowerId, id);
-        values.put(MAX_TEMP,max);
-        values.put(MIN_TEMP,min);
-        values.put(PASSIVE,passive);
 
         return values;
 
@@ -336,43 +354,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return passive;
     }
 
-    private void skillInfoTable(SQLiteDatabase sqLiteDatabase){
-        //Skill Information Table
-        String CREATE_TABLE = "CREATE TABLE " +  SKILL_INFO_TABLE_NAME + "("
-                + skillId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                + skillName + " TEXT NOT NULL,"
-                + skillImage + " TEXT NOT NULL,"
-                + skillButtonImage + " TEXT NOT NULL,"
-                + skillCoolTime + " INTEGER NOT NULL,"
-                + activeSkill + " INTEGER NOT NULL,"
-                + skillCase + " INTEGER NOT NULL"+")";
-        sqLiteDatabase.execSQL(CREATE_TABLE);
-
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"쓰다듬기","","",300,0, 0));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"가지치기","","",300,0, 1));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"꽃에게 노래 들려주기","","",300,0, 2));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"꽃에게 말걸어주기","","",0,1, 3));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"꽃 바라봐주기","","",0,1,4));
-        sqLiteDatabase.insert(FLOWER_TABLE_NAME, null, getSkillValues(0,"물 받아놓기","","",86400,0,5));
-    }
-
-    private ContentValues getSkillValues(int id,String name, String image, String buttonImage,
-                                          int cooltime, int active,int skillCase) {
-
-        ContentValues values = new ContentValues();
-
-        values.put(skillId, id);
-        values.put(skillName, name);
-        values.put(skillImage, image);
-        values.put(skillButtonImage, buttonImage);
-        values.put(skillCoolTime, cooltime);
-        values.put(activeSkill, active);
-        values.put(this.skillCase,skillCase);
-
-        return values;
-
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+FLOWER_TABLE_NAME);
@@ -396,6 +377,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 flower.setFlowerButtonImage(cursor.getString(3));
                 flower.setFlowerTab(cursor.getInt(6));
                 flower.setFlowerLevel(cursor.getInt(7));
+                if(cursor.getInt(7) == 0) flower.setBuyPossible(true);
                 flower.setCost(cursor.getInt(8),cursor.getInt(4));
                 flower.setScore(cursor.getInt(9),cursor.getInt(5));
 
@@ -436,181 +418,847 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return flowerDatas;
     }
 
-    private ContentValues getSkillDataValues(int id, int level, int buyType,int cost, int effect) {
+    public ArrayList<SkillInfo> getAllSkillInfo(){
+
+        ArrayList<SkillInfo> skillInfos = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM "+SKILL_INFO_TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery,null);
+        if(cursor.moveToFirst()){
+            do{
+                SkillInfo skillInfo = new SkillInfo();
+                skillInfo.setSkillNo(cursor.getInt(0));
+                skillInfo.setSkillName(cursor.getString(1));
+                skillInfo.setSkillImage(cursor.getString(2));
+                skillInfo.setSkillButtonImage(cursor.getString(3));
+                skillInfo.setCoolTime(cursor.getInt(4));
+                skillInfo.setPassive(cursor.getInt(5));
+                skillInfo.setSkillCase(cursor.getInt(6));
+                skillInfo.setSkillMaxLevel(cursor.getInt(7));
+
+                skillInfos.add(skillInfo);
+            }while(cursor.moveToNext());
+        }
+
+        return skillInfos;
+    }
+
+    private void SkillInfoTable(SQLiteDatabase sqLiteDatabase){
+
+        String CREATE_TABLE = "CREATE TABLE "+SKILL_INFO_TABLE_NAME+"("
+                +skillId+" INTEGER NOT NULL PRIMARY KEY,"
+                +skillName + " TEXT NOT NULL,"
+                +skillImage + " TEXT NOT NULL,"
+                +skillButtonImage + " TEXT NOT NULL,"
+                +skillCoolTime + " INTEGER NOT NULL,"
+                +passive + " INTEGER NOT NULL,"
+                +skillType + " INTEGER NOT NULL,"
+                +skillMaxLevel+ " INTEGER NOT NULL"+")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        //sqLiteDatabase.insert(ACTIVE_SKILL_FORMAT_TABLE_NAME,null,getActiveSkillFormatValues(1,"","","",300,0,0,""));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(0,"기본 탭","","",300,1,0,1));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(1,"쓰다듬기","","",300,0,0,30));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(2,"가지치기","","",300,0,1,30));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(3,"노래 들려주기","","",300,0,2,30));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(4,"말하기","","",0,1,3,30));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(5,"바라보기","","",0,1,4,30));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(6,"물받기","","",86400,0,5,5));
+    }
+
+    private ContentValues getSkillInfo(int id, String name, String image, String buttonImage, int coolTime, int passive, int skillType,int skillMaxLevel){
 
         ContentValues values = new ContentValues();
 
         values.put(skillId,id);
-        values.put(skillLevel, level);
-        values.put(skillBuyType, buyType);
-        values.put(this.cost, cost);
-        values.put(this.effect, effect);
+        values.put(skillName,name);
+        values.put(skillImage,image);
+        values.put(skillButtonImage,buttonImage);
+        values.put(skillCoolTime,coolTime);
+        values.put(this.passive,passive);
+        values.put(this.skillType,skillType);
+        values.put(this.skillMaxLevel,skillMaxLevel);
 
         return values;
-
     }
 
-    private void skillDataTable(SQLiteDatabase sqLiteDatabase){
-        //Skill Information Table
-        String CREATE_TABLE = "CREATE TABLE " +  SKILL_DATA_TABLE_NAME + "("
-                + skillId + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                + skillLevel + " INTEGER NOT NULL,"
-                + skillBuyType + " INTEGER NOT NULL,"
-                + cost + " INTEGER NOT NULL,"
-                + effect + " INTEGER NOT NULL"+")";
+    private void SkillDataTable(SQLiteDatabase sqLiteDatabase){
+
+        String CREATE_TABLE = "CREATE TABLE "+SKILL_DATA_TABLE_NAME+"("
+                +skillPrimaryKey+" INTEGER NOT NULL PRIMARY KEY,"
+                +skillId + " INTEGER NOT NULL,"
+                +skillLevel + " INTEGER NOT NULL,"
+                +skillBuyType + " INTEGER NOT NULL,"
+                +skillCost + " INTEGER NOT NULL,"
+                +skillEffect + " INTEGER NOT NULL,"
+                +skillCostType + " INTEGER NOT NULL"+")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
-        //Insert Flower Data
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,1,2,100,12));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,2,2,500,14));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,3,2,1000,16));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,4,2,5000,18));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,5,2,20000,20));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,6,2,100000,22));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,7,2,500000,24));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,8,2,1000000,26));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,9,2,3000000,28));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,10,2,5000000,30));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,11,2,50,33));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,12,2,50,36));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,13,2,50,39));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,14,2,50,42));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,15,2,50,45));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,16,2,60,48));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,17,2,70	,51));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,18,2,80	,54));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,19,2,90	,57));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,20,2,100,60));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,21,2,110,63));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,22,2,120,66));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,23,2,130,69));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,24,2,140,72));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,25,2,150,75));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,26,2,160,78));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,27,2,170,81));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,28,2,180,84));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,29,2,190,87));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(0,30,2,200,90));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,1,2,100,50));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,2,2,500	,100));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,3,2,1000,150));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,4,2,5000,200));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,5,2,20000,250));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,6,2,100000,300));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,7,2,500000,350));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,8,2,1000000,400));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,9,2,3000000,450));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,10,2,5000000,500));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,11,2,50	,600));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,12,2,50	,700));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,13,2,50	,800));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,14,2,50	,900));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,15,2,50	,1000));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,16,2,60	,1100));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,17,2,70	,1200));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,18,2,80	,1300));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,19,2,90	,1400));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,20,2,100,1500));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,21,2,110,1600));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,22,2,120,1700));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,23,2,130,1800));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,24,2,140,1900));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,25,2,150,2000));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,26,2,160,2100));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,27,2,170,2200));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,28,2,180,2300));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,29,2,190,2400));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(1,30,2,200,2500));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,1,2,100,12));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,2,2,500,14));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,3,2,1000,16));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,4,2,5000,18));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,5,2,20000,20));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,6,2,100000,22));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,7,2,500000,24));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,8,2,1000000,26));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,9,2,3000000,28));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,10,2,5000000,30));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,11,2,50,33));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,12,2,50,36));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,13,2,50,39));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,14,2,50,42));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,15,2,50,45));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,16,2,60,48));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,17,2,70	,51));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,18,2,80	,54));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,19,2,90	,57));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,20,2,100,60));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,21,2,110,63));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,22,2,120,66));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,23,2,130,69));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,24,2,140,72));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,25,2,150,75));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,26,2,160,78));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,27,2,170,81));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,28,2,180,84));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,29,2,190,87));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(2,30,2,200,90));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,1,2,50,2));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,2,2,60,4));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,3,2,70,6));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,4,2,80,8));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,5,2,90,10));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,6,2,100,12));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,7,2,110,14));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,8,2,120,16));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,9,2,130,18));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,10,2,140,20));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,11,2,150,22));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,12,2,160,24));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,13,2,170,26));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,14,2,180,28));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,15,2,190,30));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,16,2,200,32));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,17,2,200,34));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,18,2,200,36));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,19,2,200,38));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,20,2,200,40));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,21,2,200,42));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,22,2,200,44));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,23,2,200,46));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,24,2,200,48));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,25,2,200,50));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,26,2,200,52));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,27,2,200,54));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,28,2,200,56));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,29,2,200,58));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(3,30,2,200,60));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,1,2,50,10));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,2,2,60,20));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,3,2,70,30));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,4,2,80,40));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,5,2,90,50));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,6,2,100,60));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,7,2,110,70));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,8,2,120,80));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,9,2,130,90));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,10,2,140,100));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,11,2,150,120));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,12,2,160,140));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,13,2,170,160));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,14,2,180,180));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,15,2,190,200));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,16,2,200,220));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,17,2,200,240));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,18,2,200,260));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,19,2,200,280));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,20,2,200,300));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,21,2,200,320));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,22,2,200,340));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,23,2,200,360));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,24,2,200,380));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,25,2,200,400));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,26,2,200,420));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,27,2,200,440));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,28,2,200,460));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,29,2,200,480));
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME, null, getSkillDataValues(4,30,2,200,500));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(0,-1,1,2,1000,12,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(1,0,1,2,100,12,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(2,0,2,2,500,14,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(3,0,3,2,1,16,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(4,0,4,2,5,18,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(5,0,5,2,20,20,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(6,0,6,2,100,22,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(7,0,7,2,500,24,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(8,0,8,2,1,26,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(9,0,9,2,3,28,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(10,0,10,2,5,30,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(11,0,11,1,50,33,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(12,0,12,1,50,36,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(13,0,13,1,50,39,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(14,0,14,1,50,42,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(15,0,15,1,50,45,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(16,0,16,1,60,48,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(17,0,17,1,70,51,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(18,0,18,1,80,54,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(19,0,19,1,90,57,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(20,0,20,1,100,60,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(21,0,21,1,110,63,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(22,0,22,1,120,66,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(23,0,23,1,130,69,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(24,0,24,1,140,72,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(25,0,25,1,150,75,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(26,0,26,1,160,78,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(27,0,27,1,170,81,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(28,0,28,1,180,84,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(29,0,29,1,190,87,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(30,0,30,1,200,90,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(31,1,1,2,100,50,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(32,1,2,2,500,100,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(33,1,3,2,1,150,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(34,1,4,2,5,200,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(35,1,5,2,20,250,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(36,1,6,2,100,300,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(37,1,7,2,500,350,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(38,1,8,2,1,400,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(39,1,9,2,3,450,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(40,1,10,2,5,500,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(41,1,11,1,50,600,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(42,1,12,1,50,700,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(43,1,13,1,50,800,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(44,1,14,1,50,900,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(45,1,15,1,50,1000,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(46,1,16,1,60,1100,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(47,1,17,1,70,1200,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(48,1,18,1,80,1300,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(49,1,19,1,90,1400,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(50,1,20,1,100,1500,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(51,1,21,1,110,1600,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(52,1,22,1,120,1700,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(53,1,23,1,130,1800,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(54,1,24,1,140,1900,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(55,1,25,1,150,2000,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(56,1,26,1,160,2100,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(57,1,27,1,170,2200,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(58,1,28,1,180,2300,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(59,1,29,1,190,2400,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(60,1,30,1,200,2500,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(61,2,1,2,100,12,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(62,2,2,2,500,14,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(63,2,3,2,1,16,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(64,2,4,2,5,18,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(65,2,5,2,20,20,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(66,2,6,2,100,22,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(67,2,7,2,500,24,1));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(68,2,8,2,1,26,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(69,2,9,2,3,28,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(70,2,10,2,5,30,2));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(71,2,11,1,50,33,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(72,2,12,1,50,36,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(73,2,13,1,50,39,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(74,2,14,1,50,42,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(75,2,15,1,50,45,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(76,2,16,1,60,48,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(77,2,17,1,70,51,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(78,2,18,1,80,54,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(79,2,19,1,90,57,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(80,2,20,1,100,60,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(81,2,21,1,110,63,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(82,2,22,1,120,66,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(83,2,23,1,130,69,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(84,2,24,1,140,72,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(85,2,25,1,150,75,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(86,2,26,1,160,78,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(87,2,27,1,170,81,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(88,2,28,1,180,84,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(89,2,29,1,190,87,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(90,2,30,1,200,90,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(91,3,1,1,50,2,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(92,3,2,1,60,4,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(93,3,3,1,70,6,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(94,3,4,1,80,8,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(95,3,5,1,90,10,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(96,3,6,1,100,12,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(97,3,7,1,110,14,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(98,3,8,1,120,16,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(99,3,9,1,130,18,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(100,3,10,1,140,20,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(101,3,11,1,150,22,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(102,3,12,1,160,24,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(103,3,13,1,170,26,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(104,3,14,1,180,28,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(105,3,15,1,190,30,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(106,3,16,1,200,32,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(107,3,17,1,200,34,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(108,3,18,1,200,36,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(109,3,19,1,200,38,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(110,3,20,1,200,40,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(111,3,21,1,200,42,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(112,3,22,1,200,44,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(113,3,23,1,200,46,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(114,3,24,1,200,48,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(115,3,25,1,200,50,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(116,3,26,1,200,52,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(117,3,27,1,200,54,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(118,3,28,1,200,56,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(119,3,29,1,200,58,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(120,3,30,1,200,60,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(121,4,1,1,50,10,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(122,4,2,1,60,20,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(123,4,3,1,70,30,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(124,4,4,1,80,40,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(125,4,5,1,90,50,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(126,4,6,1,100,60,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(127,4,7,1,110,70,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(128,4,8,1,120,80,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(129,4,9,1,130,90,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(130,4,10,1,140,100,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(131,4,11,1,150,120,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(132,4,12,1,160,140,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(133,4,13,1,170,160,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(134,4,14,1,180,180,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(135,4,15,1,190,200,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(136,4,16,1,200,220,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(137,4,17,1,200,240,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(138,4,18,1,200,260,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(139,4,19,1,200,280,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(140,4,20,1,200,300,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(141,4,21,1,200,320,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(142,4,22,1,200,340,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(143,4,23,1,200,360,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(144,4,24,1,200,380,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(145,4,25,1,200,400,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(146,4,26,1,200,420,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(147,4,27,1,200,440,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(148,4,28,1,200,460,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(149,4,29,1,200,480,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(150,4,30,1,200,500,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(151,5,1,1,50,30,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(152,5,2,1,60,50,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(153,5,3,1,70,80,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(154,5,4,1,80,120,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(155,5,5,1,100,160,0));
+
     }
 
+    private ContentValues getSkillData(int primaryKey,int id, int level, int buyType, int cost, int effect, int costType){
+
+        ContentValues values = new ContentValues();
+        values.put(skillPrimaryKey,primaryKey);
+        values.put(skillId, id+1);
+        values.put(skillLevel, level);
+        values.put(skillBuyType, buyType);
+        values.put(skillCost, cost);
+        values.put(skillEffect, effect);
+        values.put(skillCostType, costType);
+
+        return values;
+    }
+
+    public void getAllSkillData(int skillNo, int Level) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery;
+        Cursor cursor;
+
+        if(Level > 0) {
+            selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=" + skillNo + " and " + skillLevel + "=" + Level;
+
+            SkillData skillData = new SkillData();
+            cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    skillData.setSkillNo(cursor.getInt(1));
+                    skillData.setSkillLevel(cursor.getInt(2));
+                    skillData.setSkillEffect(cursor.getInt(5));
+                } while (cursor.moveToNext());
+            }
+
+            selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=" + skillNo + " and " + skillLevel + "=" + (Level+1);
+            cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                do {
+                    skillData.setbuyType(cursor.getInt(3));
+                    skillData.setCost(cursor.getInt(6), cursor.getInt(4));
+                } while (cursor.moveToNext());
+            }
+            skillData.setSkillBuy(true);
+
+            dataList.putSkillData(skillNo,skillData);
+        }
+        else{ //skill을 구입하지 않음.
+            SkillData skillData = new SkillData();
+            skillData.setSkillNo(skillNo);
+            skillData.setSkillLevel(Level);
+            skillData.setSkillBuy(false);
+
+            selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=" + skillNo + " and " + skillLevel + "=" + (Level+1);
+            cursor = db.rawQuery(selectQuery, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    skillData.setbuyType(cursor.getInt(3));
+                    skillData.setCost(cursor.getInt(6), cursor.getInt(4));
+                } while (cursor.moveToNext());
+            }
+
+            dataList.putSkillData(skillNo,skillData);
+        }
+
+    }
+
+    public SkillData getSkill(int id, int level){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery;
+        Cursor cursor;
+
+        selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=" + id + " and " + skillLevel + "=" + level;
+
+        SkillData skillData = new SkillData();
+        cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                skillData.setSkillNo(cursor.getInt(1));
+                skillData.setSkillLevel(cursor.getInt(2));
+                skillData.setSkillEffect(cursor.getInt(5));
+            } while (cursor.moveToNext());
+        }
+
+        selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=" + id + " and " + skillLevel + "=" + (level+1);
+        cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                skillData.setbuyType(cursor.getInt(3));
+                skillData.setCost(cursor.getInt(6), cursor.getInt(4));
+            } while (cursor.moveToNext());
+        }
+        skillData.setSkillBuy(true);
+
+        return skillData;
+    }
+
+    private void DryFlowerTable(SQLiteDatabase sqLiteDatabase){
+        String CREATE_TABLE = "CREATE TABLE "+DRY_FLOWER_TABLE_NAME+"("
+                +dryFlowerNo+" INTEGER NOT NULL PRIMARY KEY,"
+                +dryFlowerScore + " INTEGER NOT NULL,"
+                +dryFlowerScoreType + " INTEGER NOT NULL"+")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(DRY_FLOWER_TABLE_NAME   ,   null   ,   getDryFlower(0,89400,0));
+        sqLiteDatabase.insert(DRY_FLOWER_TABLE_NAME   ,   null   ,   getDryFlower(1,2250,1));
+        sqLiteDatabase.insert(DRY_FLOWER_TABLE_NAME   ,   null   ,   getDryFlower(2,49095,1));
+        sqLiteDatabase.insert(DRY_FLOWER_TABLE_NAME   ,   null   ,   getDryFlower(3,1,3));
+        sqLiteDatabase.insert(DRY_FLOWER_TABLE_NAME   ,   null   ,   getDryFlower(4,19750,2));
+    }
+
+    private ContentValues getDryFlower(int id, int score, int scoreType){
+
+        ContentValues values = new ContentValues();
+        values.put(dryFlowerNo,id);
+        values.put(dryFlowerScore, score);
+        values.put(dryFlowerScoreType, scoreType);
+
+        return values;
+    }
+
+    public DryFlower getDryFlowerData(int id){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery;
+        Cursor cursor;
+
+        selectQuery = "SELECT * FROM " + DRY_FLOWER_TABLE_NAME + " WHERE " + dryFlowerNo + "=" + id;
+
+        cursor = db.rawQuery(selectQuery, null);
+
+        DryFlower dryFlower= new DryFlower();
+
+        if (cursor.moveToFirst()) {
+            do {
+                dryFlower.setDryFlowerNo(cursor.getInt(0));
+                dryFlower.setScore(cursor.getInt(2),cursor.getInt(1));
+            } while (cursor.moveToNext());
+        }
+
+        return dryFlower;
+    }
+
+    private void getGoalInfoTable(SQLiteDatabase sqLiteDatabase){
+
+        String CREATE_TABLE = "CREATE TABLE " + GOAL_INFO_TABLE_NAME + "("
+                + goalNo + " INTEGER NOT NULL PRIMARY KEY,"
+                + goalName + " TEXT NOT NULL,"
+                + goalType + " INTEGER NOT NULL,"
+                + goalMaxLevel + " INTEGER NOT NULL" + ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(0,"꽃과 친해지기",0,11));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(1,"꽃 향기가나",1,5));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(2,"홀씨 날리기 작전",2,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(3,"별이 피는 바람에",3,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(4,"자주색 치맛자락",4,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(5,"진달래 아니에요",5,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(6,"상처받아도 난 몰라요",6,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(7,"애청자",7,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(8,"액정의 안부를 묻다",8,12));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(9,"불타는 액정",9,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(10,"함께 산책가요",10,1));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(11,"부자 되세요",11,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(12,"아낌 없이 주는",12,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(13,"비나이다. 비나이다. 씨 뿌리기!",13,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(14,"영원히 보고싶어",14,10));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(15,"Touch My Body",15,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(16,"어멋! 지금 어딜 만져요!",16,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(17,"이글아이",17,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(18,"꽃이랑 눈싸움",18,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(19,"꼿꼿하게 핀 허리에",19,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(20,"새침한 똑 단발",20,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(21,"국어능력인증시험",21,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(22,"대화가 필요해",22,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(23,"진정한 소리꾼",23,8));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(24,"가수해도 되겠어요",24,20));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(25,"비구름을 그릴게요",25,5));
+        sqLiteDatabase.insert(GOAL_INFO_TABLE_NAME,null,getGoalInfo(26,"비가 오려나.. 무릎이 쑤셔",26,5));
+    }
+
+    private ContentValues getGoalInfo(int id, String name, int type, int maxLevel){
+
+        ContentValues values = new ContentValues();
+        values.put(goalNo,id);
+        values.put(goalName,name);
+        values.put(goalType,type);
+        values.put(goalMaxLevel,maxLevel);
+
+        return values;
+    }
+
+    public ArrayList<GoalInfo> getAllGoalInfo(){
+        ArrayList<GoalInfo> goalInfos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery;
+        Cursor cursor;
+
+        selectQuery = "SELECT * FROM " + GOAL_INFO_TABLE_NAME;
+
+        cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                GoalInfo goal = new GoalInfo();
+                goal.setId(cursor.getInt(0));
+                goal.setGoalName(cursor.getString(1));
+                goal.setGoalType(cursor.getInt(2));
+                goal.setGoalMaxLevel(cursor.getInt(3));
+
+                goalInfos.add(goal);
+
+            } while (cursor.moveToNext());
+        }
+
+        return goalInfos;
+    }
+
+    private void getGoalDataTable(SQLiteDatabase sqLiteDatabase){
+
+        String CREATE_TABLE = "CREATE TABLE " + GOAL_DATA_TABLE_NAME + "("
+                + goalPrimaryKey + " INTEGER NOT NULL PRIMARY KEY,"
+                + goalNo + " INTEGER NOT NULL,"
+                + goalLevel + " INTEGER NOT NULL,"
+                + goalCondition + " INTEGER NOT NULL,"
+                + goalConditionType + " INTEGER NOT NULL,"
+                + goalRewardType + " INTEGER NOT NULL,"
+                + goalReward + " INTEGER NOT NULL,"
+                + goalRewardCostType + " INTEGER NOT NULL"+ ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(0,1,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(1,1,2,2,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(2,1,3,5,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(3,1,4,10,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(4,1,5,15,0,1,60,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(5,1,6,20,0,1,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(6,1,7,25,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(7,1,8,35,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(8,1,9,50,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(9,1,10,70,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(10,1,11,100,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(11,2,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(12,2,2,2,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(13,2,3,3,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(14,2,4,4,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(15,2,5,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(16,3,1,50,0,2,150,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(17,3,2,100,0,2,750,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(18,3,3,150,0,2,3,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(19,3,4,200,0,2,25,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(20,3,5,250,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(21,3,6,300,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(22,3,7,350,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(23,3,8,400,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(24,4,1,50,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(25,4,2,100,0,2,200,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(26,4,3,150,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(27,4,4,200,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(28,4,5,250,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(29,4,6,300,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(30,4,7,350,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(31,4,8,400,0,3,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(32,5,1,50,0,2,400,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(33,5,2,100,0,2,1,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(34,5,3,150,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(35,5,4,200,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(36,5,5,250,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(37,5,6,300,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(38,5,7,350,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(39,5,8,400,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(40,6,1,50,0,2,100,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(41,6,2,100,0,5,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(42,6,3,150,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(43,6,4,200,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(44,6,5,250,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(45,6,6,300,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(46,6,7,350,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(47,6,8,400,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(48,7,1,50,0,2,5,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(49,7,2,100,0,2,500,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(50,7,3,150,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(51,7,4,200,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(52,7,5,250,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(53,7,6,300,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(54,7,7,350,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(55,7,8,400,0,4,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(56,8,1,1,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(57,8,2,2,0,5,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(58,8,3,3,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(59,8,4,5,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(60,8,5,8,0,1,20,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(61,8,6,13,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(62,8,7,21,0,2,10,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(63,8,8,34,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(64,8,9,55,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(65,8,10,89,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(66,8,11,144,0,1,60,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(67,8,12,233,0,1,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(68,8,13,377,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(69,8,14,610,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(70,8,15,987,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(71,8,16,1597,0,2,30,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(72,8,17,2584,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(73,8,18,4181,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(74,8,19,6765,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(75,8,20,10946,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(76,9,1,100,0,2,500,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(77,9,2,200,0,2,77,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(78,9,3,300,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(79,9,4,400,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(80,9,5,500,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(81,9,6,600,0,2,30,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(82,9,7,700,0,2,1,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(83,9,8,800,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(84,9,9,900,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(85,9,10,1000,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(86,9,11,1100,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(87,9,12,1200,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(88,10,1,50,0,2,500,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(89,10,2,100,0,2,5,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(90,10,3,250,0,2,20,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(91,10,4,700,0,2,60,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(92,10,5,2000,0,2,200,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(93,10,6,7500,0,2,1,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(94,10,7,30000,0,2,25,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(95,10,8,100000,0,2,600,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(96,10,9,185000,0,2,5,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(97,10,10,300000,0,2,40,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(98,10,11,450000,0,4,2,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(99,10,12,620000,0,2,2,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(100,10,13,830000,0,2,12,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(101,10,14,1070000,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(102,10,15,1300000,0,2,300,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(103,10,16,1590000,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(104,10,17,1900000,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(105,10,18,2340000,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(106,10,19,3000000,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(107,10,20,5000000,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(108,11,1,1,0,2,1,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(109,12,1,1,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(110,12,2,2,0,2,5,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(111,12,3,5,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(112,12,4,11,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(113,12,5,21,0,2,5,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(114,12,6,36,0,5,20,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(115,12,7,57,0,2,100,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(116,12,8,85,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(117,12,9,121,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(118,12,10,166,0,3,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(119,12,11,221,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(120,12,12,287,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(121,12,13,365,0,2,50,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(122,12,14,456,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(123,12,15,561,0,3,12,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(124,12,16,681,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(125,12,17,817,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(126,12,18,970,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(127,12,19,1141,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(128,12,20,1330,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(129,13,1,1,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(130,13,2,5,0,2,5,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(131,13,3,14,0,2,50,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(132,13,4,30,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(133,13,5,55,0,2,3,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(134,13,6,91,0,5,20,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(135,13,7,140,0,2,100,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(136,13,8,204,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(137,13,9,285,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(138,13,10,385,0,3,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(139,13,11,506,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(140,13,12,650,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(141,13,13,819,0,2,40,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(142,13,14,983,0,3,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(143,13,15,1208,0,1,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(144,13,16,1464,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(145,13,17,1753,0,4,2,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(146,13,18,2077,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(147,13,19,2438,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(148,13,20,2838,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(149,14,1,1,1,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(150,14,2,5,1,2,500,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(151,14,3,25,1,2,3,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(152,14,4,100,1,2,10,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(153,14,5,500,1,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(154,14,6,3700,1,2,400,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(155,14,7,10500,1,2,1,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(156,14,8,32,2,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(157,14,9,79,2,1,75,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(158,14,10,185,2,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(159,14,11,391,2,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(160,14,12,900,2,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(161,14,13,2750,2,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(162,14,14,15,3,2,1,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(163,14,15,91500,2,2,9,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(164,14,16,777777,2,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(165,14,17,1,4,2,100,4));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(166,14,18,5150,3,4,2,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(167,14,19,24,4,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(168,14,20,170,4,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(169,15,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(170,15,2,2,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(171,15,3,3,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(172,15,4,4,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(173,15,5,5,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(174,15,6,7,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(175,15,7,10,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(176,15,8,15,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(177,15,9,20,0,1,250,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(178,15,10,30,0,1,300,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(179,16,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(180,16,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(181,16,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(182,16,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(183,16,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(184,16,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(185,16,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(186,16,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(187,17,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(188,17,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(189,17,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(190,17,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(191,17,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(192,17,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(193,17,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(194,17,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(195,17,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(196,17,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(197,17,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(198,17,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(199,17,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(200,17,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(201,17,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(202,17,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(203,17,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(204,17,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(205,17,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(206,17,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(207,18,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(208,18,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(209,18,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(210,18,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(211,18,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(212,18,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(213,18,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(214,18,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(215,19,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(216,19,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(217,19,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(218,19,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(219,19,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(220,19,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(221,19,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(222,19,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(223,19,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(224,19,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(225,19,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(226,19,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(227,19,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(228,19,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(229,19,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(230,19,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(231,19,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(232,19,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(233,19,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(234,19,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(235,20,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(236,20,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(237,20,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(238,20,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(239,20,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(240,20,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(241,20,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(242,20,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(243,21,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(244,21,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(245,21,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(246,21,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(247,21,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(248,21,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(249,21,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(250,21,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(251,21,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(252,21,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(253,21,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(254,21,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(255,21,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(256,21,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(257,21,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(258,21,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(259,21,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(260,21,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(261,21,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(262,21,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(263,22,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(264,22,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(265,22,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(266,22,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(267,22,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(268,22,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(269,22,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(270,22,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(271,23,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(272,23,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(273,23,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(274,23,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(275,23,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(276,23,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(277,23,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(278,23,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(279,23,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(280,23,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(281,23,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(282,23,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(283,23,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(284,23,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(285,23,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(286,23,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(287,23,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(288,23,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(289,23,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(290,23,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(291,24,1,1,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(292,24,2,3,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(293,24,3,5,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(294,24,4,7,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(295,24,5,10,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(296,24,6,15,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(297,24,7,20,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(298,24,8,30,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(299,25,1,1,0,2,10,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(300,25,2,2,0,2,100,1));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(301,25,3,4,0,5,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(302,25,4,8,0,3,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(303,25,5,15,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(304,25,6,25,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(305,25,7,40,0,1,70,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(306,25,8,60,0,2,50,2));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(307,25,9,88,0,5,80,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(308,25,10,120,0,1,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(309,25,11,155,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(310,25,12,191,0,2,25,3));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(311,25,13,235,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(312,25,14,288,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(313,25,15,349,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(314,25,16,415,0,5,100,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(315,25,17,488,0,4,3,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(316,25,18,567,0,1,120,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(317,25,19,658,0,1,150,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(318,25,20,760,0,1,200,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(319,26,1,1,0,1,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(320,26,2,2,0,1,20,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(321,26,3,3,0,1,30,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(322,26,4,4,0,1,40,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(323,26,5,5,0,1,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(324,27,1,1,0,5,10,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(325,27,2,5,0,5,50,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(326,27,3,15,0,4,1,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(327,27,4,30,0,3,5,0));
+        sqLiteDatabase.insert(GOAL_DATA_TABLE_NAME,null, getGoalData(328,27,5,50,0,4,3,0));
+
+    }
+
+    private ContentValues getGoalData(int key, int id, int level, int condition, int coditionPower,
+                                      int rewardType, int reward, int rewardPower){
+        ContentValues values = new ContentValues();
+        values.put(goalPrimaryKey,key);
+        values.put(goalNo,id);
+        values.put(goalLevel,level);
+        values.put(goalCondition,condition);
+        values.put(goalConditionType,coditionPower);
+        values.put(goalRewardType,rewardType);
+        values.put(goalReward,reward);
+        values.put(goalRewardCostType,rewardPower);
+        return values;
+    }
+
+    public GoalData getGoalDataByID(int id, int level) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery;
+        Cursor cursor;
+
+        GoalData goalData = new GoalData();
+
+        selectQuery = "SELECT * FROM " + GOAL_DATA_TABLE_NAME + " WHERE " + goalNo + "=" + (id+1) + " and " + goalLevel + "=" + level;
+        cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                goalData.setGoalNo(cursor.getInt(0));
+                goalData.setGoalLevel(cursor.getInt(1));
+                goalData.setGoalCondition(cursor.getInt(2));
+                goalData.setGoalConditionType(cursor.getInt(3));
+                goalData.setGoalRewardType(cursor.getInt(4));
+                goalData.setGoalReward(cursor.getInt(5));
+                goalData.setGoalRewardCostType(cursor.getInt(6));
+            } while (cursor.moveToNext());
+        }
+
+        return goalData;
+    }
 }

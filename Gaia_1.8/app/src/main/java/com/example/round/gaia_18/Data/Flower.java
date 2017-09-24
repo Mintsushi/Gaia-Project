@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.round.gaia_18.MainActivity;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Round on 2017-09-06.
@@ -18,8 +19,8 @@ public class Flower {
     //꽃을 사려면 필요한 탭 점수랑, 이전 꽃의 레벨
     private int flowerTab, flowerLevel;
     //현재 꽃의 cost와 score
-    private HashMap<Integer,Integer> cost = new HashMap<>();
-    private HashMap<Integer,Integer> score = new HashMap<>();
+    private ConcurrentHashMap<Integer,Integer> cost = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer,Integer> score = new ConcurrentHashMap<>();
 
     //꽃 레벨1이 되기 위해 필요한 cost, costType
     private int flowerCost, costType;
@@ -29,6 +30,9 @@ public class Flower {
     private boolean buyType;
     private boolean buyPossible;
     private int level = 0;
+
+    //overlayView or MainView
+    private int where;
 
     public Flower(){
 
@@ -118,6 +122,38 @@ public class Flower {
         this.buyPossible = buyPossible;
     }
 
+    public int getFlowerCost() {
+        return flowerCost;
+    }
+
+    public void setFlowerCost(int flowerCost) {
+        this.flowerCost = flowerCost;
+    }
+
+    public int getCostType() {
+        return costType;
+    }
+
+    public void setCostType(int costType) {
+        this.costType = costType;
+    }
+
+    public int getFlowerScore() {
+        return flowerScore;
+    }
+
+    public void setFlowerScore(int flowerScore) {
+        this.flowerScore = flowerScore;
+    }
+
+    public int getScoreType() {
+        return scoreType;
+    }
+
+    public void setScoreType(int scoreType) {
+        this.scoreType = scoreType;
+    }
+
     public void setCost(int type, int cost){
         this.costType = type;
         this.flowerCost = cost;
@@ -137,29 +173,38 @@ public class Flower {
         }
     }
 
-    public HashMap<Integer, Integer> getCost(){return this.cost;}
+    public ConcurrentHashMap<Integer, Integer> getCost(){return this.cost;}
 
     public void setScore(int type, int score){
         this.scoreType = type;
         this.flowerScore = score;
 
         int fakeType = 0;
-        while(true){
-        if((score % Math.pow(1000,fakeType+1) / Math.pow(1000,fakeType)) != 0)
-            this.score.put(type,(int)(score % Math.pow(1000,fakeType+1) / Math.pow(1000,fakeType)));
-        if(score / Math.pow(1000,fakeType+1) <1000 ) {
-            if((int)(score / Math.pow(1000,fakeType+1)) != 0)
-                this.score.put(type + 1,(int)(score / Math.pow(1000,fakeType+1)));
-            break;
+        while(true) {
+            if ((score % Math.pow(1000, fakeType + 1) / Math.pow(1000, fakeType)) != 0)
+                this.score.put(type, (int) (score % Math.pow(1000, fakeType + 1) / Math.pow(1000, fakeType)));
+            if (score / Math.pow(1000, fakeType + 1) < 1000) {
+                if ((int) (score / Math.pow(1000, fakeType + 1)) != 0)
+                    this.score.put(type + 1, (int) (score / Math.pow(1000, fakeType + 1)));
+                break;
+            }
+            fakeType++;
+            type++;
         }
-        fakeType++;
-        type++;
-    }}
+    }
 
-    public HashMap<Integer, Integer> getScore(){return this.score;}
+    public ConcurrentHashMap<Integer, Integer> getScore(){return this.score;}
 
     public void reset(){
         setCost(this.costType,this.flowerCost);
         setScore(this.scoreType,this.flowerScore);
+    }
+
+    public int getWhere() {
+        return where;
+    }
+
+    public void setWhere(int where) {
+        this.where = where;
     }
 }

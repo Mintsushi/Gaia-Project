@@ -1,6 +1,12 @@
 package com.example.round.gaia_18.Data;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.webkit.HttpAuthHandler;
+
+import com.example.round.gaia_18.Fragement.MenuSkill;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,11 +14,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Created by Round on 2017-09-06.
- */
+import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
+import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
+import static com.example.round.gaia_18.MainActivity.relativeLayout;
+import static com.example.round.gaia_18.MainActivity.seed;
+import static com.example.round.gaia_18.OverlayService.weatherData;
 
 public class DataList {
 
@@ -24,17 +36,40 @@ public class DataList {
     private static ArrayList<OverlayPlant> overlayPlants = new ArrayList<>();
     //각 식물들의 비용과 점수를 계산하는데 필요한 상수들
     private static ArrayList<FlowerData> flowerDatas = new ArrayList<>();
+    //각 스킬의 정보
+    private static ArrayList<SkillInfo> skillInfos = new ArrayList<>();
+    //각 스킬들에 해당하는 가격, 점수 정보
+    private static ArrayList<SkillData> skillDatas = new ArrayList<>();
+    //만렙을 한 꽃들 중 dry flower fragement에 들어간 꽃에 대한 정보
+    private ConcurrentHashMap<Integer, ArrayList<DryFlower>> dryPlants = new ConcurrentHashMap<>();
+    //각 업적에 해당하는 업적 달성 조건, 보상 정보
+    private static ArrayList<GoalData> goalDatas = new ArrayList<>();
 
     //식물에 따른 클릭 수
-    public static HashMap<Integer, Integer> clickScore = new HashMap<>();
+    public static ConcurrentHashMap<Integer, Integer> clickScore = new ConcurrentHashMap<>();
     //식물에 따른 클릭 수 + 날씨에 따른 식물의 클릭 수 -> 실제 클릭 수
-    public static HashMap<Integer , Integer> totalScore = new HashMap<>();
-    //사용자가 가지고 있는 점수
-    private static HashMap<Integer, Integer> score = new HashMap<>();
+    public static ConcurrentHashMap<Integer , Integer> overlayClickScore = new ConcurrentHashMap<>();
+    //skill type0 사용시 임시로 저장할 click 수
+    public static ConcurrentHashMap<Integer, Integer> fake_clickScore = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Integer, Integer> fase_overlayClickScore = new ConcurrentHashMap<>();
+    //업적 보상(점수 누적)
+    private static ConcurrentHashMap<Integer, Integer> goalClick = new ConcurrentHashMap<>();
+    //스킬타입3(탭당 n% 만큼의 점수 증가
+    private static ConcurrentHashMap<Integer, Integer> skillEffectClickScore = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<Integer, Integer> skillEffectOverlayClickScore = new ConcurrentHashMap<>();
 
-    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas) {
+    //자동 클릭될 VIEW
+    private View clickView;
+
+    //사용자가 가지고 있는 점수
+    private static ConcurrentHashMap<Integer, Integer> score = new ConcurrentHashMap<>();
+    //사용자가 가지고 있는 현금성 재화
+    private static ConcurrentHashMap<Integer, Integer> fruit = new ConcurrentHashMap<>();
+
+    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas, ArrayList<SkillInfo> skillInfos) {
         this.flowers = flowers;
         this.flowerDatas = flowerDatas;
+        this.skillInfos = skillInfos;
     }
 
     public ArrayList<Flower> getFlowers() {
@@ -63,6 +98,113 @@ public class DataList {
 
     public void setOverlayPlants(ArrayList<OverlayPlant> overlayPlants) {
         DataList.overlayPlants = overlayPlants;
+    }
+
+    public void setGoalDatas(int id, int level, int rate){
+
+        GoalData goalData = dataBaseHelper.getGoalDataByID(id, level);
+        goalData.setGoalRate(rate);
+
+        goalDatas.add(id,goalData);
+    }
+
+    public GoalData getGoalDataByID(int id){
+        return this.goalDatas.get(id);
+    }
+
+    public ArrayList<GoalData> getAllGoalData(){return this.goalDatas;}
+
+    public void resetFlower(int id){
+
+        Log.i("RESETFLower","id : "+id);
+        Flower flower = null;
+        for(int i =0 ;i<flowers.size();i++){
+            if(flowers.get(i).getFlowerNo() == id) flower = flowers.get(i);
+        }
+
+        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
+
+        if(flower.getWhere() == 0){
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                minusScore(key,value,clickScore);
+            }
+        }
+        else{
+            ConcurrentHashMap<Integer, Integer> fakeScore = new ConcurrentHashMap<>();
+
+            int effect = weatherData.get(flower.getFlowerNo());
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                int newScore = value + (value * effect) / 100;
+                if(newScore > 999){
+                    if(newScore-1000 >0)
+                        plusScore(key,newScore%1000,fakeScore);
+                    plusScore(key+1,newScore/1000,fakeScore);
+                }
+                else{
+                    plusScore(key,value,fakeScore);
+                }
+            }
+
+            minusOverlayClickScore(fakeScore);
+        }
+
+        flower.setLevel(0);
+        flower.getCost().clear();
+        flower.getScore().clear();
+        flower.setCost(flower.getCostType(),flower.getFlowerCost());
+        flower.setScore(flower.getScoreType(),flower.getFlowerScore());
+        Log.i("RESETFLower","cost : "+flower.getCost()+" / SCORE : "+flower.getScore());
+        flower.setBuyType(false);
+    }
+    public static ArrayList<SkillInfo> getSkillInfos() {
+        return skillInfos;
+    }
+
+    public static void setSkillInfos(ArrayList<SkillInfo> skillInfos) {
+        DataList.skillInfos = skillInfos;
+    }
+
+    public static ArrayList<SkillData> getSkillDatas() {
+        return skillDatas;
+    }
+
+    public static void setSkillDatas(ArrayList<SkillData> skillDatas) {
+        DataList.skillDatas = skillDatas;
+    }
+
+    public void putSkillData(int skillNo,SkillData skillData){
+        skillDatas.add(skillNo,skillData);
+    }
+
+    public void replaceSkillData(int id, int level){
+        skillDatas.remove(id);
+        skillDatas.add(id,dataBaseHelper.getSkill(id, level));
+    }
+
+    public static ConcurrentHashMap<Integer, Integer> getClickScore() {
+        return clickScore;
+    }
+
+    public static void setClickScore(ConcurrentHashMap<Integer, Integer> clickScore) {
+        DataList.clickScore = clickScore;
+    }
+
+    public static ConcurrentHashMap<Integer, Integer> getOverlayClickScore() {
+        return overlayClickScore;
+    }
+
+    public static void setOverlayClickScore(ConcurrentHashMap<Integer, Integer> overlayClickScore) {
+        DataList.overlayClickScore = overlayClickScore;
+    }
+
+    public static ConcurrentHashMap<Integer, Integer> getScore() {
+        return score;
     }
 
     public void addOverlayPlant(OverlayPlant overlayPlant){
@@ -102,12 +244,100 @@ public class DataList {
         DataList.flowerDatas = flowerDatas;
     }
 
-    public HashMap<Integer, Integer> getScoreHashMap() {
+    public ConcurrentHashMap<Integer, Integer> getScoreHashMap() {
         return score;
     }
 
-    public static void setScore(HashMap<Integer, Integer> score) {
-        DataList.score = score;
+    public ConcurrentHashMap<Integer, ArrayList<DryFlower>> getDryPlats() {
+        return dryPlants;
+    }
+
+    public DryFlower getDryFlower(int position){
+
+        Iterator<Integer> iterator = this.dryPlants.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            //해당 key set에 있음.
+            if(dryPlants.get(key).size() > position){
+                return dryPlants.get(key).get(position);
+            }
+            //해당 key set에 없음.
+            position -= dryPlants.get(key).size();
+        }
+
+        return null;
+    }
+
+    public void setDryPlats(DryFlower plant) {
+
+        dryFlowerClick dryFlowerClick = new dryFlowerClick(plant.getScore());
+
+        //해당 id의 꽃이 이미 있음.
+        if(dryPlants.containsKey(plant.getDryFlowerNo())){
+            dryPlants.get(plant.getDryFlowerNo()).add(plant);
+        }
+        else{ //해당 id의 꽃을 처음으로 넣은것
+            ArrayList<DryFlower> dryFlowers = new ArrayList<>();
+            dryFlowers.add(plant);
+            dryPlants.put(plant.getDryFlowerNo(),dryFlowers);
+        }
+
+        dryFlowerClick.startSkill();
+    }
+
+    private class dryFlowerClick {
+
+        android.os.Handler handler = new Handler();
+        private final ConcurrentHashMap<Integer, Integer> dryFlowerScore;
+
+        public dryFlowerClick(ConcurrentHashMap<Integer, Integer> score){
+            this.dryFlowerScore = score;
+        }
+
+        public void startSkill(){
+
+            Timer timer = new Timer();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    autoClick();
+                }
+            };
+            timer.schedule(task, 0,1000);
+        }
+
+        private void autoClick(){
+            Runnable updater = new Runnable() {
+                public void run() {
+                    Log.i("click","click+click");
+                    Iterator<Integer> iterator = dryFlowerScore.keySet().iterator();
+
+                    while(iterator.hasNext()){
+                        int key = iterator.next();
+                        int value = dryFlowerScore.get(key);
+
+                        plusScore(key,value,score);
+                    }
+
+                    seed.setText(getAllScore(score));
+                    mOverlayService.setSeed();
+                }
+            };
+            handler.post(updater);
+        }
+    }
+
+    public int getDryPlantSize(){
+
+        Iterator<Integer> iterator = this.dryPlants.keySet().iterator();
+        int size = 0;
+        while(iterator.hasNext()){
+            size += dryPlants.get(iterator.next()).size();
+        }
+
+        return size;
     }
 
     public int getScore(int type){
@@ -121,7 +351,28 @@ public class DataList {
         this.score.put(type,score);
     }
 
-    public String getAllScore(HashMap<Integer, Integer> hashMap){
+    public void setFruit(int type, int fruit){
+        if(fruit == 0 && this.fruit.containsKey(type)){
+            this.fruit.remove(type);
+        }
+        this.fruit.put(type,fruit);
+    }
+
+    public ConcurrentHashMap<Integer, Integer> getGoalClick(){return this.goalClick;}
+
+    public ConcurrentHashMap<Integer, Integer> getFruitHashMap() {
+        return this.fruit;
+    }
+
+    public View getClickView() {
+        return clickView;
+    }
+
+    public void setClickView(View clickView) {
+        this.clickView = clickView;
+    }
+
+    public String getAllScore(ConcurrentHashMap<Integer, Integer> hashMap){
 
         TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
         treeMap.putAll(hashMap);
@@ -131,28 +382,30 @@ public class DataList {
 
         String scoreString = "";
 
-        iterator.hasNext();
-        while(true){
-            int type = iterator.next();
-            int score = treeMap.get(type);
+        if(iterator.hasNext()){
+            while(true){
+                int type = iterator.next();
+                int score = treeMap.get(type);
 
-            scoreString += Integer.toString(score)+getType(type);
+                if(score != 0) scoreString += Integer.toString(score)+getType(type);
 
-            if(index == 0 && iterator.hasNext()){
-                scoreString += " + ";
-                index = 1;
-            }
-            else{
-                break;
+                if(index == 0 && iterator.hasNext()){
+                    scoreString += " + ";
+                    index = 1;
+                }
+                else{
+                    break;
+                }
             }
         }
 
+        if(scoreString.equals("")) scoreString="0";
         return scoreString;
     }
 
-    public Boolean minusScore(int type, int score, HashMap<Integer, Integer> hashMap){
+    public Boolean minusScore(int type, int score, ConcurrentHashMap<Integer, Integer> hashMap){
 
-        HashMap<Integer, Integer> fakeScore = hashMap;
+        ConcurrentHashMap<Integer, Integer> fakeScore = hashMap;
 
         Log.i("BuyFlower","Score Contain Key: " + fakeScore.containsKey(type));
         //해당 타입에서 구입할 수 있을 때
@@ -172,19 +425,23 @@ public class DataList {
         while(iterator.hasNext()){
             int scoreType = iterator.next();
             int value = fakeScore.get(scoreType);
-            if(scoreType > type){
+            if(scoreType > type && value>0){
                 if(value-1 < 1){
-                    Log.i("BuyFlower","Value-1 = 0 -> value : "+value);
                     hashMap.remove(scoreType);
                 }
                 else{
-                    Log.i("BuyFlower","Value-1 != 0 -> value : "+value);
                     hashMap.put(scoreType,value-1);
                 }
 
                 while(true){
                     if(scoreType - 1 == type){
-                        int newScore = 1000+hashMap.get(type)-score;
+                        int newScore;
+                        if(hashMap.containsKey(type)){
+                            newScore = 1000+hashMap.get(type)-score;
+                        }
+                        else{
+                            newScore = 1000 - score;
+                        }
                         hashMap.put(type,newScore);
                         break;
                     }
@@ -200,7 +457,7 @@ public class DataList {
         return false;
     }
 
-    public void plusScore(int type, int score, HashMap<Integer, Integer> hashMap){
+    public void plusScore(int type, int score, ConcurrentHashMap<Integer, Integer> hashMap){
 
         if(score == 0){
             return;
@@ -235,13 +492,28 @@ public class DataList {
 
     public void windowClick(){
 
-        Iterator<Integer> iterator = totalScore.keySet().iterator();
+        Iterator<Integer> iterator = clickScore.keySet().iterator();
 
         while(iterator.hasNext()){
             int type = iterator.next();
-            int score = totalScore.get(type);
+            int score = clickScore.get(type);
 
             plusScore(type,score,this.score);
+            plusScore(type,score,this.goalClick);
+        }
+    }
+
+    public void overlayWindowClick(){
+        Log.i("OverlayClick", "Click : "+overlayClickScore.toString());
+
+        Iterator<Integer> iterator = overlayClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int type = iterator.next();
+            int score = overlayClickScore.get(type);
+
+            plusScore(type,score,this.score);
+            plusScore(type,score,this.goalClick);
         }
     }
 
@@ -284,27 +556,74 @@ public class DataList {
 
         Iterator<Integer> iterator = flower.getScore().keySet().iterator();
 
-        while (iterator.hasNext()){
-            int key = iterator.next();
-            int value = flower.getScore().get(key);
+        levelUpFlowerResetSkillType3();
 
-            minusScore(key,value,clickScore);
-            minusScore(key, value,totalScore);
+        if(flower.getWhere() == 0){
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                minusScore(key,value,clickScore);
+            }
+        }
+        else{
+            ConcurrentHashMap<Integer, Integer> fakeScore = new ConcurrentHashMap<>();
+
+            int effect = weatherData.get(flower.getFlowerNo());
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                int newScore = value + (value * effect) / 100;
+                if(newScore > 999){
+                    if(newScore-1000 >0)
+                        plusScore(key,newScore%1000,fakeScore);
+                    plusScore(key+1,newScore/1000,fakeScore);
+                }
+                else{
+                    plusScore(key,value,fakeScore);
+                }
+            }
+
+            minusOverlayClickScore(fakeScore);
         }
 
         Log.i("LevelUp","******************************");
+        flower.setLevel(flower.getLevel() + 1);
         newCost(flower);
         newScore(flower);
 
         iterator = flower.getScore().keySet().iterator();
 
-        while (iterator.hasNext()){
-            int key = iterator.next();
-            int value = flower.getScore().get(key);
+        if(flower.getWhere() == 0){
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
 
-            plusScore(key,value,clickScore);
-            plusScore(key,value,totalScore);
+                plusScore(key,value,clickScore);
+            }
         }
+        else{
+
+            int effect = weatherData.get(flower.getFlowerNo());
+
+            while (iterator.hasNext()){
+                int key = iterator.next();
+                int value = flower.getScore().get(key);
+
+                int newScore = value + (value * effect) / 100;
+                if(newScore > 999){
+                    if(newScore-1000 >0)
+                        plusScore(key,newScore%1000,overlayClickScore);
+                    plusScore(key+1,newScore/1000,overlayClickScore);
+                }
+                else{
+                    plusScore(key,value,overlayClickScore);
+                }
+            }
+        }
+
+        levelUpFlowerSetSkillType3();
     }
 
     private void newCost(Flower flower){
@@ -364,55 +683,250 @@ public class DataList {
         }
     }
 
-    public void setTotalScore(HashMap<Integer, Integer> weatherScore){
+    public void plusClickScore(ConcurrentHashMap<Integer, Integer> newScore){
+        Iterator<Integer> iterator = newScore.keySet().iterator();
 
-        Iterator<Integer> iterator = weatherScore.keySet().iterator();
-
-        totalScore.clear();
         while(iterator.hasNext()){
             int type = iterator.next();
-            int score = totalScore.get(type);
+            int score = newScore.get(type);
 
-            plusTotalScore(type,score);
+            plusScore(type,score,clickScore);
         }
     }
 
-    public void plusTotalScore(int type, int score){
+    public void minusClickScore(ConcurrentHashMap<Integer, Integer> newScore){
 
-        if(score == 0){
-            return;
+        Iterator<Integer> iterator = newScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int type = iterator.next();
+            int score = newScore.get(type);
+
+            minusScore(type,score,clickScore);
+        }
+    }
+
+    public void plusOverlayClickScore(ConcurrentHashMap<Integer, Integer> newScore){
+        Iterator<Integer> iterator = newScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int type = iterator.next();
+            int score = newScore.get(type);
+
+            plusScore(type,score,overlayClickScore);
+        }
+    }
+
+    public void minusOverlayClickScore(ConcurrentHashMap<Integer, Integer> newScore){
+        Iterator<Integer> iterator = newScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int type = iterator.next();
+            int score = newScore.get(type);
+
+            minusScore(type,score,overlayClickScore);
+        }
+    }
+
+    public void effectSkill(int skillType){
+
+        Log.i("SKILL","skillType : "+skillType);
+        if(skillType == 0){
+
+            fake_clickScore.putAll(clickScore);
+            fase_overlayClickScore.putAll(overlayClickScore);
+
+            startSkill_type0(clickScore);
+            startSkill_type0(overlayClickScore);
+        }
+    }
+
+    private void startSkill_type0(ConcurrentHashMap<Integer, Integer> score){
+        Iterator<Integer> iterator = score.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            int key = iterator.next();
+            int value = score.get(key);
+
+            dataList.plusScore(key, value, score);
+        }
+    }
+
+    public void finishSkill(int skillType){
+        if(skillType == 0){
+            clickScore.clear();
+            overlayClickScore.clear();
+
+            clickScore.putAll(fake_clickScore);
+            overlayClickScore.putAll(fase_overlayClickScore);
+
+            fake_clickScore.clear();
+            fase_overlayClickScore.clear();
+        }
+    }
+
+    //goal Score도 같이 올려줄것
+    public void startSkill_type1(int effect){
+
+        Iterator<Integer> iterator = clickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = clickScore.get(key);
+
+            int newScore = (int)(value * effect)/100;
+            if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
+            newScore /=1000;
+            do{
+                key++;
+                plusScore(key,newScore,score);
+                newScore /= 1000;
+            }while(newScore > 0);
         }
 
-        if (clickScore.containsKey(type)) {
-            if (clickScore.get(type) + score > 999) {
-                while (true) {
-                    int mok = (clickScore.get(type) + score) / 1000;
-                    int nameogi = (clickScore.get(type) + score) % 1000;
+        iterator = overlayClickScore.keySet().iterator();
 
-                    //total Score
-                    totalScore.put(type, nameogi);
-                    type ++;
-                    if (clickScore.containsKey(type)) {
-                        int newScore = clickScore.get(type) + mok;
-                        if (newScore <= 999) {
-                            //total Score
-                            totalScore.put(type, newScore);
-                            return;
-                        }
-                    } else {
-                        //total Score
-                        totalScore.put(type, mok);
-                        return;
-                    }
-                }
-            } else {
-                //total Score
-                int newScore = clickScore.get(type) + score;
-                totalScore.put(type, newScore);
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = overlayClickScore.get(key);
+
+            int newScore = value * effect;
+            if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
+            newScore /=1000;
+            do{
+                key++;
+                plusScore(key,newScore,score);
+                newScore /= 1000;
+            }while(newScore > 0);
+        }
+    }
+
+    public Boolean calculateGoal(ConcurrentHashMap<Integer, Integer> rate,ConcurrentHashMap<Integer, Integer> goal){
+
+        ConcurrentHashMap<Integer, Integer> fakeGoal = new ConcurrentHashMap<>();
+        fakeGoal.putAll(goal);
+
+        Iterator<Integer> iterator = rate.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = rate.get(key);
+
+            if(!minusScore(key,value,fakeGoal)){
+                return false;
             }
-        } else {
-            //total Score
-            totalScore.put(type, score);
+        }
+
+        return true;
+    }
+
+    //n%만큼의 점수를 계싼해서 clickScore와 overlayClickScore에 ++
+    public void startSkillType3(int effect){
+        Iterator<Integer> iterator = clickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = clickScore.get(key);
+
+            int newScore = (int)(value * effect)/100;
+            if(newScore%1000 != 0) {
+                plusScore(key, newScore%1000,clickScore);
+                plusScore(key,newScore%1000,skillEffectClickScore);
+            }
+            newScore /=1000;
+            do{
+                key++;
+                plusScore(key,newScore,score);
+                plusScore(key,newScore,skillEffectClickScore);
+                newScore /= 1000;
+            }while(newScore > 0);
+        }
+
+        iterator = overlayClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = overlayClickScore.get(key);
+
+            int newScore = value * effect;
+            if(newScore%1000 != 0) {
+                plusScore(key, newScore % 1000, overlayClickScore);
+                plusScore(key,newScore%1000,skillEffectOverlayClickScore);
+            }
+            newScore /=1000;
+            do{
+                key++;
+                plusScore(key,newScore,score);
+                plusScore(key,newScore,skillEffectOverlayClickScore);
+                newScore /= 1000;
+            }while(newScore > 0);
         }
     }
+
+    public void levelUpSkillType3(){
+
+        Iterator<Integer> iterator = skillEffectClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectClickScore.get(key);
+
+            minusScore(key, value,clickScore);
+        }
+        skillEffectClickScore.clear();
+
+        iterator = skillEffectOverlayClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectOverlayClickScore.get(key);
+
+            minusScore(key,value,overlayClickScore);
+        }
+        skillEffectOverlayClickScore.clear();
+
+
+    }
+
+    private void levelUpFlowerResetSkillType3(){
+        Iterator<Integer> iterator = skillEffectClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectClickScore.get(key);
+
+            minusScore(key, value,clickScore);
+        }
+
+        iterator = skillEffectOverlayClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectOverlayClickScore.get(key);
+
+            minusScore(key,value,overlayClickScore);
+        }
+
+    }
+
+    private void levelUpFlowerSetSkillType3(){
+        Iterator<Integer> iterator = skillEffectClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectClickScore.get(key);
+
+            plusScore(key, value,clickScore);
+        }
+
+        iterator = skillEffectOverlayClickScore.keySet().iterator();
+
+        while(iterator.hasNext()){
+            int key = iterator.next();
+            int value = skillEffectOverlayClickScore.get(key);
+
+            plusScore(key,value,overlayClickScore);
+        }
+    }
+
 }

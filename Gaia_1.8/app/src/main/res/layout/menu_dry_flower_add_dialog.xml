@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_background"
+    android:padding="20sp"
+    android:gravity="center">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/fruit" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="70sp"
+            android:textColor="@color/White"
+            android:textStyle="bold"
+            android:text="x20"/>
+    </LinearLayout>
+
+    <TextView
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="구매하시겠습니까?"
+        android:textColor="@color/White"
+        android:textStyle="bold"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <ImageButton
+            android:id="@+id/buy"
+            android:layout_marginRight="20sp"
+            android:layout_width="145dp"
+            android:layout_height="60dp"
+            android:background="@drawable/check_dialog"
+            android:scaleType="fitCenter"
+            android:textColor="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/cancel"
+            android:layout_width="145dp"
+            android:layout_height="60dp"
+            android:background="@drawable/no_dialog"
+            android:scaleType="fitCenter"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+</LinearLayout>

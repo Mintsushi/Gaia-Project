@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.util.HashMap;
+
 /**
  * Created by Round on 2017-09-06.
  */
@@ -22,6 +24,10 @@ public class Plant{
     //waterState == 0 : 물을 준 상태
     //waterState == 1 : 물을 주지 않은 상태
     private int waterState = 0;
+
+    //현재 날씨로 얻을 수 있는 패널티 / 패시브
+    private int effect;
+    private Boolean dryFlowerSetting = false;
 
     //위치 이동
     private Boolean moving = false;
@@ -72,5 +78,21 @@ public class Plant{
 
     public void setPlant(ImageView plant) {
         this.plant = plant;
+    }
+
+    public int getEffect() {
+        return effect;
+    }
+
+    public void setEffect(int effect) {
+        this.effect = effect;
+    }
+
+    public Boolean getDryFlowerSetting() {
+        return dryFlowerSetting;
+    }
+
+    public void setDryFlowerSetting(Boolean dryFlowerSetting) {
+        this.dryFlowerSetting = dryFlowerSetting;
     }
 }

@@ -1,31 +1,35 @@
 [
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_dark.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_material_dark.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_dark.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\switch_thumb_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\switch_thumb_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_hint_foreground_material_light.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_seek_thumb.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_seek_thumb.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_switch_track.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_switch_track.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_secondary_text_material_light.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_search_url_text.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_search_url_text.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_dark.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_secondary_text_material_dark.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_switch_track.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_switch_track.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_dark.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_hint_foreground_material_dark.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_default.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_default.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_dark.xml",
@@ -36,16 +40,132 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_switch_thumb.xml"
     },
     {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_spinner.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_spinner.xml"
+    },
+    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_tint_password_toggle.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\color\\design_tint_password_toggle.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_light.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_hint_foreground_material_light.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_switch_thumb.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_edittext.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_edittext.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_spinner.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_spinner.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_light.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_default.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_default.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_error.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\color\\design_error.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_borderless_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_borderless_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_borderless_text_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_secondary_text_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_btn_checkable.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_btn_checkable.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_spinner.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_spinner.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_text_material.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_default.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_default.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_error.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\color\\design_error.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_text_material.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_text_material.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_tint_password_toggle.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\color\\design_tint_password_toggle.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_switch_thumb.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_switch_thumb.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_switch_track.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_switch_track.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_tint_password_toggle.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\color\\design_tint_password_toggle.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_dark.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_secondary_text_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_dark.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_hint_foreground_material_dark.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_light.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_hint_foreground_material_light.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_light.xml",
@@ -64,28 +184,20 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_search_url_text.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_text_material.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_text_material.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_seek_thumb.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_seek_thumb.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_dark.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_primary_text_material_dark.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_edittext.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_edittext.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_spinner.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_spinner.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_dark.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_dark.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_light.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_primary_text_disable_only_material_light.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_search_url_text.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_search_url_text.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_light.xml",
@@ -96,10 +208,6 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_hint_foreground_material_light.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_default.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_default.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_error.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\color\\design_error.xml"
     },
@@ -108,24 +216,16 @@
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_edittext.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_error.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\design\\25.3.1\\res\\color\\design_error.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_btn_checkable.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_btn_checkable.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_borderless_text_material.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_btn_colored_borderless_text_material.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\switch_thumb_material_dark.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_hint_foreground_material_dark.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_hint_foreground_material_dark.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_light.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_secondary_text_material_light.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_dark.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_material_dark.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_secondary_text_material_light.xml",
@@ -136,28 +236,16 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_switch_track.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_light.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_disable_only_material_light.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_spinner.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_spinner.xml"
+        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_borderless_text_material.xml",
+        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_btn_colored_borderless_text_material.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_dark.xml",
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\switch_thumb_material_dark.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_default.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_tint_default.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_borderless_text_material.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_btn_colored_borderless_text_material.xml"
-    },
-    {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_btn_colored_text_material.xml",
-        "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_btn_colored_text_material.xml"
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_material_light.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_primary_text_material_light.xml"
     },
     {
         "merged": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_primary_text_disable_only_material_dark.xml",
@@ -168,11 +256,11 @@
         "source": "E:\\2017\\WebMo\\Gaia_Github\\NeoFul1.6\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.3.1\\res\\color\\abc_primary_text_material_light.xml"
     },
     {
-        "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\design_tint_password_toggle.xml",
-        "source": "C:\\Users\\Round\\.android\\build-cache\\6a3f3f359a4cf6d0093f8fc5afbf81f8711289be\\output\\res\\color\\design_tint_password_toggle.xml"
-    },
-    {
         "merged": "E:\\2017\\WebMo\\Gaia_Github3\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\switch_thumb_material_light.xml",
         "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\switch_thumb_material_light.xml"
+    },
+    {
+        "merged": "E:\\2017\\WebMo\\reGaia\\NeoFul1.6\\app\\build\\intermediates\\res\\merged\\debug\\color\\abc_tint_edittext.xml",
+        "source": "C:\\Users\\Round\\.android\\build-cache\\14f2506fefc2167ec8d12555894e5326741008db\\output\\res\\color\\abc_tint_edittext.xml"
     }
 ]

@@ -49,6 +49,14 @@
             android:textSize="13sp"
             android:textColor="@color/White"
             android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/flowerScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/White"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <RelativeLayout

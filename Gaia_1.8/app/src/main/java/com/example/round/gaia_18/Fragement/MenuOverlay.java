@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
+import static com.example.round.gaia_18.OverlayService.weatherData;
 
 /**
  * Created by Round on 2017-09-06.
@@ -30,7 +31,7 @@ public class MenuOverlay extends Fragment {
 
     //Layout / View
     private ListView plantList;
-    private PlantAdapter plantAdapter;
+    public static PlantAdapter plantAdapter;
 
     //Data
     private ArrayList<Plant> plants = new ArrayList<>();
@@ -54,6 +55,7 @@ public class MenuOverlay extends Fragment {
     class PlantViewHolder{
         ImageView plantImage;
         TextView plantName;
+        TextView weatherScore;
         Button overlayButton;
     }
 
@@ -79,6 +81,7 @@ public class MenuOverlay extends Fragment {
                 plantViewHolder= new PlantViewHolder();
                 plantViewHolder.plantImage = (ImageView) view.findViewById(R.id.plantImage);
                 plantViewHolder.plantName = (TextView) view.findViewById(R.id.plantName);
+                plantViewHolder.weatherScore = (TextView)view.findViewById(R.id.weatherScore);
                 plantViewHolder.overlayButton = (Button) view.findViewById(R.id.overlayButton);
 
                 view.setTag(plantViewHolder);
@@ -93,6 +96,13 @@ public class MenuOverlay extends Fragment {
                 //plantViewHolder.plantImage.setImageResource(plant.getFlower.getImage())
                 plantViewHolder.plantImage.setImageResource(R.drawable.image);
                 plantViewHolder.plantName.setText(plant.getFlower().getFlowerName());
+                String weatherScore = "";
+                if(weatherData.get(plant.getPlantNo()) > 0 ){
+                    weatherScore = "클릭 당 점수 : + "+weatherData.get(plant.getPlantNo())+" %";
+                }else{
+                    weatherScore = "HP 감소율 : + "+weatherData.get(plant.getPlantNo())+" %";
+                }
+                plantViewHolder.weatherScore.setText(weatherScore);
 
                 //overlay에 있을 때
                 if(plant.getState() == 1){
@@ -109,11 +119,15 @@ public class MenuOverlay extends Fragment {
                         if(plant.getState() == 0){
                             //overlay에 추가
                             mOverlayService.addPlantToOverlay(plant);
+                            dataList.minusClickScore(plant.getFlower().getScore());
+                            plant.getFlower().setWhere(1);
                         } //overlay에 있을 때
                         else{
                             //overlay에서 제거
                             mOverlayService.removePlant(plant.getPlantNo());
+                            dataList.plusClickScore(plant.getFlower().getScore());
                             plant.setState(0);
+                            plant.getFlower().setWhere(0);
                         }
 
                         plantAdapter.notifyDataSetChanged();

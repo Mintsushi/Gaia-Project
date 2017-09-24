@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/skillBackground"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginEnd="20dp">
+
+        <ImageView
+            android:id="@+id/skillImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"/>
+
+        <ProgressBar
+            android:id="@+id/skillExp"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/skillLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/White"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/skillName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/White"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/skillExplain"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/White"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <ImageButton
+            android:id="@+id/skillUseButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/skillCoolTime"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@color/White"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <ImageButton
+            android:id="@+id/skillLevelUpButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/skillLevelUpScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/skillLevelUpButton"
+            android:layout_centerHorizontal="true"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</LinearLayout>

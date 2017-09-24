@@ -3,6 +3,7 @@ package com.example.round.gaia_18;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -23,8 +24,12 @@ import com.example.round.gaia_18.Data.DataList;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.OverlayPlant;
 import com.example.round.gaia_18.Data.Plant;
+import com.example.round.gaia_18.Data.User;
+import com.example.round.gaia_18.Dialog.goalListDialog;
+import com.example.round.gaia_18.Fragement.MenuDryFlower;
 import com.example.round.gaia_18.Fragement.MenuFlower;
 import com.example.round.gaia_18.Fragement.MenuOverlay;
+import com.example.round.gaia_18.Fragement.MenuSkill;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +39,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = ".MainActivity";
     public static Context context;
 
-    //DataBase
+    //DataBase -> 후에 overlay로 이동
     public static DataBaseHelper dataBaseHelper;
     public static DataList dataList;
+    public static User user;
 
     //Layout / View
     public static RelativeLayout relativeLayout;
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Fragment Activity
     private MenuFlower menuFlower = new MenuFlower();
     private MenuOverlay menuOverlay = new MenuOverlay();
+    private MenuSkill menuSkill = new MenuSkill();
+    private MenuDryFlower menuDryFlower = new MenuDryFlower();
 
     //Overlay Service
     public static OverlayService mOverlayService;
@@ -90,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(mOverlayService != null){
             mOverlayService.invisible();
+            dataList.setClickView(relativeLayout);
+            relativeLayout.setOnClickListener(this);
         }
     }
 
@@ -99,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(mOverlayService != null){
             mOverlayService.visible();
+            relativeLayout.setOnClickListener(null);
         }
     }
 
@@ -107,12 +118,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //5. OverlayService
+        overlayService = new Intent(MainActivity.this, OverlayService.class);
+
+        if(!isServiceRunning(OverlayService.class)){
+            startService(overlayService);
+            bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
+        }
+
         //setContext from Static Function
         context = this.getApplicationContext();
-
-        //DataBase
-        dataBaseHelper = new DataBaseHelper(this);
-        dataList = new DataList(dataBaseHelper.getAllFlowers(), dataBaseHelper.getAllFlowerDatas());
 
         //Layout / View
         relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
@@ -131,6 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuStoreButton = (ImageButton)findViewById(R.id.menuStoreButton);
         menuDownButton = (ImageButton)findViewById(R.id.menuDownButton);
 
+
+        //DataBase
+        dataBaseHelper = new DataBaseHelper(this);
+        dataList = new DataList(dataBaseHelper.getAllFlowers(), dataBaseHelper.getAllFlowerDatas(),dataBaseHelper.getAllSkillInfo());
+        user = new User();
+
+
         //Function / 데이터 초기화
         //1. 사용자 정보 받아오기
         getUserInfo();
@@ -140,13 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menu.setOnClickListener(this);
         //4. 화면 클릭을 통한 점수 획득
         relativeLayout.setOnClickListener(this);
-        //5. OverlayService
-        overlayService = new Intent(MainActivity.this, OverlayService.class);
+        //6. goal(업적) 버튼 활성화
+        goal.setOnClickListener(this);
 
-        if(!isServiceRunning(OverlayService.class)){
-            startService(overlayService);
-            bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
-        }
         Log.i(TAG,dataBaseHelper.getAllFlowers().toString());
     }
 
@@ -158,52 +176,97 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Server가 구축되면 Volley를 사용
 
         dataList.setScore(0,50);
-        gameMoney = 1000;
+        dataList.setFruit(0,450);
+        dataList.setFruit(1,100);
+
+
+
+        user.setDryFlowerItem(2);
+
+        ArrayList<Integer> skill = new ArrayList<>();
+        skill.add(0,1);
+        skill.add(1,1);
+        skill.add(2,1);
+        skill.add(3,0);
+        skill.add(4,0);
+        skill.add(5,0);
+        skill.add(6,0);
+
+        for(int i =0 ;i<skill.size();i++){
+            dataBaseHelper.getAllSkillData(i,skill.get(i));
+        }
+
+        dataList.setGoalDatas(0,1,0);
+        dataList.setGoalDatas(1,1,0);
+        dataList.setGoalDatas(2,1,0);
+        dataList.setGoalDatas(3,1,0);
+        dataList.setGoalDatas(4,1,0);
+        dataList.setGoalDatas(5,1,0);
+        dataList.setGoalDatas(6,1,0);
+        dataList.setGoalDatas(7,1,0);
+        dataList.setGoalDatas(8,1,0);
+        dataList.setGoalDatas(9,1,0);
+        dataList.setGoalDatas(10,1,0);
+        dataList.setGoalDatas(11,1,0);
+        dataList.setGoalDatas(12,1,0);
+        dataList.setGoalDatas(13,1,0);
+        dataList.setGoalDatas(14,1,0);
+        dataList.setGoalDatas(15,1,0);
+        dataList.setGoalDatas(16,1,0);
+        dataList.setGoalDatas(17,1,0);
+        dataList.setGoalDatas(18,1,0);
+        dataList.setGoalDatas(19,1,0);
+        dataList.setGoalDatas(20,1,0);
+        dataList.setGoalDatas(21,1,0);
+        dataList.setGoalDatas(22,1,0);
+        dataList.setGoalDatas(23,1,0);
+        dataList.setGoalDatas(24,1,0);
+        dataList.setGoalDatas(25,1,0);
+        dataList.setGoalDatas(26,1,0);
 
         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-        fruit.setText(Float.toString(gameMoney));
+        fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
         Boolean already = false;
-//        int plantNo = 0;
-//        int plantLevel = 400;
-//
-//        ArrayList<Flower> flowers = dataList.getFlowers();
-//        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
-//
-//        for (int i = 0; i < overlayPlants.size(); i++) {
-//            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
-//                plants.add(overlayPlants.get(i).getPlant());
-//                already = true;
-//            }
-//        }
-//
-//
-//
-//        if(!already) {
-//            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
-//            for (int i = 0; i < flowers.size(); i++) {
-//                if (flowers.get(i).getFlowerNo() == plantNo) {
-//
-//                    ImageView plant = new ImageView(this);
-//
-//                    //plant.setImageResource(flower.get(i).getImage())
-//                    plant.setImageResource(R.drawable.image);
-//
-//                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
-//
-//                    //위치는 후에 Random 값으로 배치
-//                    relParams.leftMargin = 0;
-//                    relParams.topMargin = 0;
-//
-//                    plant.setOnLongClickListener(onLongClick);
-//                    plant.setOnTouchListener(onTouch);
-//
-//                    relativeLayout.addView(plant, relParams);
-//                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant));
-//                    break;
-//                }
-//            }
-//        }
+        int plantNo = 0;
+        int plantLevel = 399;
+
+        ArrayList<Flower> flowers = dataList.getFlowers();
+        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
+
+        for (int i = 0; i < overlayPlants.size(); i++) {
+            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
+                plants.add(overlayPlants.get(i).getPlant());
+                already = true;
+            }
+        }
+
+
+        if(!already) {
+            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
+            for (int i = 0; i < flowers.size(); i++) {
+                if (flowers.get(i).getFlowerNo() == plantNo) {
+
+                    ImageView plant = new ImageView(this);
+
+                    //plant.setImageResource(flower.get(i).getImage())
+                    plant.setImageResource(R.drawable.image);
+
+                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
+
+                    //위치는 후에 Random 값으로 배치
+                    relParams.leftMargin = 0;
+                    relParams.topMargin = 0;
+
+                    plant.setOnLongClickListener(onLongClick);
+                    plant.setOnTouchListener(onTouch);
+
+                    relativeLayout.addView(plant, relParams);
+                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant));
+                    break;
+                }
+            }
+        }
 
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
@@ -242,7 +305,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .commit();
         }else if(view == menuASkillButton){
 
+            MainActivity.this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.list_layout,menuSkill)
+                    .commit();
+
         }else if(view == menuPSkillButton){
+
+            MainActivity.this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.list_layout,menuDryFlower)
+                    .commit();
 
         }else if(view == menuOverlayButton){
 
@@ -272,7 +343,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(view == relativeLayout){
             dataList.windowClick();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-
+        }else if(view == goal){
+            goalListDialog dialog = new goalListDialog(view.getContext());
+            dialog.show();
         }
     }
 
