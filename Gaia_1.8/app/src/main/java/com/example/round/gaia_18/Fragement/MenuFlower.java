@@ -78,6 +78,7 @@ public class MenuFlower extends Fragment {
         TextView flowerScore;
         ImageButton flowerLevelUp;
         TextView flowerLevelUpScore;
+        ProgressBar hpProgress;
     }
 
     private class FlowerAdapter extends ArrayAdapter<Flower>{
@@ -113,6 +114,7 @@ public class MenuFlower extends Fragment {
                 viewHolder.flowerScore=(TextView)v.findViewById(R.id.flowerScore);
                 viewHolder.flowerLevelUp=(ImageButton) v.findViewById(R.id.flowerLevelUp);
                 viewHolder.flowerLevelUpScore=(TextView)v.findViewById(R.id.flowerLevelUpScore);
+                viewHolder.hpProgress = (ProgressBar)v.findViewById(R.id.hpProgress);
 
                 v.setTag(viewHolder);
 
@@ -124,6 +126,14 @@ public class MenuFlower extends Fragment {
             if(flower != null){
                 //buyType ==0 이면 잠긴이미지
                 if(flower.isBuyType()) {
+                    int hp=0;
+                    for(int i = 0 ;i<dataList.getPlants().size();i++){
+                        if(dataList.getPlants().get(i).getFlower().equals(flower)){
+                            hp = dataList.getPlants().get(i).getHp();
+                        }
+                    }
+
+                    viewHolder.hpProgress.setProgress(100-hp);
 
                     if(flower.getLevel() == 400){
                         viewHolder.flowerLevelUp.setImageResource(R.drawable.complete);

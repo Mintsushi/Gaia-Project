@@ -17,6 +17,7 @@ public class Plant{
     private int level;
     private Flower flower;
     private ImageView plant;
+    private int hp = 100;
 
     //state == 0 : overlayview에 없음
     //state == 1 : overlayview에 있음
@@ -33,11 +34,12 @@ public class Plant{
     private Boolean moving = false;
     private int originalXPos, originalYPos;
 
-    public Plant(int plantNo, int level, Flower flower, ImageView plant) {
+    public Plant(int plantNo, int level, Flower flower, ImageView plant,int hp) {
         this.plantNo = plantNo;
         this.level = level;
         this.flower = flower;
         this.plant = plant;
+        this.hp = hp;
     }
 
     public int getPlantNo() {
@@ -94,5 +96,13 @@ public class Plant{
 
     public void setDryFlowerSetting(Boolean dryFlowerSetting) {
         this.dryFlowerSetting = dryFlowerSetting;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp -= hp;
     }
 }

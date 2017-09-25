@@ -100,6 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mOverlayService.invisible();
             dataList.setClickView(relativeLayout);
             relativeLayout.setOnClickListener(this);
+
+            for(int i =0;i<dataList.getSkillInfos().size();i++){
+                if(dataList.getSkillInfos().get(i).getSkillCoolTimeInApp() != null){
+                    dataList.getSkillInfos().get(i).setSkillCoolTime(dataList.getSkillInfos().get(i).getSkillCoolTimeInApp());
+                }
+            }
         }
     }
 
@@ -237,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Boolean already = false;
         int plantNo = 0;
         int plantLevel = 399;
+        int plantHP = 40;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
@@ -269,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     plant.setOnTouchListener(onTouch);
 
                     relativeLayout.addView(plant, relParams);
-                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant));
+                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant,plantHP));
                     break;
                 }
             }
@@ -377,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         plant.setOnTouchListener(onTouch);
 
         relativeLayout.addView(plant,relParams);
-        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower,plant));
+        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower,plant,100));
     }
 
     public static void updatePlantLevel(int plantNo){

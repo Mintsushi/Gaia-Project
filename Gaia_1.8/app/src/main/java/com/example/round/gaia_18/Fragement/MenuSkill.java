@@ -41,6 +41,7 @@ import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.R.id.linearLayout;
+import static com.example.round.gaia_18.R.id.skillCoolTime;
 
 public class MenuSkill extends Fragment {
 
@@ -93,9 +94,9 @@ public class MenuSkill extends Fragment {
             SkillData skillData = dataList.getSkillDatas().get(position);
             final SkillViewHolder skillViewHolder;
 
+            Log.i("SkillViewHolder","skill id : "+skillInfo.getSkillNo()+" / skill Use State : "+skillInfo.getSkillUseState());
             if (skillInfo.getSkillView() == null) {
 
-                Log.i("SkillViewHolder","skill ViewHolder Setting");
                 view = mInflater.inflate(R.layout.menu_skill_item, parent, false);
                 skillViewHolder = new SkillViewHolder();
 
@@ -105,6 +106,8 @@ public class MenuSkill extends Fragment {
                 skillViewHolder.skillLevel = (TextView) view.findViewById(R.id.skillLevel);
                 skillViewHolder.skillName = (TextView) view.findViewById(R.id.skillName);
                 skillViewHolder.coolTime = (TextView) view.findViewById(R.id.skillCoolTime);
+                skillInfo.setSkillCoolTime(skillViewHolder.coolTime);
+                skillInfo.setSkillCoolTimeInApp(skillViewHolder.coolTime);
                 skillViewHolder.skillUseButton = (ImageButton) view.findViewById(R.id.skillUseButton);
                 skillViewHolder.skillUseButton.setTag(skillData.getSkillNo());
                 skillViewHolder.skillLevelUp = (ImageButton) view.findViewById(R.id.skillLevelUpButton);
@@ -118,6 +121,7 @@ public class MenuSkill extends Fragment {
             } else {
                 Log.i("SkillViewHolder","skill ViewHolder Setting");
                 skillViewHolder = (SkillViewHolder)skillInfo.getSkillView().getTag();
+                skillInfo.setSkillCoolTime(skillViewHolder.coolTime);
             }
 
 
@@ -175,8 +179,7 @@ public class MenuSkill extends Fragment {
                                     SkillData skillData = dataList.getSkillDatas().get(id);
 
                                     skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                    SkillCoolTimer timer = new SkillCoolTimer();
-                                    timer.skillCoolTime(skillInfo, skillViewHolder.coolTime, skillViewHolder.skillUseButton, skillViewHolder.background);
+                                    mOverlayService.skillCoolTime.skillCoolTime(skillInfo, skillViewHolder.skillUseButton, skillViewHolder.background);
 
                                     skillInfo.setSkillUseState(true);
                                     //Skill Cool Time동안은 사용 불가능
@@ -258,54 +261,6 @@ public class MenuSkill extends Fragment {
             }
 
             return skillInfo.getSkillView();
-        }
-    }
-
-    private class SkillCoolTimer{
-
-        private final Handler handler= new Handler();
-        Timer timer = new Timer();
-
-        public void skillCoolTime(final SkillInfo skillInfo, final TextView coolTime, final ImageButton button,final LinearLayout background){
-
-            final int time = skillInfo.getCoolTime();
-
-            TimerTask task = new TimerTask() {
-                int cool = 0;
-
-                @Override
-                public void run() {
-                    cool++;
-                    int newTime = time-cool;
-                    int hour = newTime /3600;
-                    newTime %= 3600;
-                    int min = newTime / 60;
-                    int sec = newTime % 60;
-                    updateSec(hour,sec,min,coolTime,button,background);
-                    if(sec == time) {
-                        skillInfo.setSkillUseState(false);
-                        timer.cancel();
-                    }
-                }
-            };
-
-            timer.schedule(task, 0,1000);
-        }
-
-        protected void updateSec(final int hour, final int sec, final int min, final TextView coolTime, final ImageButton button,final LinearLayout background){
-            Runnable updater = new Runnable() {
-
-                public void run() {
-                    coolTime.setText(min+":"+sec);
-                    if(min == 0 && sec == 0){
-                        coolTime.setVisibility(View.INVISIBLE);
-                        button.setVisibility(View.VISIBLE);
-                        background.setBackgroundResource(R.drawable.flower_buy_available);
-                    }
-                }
-
-            };
-            handler.post(updater);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.round.gaia_18.Data;
 
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.round.gaia_18.Fragement.MenuSkill;
 
@@ -27,6 +28,9 @@ public class SkillInfo {
     private Boolean skillDataChange = true;
     // skillAdpater
     private View skillView = null;
+    //SkillCoolTime Text;
+    private TextView skillCoolTime = null;
+    private TextView skillCoolTimeInApp = null;
 
     public SkillInfo(){}
 
@@ -126,5 +130,21 @@ public class SkillInfo {
 
     public void setSkillView(View skillViewHolder) {
         this.skillView = skillViewHolder;
+    }
+
+    public TextView getSkillCoolTime() {
+        return skillCoolTime;
+    }
+
+    public void setSkillCoolTime(TextView skillCoolTime) {
+        this.skillCoolTime = skillCoolTime;
+    }
+
+    public TextView getSkillCoolTimeInApp() {
+        return skillCoolTimeInApp;
+    }
+
+    public void setSkillCoolTimeInApp(TextView skillCoolTimeInApp) {
+        this.skillCoolTimeInApp = skillCoolTimeInApp;
     }
 }

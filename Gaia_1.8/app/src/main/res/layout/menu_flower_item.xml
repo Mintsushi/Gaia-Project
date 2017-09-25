@@ -13,11 +13,26 @@
         android:orientation="vertical"
         android:layout_marginEnd="20dp">
 
-        <ImageView
-            android:id="@+id/flowerImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="fitXY"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/flowerImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitXY"/>
+
+            <ProgressBar
+                android:id="@+id/hpProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_centerInParent="true"
+                android:max="100"
+                android:progressDrawable="@drawable/progress_drawable"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+        </RelativeLayout>
 
         <ProgressBar
             android:id="@+id/flowerExp"
