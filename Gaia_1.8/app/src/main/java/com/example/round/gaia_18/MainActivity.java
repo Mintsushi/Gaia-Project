@@ -34,15 +34,14 @@ import com.example.round.gaia_18.Fragement.MenuSkill;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.round.gaia_18.OverlayService.dataBaseHelper;
+import static com.example.round.gaia_18.OverlayService.dataList;
+import static com.example.round.gaia_18.OverlayService.user;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = ".MainActivity";
     public static Context context;
-
-    //DataBase -> 후에 overlay로 이동
-    public static DataBaseHelper dataBaseHelper;
-    public static DataList dataList;
-    public static User user;
 
     //Layout / View
     public static RelativeLayout relativeLayout;
@@ -84,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.i(TAG,"ServieConnected");
             mOverlayService = ((OverlayService.LocalBinder)iBinder).getService();
+
+            //Function / 데이터 초기화
+            //1. 사용자 정보 받아오기
+            getUserInfo();
         }
 
         @Override
@@ -101,10 +104,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dataList.setClickView(relativeLayout);
             relativeLayout.setOnClickListener(this);
 
+            seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+            fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+            mOverlayService.setSeed();
+
             for(int i =0;i<dataList.getSkillInfos().size();i++){
                 if(dataList.getSkillInfos().get(i).getSkillCoolTimeInApp() != null){
                     dataList.getSkillInfos().get(i).setSkillCoolTime(dataList.getSkillInfos().get(i).getSkillCoolTimeInApp());
                 }
+            }
+
+            if(dataList.mAdapter != null) {
+                dataList.mAdapter.notifyDataSetChanged();
+            }
+            if(dataList.flowerAdapter != null){
+                dataList.flowerAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -115,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(mOverlayService != null){
             mOverlayService.visible();
-            relativeLayout.setOnClickListener(null);
+            dataList.setClickView(null);
         }
     }
 
@@ -152,22 +166,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuStoreButton = (ImageButton)findViewById(R.id.menuStoreButton);
         menuDownButton = (ImageButton)findViewById(R.id.menuDownButton);
 
-
-        //DataBase
-        dataBaseHelper = new DataBaseHelper(this);
-        dataList = new DataList(
-                dataBaseHelper.getAllFlowers(),
-                dataBaseHelper.getAllFlowerDatas(),
-                dataBaseHelper.getAllSkillInfo(),
-                dataBaseHelper.getAllStoreProduct()
-        );
-
-        user = new User();
-
-
-        //Function / 데이터 초기화
-        //1. 사용자 정보 받아오기
-        getUserInfo();
         //2. Fragement Button setOnClickListener
         setImageButtonClick();
         //3. menu 버튼 활성화
@@ -177,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //6. goal(업적) 버튼 활성화
         goal.setOnClickListener(this);
 
-        Log.i(TAG,dataBaseHelper.getAllFlowers().toString());
     }
 
     private void getUserInfo(){

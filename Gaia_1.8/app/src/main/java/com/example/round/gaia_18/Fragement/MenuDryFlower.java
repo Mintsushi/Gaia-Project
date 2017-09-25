@@ -20,15 +20,15 @@ import com.example.round.gaia_18.Dialog.AddDryFlower;
 import com.example.round.gaia_18.Dialog.AddDryFlowerItemDialog;
 import com.example.round.gaia_18.R;
 
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.Data.DataList.dryFlowerAdapter;
+import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
-import static com.example.round.gaia_18.MainActivity.user;
+import static com.example.round.gaia_18.OverlayService.user;
 
 public class MenuDryFlower extends Fragment {
 
     private static final String TAG = ".MenuDryFlower";
     private ListView dryFlowerList;
-    private DryFlowerAdapter dryFlowerAdapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -50,7 +50,7 @@ public class MenuDryFlower extends Fragment {
         ImageButton dryFlowerInfoButton;
     }
 
-    private class DryFlowerAdapter extends ArrayAdapter<DryFlower>{
+    public class DryFlowerAdapter extends ArrayAdapter<DryFlower>{
         private LayoutInflater mInflater = null;
 
         public DryFlowerAdapter(Context context, int resource) {

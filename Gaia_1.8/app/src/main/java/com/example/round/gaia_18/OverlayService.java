@@ -40,13 +40,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_18.Common.Common;
+import com.example.round.gaia_18.Data.DataList;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.OverlayPlant;
 import com.example.round.gaia_18.Data.Plant;
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
+import com.example.round.gaia_18.Data.User;
 import com.example.round.gaia_18.Helper.Helper;
 import com.example.round.gaia_18.SkillTimer.SkillCoolTime;
+import com.example.round.gaia_18.SkillTimer.skillUseTimer_type0;
+import com.example.round.gaia_18.SkillTimer.skillUseTimer_type2;
 import com.example.round.gaia_18.model.OpenWeatherMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,10 +67,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.Inflater;
 
 import static com.example.round.gaia_18.Data.DataList.overlayClickScore;
-import static com.example.round.gaia_18.Fragement.MenuOverlay.plantAdapter;
+import static com.example.round.gaia_18.Data.DataList.overlaySkillAdpter;
 import static com.example.round.gaia_18.MainActivity.context;
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.MainActivity.weather;
@@ -75,6 +78,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     private static final String TAG = ".OverlayService";
     private final IBinder mBinder = new LocalBinder();
+
+    //datalis
+    //DataBase -> 후에 overlay로 이동
+    public static DataBaseHelper dataBaseHelper;
+    public static DataList dataList;
+    public static User user;
 
     //Overlay View Service
     private WindowManager mWindowManager;
@@ -132,8 +141,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public static ArrayList<Integer> weatherData;
 
     //Skill 사용
-    private OverlaySkillAdpter overlaySkillAdpter;
     public static SkillCoolTime skillCoolTime = new SkillCoolTime();
+    public static skillUseTimer_type0 type0 = new skillUseTimer_type0();
+    public static skillUseTimer_type2 type2 = new skillUseTimer_type2();
 
     @Override
     public IBinder onBind(Intent intent){ return mBinder; }
@@ -179,6 +189,16 @@ public class OverlayService extends Service implements View.OnClickListener,View
         noti.bigContentView = remoteView;
 
         notificationManager.notify(notification_id,noti);
+
+        //DataBase
+        dataBaseHelper = new DataBaseHelper(this);
+        dataList = new DataList(
+                dataBaseHelper.getAllFlowers(),
+                dataBaseHelper.getAllFlowerDatas(),
+                dataBaseHelper.getAllSkillInfo(),
+                dataBaseHelper.getAllStoreProduct()
+        );
+        user = new User();
 
         startForeground(startId,noti);
         return START_STICKY;
@@ -311,7 +331,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         ImageView cantUse;
     }
 
-    private class OverlaySkillAdpter extends ArrayAdapter<SkillInfo> {
+    public class OverlaySkillAdpter extends ArrayAdapter<SkillInfo> {
 
         private LayoutInflater inflater = null;
 
@@ -327,7 +347,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         public View getView(int position, View view, ViewGroup parent){
 
             final SkillInfo skillInfo = dataList.getSkillInfos().get(position);
-            SkillData skillData = dataList.getSkillDatas().get(position);
+            final SkillData skillData = dataList.getSkillDatas().get(position);
             final OverlaySkillViewHolder skillViewHolder;
 
             Log.i("OverlaySkill","id : "+position+" / buy : "+skillData.getSkillBuy());
@@ -367,8 +387,11 @@ public class OverlayService extends Service implements View.OnClickListener,View
                             public void onClick(View view) {
                                 skillViewHolder.coolTime.setVisibility(View.VISIBLE);
                                 skillInfo.setSkillCoolTime(skillViewHolder.coolTime);
-                                skillCoolTime.skillCoolTime(skillInfo,null,null);
+                                skillCoolTime.skillCoolTime(skillInfo);
                                 skillInfo.setSkillUseState(true);
+                                skillInfo.setSkillDataChange(true);
+
+                                useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
 
                                 if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
                                     dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
@@ -387,6 +410,33 @@ public class OverlayService extends Service implements View.OnClickListener,View
             }
 
             return view;
+        }
+    }
+
+    private void useSkill(int skillType, int effect){
+
+        switch (skillType){
+
+            //스킬 유형1 : 일정 시간 얻는 점수 2배
+            case 0:
+                mOverlayService.type0.startSkill(skillType,effect);
+                break;
+            //스킬 유형2 : 점수 획득
+            case 1:
+                dataList.startSkill_type1(effect,1);
+                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+                mOverlayService.setSeed();
+                break;
+            //스킬 유형3 : 초당 10회 자동 탭
+            case 2:
+                mOverlayService.type2.startSkill(skillType,effect);
+                break;
+            //스킬 유형3 : 탭 당 점수 증가
+//            case 3:break;
+//            //스킬 유형4 : 분당 일정 획수 자동 탭
+//            case 4:break;
+            //스킬 유형6 : 날씨가 비 일시 일정량의 물 획득
+            case 5:break;
         }
     }
 

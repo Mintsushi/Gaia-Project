@@ -27,10 +27,11 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.round.gaia_18.Data.DataList.flowerAdapter;
 import static com.example.round.gaia_18.MainActivity.clickScore;
-import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.seed;
+import static com.example.round.gaia_18.OverlayService.dataList;
 
 /**
  * Created by Round on 2017-09-06.
@@ -42,7 +43,6 @@ public class MenuFlower extends Fragment {
 
     //Layout / View
     private ListView flowerList;
-    private FlowerAdapter flowerAdapter;
 
     //Data
     private ArrayList<Flower> flowers = new ArrayList<>();
@@ -81,7 +81,7 @@ public class MenuFlower extends Fragment {
         ProgressBar hpProgress;
     }
 
-    private class FlowerAdapter extends ArrayAdapter<Flower>{
+    public class FlowerAdapter extends ArrayAdapter<Flower>{
 
         private LayoutInflater mInflater = null;
         private FlowerViewHolder viewHolder;

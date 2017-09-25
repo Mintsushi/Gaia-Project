@@ -17,7 +17,8 @@ import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
 
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.Data.DataList.plantAdapter;
+import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.OverlayService.weatherData;
 
@@ -31,7 +32,6 @@ public class MenuOverlay extends Fragment {
 
     //Layout / View
     private ListView plantList;
-    public static PlantAdapter plantAdapter;
 
     //Data
     private ArrayList<Plant> plants = new ArrayList<>();

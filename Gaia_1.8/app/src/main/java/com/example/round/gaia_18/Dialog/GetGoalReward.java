@@ -21,7 +21,7 @@ import com.example.round.gaia_18.R;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.seed;

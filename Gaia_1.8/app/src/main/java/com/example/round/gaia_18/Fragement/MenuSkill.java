@@ -34,8 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import android.os.Handler;
 import android.widget.Toast;
 
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.Data.DataList.mAdapter;
+import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
@@ -48,8 +48,6 @@ public class MenuSkill extends Fragment {
     private static final String TAG = ".ActiveSkillActivity";
     //skill을 띄어줄 list
     private ListView skillList;
-    //skillList Adapter
-    private SkillAdapter mAdapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -76,7 +74,7 @@ public class MenuSkill extends Fragment {
         TextView skillExplain;
     }
 
-    private class SkillAdapter extends ArrayAdapter<SkillInfo> {
+    public class SkillAdapter extends ArrayAdapter<SkillInfo> {
         private LayoutInflater mInflater = null;
 
         public SkillAdapter(Context context, int resource) {
@@ -94,7 +92,7 @@ public class MenuSkill extends Fragment {
             SkillData skillData = dataList.getSkillDatas().get(position);
             final SkillViewHolder skillViewHolder;
 
-            Log.i("SkillViewHolder","skill id : "+skillInfo.getSkillNo()+" / skill Use State : "+skillInfo.getSkillUseState());
+            Log.i("onResume","skill id : "+skillInfo.getSkillNo()+" / skill Use State : "+skillInfo.getSkillUseState());
             if (skillInfo.getSkillView() == null) {
 
                 view = mInflater.inflate(R.layout.menu_skill_item, parent, false);
@@ -179,7 +177,7 @@ public class MenuSkill extends Fragment {
                                     SkillData skillData = dataList.getSkillDatas().get(id);
 
                                     skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                    mOverlayService.skillCoolTime.skillCoolTime(skillInfo, skillViewHolder.skillUseButton, skillViewHolder.background);
+                                    mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
 
                                     skillInfo.setSkillUseState(true);
                                     //Skill Cool Time동안은 사용 불가능
@@ -264,93 +262,27 @@ public class MenuSkill extends Fragment {
         }
     }
 
-    abstract class SkillUse{
-
-        Handler handler= new Handler();
-        Timer timer = new Timer();
-
-        protected abstract void startSkill(final int skillType, final int time);
-    }
-
-    private class SkillUseTimer_type0 extends SkillUse{
-
-        @Override
-        public void startSkill(final int skillType, final int time){
-
-            dataList.effectSkill(skillType);
-
-            TimerTask task = new TimerTask() {
-                int cool = 0;
-                @Override
-                public void run() {
-                    cool++;
-                    if(cool == time) {
-                        Log.i("Time","Time Finished");
-                        timer.cancel();
-                        dataList.finishSkill(skillType);
-                    }
-                }
-            };
-            timer.schedule(task, 0,1000);
-        }
-    }
-
-    private class SkillUseTimer_type2 extends SkillUse{
-
-        @Override
-        public void startSkill(final int skillType, final int time){
-
-            TimerTask task = new TimerTask() {
-                int cool = 0;
-                @Override
-                public void run() {
-                    cool++;
-                    autoClick();
-                    if(cool == time*10) {
-                        timer.cancel();
-                    }
-                }
-            };
-            timer.schedule(task, 0,100);
-        }
-
-        private void autoClick(){
-            Runnable updater = new Runnable() {
-                public void run() {
-                    if(dataList.getClickView()==relativeLayout) dataList.windowClick();
-                    else dataList.overlayWindowClick();
-                    mOverlayService.setSeed();
-                    seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-                }
-            };
-
-            handler.post(updater);
-        }
-    }
-
     private void useSkill(int skillType, int effect){
 
         switch (skillType){
 
             //스킬 유형1 : 일정 시간 얻는 점수 2배
             case 0:
-                SkillUseTimer_type0 type0 = new SkillUseTimer_type0();
-                type0.startSkill(skillType,effect);
+                mOverlayService.type0.startSkill(skillType,effect);
                 break;
             //스킬 유형2 : 점수 획득
             case 1:
-                dataList.startSkill_type1(effect);
+                dataList.startSkill_type1(effect,0);
                 seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
                 mOverlayService.setSeed();
                 break;
             //스킬 유형3 : 초당 10회 자동 탭
             case 2:
-                SkillUseTimer_type2 type2 = new SkillUseTimer_type2();
-                type2.startSkill(skillType,effect);
+                mOverlayService.type2.startSkill(skillType,effect);
                 break;
-            //스킬 유형4 : 탭 당 점수 증가
+            //스킬 유형3 : 탭 당 점수 증가
 //            case 3:break;
-//            //스킬 유형5 : 분당 일정 획수 자동 탭
+//            //스킬 유형4 : 분당 일정 획수 자동 탭
 //            case 4:break;
             //스킬 유형6 : 날씨가 비 일시 일정량의 물 획득
             case 5:break;

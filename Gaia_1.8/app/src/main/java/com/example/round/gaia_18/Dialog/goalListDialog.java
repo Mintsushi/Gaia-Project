@@ -33,8 +33,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.OverlayService.dataList;
 
 /**
  * Created by Round on 2017-09-23.

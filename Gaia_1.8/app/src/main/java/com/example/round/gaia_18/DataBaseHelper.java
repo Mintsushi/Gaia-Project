@@ -17,7 +17,7 @@ import com.example.round.gaia_18.Data.StoreProduct;
 
 import java.util.ArrayList;
 
-import static com.example.round.gaia_18.MainActivity.dataList;
+import static com.example.round.gaia_18.OverlayService.dataList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 

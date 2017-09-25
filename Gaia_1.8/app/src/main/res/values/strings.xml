@@ -8,7 +8,7 @@
 
     <!--Skill-->
     <string name="skillCase0">%d초 동안 점수 2배 증가</string>
-    <string name="skillCase1">%d %%만큼의 점수 획득</string>
+    <string name="skillCase1">%d배 만큼의 점수 획득</string>
     <string name="skillCase2">%d초 동안 초당 10회 자동 탭</string>
     <string name="skillCase3">탭 당 %d %%만큼의 점수 증가</string>
     <string name="skillCase4">분당 %d회 자동 탭</string>

@@ -23,8 +23,8 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.round.gaia_18.MainActivity.dataList;
-import static com.example.round.gaia_18.MainActivity.user;
+import static com.example.round.gaia_18.OverlayService.dataList;
+import static com.example.round.gaia_18.OverlayService.user;
 
 /**
  * Created by Round on 2017-09-22.

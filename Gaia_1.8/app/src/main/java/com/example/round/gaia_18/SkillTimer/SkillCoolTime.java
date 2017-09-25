@@ -12,6 +12,9 @@ import com.example.round.gaia_18.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
+import static com.example.round.gaia_18.OverlayService.dataList;
+
 /**
  * Created by Round on 2017-09-25.
  */
@@ -22,7 +25,7 @@ public class SkillCoolTime{
 
     public SkillCoolTime(){}
 
-    public void skillCoolTime(final SkillInfo skillInfo, final ImageButton button, final LinearLayout background){
+    public void skillCoolTime(final SkillInfo skillInfo){
 
         final int time = skillInfo.getCoolTime();
 
@@ -37,10 +40,16 @@ public class SkillCoolTime{
                 newTime %= 3600;
                 int min = newTime / 60;
                 int sec = newTime % 60;
-                updateSec(hour,sec,min,skillInfo.getSkillCoolTime(),button,background);
-                if(cool == time) {
+                updateSec(hour,sec,min,skillInfo.getSkillCoolTime());
+                if(cool == time+1) {
                     skillInfo.setSkillUseState(false);
                     timer.cancel();
+                    if(dataList.mAdapter != null){
+                        dataList.mAdapter.notifyDataSetChanged();
+                    }
+                    if(dataList.overlaySkillAdpter != null){
+                        dataList.overlaySkillAdpter.notifyDataSetChanged();
+                    }
                 }
             }
         };
@@ -48,17 +57,13 @@ public class SkillCoolTime{
         timer.schedule(task, 0,1000);
     }
 
-    protected void updateSec(final int hour, final int sec, final int min, final TextView coolTime, final ImageButton button,final LinearLayout background){
+    protected void updateSec(final int hour, final int sec, final int min, final TextView coolTime){
         Runnable updater = new Runnable() {
 
             public void run() {
                 coolTime.setText(min+":"+sec);
                 if(min == 0 && sec == 0){
                     coolTime.setVisibility(View.INVISIBLE);
-                    if(button !=null || background !=null) {
-                        button.setVisibility(View.VISIBLE);
-                        background.setBackgroundResource(R.drawable.flower_buy_available);
-                    }
                 }
             }
 

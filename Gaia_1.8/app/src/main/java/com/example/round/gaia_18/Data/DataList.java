@@ -6,7 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.HttpAuthHandler;
 
+import com.example.round.gaia_18.Fragement.MenuDryFlower;
+import com.example.round.gaia_18.Fragement.MenuFlower;
+import com.example.round.gaia_18.Fragement.MenuOverlay;
 import com.example.round.gaia_18.Fragement.MenuSkill;
+import com.example.round.gaia_18.OverlayService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,11 +23,10 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.round.gaia_18.MainActivity.dataBaseHelper;
-import static com.example.round.gaia_18.MainActivity.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
+import static com.example.round.gaia_18.OverlayService.dataBaseHelper;
 import static com.example.round.gaia_18.OverlayService.weatherData;
 
 public class DataList {
@@ -61,6 +64,15 @@ public class DataList {
     //스킬타입3(탭당 n% 만큼의 점수 증가
     private static ConcurrentHashMap<Integer, Integer> skillEffectClickScore = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<Integer, Integer> skillEffectOverlayClickScore = new ConcurrentHashMap<>();
+
+    //각 fragement의 Adatper들
+    public static MenuDryFlower.DryFlowerAdapter dryFlowerAdapter;
+    public static MenuFlower.FlowerAdapter flowerAdapter;
+    public static MenuOverlay.PlantAdapter plantAdapter;
+    //skillList Adapter
+    public static MenuSkill.SkillAdapter mAdapter;
+    //overlaySkill Adapter
+    public static OverlayService.OverlaySkillAdpter overlaySkillAdpter;
 
     //자동 클릭될 VIEW
     private View clickView;
@@ -774,7 +786,7 @@ public class DataList {
             int key = iterator.next();
             int value = score.get(key);
 
-            dataList.plusScore(key, value, score);
+            plusScore(key, value, score);
         }
     }
 
@@ -792,38 +804,45 @@ public class DataList {
     }
 
     //goal Score도 같이 올려줄것
-    public void startSkill_type1(int effect){
+    public void startSkill_type1(int effect, int where){
+        Iterator<Integer> iterator;
 
-        Iterator<Integer> iterator = clickScore.keySet().iterator();
+        //App 내부에서 스킬 사용
+        if(where == 0){
+            iterator= clickScore.keySet().iterator();
 
-        while(iterator.hasNext()){
-            int key = iterator.next();
-            int value = clickScore.get(key);
+            while(iterator.hasNext()){
+                int key = iterator.next();
+                int value = clickScore.get(key);
 
-            int newScore = (int)(value * effect)/100;
-            if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
-            newScore /=1000;
-            do{
-                key++;
-                plusScore(key,newScore,score);
-                newScore /= 1000;
-            }while(newScore > 0);
+                int newScore = (int)(value * effect);
+                if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
+                newScore /=1000;
+                do{
+                    key++;
+                    plusScore(key,newScore,score);
+                    newScore /= 1000;
+                }while(newScore > 0);
+            }
         }
 
-        iterator = overlayClickScore.keySet().iterator();
+        //외부화면에서 스킬 사용
+        else{
+            iterator = overlayClickScore.keySet().iterator();
 
-        while(iterator.hasNext()){
-            int key = iterator.next();
-            int value = overlayClickScore.get(key);
+            while(iterator.hasNext()){
+                int key = iterator.next();
+                int value = overlayClickScore.get(key);
 
-            int newScore = value * effect;
-            if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
-            newScore /=1000;
-            do{
-                key++;
-                plusScore(key,newScore,score);
-                newScore /= 1000;
-            }while(newScore > 0);
+                int newScore = value * effect;
+                if(newScore%1000 != 0) plusScore(key, newScore%1000,score);
+                newScore /=1000;
+                do{
+                    key++;
+                    plusScore(key,newScore,score);
+                    newScore /= 1000;
+                }while(newScore > 0);
+            }
         }
     }
 
