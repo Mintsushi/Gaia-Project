@@ -21,6 +21,8 @@ import com.example.round.gaia_18.Dialog.AddDryFlowerItemDialog;
 import com.example.round.gaia_18.R;
 
 import static com.example.round.gaia_18.Data.DataList.dryFlowerAdapter;
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
+import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.OverlayService.user;
@@ -111,6 +113,14 @@ public class MenuDryFlower extends Fragment {
                                     for(int i =0 ; i<dialog.getDryFlower().size();i++){
                                         dataList.setDryPlats(dialog.getDryFlower().get(i));
                                         dataList.resetFlower(dialog.getDryFlower().get(i).getDryFlowerNo());
+
+                                        //App에 있을 때
+                                        if(dialog.getDryFlower().get(i).getPlant().getState() == 0){
+                                            relativeLayout.removeView(dialog.getDryFlower().get(i).getPlant().getPlant());
+                                        }else{//overlay에 있을 때
+                                           mOverlayService.removePlant(dialog.getDryFlower().get(i).getDryFlowerNo());
+                                        }
+                                        dataList.getPlants().remove(dialog.getDryFlower().get(i).getIndex());
                                     }
 
                                     dataList.getGoalDataByID(14).setGoalRate(dialog.getDryFlower().size());

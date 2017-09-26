@@ -13,6 +13,7 @@ public class DryFlower {
     private ConcurrentHashMap<Integer, Integer> score = new ConcurrentHashMap<>();
     private boolean check = false;
     private Plant plant;
+    private int index;
 
     public DryFlower(){}
 
@@ -71,5 +72,13 @@ public class DryFlower {
 
     public void setPlant(Plant plant) {
         this.plant = plant;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

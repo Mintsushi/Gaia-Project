@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Round on 2017-09-06.
@@ -18,6 +20,7 @@ public class Plant{
     private Flower flower;
     private ImageView plant;
     private int hp = 100;
+    private Timer timer = new Timer();
 
     //state == 0 : overlayview에 없음
     //state == 1 : overlayview에 있음
@@ -29,6 +32,9 @@ public class Plant{
     //현재 날씨로 얻을 수 있는 패널티 / 패시브
     private int effect;
     private Boolean dryFlowerSetting = false;
+
+    //외부에서 얻을 수 있는 점수
+    private ConcurrentHashMap<Integer, Integer> overlayScore = new ConcurrentHashMap<>();
 
     //위치 이동
     private Boolean moving = false;
@@ -103,6 +109,22 @@ public class Plant{
     }
 
     public void setHp(int hp) {
-        this.hp -= hp;
+        this.hp += hp;
+    }
+
+    public ConcurrentHashMap<Integer, Integer> getOverlayScore() {
+        return overlayScore;
+    }
+
+    public void setOverlayScore(ConcurrentHashMap<Integer, Integer> overlayScore) {
+        this.overlayScore = overlayScore;
+    }
+
+    public Timer getTimer() {
+        return timer;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
     }
 }

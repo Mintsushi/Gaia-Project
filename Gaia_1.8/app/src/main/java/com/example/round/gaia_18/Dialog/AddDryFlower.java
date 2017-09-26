@@ -63,6 +63,7 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
                 DryFlower maxPlant = dataBaseHelper.getDryFlowerData(dataList.getPlants().get(i).getPlantNo());
                 maxPlant.setDryFlowerName(dataList.getPlants().get(i).getFlower().getFlowerName());
                 maxPlant.setPlant(dataList.getPlants().get(i));
+                maxPlant.setIndex(i);
                 maxLevel.add(maxPlant);
             }
         }

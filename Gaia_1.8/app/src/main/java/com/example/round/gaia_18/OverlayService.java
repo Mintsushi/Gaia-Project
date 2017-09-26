@@ -63,6 +63,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.Inflater;
 
@@ -86,14 +87,14 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public static User user;
 
     //Overlay View Service
-    private WindowManager mWindowManager;
+    public WindowManager mWindowManager;
     private View toLeftView;
 
     //view Move
     private float offsetX, offsetY;
     private int originalX, originalY;
     private boolean moving;
-    private boolean enalbeOverlayService = false;
+    public boolean enalbeOverlayService = false;
 
     //Notification View
     private Notification noti;
@@ -208,8 +209,6 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public void onCreate(){
         super.onCreate();
 
-        setLocation();
-
         //Overlay Service / WindowManager
         mWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
 
@@ -229,11 +228,10 @@ public class OverlayService extends Service implements View.OnClickListener,View
         params.height = 0;
 
         mWindowManager.addView(toLeftView, params);
-
         setLayout();
     }
 
-    private void setLocation(){
+    public Boolean setLocation(){
         locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(),false);
 
@@ -256,12 +254,20 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 .check();
 
         try{
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,400,1,this);
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,400,1,this);
+
+            Boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            if(!isGPSEnabled) return true;
+            else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 400, 1, this);
+            }
         }catch (SecurityException e){
             Log.i("OverlayService",e.toString());
         }
 
+        enalbeOverlayService = true;
+        return false;
     }
 
     public void setSeed(){
@@ -496,37 +502,65 @@ public class OverlayService extends Service implements View.OnClickListener,View
         }
     }
 
-    public void addPlantToOverlay(Plant plant){
+    public void setOverlayPlantToDryFlower(int id){
 
-        relativeLayout.removeView(plant.getPlant());
+        ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
 
-        ImageView exPlant = plant.getPlant();
+        for(int i =0 ;i<plants.size();i++){
+            if(plants.get(i).getPlant().getPlantNo() == id){
+                minusOverlayClickScore(plants.get(i).getPlant());
+                plants.remove(i);
+            }
+        }
+    }
 
-        int[] location = new int[2];
-        exPlant.getLocationOnScreen(location);
+    public Boolean onTest(int plantID){
+        for(int i =0 ;i<dataList.getOverlayPlants().size();i++){
+            if(dataList.getOverlayPlants().get(i).getPlant().getPlantNo() == plantID){
+                return false;
+            }
+        }
+        return true;
+    }
 
-        ImageView overlayPlant = new ImageView(this);
-        //overlayPlant.setImageResource(plant.getFlower().getImage());
-        overlayPlant.setImageResource(R.drawable.image);
+    public Boolean addPlantToOverlay(Plant plant){
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                exPlant.getWidth(),exPlant.getHeight(),
-                WindowManager.LayoutParams.TYPE_TOAST,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                PixelFormat.TRANSLUCENT
-        );
+        if(enalbeOverlayService) {
+            relativeLayout.removeView(plant.getPlant());
 
-        params.gravity = Gravity.LEFT | Gravity.TOP;
-        params.x = location[0];
-        params.y = location[1];
+            ImageView exPlant = plant.getPlant();
 
-        overlayPlant.setOnClickListener(this);
-        overlayPlant.setOnTouchListener(this);
+            int[] location = new int[2];
+            exPlant.getLocationOnScreen(location);
 
-        plant.setState(1);
-        plusOverlayClickScore(plant);
-        dataList.addOverlayPlant(new OverlayPlant(plant,overlayPlant, params));
+            ImageView overlayPlant = new ImageView(this);
+            //overlayPlant.setImageResource(plant.getFlower().getImage());
+            overlayPlant.setImageResource(R.drawable.image);
+
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                    exPlant.getWidth(), exPlant.getHeight(),
+                    WindowManager.LayoutParams.TYPE_TOAST,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    PixelFormat.TRANSLUCENT
+            );
+
+            params.gravity = Gravity.LEFT | Gravity.TOP;
+            params.x = location[0];
+            params.y = location[1];
+
+            overlayPlant.setOnClickListener(this);
+            overlayPlant.setOnTouchListener(this);
+
+            plant.setState(1);
+            plusOverlayClickScore(plant);
+            dataList.addOverlayPlant(new OverlayPlant(plant, overlayPlant, params));
+
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     @Override
@@ -707,16 +741,18 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 weatherData = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
 
                 Log.i("Weather**","Diff Weather : "+weatherData.toString());
-                //날씨에 따른 새로운 click 점수를 저장할 hashmap
-                ConcurrentHashMap<Integer, Integer> newTotalScore = new ConcurrentHashMap<>();
 //
                 dataList.overlayClickScore.clear();
                 for(int i =0; i<dataList.getOverlayPlants().size(); i++){
-
                     //해당 꽃의 id(flowerNo)
                     int id = dataList.getOverlayPlants().get(i).getPlant().getPlantNo();
                     //해당 꽃의 N%를 계산하기 위해, 현재 꽃의 점수를 가져와야함 -> flower 객체에 있음.
                     Flower flower = dataList.getOverlayPlants().get(i).getPlant().getFlower();
+                    final Plant plant = dataList.getOverlayPlants().get(i).getPlant();
+
+                    plant.getOverlayScore().clear();
+                    plant.getTimer().cancel();
+                    plant.setEffect(0);
 
                     //날씨에 따른 패널티 / 패시브
                     int effect = weatherData.get(id);
@@ -734,27 +770,38 @@ public class OverlayService extends Service implements View.OnClickListener,View
                             int newScore = value + (value * effect) / 100;
                             if(newScore > 999){
                                 if(newScore-1000 >0)
-                                    dataList.plusScore(key,newScore%1000,newTotalScore);
-                                dataList.plusScore(key+1,newScore/1000,newTotalScore);
+                                    dataList.plusScore(key,newScore%1000,plant.getOverlayScore());
+                                dataList.plusScore(key+1,newScore/1000,plant.getOverlayScore());
                             }
                             else{
-                              dataList.plusScore(key,newScore,newTotalScore);
+                              dataList.plusScore(key,newScore,plant.getOverlayScore());
                             }
                         }
 
-                        dataList.plusOverlayClickScore(newTotalScore);
+                        dataList.plusOverlayClickScore(plant.getOverlayScore());
                     }
                     else if(effect == 0){
-                        Iterator<Integer> iterator = flower.getScore().keySet().iterator();
-
-                        while (iterator.hasNext()) {
-                            int key = iterator.next();
-                            int value = flower.getScore().get(key);
-                            dataList.plusScore(key,value, newTotalScore);
-                        }
+                        plant.getOverlayScore().clear();
+                        dataList.plusOverlayClickScore(flower.getScore());
+                        plant.getTimer().cancel();
+                        plant.setEffect(0);
                     }
                     else{ //hp 감소
-                        dataList.getOverlayPlants().get(i).getPlant().setHp(effect);
+
+                        plant.setEffect(effect);
+
+                        //점수 증가였다가 HP 증가로 변화
+                        if(plant.getEffect()==0){
+                            //3분에 한번씩 감소
+                            TimerTask task = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    plant.setHp(plant.getEffect());
+                                }
+                            };
+
+                            plant.getTimer().schedule(task,0,180000);
+                        }
                     }
 
                 }
@@ -773,49 +820,26 @@ public class OverlayService extends Service implements View.OnClickListener,View
         Flower flower = plant.getFlower();
 
         //꽃의 점수 5%값을 임시로 저장
-        ConcurrentHashMap<Integer, Integer> newTotalScore = new ConcurrentHashMap<>();
-
         //날씨에 따른 패널티 / 패시브
         int effect = weatherData.get(plant.getPlantNo());
 
         // effect>0일 경우는 추가 점수
         // effect<0일 경우는 hp 감소
         if(effect > 0) {
-
-            //꽃의 현재 점수
-            Iterator<Integer> iterator = flower.getScore().keySet().iterator();
-
-            while (iterator.hasNext()) {
-                int key = iterator.next();
-                int value = flower.getScore().get(key);
-
-                Log.i("OverlayClick","key : "+key+" / value : "+value+" / effect : "+effect);
-
-                int newScore = value + (value * effect) / 100;
-                if(newScore > 999){
-                    if(newScore-1000 >0)
-                        dataList.plusScore(key,newScore%1000,newTotalScore);
-                    dataList.plusScore(key+1,newScore/1000,newTotalScore);
-                }
-                else{
-                    dataList.plusScore(key,newScore,newTotalScore);
-                }
-            }
-
-            dataList.minusOverlayClickScore(newTotalScore);
+            dataList.minusOverlayClickScore(plant.getOverlayScore());
         }
         else if(effect == 0){
             dataList.minusOverlayClickScore(flower.getScore());
         }
         else{ //hp 감소 취소
-
+            plant.getTimer().cancel();
         }
     }
 
-    public void plusOverlayClickScore(Plant plant){
+    public void plusOverlayClickScore(final Plant plant){
 
         Flower flower = plant.getFlower();
-        int effect = weatherData.get(plant.getPlantNo());
+        final int effect = weatherData.get(plant.getPlantNo());
         Iterator<Integer> iterator = flower.getScore().keySet().iterator();
 
         Log.i("OverlayClick", "Flower : "+flower.getFlowerName()+" / effect : "+effect);
@@ -831,18 +855,30 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 Log.i("OverlayClick", "key : " + key + " / value : " + newScore + " / effect : " + effect);
                 if (newScore > 999) {
                     if (newScore - 1000 > 0)
-                        dataList.plusScore(key, newScore % 1000, overlayClickScore);
-                    dataList.plusScore(key + 1, newScore / 1000, overlayClickScore);
+                        dataList.plusScore(key, newScore % 1000, plant.getOverlayScore());
+                    dataList.plusScore(key + 1, newScore / 1000, plant.getOverlayScore());
                 } else {
-                    dataList.plusScore(key, newScore, overlayClickScore);
+                    dataList.plusScore(key, newScore, plant.getOverlayScore());
                 }
             }
+
+            dataList.plusOverlayClickScore(plant.getOverlayScore());
         }
         else if(effect == 0){
             dataList.plusOverlayClickScore(flower.getScore());
         }
         else { //hp 감소
 
+            plant.setEffect(effect);
+            //3분에 한번씩 감소
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    plant.setHp(plant.getEffect());
+                }
+            };
+
+            plant.getTimer().schedule(task,0,180000);
         }
     }
 

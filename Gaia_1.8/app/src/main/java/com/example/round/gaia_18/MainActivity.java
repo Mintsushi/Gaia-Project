@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,8 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static Boolean moving;
     private static int originalXPos,originalYPos;
 
-    //Click Score
-    public static HashMap<Integer, Integer> clickScore;
+    //GPS Setting
+    private android.app.AlertDialog alertDialog = null;
 
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
@@ -84,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i(TAG,"ServieConnected");
             mOverlayService = ((OverlayService.LocalBinder)iBinder).getService();
 
+            if(mOverlayService.setLocation()){
+                setGPS("GPS Setting이 되지 않았을 수도 있습니다.\n 설정하시겠습니까?\n" +
+                        "(설정하지 않으시면 외부기능 이용에 불편함이 있으실 수 있습니다.)");
+            }
             //Function / 데이터 초기화
             //1. 사용자 정보 받아오기
             getUserInfo();
@@ -94,6 +100,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i(TAG,"Service DisConnected");
         }
     };
+
+    private void setGPS(String message) {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_gps, null);
+
+        TextView warn = (TextView) dialogView.findViewById(R.id.warn);
+        warn.setText(message);
+        Button cancel = (Button) dialogView.findViewById(R.id.cancel);
+        Button submit = (Button) dialogView.findViewById(R.id.submit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOverlayService.enalbeOverlayService = true;
+                alertDialog.cancel();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
 
     @Override
     protected void onResume(){

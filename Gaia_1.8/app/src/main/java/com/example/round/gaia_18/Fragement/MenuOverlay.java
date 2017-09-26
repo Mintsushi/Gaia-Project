@@ -1,8 +1,12 @@
 package com.example.round.gaia_18.Fragement;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.round.gaia_18.Data.DataList.plantAdapter;
 import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
@@ -29,12 +34,13 @@ import static com.example.round.gaia_18.OverlayService.weatherData;
 public class MenuOverlay extends Fragment {
 
     private static final String TAG =".MenuOverlay";
+    private static final int REQUEST_CODE=1001;
+    private View view;
 
     //Layout / View
     private ListView plantList;
-
-    //Data
-    private ArrayList<Plant> plants = new ArrayList<>();
+    //GPS Setting
+    private android.app.AlertDialog alertDialog = null;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -42,11 +48,16 @@ public class MenuOverlay extends Fragment {
         View view = inflater.inflate(R.layout.menu_overlay_fragment,container,false);
 
         //plant : 사용자가 가지고 있는 꽃 종류
-        plants = dataList.getPlants();
 
-        plantAdapter = new PlantAdapter(getContext(),R.layout.menu_overlay_item);
-        plantList = (ListView)view.findViewById(R.id.menu_overlay_list);
-        plantList.setAdapter(plantAdapter);
+        if(mOverlayService.enalbeOverlayService){
+            plantAdapter = new PlantAdapter(getContext(),R.layout.menu_overlay_item);
+            plantList = (ListView)view.findViewById(R.id.menu_overlay_list);
+            plantList.setAdapter(plantAdapter);
+        }
+        else{
+            this.view = view;
+            setGPS();
+        }
 
         return view;
     }
@@ -69,11 +80,11 @@ public class MenuOverlay extends Fragment {
         }
 
         @Override
-        public int getCount(){ return plants.size(); }
+        public int getCount(){ return dataList.getPlants().size(); }
 
         @Override
         public View getView(int position, View view, ViewGroup parent){
-            PlantViewHolder plantViewHolder;
+            final PlantViewHolder plantViewHolder;
 
             if( view == null){
                 view = mInflater.inflate(R.layout.menu_overlay_item,parent,false);
@@ -89,7 +100,7 @@ public class MenuOverlay extends Fragment {
                 plantViewHolder = (PlantViewHolder) view.getTag();
             }
 
-            final Plant plant = plants.get(position);
+            final Plant plant = dataList.getPlants().get(position);
 
             if(plant != null){
 
@@ -117,11 +128,13 @@ public class MenuOverlay extends Fragment {
                     public void onClick(View view) {
                         //overlay에 없을 때
                         if(plant.getState() == 0){
-                            //overlay에 추가
-                            mOverlayService.addPlantToOverlay(plant);
-                            dataList.minusClickScore(plant.getFlower().getScore());
-                            plant.getFlower().setWhere(1);
-                            dataList.getGoalDataByID(10).setGoalRate(1);
+                            if(mOverlayService.addPlantToOverlay(plant)) {
+                                mOverlayService.addPlantToOverlay(plant);
+                                dataList.minusClickScore(plant.getFlower().getScore());
+                                plant.getFlower().setWhere(1);
+                                plant.setState(1);
+                                dataList.getGoalDataByID(10).setGoalRate(1);
+                            }
                         } //overlay에 있을 때
                         else{
                             //overlay에서 제거
@@ -129,6 +142,7 @@ public class MenuOverlay extends Fragment {
                             dataList.plusClickScore(plant.getFlower().getScore());
                             plant.setState(0);
                             plant.getFlower().setWhere(0);
+                            plant.setState(0);
                         }
 
                         plantAdapter.notifyDataSetChanged();
@@ -137,6 +151,50 @@ public class MenuOverlay extends Fragment {
             }
 
             return view;
+        }
+    }
+
+    private void setGPS() {
+        android.app.AlertDialog.Builder dialogBuilder = new android.app.AlertDialog.Builder(getContext());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+        View dialogView = inflater.inflate(R.layout.dialog_gps, null);
+
+        TextView warn = (TextView) dialogView.findViewById(R.id.warn);
+        warn.setText("GPS Setting이 되어 있지 않아. 외부기능 사용이 불가능합니다.\n 외부기능을 사용하고 싶으시면 확인버튼을 클릭하여 GPS를 실행시켜주세요.");
+        Button cancel = (Button) dialogView.findViewById(R.id.cancel);
+        Button submit = (Button) dialogView.findViewById(R.id.submit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOverlayService.enalbeOverlayService = true;
+                alertDialog.cancel();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.cancel();
+            }
+        });
+        dialogBuilder.setView(dialogView);
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode,resultCode,data);
+
+        Log.i("GPS","requestCode : "+requestCode+" / resultCode : "+requestCode+" / RESULT OK : "+RESULT_OK);
+        if(requestCode == REQUEST_CODE){
+            plantAdapter = new PlantAdapter(getContext(),R.layout.menu_overlay_item);
+            plantList = (ListView)view.findViewById(R.id.menu_overlay_list);
+            plantList.setAdapter(plantAdapter);
         }
     }
 }

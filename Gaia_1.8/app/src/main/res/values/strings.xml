@@ -5,6 +5,7 @@
     <string name="menu">Menu</string>
     <string name="Goal">Goal</string>
     <string name="level">Level . </string>
+    <string name="startGame">게임시작</string>
 
     <!--Skill-->
     <string name="skillCase0">%d초 동안 점수 2배 증가</string>

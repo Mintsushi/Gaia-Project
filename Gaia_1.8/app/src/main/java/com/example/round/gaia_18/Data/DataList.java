@@ -197,7 +197,6 @@ public class DataList {
         flower.getScore().clear();
         flower.setCost(flower.getCostType(),flower.getFlowerCost());
         flower.setScore(flower.getScoreType(),flower.getFlowerScore());
-        Log.i("RESETFLower","cost : "+flower.getCost()+" / SCORE : "+flower.getScore());
         flower.setBuyType(false);
     }
     public static ArrayList<SkillInfo> getSkillInfos() {

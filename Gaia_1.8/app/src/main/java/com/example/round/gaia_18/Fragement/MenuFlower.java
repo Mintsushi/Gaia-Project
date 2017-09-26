@@ -28,8 +28,6 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.Data.DataList.flowerAdapter;
-import static com.example.round.gaia_18.MainActivity.clickScore;
-import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataList;
 
