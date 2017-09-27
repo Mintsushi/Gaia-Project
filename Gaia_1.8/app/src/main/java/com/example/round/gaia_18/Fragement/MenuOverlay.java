@@ -129,7 +129,7 @@ public class MenuOverlay extends Fragment {
                         //overlay에 없을 때
                         if(plant.getState() == 0){
                             if(mOverlayService.addPlantToOverlay(plant)) {
-                                mOverlayService.addPlantToOverlay(plant);
+                                Log.i("overlay","SET overlay");
                                 dataList.minusClickScore(plant.getFlower().getScore());
                                 plant.getFlower().setWhere(1);
                                 plant.setState(1);
@@ -138,6 +138,7 @@ public class MenuOverlay extends Fragment {
                         } //overlay에 있을 때
                         else{
                             //overlay에서 제거
+                            Log.i("overlay","remove overlay");
                             mOverlayService.removePlant(plant.getPlantNo());
                             dataList.plusClickScore(plant.getFlower().getScore());
                             plant.setState(0);

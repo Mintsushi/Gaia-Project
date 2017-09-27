@@ -10,6 +10,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.location.Criteria;
 import android.location.Location;
@@ -32,6 +33,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -66,6 +68,8 @@ import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.Inflater;
+
+import at.markushi.ui.CircleButton;
 
 import static com.example.round.gaia_18.Data.DataList.overlayClickScore;
 import static com.example.round.gaia_18.Data.DataList.overlaySkillAdpter;
@@ -108,19 +112,23 @@ public class OverlayService extends Service implements View.OnClickListener,View
     private String provider;
     private double lat,lng;
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
-    private String weatherState = "";
+    private static String weatherState = "";
 
     private final int MY_PERMISSION = 0;
 
     //Screen Click
     public LinearLayout linearLayout;
     private LinearLayout skill;
-    private Button open;
-    private Button click;
+    private CircleButton open;
+    private CircleButton remove;
+    private CircleButton click;
+    private CircleButton useSkill;
     private TextView seedOverlay;
     private WindowManager.LayoutParams clickLayout;
     private WindowManager.LayoutParams skillWindow;
     private Button removeAll;
+    private ListView skillList;
+    private LinearLayout.LayoutParams ButtonParams;
 
     //0 닫혀있는 상태
     //1 열려있는 상태
@@ -128,6 +136,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
     //0 : click stop
     //1 : click available
     private int clickState = 0;
+    //0 : Non Skill Use
+    //1: Use Skill
+    private int skillUse = 0;
 
     //Error Solution
     //0: overlayScreen Off
@@ -169,7 +180,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
 
     public class LocalBinder extends Binder {
-        OverlayService getService(){ return OverlayService.this; }
+        OverlayService getService(){return OverlayService.this;}
     }
 
     @Override
@@ -271,63 +282,92 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     public void setSeed(){
-        seedOverlay.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+//        seedOverlay.setText(dataList.getAllScore(dataList.getScoreHashMap()));
     }
 
     private void setLayout(){
         linearLayout = new LinearLayout(this);
         linearLayout.setOnClickListener(this);
 
+        skillList = new ListView(this);
+        skillList.setBackgroundColor(getResources().getColor(R.color.White));
+        overlaySkillAdpter = new OverlaySkillAdpter(this, R.layout.overlay_skill_item);
+        skillList.setAdapter(overlaySkillAdpter);
+
         skill = new LinearLayout(this);
         skill.setOrientation(LinearLayout.VERTICAL);
-        skill.setGravity(Gravity.CENTER_HORIZONTAL);
-        skill.setBackgroundResource(R.drawable.brown_background);
-
-        seedOverlay = new TextView(this);
-//        seedOverlay.setText(Integer.toString(score));
-
-        open = new Button(this);
-        open.setText("OPEN");
-
-        click = new Button(this);
-        click.setText("Click");
-
-        removeAll = new Button(this);
-        removeAll.setText("Remove");
-
-        open.setOnClickListener(this);
-        click.setOnClickListener(this);
-        removeAll.setOnClickListener(this);
-
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        buttonParams.gravity=Gravity.CENTER;
-        skill.addView(seedOverlay,buttonParams);
-        skill.addView(open,buttonParams);
-        skill.addView(click,buttonParams);
-        skill.addView(removeAll,buttonParams);
-
-        ListView listView = new ListView(this);
-        overlaySkillAdpter = new OverlaySkillAdpter(this, R.layout.overlay_skill_item);
-        listView.setAdapter(overlaySkillAdpter);
-
-        buttonParams = new LinearLayout.LayoutParams(200, ViewGroup.LayoutParams.MATCH_PARENT);
-        buttonParams.gravity=Gravity.CENTER;
-        skill.addView(listView,buttonParams);
 
         skillWindow = new WindowManager.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,200,
+                300, ViewGroup.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_TOAST,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 PixelFormat.TRANSLUCENT
         );
-        skillWindow.gravity = Gravity.RIGHT | Gravity.BOTTOM;
+
+        skillWindow.gravity = Gravity.LEFT | Gravity.TOP;
+
+        skill.setOnClickListener(this);
+        skill.setOnTouchListener(this);
 
         clickLayout = new WindowManager.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.TYPE_TOAST,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
+
+        open = new CircleButton(this);
+        open.setImageResource(R.drawable.open);
+        open.setTag(0);
+
+        click = new CircleButton(this);
+        click.setImageResource(R.drawable.click);
+        click.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        remove = new CircleButton(this);
+        remove.setImageResource(R.drawable.remove);
+        remove.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        useSkill = new CircleButton(this);
+        useSkill.setImageResource(R.drawable.skill);
+        useSkill.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        click.setOnClickListener(this);
+        remove.setOnClickListener(this);
+        useSkill.setOnClickListener(this);
+
+        open.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //close - > open
+                if((int)view.getTag() == 0){
+                    LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(150, 150);
+                    buttonParams.gravity=Gravity.CENTER;
+                    buttonParams.bottomMargin=20;
+                    skill.addView(click,buttonParams);
+                    skill.addView(remove,buttonParams);
+                    skill.addView(useSkill,buttonParams);
+                    view.setTag(1);
+                }
+                else{ //open -> close
+
+                    if(skillUse == 1){
+                        skill.removeView(skillList);
+                    }
+
+                    skill.removeView(click);
+                    skill.removeView(remove);
+                    skill.removeView(useSkill);
+
+                    view.setTag(0);
+                }
+            }
+        });
+        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(150, 150);
+        buttonParams.gravity=Gravity.CENTER;
+        buttonParams.topMargin=150;
+        buttonParams.bottomMargin = 100;
+        skill.addView(open,buttonParams);
 
     }
 
@@ -466,6 +506,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 clickState = 0;
             }
             mWindowManager.removeView(skill);
+//            mWindowManager.removeView(circleMenu);
             visible = 0;
         }
     }
@@ -480,6 +521,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             }
 
             mWindowManager.addView(skill, skillWindow);
+//            mWindowManager.addView(circleMenu,skillWindow);
             setSeed();
 
             visible = 1;
@@ -553,6 +595,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             overlayPlant.setOnTouchListener(this);
 
             plant.setState(1);
+            Log.i("overlay","plusOverlayClickScore");
             plusOverlayClickScore(plant);
             dataList.addOverlayPlant(new OverlayPlant(plant, overlayPlant, params));
 
@@ -565,6 +608,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent){
+
+        Log.i("onTouch","motion : "+motionEvent.toString());
         if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
             moving = false;
 
@@ -618,43 +663,29 @@ public class OverlayService extends Service implements View.OnClickListener,View
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
             dataList.getGoalDataByID(9).setGoalRate(1);
-        }else if(view == open){
+        }
+        else if(view == click){
 
-            WindowManager.LayoutParams params = (WindowManager.LayoutParams)skill.getLayoutParams();
-            if(skillWindowState == 0){
-                params.height = 1000;
-                mWindowManager.updateViewLayout(skill,params);
-
-                open.setText("Close");
-                skillWindowState = 1;
-            }
-            else{
-                params.height = 200;
-                mWindowManager.updateViewLayout(skill,params);
-
-                open.setText("Open");
-                skillWindowState = 0;
-            }
-
-        }else if(view == click){
-
+            //stop -> click
             if(clickState == 0){
                 mWindowManager.addView(linearLayout,clickLayout);
                 dataList.setClickView(linearLayout);
                 //수정필요
                 mWindowManager.removeView(skill);
                 mWindowManager.addView(skill,(WindowManager.LayoutParams)skill.getLayoutParams());
-                click.setText("Stop");
+                click.setImageResource(R.drawable.stop);
                 clickState = 1;
             }
-            else{
+            else{ //click -> stop
                 mWindowManager.removeView(linearLayout);
-                click.setText("Click");
+                click.setImageResource(R.drawable.click);
                 clickState = 0;
             }
 
-        }else if(view == removeAll){
+        }
+        else if(view == remove){
 
+            //create -> remove
             if(removeState == 0){
                 ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
 
@@ -662,18 +693,35 @@ public class OverlayService extends Service implements View.OnClickListener,View
                     mWindowManager.removeView(plants.get(i).getOverlayPlant());
                 }
 
-                removeAll.setText("Create");
+                remove.setImageResource(R.drawable.create);
                 removeState = 1;
             }
 
-            else{
+            else{ //remove -> create
                 ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
 
                 for (int i = 0; i < plants.size(); i++) {
                     mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
                 }
-                removeAll.setText("Remove");
+
+                remove.setImageResource(R.drawable.remove);
                 removeState = 0;
+            }
+        }
+        else if(view == useSkill){
+
+            Log.i("UseSkill","use Skill!! : "+useSkill.getTag());
+            //Non Use Skill -> Use Skill
+            if(skillUse == 0) {
+                Log.i("UseSkill","use Skill!!");
+                LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(200, 500);
+                buttonParams.gravity=Gravity.CENTER;
+                skill.addView(skillList,buttonParams);
+                skillUse = 1;
+            }
+            else{ //Use Skill -> Non Use Skill
+                skill.removeView(skillList);
+                skillUse = 0;
             }
         }
     }
@@ -852,7 +900,6 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 Log.i("OverlayClick", "key : " + key + " / value : " + value + " / effect : " + effect);
 
                 int newScore = value + ((value * effect) / 100);
-                Log.i("OverlayClick", "key : " + key + " / value : " + newScore + " / effect : " + effect);
                 if (newScore > 999) {
                     if (newScore - 1000 > 0)
                         dataList.plusScore(key, newScore % 1000, plant.getOverlayScore());

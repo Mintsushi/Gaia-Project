@@ -36,7 +36,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.2.0'
     compile 'com.google.android.gms:play-services-auth:9.2.0'
     // 카카오 로그인 sdk를 사용하기 위해 필요.
-    compile group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+    compile 'com.github.markushi:circlebutton:1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

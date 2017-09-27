@@ -285,7 +285,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         for (int i = 0; i < overlayPlants.size(); i++) {
             if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
-                plants.add(overlayPlants.get(i).getPlant());
                 already = true;
             }
         }

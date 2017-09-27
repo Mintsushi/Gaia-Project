@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="60sp"
-    android:gravity="center">
+    android:gravity="center"
+    android:layout_marginBottom="10sp">
 
 
     <ImageView

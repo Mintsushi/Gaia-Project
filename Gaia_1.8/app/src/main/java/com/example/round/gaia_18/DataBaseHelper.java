@@ -133,6 +133,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DRY_FLOWER_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_INFO_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_DATA_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+STORE_TABLE_NAME);
         //flower Table 구축
         flowerTable(sqLiteDatabase);
         //flower 수식 data DB 구축
@@ -472,7 +473,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
         //sqLiteDatabase.insert(ACTIVE_SKILL_FORMAT_TABLE_NAME,null,getActiveSkillFormatValues(1,"","","",300,0,0,""));
-        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(0,"기본 탭","","",300,1,0,1));
+        sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(0,"기본 탭","","",300,1,6,1200));
         sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(1,"쓰다듬기","","",300,0,0,30));
         sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(2,"가지치기","","",300,0,1,30));
         sqLiteDatabase.insert(SKILL_INFO_TABLE_NAME,null,getSkillInfo(3,"노래 들려주기","","",300,0,2,30));
