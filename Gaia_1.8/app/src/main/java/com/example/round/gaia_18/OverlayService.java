@@ -1,29 +1,19 @@
 package com.example.round.gaia_18;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +23,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -60,18 +49,13 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.Inflater;
 
 import at.markushi.ui.CircleButton;
 
-import static com.example.round.gaia_18.Data.DataList.overlayClickScore;
 import static com.example.round.gaia_18.Data.DataList.overlaySkillAdpter;
 import static com.example.round.gaia_18.MainActivity.context;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
@@ -79,10 +63,27 @@ import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.MainActivity.weather;
 
+
+
 public class OverlayService extends Service implements View.OnClickListener,View.OnTouchListener,LocationListener{
 
     private static final String TAG = ".OverlayService";
     private final IBinder mBinder = new LocalBinder();
+
+    //사용자 세팅 상태
+    public static int[] settingVar = new int[]{1,1,1,1,1};
+
+    public static void nitificationOnOff(boolean type){
+        //노티피케이션 실행
+        if(type) {
+            remoteView.setViewVisibility(remoteView.getLayoutId(),View.INVISIBLE);
+            noti.bigContentView = remoteView;
+        }else {
+            remoteView.setViewVisibility(remoteView.getLayoutId(),View.VISIBLE);
+            noti.bigContentView = remoteView;
+        }
+        notificationManager.notify(notification_id,noti);
+    }
 
     //datalis
     //DataBase -> 후에 overlay로 이동
@@ -101,11 +102,11 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public boolean enalbeOverlayService = false;
 
     //Notification View
-    private Notification noti;
-    private Notification.Builder builder;
-    private NotificationManager notificationManager;
-    private int notification_id = 1;
-    private RemoteViews remoteView;
+    private static Notification noti;
+    private static Notification.Builder builder;
+    private static NotificationManager notificationManager;
+    private static int notification_id = 1;
+    private static RemoteViews remoteView;
 
     //Location & Weather
     private LocationManager locationManager;
@@ -190,8 +191,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
         //Notification Custom View
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         remoteView = new RemoteViews(getPackageName(),R.layout.custom_notification);
-
+        remoteView.setViewVisibility(remoteView.getLayoutId(),View.INVISIBLE);
         builder = new Notification.Builder(getApplicationContext());
+
         //후에 application icon으로 변경
         builder.setSmallIcon(R.drawable.image)
                 .setContentTitle("Gaia Project");
@@ -200,7 +202,10 @@ public class OverlayService extends Service implements View.OnClickListener,View
         noti = builder.build();
         noti.bigContentView = remoteView;
 
+        noti.bigContentView.setViewVisibility(remoteView.getLayoutId(),View.INVISIBLE);
+        //노티피케이션 실행
         notificationManager.notify(notification_id,noti);
+
 
         //DataBase
         dataBaseHelper = new DataBaseHelper(this);
@@ -208,9 +213,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 dataBaseHelper.getAllFlowers(),
                 dataBaseHelper.getAllFlowerDatas(),
                 dataBaseHelper.getAllSkillInfo(),
-                dataBaseHelper.getAllStoreProduct()
+                dataBaseHelper.getAllStoreProduct(),
+                dataBaseHelper.getWaterInform()
         );
         user = new User();
+
+        notificationManager.cancel(notification_id);
 
         startForeground(startId,noti);
         return START_STICKY;
@@ -222,6 +230,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         //Overlay Service / WindowManager
         mWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+
 
         toLeftView = new View(this);
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
@@ -759,7 +768,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             Log.i("Weather**","Get Weather");
 
             //기존이랑 날씨가 다르면
-            if(!weatherState.equals(openWeatherMap.getWeather().get(0).getDescription())){
+            if(!weatherState.equals(openWeatherMap.getWeather().get(0).getDescription()) && settingVar[3]==1){
                 Log.i("Weather**","Diff Weather");
 
                 //현재 날씨 setting
@@ -774,22 +783,23 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 remoteView.setTextViewText(R.id.txtCelsius,String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
                 remoteView.setTextViewText(R.id.txtDescription,String.format("%s",openWeatherMap.getWeather().get(0).getDescription()));
 
+
                 Picasso.with(context)
                         .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                         .into(remoteView,R.id.imageView,notification_id,noti);
-                noti.contentView = remoteView;
+
 
                 notificationManager.notify(notification_id,noti);
-
                 Picasso.with(context)
                         .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                         .into(weather);
 
                 //해당 날씨에 따른 영향에 관한 datalist 받아오기
+                Log.i("Weather**","Diff Weather :" +openWeatherMap.getWeather().get(0).getDescription());
+                ;
                 weatherData = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
-
                 Log.i("Weather**","Diff Weather : "+weatherData.toString());
-//
+
                 dataList.overlayClickScore.clear();
                 for(int i =0; i<dataList.getOverlayPlants().size(); i++){
                     //해당 꽃의 id(flowerNo)
@@ -803,7 +813,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
                     plant.setEffect(0);
 
                     //날씨에 따른 패널티 / 패시브
-                    int effect = weatherData.get(id);
+                    // 김태우 정보 밀려남에따라 아이디 +2
+                    int effect = weatherData.get(id+2);
                     // effect>0일 경우는 추가 점수
                     // effect<0일 경우는 hp 감소
                     if(effect > 0) {
@@ -869,7 +880,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         //꽃의 점수 5%값을 임시로 저장
         //날씨에 따른 패널티 / 패시브
-        int effect = weatherData.get(plant.getPlantNo());
+        // 김태우 정보 밀려남에따라 아이디 +2
+
+        int effect = weatherData.get(plant.getPlantNo()+2);
 
         // effect>0일 경우는 추가 점수
         // effect<0일 경우는 hp 감소
@@ -887,7 +900,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public void plusOverlayClickScore(final Plant plant){
 
         Flower flower = plant.getFlower();
-        final int effect = weatherData.get(plant.getPlantNo());
+
+        // 김태우 정보 밀려남에따라 아이디 +2
+        final int effect = weatherData.get(plant.getPlantNo()+2);
         Iterator<Integer> iterator = flower.getScore().keySet().iterator();
 
         Log.i("OverlayClick", "Flower : "+flower.getFlowerName()+" / effect : "+effect);

@@ -3,28 +3,40 @@ package com.example.round.gaia_18.Data;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by Round on 2017-09-24.
+ * 김태우
+ * 아이템 수량 추가. itemList 삭제함
+ *
  */
 
 public class StoreProduct {
 
     private int itemId;
-    private String itemName;
+    private int itemCode;
+    private String itemName;;
     private ConcurrentHashMap<Integer, Integer> seedCost = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> fruitCost = new ConcurrentHashMap<>();
     private int itemEffectType;
+    private String itemExplain;
     private String image;
-    private int number;
+    private int itemNumber;
 
     public StoreProduct(){}
 
-    public StoreProduct(int itemId, String itemName, ConcurrentHashMap<Integer, Integer> seedCost, ConcurrentHashMap<Integer, Integer> fruitCost, int itemEffectType, String image) {
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.seedCost = seedCost;
-        this.fruitCost = fruitCost;
-        this.itemEffectType = itemEffectType;
-        this.image = image;
+
+    public void setItemExplain(String itemExplain) {
+        this.itemExplain = itemExplain;
+    }
+
+    public String getItemExplain() {
+        return itemExplain;
+    }
+
+    public void setItemCode(int itemCode) {
+        this.itemCode = itemCode;
+    }
+
+    public int getItemCode() {
+        return itemCode;
     }
 
     public int getItemId() {
@@ -70,21 +82,7 @@ public class StoreProduct {
     }
 
     public void setFruitCost(int fruit) {
-        int type=0;
-        if(fruit!=0) {
-            while(true) {
-
-                int newScore = fruit %1000;
-                this.fruitCost.put(fruit,newScore);
-
-                fruit /= 1000;
-                if(fruit < 1000){
-                    if(fruit != 0) this.fruitCost.put(type+1,fruit);
-                    break;
-                }
-                type++;
-            }
-        }
+        this.fruitCost.put(0,fruit);
     }
 
     public int getItemEffectType() {
@@ -103,11 +101,11 @@ public class StoreProduct {
         this.image = image;
     }
 
-    public int getNumber() {
-        return number;
+    public int getItemNumber() {
+        return itemNumber;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setItemNumber(int number) {
+        this.itemNumber = number;
     }
 }

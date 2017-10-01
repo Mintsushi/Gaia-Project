@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.round.gaia_18.Data.DryFlower;
 import com.example.round.gaia_18.Data.Flower;
@@ -14,6 +15,7 @@ import com.example.round.gaia_18.Data.GoalInfo;
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
 import com.example.round.gaia_18.Data.StoreProduct;
+import com.example.round.gaia_18.Data.Water;
 
 import java.util.ArrayList;
 
@@ -109,6 +111,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     //Store DataBase
     private static final String STORE_TABLE_NAME ="store";
+    private static final String storeCode="productCode";
     private static final String storeNo="productId";
     private static final String storeName="productName";
     private static final String storeSeed ="productSeed";
@@ -116,6 +119,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String storeEffectType="productEffectType";
     private static final String storeExplain="productExplain";
     private static final String storeImage ="productImage";
+
+    //Water
+    final private static String WATER_TABLE_NAME = "WATER_TABLE";
+    final private static String waterKey = "KEY_KEY";
+    final private static String waterId = "KEY_ID";
+    final private static String waterPeriod = "KEY_PERIOD";
+    final private static String waterPenaltyTime = "KEY_PENALTY_TIME";
+    final private static String waterPenalty = "KEY_PENALTY";
+    final private static String waterNeedWaterNum = "KEY_NEED_WATER_NUM";
 
 
     public DataBaseHelper(Context context) {
@@ -152,6 +164,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getGoalDataTable(sqLiteDatabase);
         //Store DataBase 구축
         getStoreTable(sqLiteDatabase);
+        // 물주기테이블 구축
+        WaterTable(sqLiteDatabase);
+
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -249,6 +264,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + WEATHER_TABLE + "("
                 + WEATHER_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                 + WEATHER_NAME + " TEXT NOT NULL,"
+                + "rain" + " INTEGER NOT NULL,"
+                + "disaster" + " INTEGER NOT NULL,"
                 + "flower1" + " INTEGER NOT NULL,"
                 + "flower2" + " INTEGER NOT NULL,"
                 + "flower3" + " INTEGER NOT NULL,"
@@ -256,87 +273,91 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 + "flower5" + " INTEGER NOT NULL"+ ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(0,"thunderstorm with light rain",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(1,"thunderstorm with rain",3,0,0,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(2,"thunderstorm with heavy rain",0,-3,-3,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(3,"light thunderstorm",3,0,0,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(4,"thunderstorm",-3,-5,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(5,"heavy thunderstorm",-5,-5,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(6,"ragged thunderstorm",-5,-5,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(7,"thunderstorm with light drizzle",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(8,"thunderstorm with drizzle",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(8,"thunderstorm with heavy drizzle",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(9,"light intensity drizzle",5,5,5,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(10,"drizzle",7,7,5,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(11,"heavy intensity drizzle",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(12,"light intensity drizzle rain",7,7,5,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(13,"drizzle rain",5,5,5,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(14,"heavy intensity drizzle rain",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(15,"shower rain and drizzle",5,5,5,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(16,"heavy shower rain and drizzle",5,3,3,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(17,"shower drizzle",5,5,5,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(18,"light rain",7,7,7,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(19,"moderate rain",5,5,5,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(20,"heavy intensity rain",5,3,0,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(21,"very heavy rain",3,0,-3,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(22,"extreme rain",-3,-3,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(23,"freezing rain",-5,-5,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(24,"light intensity shower rain",7,5,5,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(25,"shower rain",7,5,5,5,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(26,"heavy intensity shower rainw",3,3,3,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(27,"ragged shower rain",3,3,3,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(28,"light snow",0,-5,-3,-5,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(30,"snow",-3,-7,-3,-5,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(31,"heavy snow",-3,-7,-3,-5,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(32,"sleet",-5,-5,-3,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(33,"shower sleet",-5,-7,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(34,"light rain and snow",3,0,0,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(35,"rain and snow",3,-3,0,-3,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(36,"light shower snow",0,-7,-3,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(37,"shower snow",-5,-7,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(38,"heavy shower snow",-7,-10,-5,-7,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(39,"mist",7,7,5,7,10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(40,"smoke",0,-3,-7,-3,-7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(41,"haze",0,0,0,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(42,"sand, dust whirls",-5,-10,-10,-10,-10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(43,"fog",5,5,3,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(44,"sand",-3,-5,-5,-5,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(45,"dust",-5,-7,-10,-5,-7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(46,"volcanic ash",-10,-15,-15,-10,-15));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(47,"squalls",-3,-5,-7,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(48,"tornado",-5,-7,-10,-3,-5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(49,"clear sky",10,7,7,7,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(50,"few clouds",7,3,3,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(51,"scattered clouds",7,3,3,3,7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(52,"broken clouds",5,0,0,3,7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(53,"overcast clouds",5,-3,-3,3,10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(54,"tropical storm",-7,-10,-10,-7,-10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(55,"hurricane",-7,-10,-10,-7,-10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(56,"cold",3,0,0,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(57,"hot",0,3,0,3,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(58,"windy",5,0,0,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(59,"hail",-3,-3,-5,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(60,"calm",5,5,5,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(61,"light breeze",7,5,5,5,7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(62,"gentle breeze",7,5,5,5,7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(63,"moderate breeze",5,3,3,5,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(64,"fresh breeze",5,3,3,3,5));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(65,"strong breeze",5,0,0,3,3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(66,"high wind, near gale",3,-3,-3,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(67,"gale",0,-3,-3,0,0));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(68,"severe gale",-3,-3,-3,-3,-3));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(69,"storm",-5,-5,-7,-5,-7));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(70,"violent storm",-7,-10,-10,-7,-10));
-        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(71,"hurricane",-7,-10,-10,-7,-10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(0,"thunderstorm with light rain ",1,0,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(1,"thunderstorm with rain",1,0,3,0,0,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(2,"thunderstorm with heavy rain",1,1,0,-3,-3,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(3,"light thunderstorm",0,1,3,0,0,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(4,"thunderstorm",0,1,-3,-5,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(5,"heavy thunderstorm",0,1,-5,-5,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(6,"ragged thunderstorm",0,1,-3,-5,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(7,"thunderstorm with light drizzle",0,0,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(8,"thunderstorm with drizzle",0,1,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(9,"thunderstorm with heavy drizzle",0,1,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(10,"light intensity drizzle",0,0,5,5,5,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(11,"drizzle",0,0,7,7,5,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(12,"heavy intensity drizzle",0,0,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(13,"light intensity drizzle rain",1,0,7,7,5,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(14,"drizzle rain",1,0,5,5,5,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(15,"heavy intensity drizzle rain",1,0,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(16,"shower rain and drizzle",1,0,5,5,5,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(17,"heavy shower rain and drizzle",1,0,5,3,3,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(18,"shower drizzle",0,0,5,5,5,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(19,"light rain",1,0,7,7,7,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(20,"moderate rain",1,0,5,5,5,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(21,"heavy intensity rain",1,0,5,3,0,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(22,"very heavy rain",1,0,3,0,-3,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(23,"extreme rain",1,1,-3,-3,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(24,"freezing rain",1,1,-5,-5,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(25,"light intensity shower rain",1,0,7,5,5,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(26,"shower rain",1,0,7,5,5,5,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(27,"heavy intensity shower rain",1,0,3,3,3,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(28,"ragged shower rain ",1,0,3,3,3,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(29,"light snow",0,0,0,-5,-3,-5,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(30,"snow",0,1,-3,-7,-3,-5,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(31,"heavy snow",0,1,-3,-7,-3,-5,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(32,"sleet",0,1,-5,-5,-3,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(33,"shower sleet",0,0,-5,-7,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(34,"light rain and snow",1,0,3,0,0,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(35,"rain and snow",1,0,3,-3,0,-3,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(36,"light shower snow",0,0,0,-7,-3,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(37,"shower snow",0,1,-5,-7,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(38,"heavy shower snow ",0,1,-7,-10,-5,-7,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(39,"mist",0,0,7,7,5,7,10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(40,"smoke",0,0,0,-3,-7,-3,-7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(41,"haze",0,0,0,0,0,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(42,"sand, dust whirls",0,1,-5,-10,-10,-10,-10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(43,"fog",0,0,5,5,3,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(44,"sand",0,1,-3,-5,-5,-5,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(45,"dust",0,1,-5,-7,-10,-5,-7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(46,"volcanic ash",0,1,-10,-15,-15,-10,-15));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(47,"squalls",0,0,-3,-5,-7,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(48,"tornado",0,1,-5,-7,-10,-3,-5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(49,"clear sky",0,0,10,7,7,7,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(50,"few clouds",0,0,7,3,3,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(51,"scattered clouds",0,0,7,3,3,3,7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(52,"broken clouds",0,0,5,0,0,3,7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(53,"overcast clouds",0,0,5,-3,-3,3,10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(54,"tropical storm",0,1,-7,-10,-10,-7,-10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(55,"hurricane",0,1,-7,-10,-10,-7,-10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(56,"cold",0,0,3,0,0,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(57,"hot",0,0,0,3,0,3,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(58,"windy",0,0,5,0,0,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(59,"hail",0,0,-3,-3,-5,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(60,"calm",0,0,5,5,5,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(61,"light breeze",0,0,7,5,5,5,7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(62,"gentle breeze",0,0,7,5,5,5,7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(63,"moderate breeze",0,0,5,3,3,5,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(64,"fresh breeze",0,0,5,3,3,3,5));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(65,"strong breeze",0,0,5,0,0,3,3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(66,"high wind, near gale",0,0,3,-3,-3,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(67,"gale",0,0,0,-3,-3,0,0));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(68,"severe gale",0,0,-3,-3,-3,-3,-3));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(69,"storm",0,1,-5,-5,-7,-5,-7));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(70,"violent storm",0,1,-7,-10,-10,-7,-10));
+        sqLiteDatabase.insert(WEATHER_TABLE, null, getWeather(71,"hurricane ",0,1,-7,-10,-10,-7,-10));
+
+
 
     }
 
-    private ContentValues getWeather(int id, String name, int flower1, int flower2, int flower3, int flower4, int flower5) {
+    private ContentValues getWeather(int id, String name, int rain, int disaster, int flower1, int flower2, int flower3, int flower4, int flower5) {
 
         ContentValues values = new ContentValues();
 
         values.put(WEATHER_ID, id);
         values.put(WEATHER_NAME,name);
+        values.put("rain",rain);
+        values.put("disaster",disaster);
         values.put("flower1",flower1);
         values.put("flower2",flower2);
         values.put("flower3",flower3);
@@ -344,7 +365,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put("flower5",flower5);
 
         return values;
-
     }
 
     public ArrayList<Integer> getWeatherPassive(String weather){
@@ -357,11 +377,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
+
                 passive.add(cursor.getInt(2));
                 passive.add(cursor.getInt(3));
                 passive.add(cursor.getInt(4));
                 passive.add(cursor.getInt(5));
                 passive.add(cursor.getInt(6));
+                passive.add(cursor.getInt(7));
+                passive.add(cursor.getInt(8));
             } while (cursor.moveToNext());
         }
 
@@ -1233,34 +1256,37 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return goalData;
     }
-
     private void getStoreTable(SQLiteDatabase sqLiteDatabase){
+
 
         String CREATE_TABLE = "CREATE TABLE " + STORE_TABLE_NAME + "("
                 + storeNo + " INTEGER NOT NULL PRIMARY KEY,"
+                + storeCode + " INTEGER NOT NULL,"
                 + storeName + " TEXT NOT NULL,"
                 + storeSeed + " INTEGER NOT NULL,"
                 + storeFruit + " INTEGER NOT NULL,"
                 + storeEffectType + " INTEGER NOT NULL,"
+                + storeExplain + " TEXT NOT NULL,"
                 + storeImage + " TEXT NOT NULL"+ ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
-
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,"자동 클릭",0,300,1,"ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,"체력 포션",0,15,2,"ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,"부활 포션",0,100,3,"ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,"물",0,3,4,"ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,"물",10000,0,4,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,0000001,"자동 클릭",-1,300,1,"보유 시 초당 10회 자동 탭.","ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,0000002,"체력 포션",-1,15,2,"체력 20% 회복.","ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,0000003,"부활 포션",-1,100,3,"체력이 0%가 되어 시들어버린 꽃을 부활시킴.","ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,0000004,"물",-1,3,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,0000004,"물",10000,-1,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
 
     }
 
-    private ContentValues getStoreProductValues(int id, String name, int seedCost, int fruitCost, int effect, String iamge){
+    private ContentValues getStoreProductValues(int id, int code, String name, int seedCost, int fruitCost, int effect, String explain, String iamge){
 
         ContentValues values = new ContentValues();
         values.put(storeNo,id);
+        values.put(storeCode,code);
         values.put(storeName,name);
         values.put(storeSeed,seedCost);
         values.put(storeFruit,fruitCost);
         values.put(storeEffectType,effect);
+        values.put(storeExplain,explain);
         values.put(storeImage,iamge);
         return values;
     }
@@ -1276,11 +1302,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             do {
                 StoreProduct storeProduct = new StoreProduct();
                 storeProduct.setItemId(cursor.getInt(0));
-                storeProduct.setItemName(cursor.getString(1));
-                storeProduct.setSeedCost(cursor.getInt(2));
-                storeProduct.setFruitCost(cursor.getInt(3));
-                storeProduct.setItemEffectType(cursor.getInt(4));
-                storeProduct.setImage(cursor.getString(5));
+                storeProduct.setItemCode(cursor.getInt(1));
+                storeProduct.setItemName(cursor.getString(2));
+                storeProduct.setSeedCost(cursor.getInt(3));
+                storeProduct.setFruitCost(cursor.getInt(4));
+                storeProduct.setItemEffectType(cursor.getInt(5));
+                storeProduct.setItemExplain(cursor.getString(6));
+                storeProduct.setImage(cursor.getString(7));
 
                 storeProducts.add(storeProduct);
             } while (cursor.moveToNext());
@@ -1288,4 +1316,53 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return storeProducts;
     }
+    public ArrayList<Water> getWaterInform(){
+        ArrayList<Water> W = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM "+WATER_TABLE_NAME,null);
+        if (cursor.moveToFirst()) {
+            do {
+                Water water = new Water(cursor.getInt(0),cursor.getInt(1), cursor.getInt(3), cursor.getInt(2),cursor.getInt(4),cursor.getInt(5));
+                W.add(water);
+
+                Log.i(" SQL ", ""+cursor.getInt(0)+" : "+cursor.getInt(1)+" : "+cursor.getInt(2)+" : "+cursor.getInt(3)+" : "+
+                        cursor.getInt(4)+" : "+cursor.getInt(5));
+
+            } while (cursor.moveToNext());
+        }
+
+        return W;
+    }
+    private void WaterTable(SQLiteDatabase sqLiteDatabase) {
+
+        String CREATE_TABLE = "CREATE TABLE " + WATER_TABLE_NAME + "("
+                + waterKey + " INTEGER NOT NULL PRIMARY KEY,"
+                + waterId + " INTEGER NOT NULL,"
+                + waterPeriod + " INTEGER NOT NULL,"
+                + waterPenaltyTime + " INTEGER NOT NULL,"
+                + waterPenalty + " INTEGER NOT NULL,"
+                + waterNeedWaterNum + " INTEGER NOT NULL" + ")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(0,1,300,120,1,1));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(1,2,480,192,1,2));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(2,3,900,360,2,4));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(3,4,1200,480,3,6));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(4,5,1800,720,3,10));
+    }
+    private ContentValues getWaterValues(int key, int id, int period, int penaltyTime, int penalty, int neddWaterNum){
+
+
+        ContentValues values = new ContentValues();
+        values.put(waterKey,key);
+        values.put(waterId,id);
+        values.put(waterPeriod,period);
+        values.put(waterPenaltyTime,penaltyTime);
+        values.put(waterPenalty,penalty);
+        values.put(waterNeedWaterNum,neddWaterNum);
+        return values;
+    }
+
 }
+

@@ -3,8 +3,6 @@ package com.example.round.gaia_18.Fragement;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,32 +14,21 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
 import com.example.round.gaia_18.R;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import android.os.Handler;
-import android.widget.Toast;
-
 import static com.example.round.gaia_18.Data.DataList.mAdapter;
-import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
-import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
-import static com.example.round.gaia_18.R.id.linearLayout;
-import static com.example.round.gaia_18.R.id.skillCoolTime;
+import static com.example.round.gaia_18.OverlayService.dataList;
+import static com.example.round.gaia_18.OverlayService.weatherData;
 
 public class MenuSkill extends Fragment {
 
@@ -186,9 +173,13 @@ public class MenuSkill extends Fragment {
 
                                     useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
 
+                                    // 수식 에러로 터져서 주석처리
+                                    // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
+                                    /*
                                     if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
                                         dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
                                     }
+                                    */
                                 }
                             });
                         }
@@ -235,16 +226,21 @@ public class MenuSkill extends Fragment {
                                 dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
                                 fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
+                                Log.i("skillData.getSkillNo()",""+skillData.getSkillNo());
                                 skillInfo.setSkillDataChange(true);
 
                                 if(skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
+                                    // 수식 에러로 터져서 주석처리
+                                    // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
+/*
                                     if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()){
                                         dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).setGoalRate(1);
                                     }
+*/
                                 }else{
                                     Log.i("BuySkill","skill id : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalNo()+" / skillGoalRate : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate());
                                     if (dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalCondition()) {
-                                        dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
+                                        //dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
                                     }
                                 }
 
@@ -284,8 +280,20 @@ public class MenuSkill extends Fragment {
 //            case 3:break;
 //            //스킬 유형4 : 분당 일정 획수 자동 탭
 //            case 4:break;
+
             //스킬 유형6 : 날씨가 비 일시 일정량의 물 획득
-            case 5:break;
+            case 5:
+                Log.i("weaterData",""+weatherData.get(0));
+                Log.i("weaterData",""+ effect);
+                // 날씨정보 얻어오기.
+                if(weatherData.get(0)==1) {
+                    dataList.setIncItemNumber(3, effect);
+                    Toast.makeText(getContext(), "빗물을 열심히 받았어요!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 

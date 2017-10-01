@@ -125,11 +125,17 @@ public class GetGoalReward extends Dialog {
                 updateGoalReward(rewardType);
                 break;
             //체력포션
-            case 3:break;
+            case 3:
+                updataGoalRewardItem(1);
+                break;
             //부활포션
-            case 4:break;
+            case 4:
+                updataGoalRewardItem(2);
+                break;
             //물
-            case 5:break;
+            case 5:
+                updataGoalRewardItem(3);
+                break;
         }
     }
 
@@ -159,4 +165,9 @@ public class GetGoalReward extends Dialog {
             mOverlayService.setSeed();
         }
     }
+
+    private void updataGoalRewardItem(int rewardItemType){
+        dataList.setIncItemNumber(rewardItemType,Integer.parseInt(dataList.getAllScore(reward)));
+    }
 }
+

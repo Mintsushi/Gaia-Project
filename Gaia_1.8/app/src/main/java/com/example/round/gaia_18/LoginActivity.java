@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Login",getApplicationContext().MODE_PRIVATE);
         editor = pref.edit();
 
+        editor.putString("LoginType","Google");
+        editor.putString("Email","riza_e41@gmail.com");
         editor.putBoolean("autoLogin", true);
         editor.putString("nickname","Round");
         editor.commit();

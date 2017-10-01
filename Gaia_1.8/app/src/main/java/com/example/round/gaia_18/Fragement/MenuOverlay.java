@@ -1,6 +1,5 @@
 package com.example.round.gaia_18.Fragement;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,12 +18,10 @@ import android.widget.TextView;
 import com.example.round.gaia_18.Data.Plant;
 import com.example.round.gaia_18.R;
 
-import java.util.ArrayList;
-
 import static android.app.Activity.RESULT_OK;
 import static com.example.round.gaia_18.Data.DataList.plantAdapter;
-import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
+import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.OverlayService.weatherData;
 
 /**
@@ -108,6 +105,7 @@ public class MenuOverlay extends Fragment {
                 plantViewHolder.plantImage.setImageResource(R.drawable.image);
                 plantViewHolder.plantName.setText(plant.getFlower().getFlowerName());
                 String weatherScore = "";
+
                 if(weatherData.get(plant.getPlantNo()) > 0 ){
                     weatherScore = "클릭 당 점수 : + "+weatherData.get(plant.getPlantNo())+" %";
                 }else{

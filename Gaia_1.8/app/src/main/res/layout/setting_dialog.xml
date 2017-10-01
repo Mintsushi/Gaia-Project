@@ -35,34 +35,90 @@
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="300dp"
-                    android:layout_height="400dp"
+                    android:layout_height="430dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/dialog_back_corner"
                     android:orientation="vertical">
 
 
-                    <TextView
-                        android:id="@+id/nameText"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:text="name"
-                        android:textAlignment="center"
-                        android:textSize="24sp" />
+                        android:background="@drawable/dialog_add_dryflower_item"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/loginTypeImage"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/Text1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="E-Mail : " />
+
+                                <TextView
+                                    android:id="@+id/emailText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TextView" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_weight="1"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/Text2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nicname : " />
+
+                                <TextView
+                                    android:id="@+id/nameText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="name" />
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="60dp"
                         android:layout_marginRight="60dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
                         <Switch
                             android:id="@+id/switch1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="Swhitch1"
                             android:textSize="18sp" />
 
@@ -70,7 +126,7 @@
                             android:id="@+id/switch2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="Swhitch2"
                             android:textSize="18sp" />
 
@@ -78,7 +134,7 @@
                             android:id="@+id/switch3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="Swhitch3"
                             android:textSize="18sp" />
 
@@ -86,8 +142,16 @@
                             android:id="@+id/switch4"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:text="Swhitch4"
+                            android:textSize="18sp" />
+
+                        <Switch
+                            android:id="@+id/switch5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Swhitch5"
                             android:textSize="18sp" />
                     </LinearLayout>
 
@@ -97,7 +161,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="20dp"
                         android:orientation="horizontal"
                         tools:layout_editor_absoluteX="8dp"
                         tools:layout_editor_absoluteY="8dp">
@@ -119,7 +183,17 @@
                             android:layout_marginRight="60dp"
                             android:layout_weight="1"
                             android:text="Load" />
+
                     </LinearLayout>
+
+                    <Button
+                        android:id="@+id/logoutButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="LogOut" />
 
                 </LinearLayout>
             </RelativeLayout>

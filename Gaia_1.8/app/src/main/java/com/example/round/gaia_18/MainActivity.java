@@ -3,13 +3,12 @@ package com.example.round.gaia_18;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,19 +21,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.round.gaia_18.Data.DataList;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.OverlayPlant;
 import com.example.round.gaia_18.Data.Plant;
-import com.example.round.gaia_18.Data.User;
+import com.example.round.gaia_18.Dialog.Setting;
 import com.example.round.gaia_18.Dialog.goalListDialog;
 import com.example.round.gaia_18.Fragement.MenuDryFlower;
 import com.example.round.gaia_18.Fragement.MenuFlower;
 import com.example.round.gaia_18.Fragement.MenuOverlay;
 import com.example.round.gaia_18.Fragement.MenuSkill;
+import com.example.round.gaia_18.Fragement.MenuStore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.example.round.gaia_18.OverlayService.dataBaseHelper;
 import static com.example.round.gaia_18.OverlayService.dataList;
@@ -45,10 +43,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = ".MainActivity";
     public static Context context;
 
+    public static void weatherOnOff(boolean type){
+        if(type) {
+            //weather.setVisibility(View.VISIBLE);
+        }else {
+            // weather.setVisibility(View.INVISIBLE);
+        }
+    }
+
     //Layout / View
     public static RelativeLayout relativeLayout;
     private LinearLayout linearLayout;
-    private Button goal, menu;
+    private Button goal, menu, setting;
     public static TextView seed, fruit;
     public static ImageView weather;
 
@@ -68,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MenuOverlay menuOverlay = new MenuOverlay();
     private MenuSkill menuSkill = new MenuSkill();
     private MenuDryFlower menuDryFlower = new MenuDryFlower();
-
+    private MenuStore menuStore = new MenuStore();
     //Overlay Service
     public static OverlayService mOverlayService;
     private Intent overlayService;
@@ -179,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //5. OverlayService
         overlayService = new Intent(MainActivity.this, OverlayService.class);
 
+
         if(!isServiceRunning(OverlayService.class)){
             startService(overlayService);
             bindService(overlayService,mServiceConnection,BIND_AUTO_CREATE);
@@ -195,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menu = (Button)findViewById(R.id.menu);
         goal = (Button)findViewById(R.id.goal);
         weather = (ImageView)findViewById(R.id.weather);
+        setting = (Button)findViewById(R.id.setting);
 
         //Fragement Button
         menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
@@ -212,6 +220,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         relativeLayout.setOnClickListener(this);
         //6. goal(업적) 버튼 활성화
         goal.setOnClickListener(this);
+        //7 세팅창
+        setting.setOnClickListener(this);
 
     }
 
@@ -226,10 +236,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.setFruit(0,450);
         dataList.setFruit(1,100);
 
-        dataList.setNumber(0,0);
-        dataList.setNumber(1,0);
-        dataList.setNumber(2,0);
-        dataList.setNumber(3,2);
+        dataList.setItemNumber(0,0);
+        dataList.setItemNumber(1,0);
+        dataList.setItemNumber(2,0);
+        dataList.setItemNumber(3,5);
 
         user.setDryFlowerItem(2);
 
@@ -278,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Boolean already = false;
         int plantNo = 0;
         int plantLevel = 399;
-        int plantHP = 40;
+        int plantHP = 100;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
@@ -294,23 +304,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
             for (int i = 0; i < flowers.size(); i++) {
                 if (flowers.get(i).getFlowerNo() == plantNo) {
+// 레이아웃
+                    RelativeLayout plantLayout = new RelativeLayout(MainActivity.context);
+                    RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
+                    // 위치는 후에 Random 값으로 배치
+                    plantLayoutParams.leftMargin = 200;
+                    plantLayoutParams.topMargin = 200;
+                    plantLayout.setOnLongClickListener(onLongClick);
+                    plantLayout.setOnTouchListener(onTouch);
+                    relativeLayout.addView(plantLayout, plantLayoutParams);
 
-                    ImageView plant = new ImageView(this);
+                    // 식물 이미지
+                    ImageView plant = new ImageView(context);
+                    //plant.setImageResource(flower.getImage());
+                    plant.setImageResource(R.drawable.imageflower);
+                    //plant.setTag(flower.getImage());
 
-                    //plant.setImageResource(flower.get(i).getImage())
-                    plant.setImageResource(R.drawable.image);
+                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
+                    relParams.topMargin = 50;
+                    plantLayout.addView(plant, relParams);
 
-                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200, 200);
-
-                    //위치는 후에 Random 값으로 배치
-                    relParams.leftMargin = 0;
-                    relParams.topMargin = 0;
-
-                    plant.setOnLongClickListener(onLongClick);
-                    plant.setOnTouchListener(onTouch);
-
-                    relativeLayout.addView(plant, relParams);
-                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant,plantHP));
+                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant,plantLayout,plantHP));
                     break;
                 }
             }
@@ -371,6 +385,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .commit();
 
         }else if(view == menuStoreButton){
+            MainActivity.this.getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.list_layout, menuStore)
+                    .commit();
 
         }else if(view == menuDownButton){
 
@@ -397,28 +415,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(view == goal){
             goalListDialog dialog = new goalListDialog(view.getContext());
             dialog.show();
+        }else if(view == setting){
+            Setting dialog = new Setting(view.getContext());
+            dialog.show();
         }
     }
 
     public static void buyPlant( Flower flower ){
 
-        ImageView plant = new ImageView(context);
+        // 레이아웃
+        RelativeLayout plantLayout = new RelativeLayout(MainActivity.context);
+        RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
+        // 위치는 후에 Random 값으로 배치
+        plantLayoutParams.leftMargin = 200;
+        plantLayoutParams.topMargin = 200;
+        plantLayout.setOnLongClickListener(onLongClick);
+        plantLayout.setOnTouchListener(onTouch);
+        relativeLayout.addView(plantLayout, plantLayoutParams);
 
+        // 식물 이미지
+        ImageView plant = new ImageView(context);
         //plant.setImageResource(flower.getImage());
-        plant.setImageResource(R.drawable.image);
+        plant.setImageResource(R.drawable.imageflower);
         //plant.setTag(flower.getImage());
 
-        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(200,200);
+        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
+        relParams.topMargin = 50;
+        plantLayout.addView(plant, relParams);
 
-        //위치는 후에 Random 값으로 배치
-        relParams.leftMargin = 0;
-        relParams.topMargin = 0;
-
-        plant.setOnLongClickListener(onLongClick);
-        plant.setOnTouchListener(onTouch);
-
-        relativeLayout.addView(plant,relParams);
-        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower,plant,100));
+        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower,plant, plantLayout, 100));
     }
 
     public static void updatePlantLevel(int plantNo){

@@ -1,10 +1,8 @@
 package com.example.round.gaia_18.Data;
 
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.webkit.HttpAuthHandler;
 
 import com.example.round.gaia_18.Fragement.MenuDryFlower;
 import com.example.round.gaia_18.Fragement.MenuFlower;
@@ -14,17 +12,13 @@ import com.example.round.gaia_18.OverlayService;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
-import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataBaseHelper;
 import static com.example.round.gaia_18.OverlayService.weatherData;
@@ -50,7 +44,9 @@ public class DataList {
     //각 업적의 정보
     private ArrayList<GoalInfo> goalInfos = dataBaseHelper.getAllGoalInfo();
     //각 상정 아이템의 정보
-    private ArrayList<StoreProduct> storeProducts = new ArrayList<>();
+    private static ArrayList<StoreProduct> storeProducts = new ArrayList<>();
+    // WATER 물주기 정보
+    private static ArrayList<Water> waters = new ArrayList<>();
 
     //식물에 따른 클릭 수
     public static ConcurrentHashMap<Integer, Integer> clickScore = new ConcurrentHashMap<>();
@@ -82,11 +78,12 @@ public class DataList {
     //사용자가 가지고 있는 현금성 재화
     private static ConcurrentHashMap<Integer, Integer> fruit = new ConcurrentHashMap<>();
 
-    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas, ArrayList<SkillInfo> skillInfos,ArrayList<StoreProduct> storeProducts) {
+    public DataList(ArrayList<Flower> flowers, ArrayList<FlowerData> flowerDatas, ArrayList<SkillInfo> skillInfos,ArrayList<StoreProduct> storeProducts, ArrayList<Water> waters) {
         this.flowers = flowers;
         this.flowerDatas = flowerDatas;
         this.skillInfos = skillInfos;
         this.storeProducts = storeProducts;
+        this.waters = waters;
     }
 
     public ArrayList<Flower> getFlowers() {
@@ -148,9 +145,41 @@ public class DataList {
         return goalInfos;
     }
 
-    public void setNumber(int id, int num){
-        this.storeProducts.get(id).setNumber(num);
+    public static ArrayList<StoreProduct> getMiniItemListProducts() {
+        ArrayList<StoreProduct> miniList = new ArrayList<>();;
+        miniList.add(storeProducts.get(1));
+        miniList.add(storeProducts.get(2));
+        miniList.add(storeProducts.get(3));
+        return miniList;
     }
+
+    public static ArrayList<StoreProduct> getStoreProducts() {
+        return storeProducts;
+    }
+
+    public static void setStoreProducts(ArrayList<StoreProduct> storeProducts) {
+        DataList.storeProducts = storeProducts;
+    }
+
+    public void setItemNumber(int id, int num){
+        this.storeProducts.get(id).setItemNumber(num);
+    }
+    public void setIncItemNumber(int id, int num){
+        int temp = this.storeProducts.get(id).getItemNumber();
+        this.storeProducts.get(id).setItemNumber(temp + num);
+    }
+    public void setDesItemNumber(int id, int num){
+        int temp = this.storeProducts.get(id).getItemNumber();
+        this.storeProducts.get(id).setItemNumber(temp - num);
+    }
+    public int getItemNumber(int id){
+        return  this.storeProducts.get(id).getItemNumber();
+    }
+
+    public static ArrayList<Water> getWaters() {
+        return waters;
+    }
+
 
     public void resetFlower(int id){
 
@@ -427,7 +456,7 @@ public class DataList {
                 if(score != 0) scoreString += Integer.toString(score)+getType(type);
 
                 if(index == 0 && iterator.hasNext()){
-                    scoreString += " + ";
+                    scoreString += ".";
                     index = 1;
                 }
                 else{
