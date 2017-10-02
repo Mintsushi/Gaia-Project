@@ -123,88 +123,28 @@ public class MenuStore extends Fragment {
 
                                 dialog.setName(storeProduct.getItemName());
                                 dialog.setExplain(storeProduct.getItemEffectType());
+                                dialog.setProduct(storeProduct);
 
                                 //현금성 재화
                                 if(storeProduct.getBuyType() == 0){
-                                    dialog.setBuyType(0,storeProduct.getCost());
+                                    dialog.setUseCost(1,storeProduct.getCost());
+                                    dialog.setPreCost(1,dataList.getFruitHashMap());
                                 }
                                 else{
-                                    dialog.setBuyType(1,storeProduct.getCost());
+                                    dialog.setUseCost(0,storeProduct.getCost());
+                                    dialog.setPreCost(0,dataList.getScoreHashMap());
                                 }
 
                             }
                         });
-                        //현금성 재화로 구매
-                        if(storeProduct.getBuyType() == 0){
-                            //구매 성공
-                            if(buyForFruit(storeProduct.getCost())){
-                                storeProduct.setNumber(1);
-                                fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
-                                if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
-                                    //업적 증가(아이템 구입)
-                                    dataList.getGoalDataByID(11).setGoalRate(1);
-                                }
-
-                                storeAdapter.notifyDataSetChanged();
-                            }else{//구매 실패
-                                Toast.makeText(getActivity(), "Fruit이 부족합니다!!!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        else{ //게임 재화로 구매
-                            if(buyForScore(storeProduct.getCost())){
-                                storeProduct.setNumber(1);
-                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-
-                                if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
-                                    //업적 증가(아이템 구입)
-                                    dataList.getGoalDataByID(11).setGoalRate(1);
-                                }
-
-                                storeAdapter.notifyDataSetChanged();
-                            }else{//구매 실패
-                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                        dialog.show();
                     }
                 });
             }
 
             return view;
         }
-    }
-
-    //게임 재화로 구매
-    private Boolean buyForScore(ConcurrentHashMap<Integer, Integer> seed) {
-
-        Iterator<Integer> iterator = seed.keySet().iterator();
-
-        while (iterator.hasNext()) {
-            int key = iterator.next();
-            int value = seed.get(key);
-
-            if (!dataList.minusScore(key, value, dataList.getScoreHashMap())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //현금성 재화로 구매
-    private Boolean buyForFruit(ConcurrentHashMap<Integer, Integer> fruit) {
-
-        Iterator<Integer> iterator = fruit.keySet().iterator();
-
-        while (iterator.hasNext()) {
-            int key = iterator.next();
-            int value = fruit.get(key);
-
-            if (!dataList.minusScore(key, value, dataList.getFruitHashMap())) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     // 0번 아이템용

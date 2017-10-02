@@ -146,6 +146,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_INFO_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_DATA_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+STORE_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+WATER_TABLE_NAME);
         //flower Table 구축
         flowerTable(sqLiteDatabase);
         //flower 수식 data DB 구축
@@ -1261,32 +1262,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String CREATE_TABLE = "CREATE TABLE " + STORE_TABLE_NAME + "("
                 + storeNo + " INTEGER NOT NULL PRIMARY KEY,"
-                + storeCode + " INTEGER NOT NULL,"
                 + storeName + " TEXT NOT NULL,"
                 + storeSeed + " INTEGER NOT NULL,"
                 + storeFruit + " INTEGER NOT NULL,"
                 + storeEffectType + " INTEGER NOT NULL,"
-                + storeExplain + " TEXT NOT NULL,"
                 + storeImage + " TEXT NOT NULL"+ ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,0000001,"자동 클릭",-1,300,1,"보유 시 초당 10회 자동 탭.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,0000002,"체력 포션",-1,15,2,"체력 20% 회복.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,0000003,"부활 포션",-1,100,3,"체력이 0%가 되어 시들어버린 꽃을 부활시킴.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,0000004,"물",-1,3,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,0000004,"물",10000,-1,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
 
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,"자동 클릭",0,300,1,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,"체력 포션",0,15,2,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,"부활 포션",0,100,3,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,"물",0,3,4,"ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,"물",1,10000,4,"ImagePath"));
     }
 
-    private ContentValues getStoreProductValues(int id, int code, String name, int seedCost, int fruitCost, int effect, String explain, String iamge){
+    private ContentValues getStoreProductValues(int id, String name, int seedCost, int fruitCost, int effect,String iamge){
 
         ContentValues values = new ContentValues();
         values.put(storeNo,id);
-        values.put(storeCode,code);
         values.put(storeName,name);
         values.put(storeSeed,seedCost);
         values.put(storeFruit,fruitCost);
         values.put(storeEffectType,effect);
-        values.put(storeExplain,explain);
         values.put(storeImage,iamge);
         return values;
     }
@@ -1302,13 +1299,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             do {
                 StoreProduct storeProduct = new StoreProduct();
                 storeProduct.setItemId(cursor.getInt(0));
-                storeProduct.setItemCode(cursor.getInt(1));
-                storeProduct.setItemName(cursor.getString(2));
-                storeProduct.setSeedCost(cursor.getInt(3));
-                storeProduct.setFruitCost(cursor.getInt(4));
-                storeProduct.setItemEffectType(cursor.getInt(5));
-                storeProduct.setItemExplain(cursor.getString(6));
-                storeProduct.setImage(cursor.getString(7));
+                storeProduct.setItemName(cursor.getString(1));
+                storeProduct.setBuyType(cursor.getInt(2));
+                storeProduct.setCost(cursor.getInt(3));
+                storeProduct.setItemEffectType(cursor.getInt(4));
+                storeProduct.setImage(cursor.getString(5));
 
                 storeProducts.add(storeProduct);
             } while (cursor.moveToNext());
@@ -1316,6 +1311,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return storeProducts;
     }
+
     public ArrayList<Water> getWaterInform(){
         ArrayList<Water> W = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -1323,7 +1319,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM "+WATER_TABLE_NAME,null);
         if (cursor.moveToFirst()) {
             do {
-                Water water = new Water(cursor.getInt(0),cursor.getInt(1), cursor.getInt(3), cursor.getInt(2),cursor.getInt(4),cursor.getInt(5));
+                Water water = new Water(cursor.getInt(1), cursor.getInt(3), cursor.getInt(2),cursor.getInt(4),cursor.getInt(5));
                 W.add(water);
 
                 Log.i(" SQL ", ""+cursor.getInt(0)+" : "+cursor.getInt(1)+" : "+cursor.getInt(2)+" : "+cursor.getInt(3)+" : "+
