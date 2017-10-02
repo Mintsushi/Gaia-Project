@@ -21,6 +21,7 @@ import com.example.round.gaia_18.R;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.example.round.gaia_18.Data.DataList.goalAdapter;
 import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
@@ -32,11 +33,13 @@ public class GetGoalReward extends Dialog {
 
     private int rewardType;
     private final ConcurrentHashMap<Integer, Integer> reward;
+    private int goalNo;
 
-    public GetGoalReward(Context context, int rewardType, ConcurrentHashMap<Integer, Integer> reward){
+    public GetGoalReward(Context context, int goalNo,int rewardType, ConcurrentHashMap<Integer, Integer> reward){
         super(context);
         this.rewardType = rewardType;
         this.reward = reward;
+        this.goalNo = goalNo;
         Log.i("GetGoalReward","reward : "+reward.toString()+" / rewardType : " +rewardType);
     }
 
@@ -64,6 +67,8 @@ public class GetGoalReward extends Dialog {
             @Override
             public void onClick(View view) {
                 rewardFromGoal();
+                dataList.goalLevelUp(goalNo);
+                goalAdapter.notifyDataSetChanged();
                 dismiss();
             }
         });

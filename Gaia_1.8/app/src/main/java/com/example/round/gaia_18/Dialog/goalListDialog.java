@@ -33,6 +33,7 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import static com.example.round.gaia_18.Data.DataList.goalAdapter;
 import static com.example.round.gaia_18.OverlayService.dataList;
 
 /**
@@ -45,8 +46,6 @@ public class goalListDialog extends Dialog {
     private static final float BYTES_PER_PX = 4.0f;
 
     private ListView goalList;
-    private GoalAdapter mAdapter;
-
 
     public goalListDialog(Context context){super(context);}
 
@@ -58,10 +57,10 @@ public class goalListDialog extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(R.layout.goal_dialog);
 
-        mAdapter = new GoalAdapter(getContext(),R.layout.goal_dialog_item);
+        goalAdapter = new GoalAdapter(getContext(),R.layout.goal_dialog_item);
         goalList = (ListView)findViewById(R.id.goal_list);
 
-        goalList.setAdapter(mAdapter);
+        goalList.setAdapter(goalAdapter);
     }
 
     private class GoalViewHolder{
@@ -152,11 +151,8 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalRewardType(),goalData.getReward());
+                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalNo(),goalData.getGoalRewardType(),goalData.getReward());
                                     dialog.show();
-
-                                    dataList.goalLevelUp(goalData.getGoalNo());
-                                    mAdapter.notifyDataSetChanged();
                                 }
                             });
 
@@ -180,7 +176,7 @@ public class goalListDialog extends Dialog {
                             viewHolder.goalReward.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalRewardType(),goalData.getReward());
+                                    GetGoalReward dialog = new GetGoalReward(getContext(),goalData.getGoalNo(),goalData.getGoalRewardType(),goalData.getReward());
                                     dialog.show();
 
                                     Log.i("LevelUp","id : "+goalData.getGoalNo()+" / max Level : "+goalInfo.getGoalMaxLevel()+" / goal Level : "+goalData.getGoalLevel());
@@ -191,7 +187,6 @@ public class goalListDialog extends Dialog {
                                         goalData.setGoalLevel(goalData.getGoalLevel()+1);
                                         Log.i("LevelUp","********************"+goalData.getGoalLevel());
                                     }
-                                    mAdapter.notifyDataSetChanged();
                                 }
                             });
 

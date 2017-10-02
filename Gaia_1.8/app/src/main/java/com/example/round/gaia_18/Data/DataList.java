@@ -4,10 +4,12 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.example.round.gaia_18.Dialog.goalListDialog;
 import com.example.round.gaia_18.Fragement.MenuDryFlower;
 import com.example.round.gaia_18.Fragement.MenuFlower;
 import com.example.round.gaia_18.Fragement.MenuOverlay;
 import com.example.round.gaia_18.Fragement.MenuSkill;
+import com.example.round.gaia_18.Fragement.MenuStore;
 import com.example.round.gaia_18.OverlayService;
 
 import java.util.ArrayList;
@@ -69,6 +71,10 @@ public class DataList {
     public static MenuSkill.SkillAdapter mAdapter;
     //overlaySkill Adapter
     public static OverlayService.OverlaySkillAdpter overlaySkillAdpter;
+    //storeAdapter
+    public static MenuStore.StoreAdapter storeAdapter;
+    //업적 Adapter
+    public static goalListDialog.GoalAdapter goalAdapter;
 
     //자동 클릭될 VIEW
     private View clickView;
@@ -164,10 +170,12 @@ public class DataList {
     public void setItemNumber(int id, int num){
         this.storeProducts.get(id).setItemNumber(num);
     }
+
     public void setIncItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp + num);
     }
+
     public void setDesItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp - num);
@@ -228,6 +236,7 @@ public class DataList {
         flower.setScore(flower.getScoreType(),flower.getFlowerScore());
         flower.setBuyType(false);
     }
+
     public static ArrayList<SkillInfo> getSkillInfos() {
         return skillInfos;
     }

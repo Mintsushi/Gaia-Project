@@ -26,6 +26,8 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.Data.DataList.getScore;
+import static com.example.round.gaia_18.Data.DataList.storeAdapter;
+import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataList;
 
@@ -35,27 +37,24 @@ public class MenuStore extends Fragment {
     private static final String TAG = ".StoreProduct";
     private ListView storeList;
 
-    private StoreAdapter mAdapter;
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
         View view = inflater.inflate(R.layout.menu_store_fragment, container, false);
-        mAdapter = new StoreAdapter(getContext(), R.layout.menu_store_item);
+
+        storeAdapter = new StoreAdapter(getContext(), R.layout.menu_store_item);
         storeList = (ListView) view.findViewById(R.id.storeList);
-        storeList.setAdapter(mAdapter);
+        storeList.setAdapter(storeAdapter);
 
         return view;
     }
 
-    // 상점 리스트뷰 포멧
-    public class StoreProductViewHolder {
+    private class StoreViewHolder{
         ImageView productImage;
-        TextView productNameText;
-        TextView productExplainText;
-        TextView productNeedUseCostText;
-        TextView productUseCostText;
+        TextView productName;
+        TextView productExplain;
+        TextView productNum;
+        TextView productBuyScore;
         ImageButton productBuyButton;
-        TextView itemNumText;
     }
 
     // 상점 리스트 어뎁터
@@ -73,53 +72,47 @@ public class MenuStore extends Fragment {
         }
 
         @Override
-        public View getView(int position, View v, final ViewGroup parent) {
-            final StoreProductViewHolder viewHolder;
-            final StoreProduct info = dataList.getStoreProducts().get(position);
+        public View getView(int position, View view, final ViewGroup parent) {
+            final StoreProduct storeProduct = dataList.getStoreProducts().get(position);
+            final StoreViewHolder viewholder;
 
+            if(view == null){
 
-            Log.i("StoreProduct", "이름 : " + info.getItemName() + " , 설명 : " + info.getItemExplain());
+                view = mInflater.inflate(R.layout.menu_store_item,parent,false);
 
-            if (v == null) {
-                //뷰 활성화
-                v = mInflater.inflate(R.layout.menu_store_item, parent, false);
-                viewHolder = new StoreProductViewHolder();
-                viewHolder.productImage = (ImageView) v.findViewById(R.id.productImage);
-                viewHolder.productNameText = (TextView) v.findViewById(R.id.productNameText);
-                viewHolder.productExplainText = (TextView) v.findViewById(R.id.productExplainText);
-                viewHolder.productNeedUseCostText = (TextView) v.findViewById(R.id.needUseCostText);
-                viewHolder.productUseCostText = (TextView) v.findViewById(R.id.productUseCostText);
-                viewHolder.productBuyButton = (ImageButton) v.findViewById(R.id.productBuyButton);
-                viewHolder.itemNumText = (TextView) v.findViewById(R.id.itemNum);
-                v.setTag(viewHolder);
-            } else {
-                viewHolder = (StoreProductViewHolder) v.getTag();
+                viewholder = new StoreViewHolder();
+                viewholder.productImage = (ImageView)view.findViewById(R.id.productImage);
+                viewholder.productName = (TextView)view.findViewById(R.id.productName);
+                viewholder.productExplain = (TextView)view.findViewById(R.id.productExplain);
+                viewholder.productNum = (TextView)view.findViewById(R.id.storeProductNum);
+                viewholder.productBuyScore = (TextView)view.findViewById(R.id.productBuyCost);
+                viewholder.productBuyButton = (ImageButton)view.findViewById(R.id.productBuyButton);
+
+                view.setTag(viewholder);
+            }else{
+                viewholder = (StoreViewHolder)view.getTag();
             }
 
-            if (info != null) {
-                // 뷰에 이미지 그리기
-                viewHolder.productImage.setImageResource(R.drawable.image);
-                viewHolder.productNameText.setText(info.getItemName());
-                viewHolder.productExplainText.setText(info.getItemExplain());
-                viewHolder.productBuyButton.setImageResource(R.drawable.buy);
-                viewHolder.itemNumText.setText("수량 : " + dataList.getItemNumber(info.getItemCode() -1));
+            if(storeProduct != null){
 
-                Log.i("integer-1", "" + info.getSeedCost().get(-1));
-                Log.i("integer-2", "" + info.getFruitCost());
-                if(info.getSeedCost().get(-1) != null && info.getFruitCost().get(-1) != null) {
-                    //구매불가능
+                //후에 아이템 이미지로 변경
+                viewholder.productImage.setImageResource(R.drawable.image);
+                viewholder.productName.setText(storeProduct.getItemName());
+                Log.i("getString","product" + Integer.toString(storeProduct.getItemEffectType()));
+                int resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(storeProduct.getItemEffectType()), "string", getContext().getPackageName());
+                viewholder.productExplain.setText(getResources().getText(resourceId));
+                viewholder.productNum.setText(Integer.toString(storeProduct.getItemNumber()));
+
+                //현금성 재화로 구매
+                if(storeProduct.getBuyType() == 0){
+                    viewholder.productBuyButton.setImageResource(R.drawable.fruit);
+                }else{ //게임 재화로 구매
+                    viewholder.productBuyButton.setImageResource(R.drawable.seed);
                 }
 
-                else if(info.getSeedCost().get(-1) != null){   //현금재화로 구매하는경우info.getSeedCost() == -1
-                    viewHolder.productNeedUseCostText.setText("Fruit : ");
-                    viewHolder.productUseCostText.setText("" + dataList.getAllScore(info.getFruitCost()));
-                } else {    //게임재화로 구매하는경우info.getFruitCost() == -1
-                    viewHolder.productNeedUseCostText.setText("Seed : ");
-                    viewHolder.productUseCostText.setText("" + dataList.getAllScore(info.getSeedCost()));
-                }
+                viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getCost()));
 
-                // 구매버튼
-                viewHolder.productBuyButton.setOnClickListener(new View.OnClickListener() {
+                viewholder.productBuyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
@@ -127,61 +120,57 @@ public class MenuStore extends Fragment {
                         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface dialogInterface) {
-                                dialog.setImage(info.getImage());
-                                dialog.setName(info.getItemName());
-                                dialog.setExplain(info.getItemExplain());
 
-                                // 구매에 사용하는 재화의 정보 보내기
-                                if (info.getSeedCost().get(-1) != null) {
-                                    dialog.setUseCost(1,info.getFruitCost());
-                                    dialog.setPreCost(1,dataList.getFruitHashMap());
-                                } else {
-                                    dialog.setUseCost(0,info.getSeedCost());
-                                    dialog.setPreCost(0,dataList.getScoreHashMap());
+                                dialog.setName(storeProduct.getItemName());
+                                dialog.setExplain(storeProduct.getItemEffectType());
+
+                                //현금성 재화
+                                if(storeProduct.getBuyType() == 0){
+                                    dialog.setBuyType(0,storeProduct.getCost());
                                 }
-                            }
-                        });
-
-                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dia) {
-                                // 구매 성공시..
-                                if (dialog.buySuccess == 1) {
-
-                                    dataList.getGoalDataByID(7).setGoalRate(1);
-                                    dataList.setIncItemNumber(info.getItemCode() - 1, 1);
-
-                                    // 만약 1번 아이템이면 10분동안 점수획득후 아이템 감소 하게됨
-                                    if(info.getItemId()==0){
-                                        itemskillTimemer itemskillTimemer = new itemskillTimemer(600);
-                                        itemskillTimemer.handlerStart();
-                                    }
-
-                                    mAdapter.notifyDataSetChanged();
-                                    Toast.makeText(getActivity(), "구매성공", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    if(dialog.costType == -1){
-                                        //취소버튼 누른경우
-                                    }
-                                    else if(dialog.costType ==1){
-                                        Toast.makeText(getActivity(), "열매가 부족해요!", Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getActivity(), "씨앗이 부족해요!", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                else{
+                                    dialog.setBuyType(1,storeProduct.getCost());
                                 }
 
                             }
                         });
-                        dialog.show();
+                        //현금성 재화로 구매
+                        if(storeProduct.getBuyType() == 0){
+                            //구매 성공
+                            if(buyForFruit(storeProduct.getCost())){
+                                storeProduct.setNumber(1);
+                                fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
+                                if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
+                                    //업적 증가(아이템 구입)
+                                    dataList.getGoalDataByID(11).setGoalRate(1);
+                                }
+
+                                storeAdapter.notifyDataSetChanged();
+                            }else{//구매 실패
+                                Toast.makeText(getActivity(), "Fruit이 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{ //게임 재화로 구매
+                            if(buyForScore(storeProduct.getCost())){
+                                storeProduct.setNumber(1);
+                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+                                if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
+                                    //업적 증가(아이템 구입)
+                                    dataList.getGoalDataByID(11).setGoalRate(1);
+                                }
+
+                                storeAdapter.notifyDataSetChanged();
+                            }else{//구매 실패
+                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
                     }
                 });
-
             }
 
-            return v;
+            return view;
         }
     }
 
