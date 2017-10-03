@@ -20,14 +20,11 @@ import com.example.round.gaia_18.Data.StoreProduct;
 import com.example.round.gaia_18.Dialog.StoreCheckDialog;
 import com.example.round.gaia_18.R;
 
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.Data.DataList.getScore;
 import static com.example.round.gaia_18.Data.DataList.storeAdapter;
-import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataList;
 
@@ -101,16 +98,16 @@ public class MenuStore extends Fragment {
                 Log.i("getString","product" + Integer.toString(storeProduct.getItemEffectType()));
                 int resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(storeProduct.getItemEffectType()), "string", getContext().getPackageName());
                 viewholder.productExplain.setText(getResources().getText(resourceId));
-                viewholder.productNum.setText(Integer.toString(storeProduct.getItemNumber()));
+                viewholder.productNum.setText(""+dataList.getItemNumber(storeProduct.getItemCode() -1));
 
-                //현금성 재화로 구매
-                if(storeProduct.getBuyType() == 0){
+                if(storeProduct.getSeedCost().get(-1) != null){
                     viewholder.productBuyButton.setImageResource(R.drawable.fruit);
-                }else{ //게임 재화로 구매
-                    viewholder.productBuyButton.setImageResource(R.drawable.seed);
+                    viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getFruitCost()));
                 }
-
-                viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getCost()));
+                else{ //현금성 재화로 구매
+                    viewholder.productBuyButton.setImageResource(R.drawable.seed);
+                    viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getSeedCost()));
+                }
 
                 viewholder.productBuyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -121,24 +118,56 @@ public class MenuStore extends Fragment {
                             @Override
                             public void onShow(DialogInterface dialogInterface) {
 
+                                dialog.setImage(storeProduct.getImage());
                                 dialog.setName(storeProduct.getItemName());
-                                dialog.setExplain(storeProduct.getItemEffectType());
-                                dialog.setProduct(storeProduct);
+                                dialog.setExplain(storeProduct.getItemExplain());
 
-                                //현금성 재화
-                                if(storeProduct.getBuyType() == 0){
-                                    dialog.setUseCost(1,storeProduct.getCost());
+                                // 구매에 사용하는 재화의 정보 보내기
+                                if (storeProduct.getSeedCost().get(-1) != null) {
+                                    dialog.setUseCost(1,storeProduct.getFruitCost());
                                     dialog.setPreCost(1,dataList.getFruitHashMap());
-                                }
-                                else{
-                                    dialog.setUseCost(0,storeProduct.getCost());
+                                } else {
+                                    dialog.setUseCost(0,storeProduct.getSeedCost());
                                     dialog.setPreCost(0,dataList.getScoreHashMap());
                                 }
 
                             }
                         });
 
+                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dia) {
+                                // 구매 성공시..
+                                if (dialog.buySuccess == 1) {
+
+                                    dataList.getGoalDataByID(7).setGoalRate(1);
+                                    dataList.setIncItemNumber(storeProduct.getItemCode() - 1, 1);
+
+                                    // 만약 1번 아이템이면 10분동안 점수획득후 아이템 감소 하게됨
+                                    if(storeProduct.getItemId()==0){
+                                        itemskillTimemer itemskillTimemer = new itemskillTimemer(600);
+                                        itemskillTimemer.handlerStart();
+                                    }
+
+                                    storeAdapter.notifyDataSetChanged();
+                                    Toast.makeText(getActivity(), "구매성공", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    if(dialog.costType == -1){
+                                        //취소버튼 누른경우
+                                    }
+                                    else if(dialog.costType ==1){
+                                        Toast.makeText(getActivity(), "열매가 부족해요!", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(getActivity(), "씨앗이 부족해요!", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+
+                            }
+                        });
                         dialog.show();
+
                     }
                 });
             }

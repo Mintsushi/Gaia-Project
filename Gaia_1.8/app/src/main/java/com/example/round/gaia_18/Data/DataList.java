@@ -112,6 +112,14 @@ public class DataList {
         this.plants.add(plant);
     }
 
+    public void delsPlant(int x){
+
+        Log.i("list ", ""+this.plants.get(x).getPlantNo());
+        Log.i("list ", "1: "+this.plants.size());
+        this.plants.remove(x);
+        Log.i("list ", "2: "+this.plants.size());
+    }
+
     public ArrayList<OverlayPlant> getOverlayPlants() {
         return overlayPlants;
     }
@@ -170,12 +178,10 @@ public class DataList {
     public void setItemNumber(int id, int num){
         this.storeProducts.get(id).setItemNumber(num);
     }
-
     public void setIncItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp + num);
     }
-
     public void setDesItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp - num);

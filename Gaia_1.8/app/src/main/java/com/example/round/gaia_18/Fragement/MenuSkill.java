@@ -283,8 +283,9 @@ public class MenuSkill extends Fragment {
 
             //스킬 유형6 : 날씨가 비 일시 일정량의 물 획득
             case 5:
-                Log.i("weaterData",""+weatherData.get(0));
+
                 Log.i("weaterData",""+ effect);
+                Log.i("weaterData",""+weatherData.get(0));
                 // 날씨정보 얻어오기.
                 if(weatherData.get(0)==1) {
                     dataList.setIncItemNumber(3, effect);

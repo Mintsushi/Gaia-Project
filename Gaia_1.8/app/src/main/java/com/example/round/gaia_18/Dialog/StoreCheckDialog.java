@@ -11,15 +11,12 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.round.gaia_18.Data.StoreProduct;
 import com.example.round.gaia_18.R;
 
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.example.round.gaia_18.Data.DataList.storeAdapter;
 import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataList;
@@ -42,8 +39,6 @@ public class StoreCheckDialog extends Dialog {
 
     ImageButton diaBuyYesButton;
     ImageButton diaBuyNoButton;
-
-    StoreProduct storeProduct;
 
     public int costType;
     public int buySuccess;
@@ -73,35 +68,23 @@ public class StoreCheckDialog extends Dialog {
                 // 구매관련
                 if(costType==1) {
                     if (buyForFruit(useCostHash)) { // 구입완료
-                        storeProduct.setItemNumber(1);
                         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
-
-                        if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
-                            //업적 증가(아이템 구입)
-                            dataList.getGoalDataByID(11).setGoalRate(1);
-                        }
-
-                        storeAdapter.notifyDataSetChanged();
+                        buySuccess = getBuySuccess(1);
                         dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Fruit이 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                        buySuccess = getBuySuccess(0);
+                        dismiss();
                     }
                 }
                 else{
                     if (buyForScore(useCostHash)){ //구입완료
-                        storeProduct.setItemNumber(1);
                         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-
-                        if(dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
-                            //업적 증가(아이템 구입)
-                            dataList.getGoalDataByID(11).setGoalRate(1);
-                        }
-
-                        storeAdapter.notifyDataSetChanged();
+                        buySuccess = getBuySuccess(1);
                         dismiss();
 
                     } else { //재화부족으로 구매 실패
-                        Toast.makeText(getContext(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                        buySuccess = getBuySuccess(0);
+                        dismiss();
                     }
                 }
             }
@@ -128,19 +111,12 @@ public class StoreCheckDialog extends Dialog {
     public void setName(String str) {
         storeCheckNameText.setText(str);
     }
-
-    public void setExplain(int effectType) {
-        int resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(effectType), "string", getContext().getPackageName());
-        storeCheckExplainText.setText(getContext().getResources().getText(resourceId));
+    public void setExplain(String str) {
+        storeCheckExplainText.setText(str);
     }
-
     public void setImage(String str) {
         Log.i("path :: ", ":: " + str + "::" + getContext().getPackageName());
         //storeCheckImage.setImageResource();
-    }
-
-    public void setProduct(StoreProduct storeProduct){
-        this.storeProduct = storeProduct;
     }
 
     public void setUseCost(int type, ConcurrentHashMap<Integer, Integer> str) {

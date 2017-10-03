@@ -2,6 +2,8 @@ package com.example.round.gaia_18.Data;
 
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 /**
  * Created by Round on 2017-09-06.
@@ -10,13 +12,17 @@ import android.widget.ImageView;
 public class OverlayPlant {
 
     private Plant plant;
-    private ImageView overlayPlant;
     private WindowManager.LayoutParams params;
+    private RelativeLayout overlayPlant;
+    private ProgressBar overlayPlantHP;
+    private ImageView overlayPlantWater;
+    private RelativeLayout  overlayPlantLayout;
 
-    public OverlayPlant(Plant plant, ImageView overlayPlant, WindowManager.LayoutParams params) {
+    public OverlayPlant(Plant plant, RelativeLayout overlayPlant, WindowManager.LayoutParams params) {
         this.plant = plant;
         this.overlayPlant = overlayPlant;
         this.params = params;
+
     }
 
     public Plant getPlant() {
@@ -27,11 +33,11 @@ public class OverlayPlant {
         this.plant = plant;
     }
 
-    public ImageView getOverlayPlant() {
+    public RelativeLayout getOverlayPlant() {
         return overlayPlant;
     }
 
-    public void setOverlayPlant(ImageView overlayPlant) {
+    public void setOverlayPlant(RelativeLayout overlayPlant) {
         this.overlayPlant = overlayPlant;
     }
 
