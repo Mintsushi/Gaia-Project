@@ -1307,46 +1307,47 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Water> getWaterInform(){
-        ArrayList<Water> W = new ArrayList<>();
+        ArrayList<Water> waters = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM "+WATER_TABLE_NAME,null);
         if (cursor.moveToFirst()) {
             do {
-                Water water = new Water(cursor.getInt(1), cursor.getInt(3), cursor.getInt(2),cursor.getInt(4),cursor.getInt(5));
-                W.add(water);
+                Water water = new Water();
+                water.setFlowerId(cursor.getInt(0));
+                water.setWaterPeriod(cursor.getInt(1));
+                water.setWaterPenaltyTime(cursor.getInt(2));
+                water.setWaterPenalty(cursor.getInt(3));
+                water.setWaterNeedWaterNum(cursor.getInt(4));
 
-                Log.i(" SQL ", ""+cursor.getInt(0)+" : "+cursor.getInt(1)+" : "+cursor.getInt(2)+" : "+cursor.getInt(3)+" : "+
-                        cursor.getInt(4)+" : "+cursor.getInt(5));
+                waters.add(water);
 
             } while (cursor.moveToNext());
         }
 
-        return W;
+        return waters;
     }
+
     private void WaterTable(SQLiteDatabase sqLiteDatabase) {
 
         String CREATE_TABLE = "CREATE TABLE " + WATER_TABLE_NAME + "("
-                + waterKey + " INTEGER NOT NULL PRIMARY KEY,"
-                + waterId + " INTEGER NOT NULL,"
+                + flowerId + " INTEGER NOT NULL,"
                 + waterPeriod + " INTEGER NOT NULL,"
                 + waterPenaltyTime + " INTEGER NOT NULL,"
                 + waterPenalty + " INTEGER NOT NULL,"
                 + waterNeedWaterNum + " INTEGER NOT NULL" + ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
-        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(0,1,300,120,1,1));
-        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(1,2,480,192,1,2));
-        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(2,3,900,360,2,4));
-        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(3,4,1200,480,3,6));
-        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(4,5,1800,720,3,10));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(0,300,120,1,1));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(1,480,192,1,2));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(2,900,360,2,4));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(3,1200,480,3,6));
+        sqLiteDatabase.insert(WATER_TABLE_NAME,null,getWaterValues(4,1800,720,3,10));
     }
-    private ContentValues getWaterValues(int key, int id, int period, int penaltyTime, int penalty, int neddWaterNum){
 
-
+    private ContentValues getWaterValues(int id, int period, int penaltyTime, int penalty, int neddWaterNum){
         ContentValues values = new ContentValues();
-        values.put(waterKey,key);
-        values.put(waterId,id);
+        values.put(flowerId,id);
         values.put(waterPeriod,period);
         values.put(waterPenaltyTime,penaltyTime);
         values.put(waterPenalty,penalty);
