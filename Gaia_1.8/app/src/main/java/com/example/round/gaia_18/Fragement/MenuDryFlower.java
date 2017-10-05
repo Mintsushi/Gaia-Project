@@ -21,10 +21,10 @@ import com.example.round.gaia_18.Dialog.AddDryFlowerItemDialog;
 import com.example.round.gaia_18.R;
 
 import static com.example.round.gaia_18.Data.DataList.dryFlowerAdapter;
+import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.relativeLayout;
 import static com.example.round.gaia_18.OverlayService.dataList;
-import static com.example.round.gaia_18.MainActivity.fruit;
 import static com.example.round.gaia_18.OverlayService.user;
 
 public class MenuDryFlower extends Fragment {
@@ -109,20 +109,25 @@ public class MenuDryFlower extends Fragment {
                             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                 @Override
                                 public void onDismiss(DialogInterface dialogInterface) {
+                                    Log.i(" MainActivity. dialog : ",""+dialog.getDryFlower().size());
 
                                     for(int i =0 ; i<dialog.getDryFlower().size();i++){
                                         dataList.setDryPlats(dialog.getDryFlower().get(i));
                                         dataList.resetFlower(dialog.getDryFlower().get(i).getDryFlowerNo());
-
                                         //App에 있을 때
                                         if(dialog.getDryFlower().get(i).getPlant().getState() == 0){
-                                            relativeLayout.removeView(dialog.getDryFlower().get(i).getPlant().getPlant());
+                                            Log.i(" MainActivity.delPlant sze : ",""+dataList.getPlants().size());
+
+                                            relativeLayout.removeView(dialog.getDryFlower().get(i).getPlant().getPlantLayout());
+                                            dataList.delsPlant(dialog.getDryFlower().get(i).getIndex());
+                                            Log.i(" MainActivity.delPlant sze : ",""+dataList.getPlants().size());
+
                                         }else{//overlay에 있을 때
                                            mOverlayService.removePlant(dialog.getDryFlower().get(i).getDryFlowerNo());
                                         }
-                                        dataList.getPlants().remove(dialog.getDryFlower().get(i).getIndex());
-                                    }
 
+                                    }
+                                    Log.i(" MainActivity.delPlant sze : ",""+dataList.getPlants().size());
                                     dataList.getGoalDataByID(14).setGoalRate(dialog.getDryFlower().size());
                                     dryFlowerAdapter.notifyDataSetChanged();
                                 }

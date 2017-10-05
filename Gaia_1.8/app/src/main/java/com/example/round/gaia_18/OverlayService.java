@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -546,7 +548,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         for(int i =0 ;i<plants.size();i++){
             if(plants.get(i).getPlant().getPlantNo() == id){
-                relativeLayout.addView(plants.get(i).getPlant().getPlant());
+                relativeLayout.addView(plants.get(i).getPlant().getPlantLayout());
                 minusOverlayClickScore(plants.get(i).getPlant());
                 plants.remove(i);
             }
@@ -574,19 +576,20 @@ public class OverlayService extends Service implements View.OnClickListener,View
         return true;
     }
 
-    public Boolean addPlantToOverlay(Plant plant){
+
+    public Boolean addPlantToOverlay(final Plant plant){
 
         if(enalbeOverlayService) {
-            relativeLayout.removeView(plant.getPlant());
+            relativeLayout.removeView(plant.getPlantLayout());
 
             ImageView exPlant = plant.getPlant();
 
             int[] location = new int[2];
             exPlant.getLocationOnScreen(location);
 
-            ImageView overlayPlant = new ImageView(this);
+            RelativeLayout overlayPlant = new RelativeLayout(this);
             //overlayPlant.setImageResource(plant.getFlower().getImage());
-            overlayPlant.setImageResource(R.drawable.image);
+            //overlayPlant.setImageResource(R.drawable.imageflower);
 
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                     exPlant.getWidth(), exPlant.getHeight(),
@@ -603,9 +606,59 @@ public class OverlayService extends Service implements View.OnClickListener,View
             overlayPlant.setOnClickListener(this);
             overlayPlant.setOnTouchListener(this);
 
+            // 식물 이미지
+           ImageView plantImage = new ImageView(MainActivity.context);
+            //plant.setImageResource(flower.getImage());
+            plantImage.setImageResource(R.drawable.imageflower);
+            //plant.setTag(flower.getImage());
+
+            RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
+            relParams.topMargin = 50;
+            overlayPlant.addView(plantImage, relParams);
+
+            ImageView plantWater = new ImageView(MainActivity.context);
+            plantWater.setImageResource(R.drawable.reward4);
+            plantWater.setVisibility(View.INVISIBLE);
+            plantWater.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // 물의 개수가 물을 줄수있을만큼 있을때.
+                    if( dataList.getItemNumber(3) >= plant.getWaterInfo().get(plant.getPlantNo()).getWaterNeedWaterNum()) {Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+                        dataList.setDesItemNumber(3, plant.getWaterInfo().get(plant.getPlantNo()).getWaterNeedWaterNum());
+                        plant.setWaterState(0);
+                        plant.getPlantWater().setVisibility(View.INVISIBLE);
+                    }else{
+                        Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+
+                    }
+                }
+            });
+            // 위치세팅
+            RelativeLayout.LayoutParams waterParams = new RelativeLayout.LayoutParams(100, 100);
+            int[] waterLocation = new int[2];
+            overlayPlant.getLocationOnScreen(waterLocation);
+            waterParams.leftMargin =  params.x+100;
+            waterParams.topMargin = params.y+0;
+            overlayPlant.addView(plantWater,waterParams);
+
+
+            // 체력바
+            ProgressBar plantHP = new ProgressBar(MainActivity.context, null, android.R.attr.progressBarStyleHorizontal);
+            plantHP.setMax(plant.getMaxHp()); // 최대체력 100
+            plantHP.setProgress(plant.getHp());
+
+            // 위치세팅
+            RelativeLayout.LayoutParams hpParams = new RelativeLayout.LayoutParams(200, 40);
+            int[] hpLocation1 = new int[2];
+            overlayPlant.getLocationOnScreen(hpLocation1);
+            hpParams.leftMargin = params.x+30;
+            hpParams.topMargin = params.y+350;
+            overlayPlant.addView(plantHP, hpParams);
+
             plant.setState(1);
             Log.i("overlay","plusOverlayClickScore");
             plusOverlayClickScore(plant);
+
             dataList.addOverlayPlant(new OverlayPlant(plant, overlayPlant, params));
 
             return true;
@@ -614,6 +667,70 @@ public class OverlayService extends Service implements View.OnClickListener,View
             return false;
         }
     }
+
+    /*
+    public Boolean addPlantToOverlay(Plant plant){
+
+        if(enalbeOverlayService) {
+
+            relativeLayout.removeView(plant.getPlantLayout());
+
+            RelativeLayout overlayPlant = plant.getPlantLayout();
+            int[] plantLocation = new int[2];
+
+            overlayPlant.getLocationOnScreen(plantLocation);
+
+            WindowManager.LayoutParams plantParams = new WindowManager.LayoutParams(
+                    overlayPlant.getWidth(), overlayPlant.getHeight(),
+                    WindowManager.LayoutParams.TYPE_TOAST,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    PixelFormat.TRANSLUCENT
+            );
+            plantParams.gravity = Gravity.LEFT | Gravity.TOP;
+            plantParams.x = plantLocation[0];
+            plantParams.y = plantLocation[1];
+
+            overlayPlant.setOnClickListener(this);
+            overlayPlant.setOnTouchListener(this);
+
+
+
+
+
+
+
+
+            ImageView exPlant = plant.getPlant();
+
+            int[] location = new int[2];
+            exPlant.getLocationOnScreen(location);
+
+
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                    exPlant.getWidth(), exPlant.getHeight(),
+                    WindowManager.LayoutParams.TYPE_TOAST,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    PixelFormat.TRANSLUCENT
+            );
+
+            params.gravity = Gravity.LEFT | Gravity.TOP;
+            params.x = location[0];
+            params.y = location[1];
+
+            plant.setState(1);
+            Log.i("overlay","plusOverlayClickScore");
+            plusOverlayClickScore(plant);
+            dataList.addOverlayPlant(new OverlayPlant(plant, overlayPlant, plantParams));
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+*/
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent){

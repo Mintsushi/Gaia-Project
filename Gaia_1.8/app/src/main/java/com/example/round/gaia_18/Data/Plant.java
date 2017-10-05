@@ -67,22 +67,41 @@ public class Plant{
     private Boolean moving = false;
     private int originalXPos, originalYPos;
 
-    public Plant(int plantNo, int level, Flower flower, ImageView plant, RelativeLayout plantLayout, int hp) {
+    public Plant(int plantNo, int level, Flower flower, int hp) {
 
         this.plantNo = plantNo;
         this.level = level;
         this.flower = flower;
-        this.plant = plant;
-        this.plantLayout = plantLayout;
         this.hp = hp;
         this.waterState = 0;
         waterInfo = DataList.getWaters();
         this.timemer = new Timemer(waterInfo.get(plantNo).getWaterPeriod(),waterInfo.get(plantNo).getWaterPenaltyTime());
+    }
 
+    public void plantRepaint(RelativeLayout relativeLayout){
 
-        //물달라는 이미지뷰
+        plantLayout = new RelativeLayout(MainActivity.context);
+        RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
+        // 위치는 후에 Random 값으로 배치
+        plantLayoutParams.leftMargin = 200;
+        plantLayoutParams.topMargin = 200;
+        plantLayout.setOnLongClickListener(MainActivity.onLongClick);
+        plantLayout.setOnTouchListener(MainActivity.onTouch);
+        relativeLayout.addView(plantLayout, plantLayoutParams);
+
+        // 식물 이미지
+        plant = new ImageView(MainActivity.context);
+        //plant.setImageResource(flower.getImage());
+        plant.setImageResource(R.drawable.imageflower);
+        //plant.setTag(flower.getImage());
+
+        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
+        relParams.topMargin = 50;
+        plantLayout.addView(plant, relParams);
+
         plantWater = new ImageView(MainActivity.context);
         plantWater.setImageResource(R.drawable.reward4);
+        plantWater.setVisibility(View.INVISIBLE);
         plantWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,7 +235,8 @@ public class Plant{
                 // 뷰에 이미지 그리기
                 viewHolder.miniItemImage.setImageResource(R.drawable.reward3);
                 viewHolder.miniItemNameText.setText(info.getItemName());
-                viewHolder.miniItemNumText.setText("수량 : "+dataList.getItemNumber(info.getItemId() -1));
+                Log.i("item num " ,""+dataList.getItemNumber(info.getItemId() -1));
+                viewHolder.miniItemNumText.setText("수량 : "+dataList.getItemNumber(info.getItemCode()-1));
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -362,7 +382,12 @@ public class Plant{
         this.plantHP.setProgress(this.hp );
     }
 
-
+    public static int getMaxHp() {
+        return MAX_HP;
+    }
+    public ProgressBar getPlantHP() {
+        return plantHP;
+    }
 
     public ImageView getPlantWater() {
         return plantWater;
@@ -378,6 +403,10 @@ public class Plant{
 
     public RelativeLayout getPlantLayout() {
         return plantLayout;
+    }
+
+    public ArrayList<Water> getWaterInfo() {
+        return waterInfo;
     }
 
     public Timer getTimer() {

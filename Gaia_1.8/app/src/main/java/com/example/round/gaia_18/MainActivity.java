@@ -158,6 +158,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
             fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
             mOverlayService.setSeed();
+            Log.i("repaint ", "repaint size : "+dataList.getPlants().size());
+            for(int i =0;i<dataList.getPlants().size();i++) {
+
+                Log.i("repaint ", "repaint state : "+dataList.getPlants().get(i).getState());
+                    if (dataList.getPlants().get(i).getState() == 0) {
+                        Log.i("repaint ", "repaint  : "+dataList.getPlants().get(i).getFlower().getFlowerName());
+                        dataList.getPlants().get(i).plantRepaint( relativeLayout);
+                    }
+
+            }
+
 
             for(int i =0;i<dataList.getSkillInfos().size();i++){
                 if(dataList.getSkillInfos().get(i).getSkillCoolTimeInApp() != null){
@@ -171,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(dataList.flowerAdapter != null){
                 dataList.flowerAdapter.notifyDataSetChanged();
             }
+
         }
     }
 
@@ -405,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        RequestQueue requestQueue = Volley.newRequestQueue(this);
 //        requestQueue.add(request);
 
-        dataList.setScore(1,50);
+        dataList.setScore(3,50);
         dataList.setFruit(0,500);
 
         dataList.setItemNumber(0,0);
@@ -482,27 +494,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
             for (int i = 0; i < flowers.size(); i++) {
                 if (flowers.get(i).getFlowerNo() == plantNo) {
-// 레이아웃
-                    RelativeLayout plantLayout = new RelativeLayout(MainActivity.context);
-                    RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
-                    // 위치는 후에 Random 값으로 배치
-                    plantLayoutParams.leftMargin = 200;
-                    plantLayoutParams.topMargin = 200;
-                    plantLayout.setOnLongClickListener(onLongClick);
-                    plantLayout.setOnTouchListener(onTouch);
-                    relativeLayout.addView(plantLayout, plantLayoutParams);
 
-                    // 식물 이미지
-                    ImageView plant = new ImageView(context);
-                    //plant.setImageResource(flower.getImage());
-                    plant.setImageResource(R.drawable.imageflower);
-                    //plant.setTag(flower.getImage());
-
-                    RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
-                    relParams.topMargin = 50;
-                    plantLayout.addView(plant, relParams);
-
-                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i), plant,plantLayout,plantHP));
+                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i),plantHP));
                     break;
                 }
             }
@@ -522,26 +515,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < flowers.size(); i++) {
 
             if (flowers.get(i).getFlowerNo() == flowerNo) {
-                RelativeLayout plantLayout = new RelativeLayout(MainActivity.context);
-                RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
-                // 위치는 후에 Random 값으로 배치
-                plantLayoutParams.leftMargin = 200;
-                plantLayoutParams.topMargin = 200;
-                plantLayout.setOnLongClickListener(onLongClick);
-                plantLayout.setOnTouchListener(onTouch);
-                relativeLayout.addView(plantLayout, plantLayoutParams);
 
-                // 식물 이미지
-                ImageView plant = new ImageView(context);
-                //plant.setImageResource(flower.getImage());
-                plant.setImageResource(R.drawable.imageflower);
-                //plant.setTag(flower.getImage());
-
-                RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
-                relParams.topMargin = 50;
-                plantLayout.addView(plant, relParams);
-
-                plants.add(new Plant(flowerNo, level, flowers.get(i), plant, plantLayout,hp));
+                plants.add(new Plant(flowerNo, level, flowers.get(i) ,hp));
                 break;
             }
         }
@@ -647,28 +622,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static void buyPlant( Flower flower ){
 
-        // 레이아웃
-        RelativeLayout plantLayout = new RelativeLayout(MainActivity.context);
-        RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
-        // 위치는 후에 Random 값으로 배치
-        plantLayoutParams.leftMargin = 200;
-        plantLayoutParams.topMargin = 200;
-        plantLayout.setOnLongClickListener(onLongClick);
-        plantLayout.setOnTouchListener(onTouch);
-        relativeLayout.addView(plantLayout, plantLayoutParams);
-
-        // 식물 이미지
-        ImageView plant = new ImageView(context);
-        //plant.setImageResource(flower.getImage());
-        plant.setImageResource(R.drawable.imageflower);
-        //plant.setTag(flower.getImage());
-
-        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
-        relParams.topMargin = 50;
-        plantLayout.addView(plant, relParams);
-
-        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower,plant, plantLayout, 100));
+        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower, 100));
+        dataList.getPlants().get(flower.getFlowerNo()).plantRepaint( relativeLayout);
     }
+
 
     public static void updatePlantLevel(int plantNo){
 
@@ -686,7 +643,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seed.setText(Integer.toString(score));
     }
 
-    private static View.OnTouchListener onTouch = new View.OnTouchListener() {
+    public static View.OnTouchListener onTouch = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
@@ -730,7 +687,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private static View.OnLongClickListener onLongClick = new View.OnLongClickListener() {
+    public static View.OnLongClickListener onLongClick = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
             return false;

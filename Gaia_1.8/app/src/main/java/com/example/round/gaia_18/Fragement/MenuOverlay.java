@@ -125,6 +125,7 @@ public class MenuOverlay extends Fragment {
                     @Override
                     public void onClick(View view) {
                         //overlay에 없을 때
+                        Log.i("overView","size"+ dataList.getPlants().size());
                         if(plant.getState() == 0){
                             if(mOverlayService.addPlantToOverlay(plant)) {
                                 Log.i("overlay","SET overlay");
