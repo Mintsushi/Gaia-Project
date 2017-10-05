@@ -18,7 +18,7 @@ public class StoreProduct {
     private int itemNumber = 0;
     private int buyType;
 
-    public StoreProduct(){cost.put(0,0);}
+    public StoreProduct(){}
 
     public int getItemId() {
         return itemId;
@@ -46,7 +46,7 @@ public class StoreProduct {
             while(true) {
 
                 int newScore = seed %1000;
-                this.cost.put(seed,newScore);
+                this.cost.put(type,newScore);
 
                 seed /= 1000;
                 if(seed < 1000){

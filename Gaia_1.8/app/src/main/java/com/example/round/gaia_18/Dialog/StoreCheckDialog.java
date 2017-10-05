@@ -11,10 +11,13 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.round.gaia_18.R;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.example.round.gaia_18.MainActivity.fruit;
@@ -41,7 +44,7 @@ public class StoreCheckDialog extends Dialog {
     ImageButton diaBuyNoButton;
 
     public int costType;
-    public int buySuccess;
+    public int buySuccess = 0;
     private ConcurrentHashMap<Integer, Integer> useCostHash = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> preCostHash = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> futCostHash = new ConcurrentHashMap<>();
@@ -67,12 +70,13 @@ public class StoreCheckDialog extends Dialog {
             public void onClick(View view) {
                 // 구매관련
                 if(costType==1) {
+                    Log.i("Store","costType : "+Integer.toString(costType));
                     if (buyForFruit(useCostHash)) { // 구입완료
                         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
                         buySuccess = getBuySuccess(1);
                         dismiss();
                     } else {
-                        buySuccess = getBuySuccess(0);
+                        Toast.makeText(getContext(), "열매가 부족해요!", Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
                 }
@@ -83,7 +87,7 @@ public class StoreCheckDialog extends Dialog {
                         dismiss();
 
                     } else { //재화부족으로 구매 실패
-                        buySuccess = getBuySuccess(0);
+                        Toast.makeText(getContext(), "씨앗이 부족해요!", Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
                 }
@@ -93,8 +97,6 @@ public class StoreCheckDialog extends Dialog {
         diaBuyNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buySuccess = getBuySuccess(0);
-                costType = -1;
                 dismiss();
             }
         });
@@ -120,7 +122,8 @@ public class StoreCheckDialog extends Dialog {
     }
 
     public void setUseCost(int type, ConcurrentHashMap<Integer, Integer> str) {
-        useCostHash = str;
+        useCostHash.putAll(str);
+        Log.i("Store",useCostHash.toString());
         costType = type;
         if(type==1){
             diaUseCostText.setText(""+dataList.getAllScore(str));
@@ -147,36 +150,45 @@ public class StoreCheckDialog extends Dialog {
     }
 
     //게임 재화로 구매
-    private Boolean buyForScore(ConcurrentHashMap<Integer, Integer> seed) {
+    private boolean buyForScore(ConcurrentHashMap<Integer, Integer> cost){
 
-        Iterator<Integer> iterator = seed.keySet().iterator();
+        TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
+        treeMap.putAll(cost);
 
-        while (iterator.hasNext()) {
+        Iterator<Integer> iterator = treeMap.keySet().iterator();
+
+        while(iterator.hasNext()){
             int key = iterator.next();
-            int value = seed.get(key);
+            int value = cost.get(key);
 
-            if (!dataList.minusScore(key, value, dataList.getScoreHashMap())) {
+            Log.i("BuyFlower",key+" / "+value);
+            if(!dataList.minusScore(key,value,dataList.getScoreHashMap())){
                 return false;
             }
         }
-        return true;
-    }
 
+        return true;
+
+    }
     //현금성 재화로 구매
     private Boolean buyForFruit(ConcurrentHashMap<Integer, Integer> fruit) {
 
-        Iterator<Integer> iterator = fruit.keySet().iterator();
+        TreeMap<Integer, Integer> treeMap = new TreeMap<Integer, Integer>(Collections.<Integer>reverseOrder());
+        treeMap.putAll(fruit);
 
-        while (iterator.hasNext()) {
+        Iterator<Integer> iterator = treeMap.keySet().iterator();
+
+        while(iterator.hasNext()){
             int key = iterator.next();
             int value = fruit.get(key);
 
-            if (!dataList.minusScore(key, value, dataList.getFruitHashMap())) {
+            if(!dataList.minusScore(key,value,dataList.getFruitHashMap())){
                 return false;
             }
         }
 
         return true;
+
     }
 
 }

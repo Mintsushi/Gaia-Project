@@ -120,7 +120,7 @@ public class MenuStore extends Fragment {
 
                                 dialog.setImage(storeProduct.getImage());
                                 dialog.setName(storeProduct.getItemName());
-
+                                dialog.setExplain(viewholder.productExplain.getText().toString());
                                 // 구매에 사용하는 재화의 정보 보내기
                                 if (storeProduct.getBuyType() == 0) {
                                     dialog.setUseCost(1,storeProduct.getCost());
@@ -147,22 +147,8 @@ public class MenuStore extends Fragment {
                                         itemskillTimemer itemskillTimemer = new itemskillTimemer(600);
                                         itemskillTimemer.handlerStart();
                                     }
-
                                     storeAdapter.notifyDataSetChanged();
-                                    Toast.makeText(getActivity(), "구매성공", Toast.LENGTH_SHORT).show();
                                 }
-                                else {
-                                    if(dialog.costType == -1){
-                                        //취소버튼 누른경우
-                                    }
-                                    else if(dialog.costType ==1){
-                                        Toast.makeText(getActivity(), "열매가 부족해요!", Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(getActivity(), "씨앗이 부족해요!", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-
                             }
                         });
                         dialog.show();
