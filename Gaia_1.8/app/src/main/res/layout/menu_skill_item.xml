@@ -9,14 +9,15 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginEnd="20dp">
+        android:gravity="center"
+        android:layout_marginEnd="10dp">
 
         <ImageView
             android:id="@+id/skillImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60sp"
+            android:layout_height="60sp"
             android:scaleType="fitXY"/>
 
         <ProgressBar
@@ -68,8 +69,7 @@
         <ImageButton
             android:id="@+id/skillUseButton"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:scaleType="fitXY"/>
+            android:layout_height="60dp"/>
 
         <TextView
             android:id="@+id/skillCoolTime"
@@ -88,7 +88,7 @@
 
         <ImageButton
             android:id="@+id/skillLevelUpButton"
-            android:layout_width="60dp"
+            android:layout_width="150sp"
             android:layout_height="60dp"
             android:scaleType="fitXY"/>
 

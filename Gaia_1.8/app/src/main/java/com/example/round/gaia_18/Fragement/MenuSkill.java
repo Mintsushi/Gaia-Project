@@ -114,11 +114,13 @@ public class MenuSkill extends Fragment {
 
                 skillInfo.setSkillDataChange(false);
                 //후에 skill Image로 변경
-                skillViewHolder.skillImage.setImageResource(R.drawable.image);
+                int resourceId = getContext().getResources().getIdentifier("skill"+skillInfo.getSkillNo(),"drawable",getContext().getPackageName());
+                skillViewHolder.skillImage.setImageResource(resourceId);
+//                skillViewHolder.skillImage.setImageResource(R.drawable.image);
                 skillViewHolder.skillName.setText(skillInfo.getSkillName());
                 skillViewHolder.skillExpBar.setProgress(skillData.getSkillLevel() * 4);
                 skillViewHolder.skillLevel.setText(Integer.toString(skillData.getSkillLevel()));
-                int resourceId = getContext().getResources().getIdentifier("skillCase" + skillInfo.getSkillCase(), "string", getContext().getPackageName());
+                resourceId = getContext().getResources().getIdentifier("skillCase" + skillInfo.getSkillCase(), "string", getContext().getPackageName());
                 skillViewHolder.skillExplain.setText(String.format(getString(resourceId), skillData.getSkillEffect()));
 
                 if (skillData.getbuyType() == 1) {
