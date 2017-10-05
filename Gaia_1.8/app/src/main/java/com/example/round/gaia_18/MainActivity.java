@@ -425,11 +425,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.setItemNumber(2,0);
         dataList.setItemNumber(3,5);
 
-        dataList.setItemNumber(0,0);
-        dataList.setItemNumber(1,0);
-        dataList.setItemNumber(2,0);
-        dataList.setItemNumber(3,5);
-
         user.setDryFlowerItem(2);
 
         ArrayList<Integer> skill = new ArrayList<>();

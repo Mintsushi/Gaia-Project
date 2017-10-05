@@ -236,7 +236,7 @@ public class Plant{
                 viewHolder.miniItemImage.setImageResource(R.drawable.reward3);
                 viewHolder.miniItemNameText.setText(info.getItemName());
                 Log.i("item num " ,""+dataList.getItemNumber(info.getItemId() -1));
-                viewHolder.miniItemNumText.setText("수량 : "+dataList.getItemNumber(info.getItemCode()-1));
+                viewHolder.miniItemNumText.setText("수량 : "+dataList.getItemNumber(info.getItemId()));
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

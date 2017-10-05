@@ -426,7 +426,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
 
             if(skillInfo != null){
-                skillViewHolder.skillImage.setImageResource(R.drawable.image);
+                int resourceId = getContext().getResources().getIdentifier("skill"+skillInfo.getSkillNo(),"drawable",getContext().getPackageName());
+                skillViewHolder.skillImage.setImageResource(resourceId);
+//                skillViewHolder.skillImage.setImageResource(R.drawable.image);
 
                 //skill을 구입함
                 if(skillData.getSkillBuy()){
@@ -623,7 +625,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 @Override
                 public void onClick(View view) {
                     // 물의 개수가 물을 줄수있을만큼 있을때.
-                    if( dataList.getItemNumber(3) >= plant.getWaterInfo().get(plant.getPlantNo()).getWaterNeedWaterNum()) {Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+                    if( dataList.getItemNumber(3) >= plant.getWaterInfo().get(plant.getPlantNo()).getWaterNeedWaterNum()) {
+                        Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
                         dataList.setDesItemNumber(3, plant.getWaterInfo().get(plant.getPlantNo()).getWaterNeedWaterNum());
                         plant.setWaterState(0);
                         plant.getPlantWater().setVisibility(View.INVISIBLE);

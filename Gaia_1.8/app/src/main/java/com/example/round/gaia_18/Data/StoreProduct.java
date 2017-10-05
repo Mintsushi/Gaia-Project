@@ -11,33 +11,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StoreProduct {
 
     private int itemId;
-    private int itemCode;
     private String itemName;;
-    private ConcurrentHashMap<Integer, Integer> seedCost = new ConcurrentHashMap<>();
-    private ConcurrentHashMap<Integer, Integer> fruitCost = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<Integer,Integer> cost = new ConcurrentHashMap<>();
     private int itemEffectType;
-    private String itemExplain;
     private String image;
-    private int itemNumber;
+    private int itemNumber = 0;
+    private int buyType;
 
-    public StoreProduct(){}
-
-
-    public void setItemExplain(String itemExplain) {
-        this.itemExplain = itemExplain;
-    }
-
-    public String getItemExplain() {
-        return itemExplain;
-    }
-
-    public void setItemCode(int itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    public int getItemCode() {
-        return itemCode;
-    }
+    public StoreProduct(){cost.put(0,0);}
 
     public int getItemId() {
         return itemId;
@@ -55,34 +36,26 @@ public class StoreProduct {
         this.itemName = itemName;
     }
 
-    public ConcurrentHashMap<Integer, Integer> getSeedCost() {
-        return seedCost;
+    public ConcurrentHashMap<Integer, Integer> getCost() {
+        return cost;
     }
 
-    public void setSeedCost(int seed) {
+    public void setCost(int seed) {
         int type=0;
         if(seed!=0) {
             while(true) {
 
                 int newScore = seed %1000;
-                this.seedCost.put(seed,newScore);
+                this.cost.put(seed,newScore);
 
                 seed /= 1000;
                 if(seed < 1000){
-                    if(seed != 0) this.seedCost.put(type+1,seed);
+                    if(seed != 0) this.cost.put(type+1,seed);
                     break;
                 }
                 type++;
             }
         }
-    }
-
-    public ConcurrentHashMap<Integer, Integer> getFruitCost() {
-        return fruitCost;
-    }
-
-    public void setFruitCost(int fruit) {
-        this.fruitCost.put(0,fruit);
     }
 
     public int getItemEffectType() {
@@ -108,4 +81,8 @@ public class StoreProduct {
     public void setItemNumber(int number) {
         this.itemNumber = number;
     }
+
+    public void setBuyType(int buyType){this.buyType = buyType;}
+    public int getBuyType(){return this.buyType;}
+
 }

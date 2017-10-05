@@ -95,20 +95,20 @@ public class MenuStore extends Fragment {
                 //후에 아이템 이미지로 변경
                 viewholder.productImage.setImageResource(R.drawable.image);
                 viewholder.productName.setText(storeProduct.getItemName());
-                Log.i("getString","product" + Integer.toString(storeProduct.getItemEffectType()));
+                Log.i("getString","product" + Integer.toString(storeProduct.getBuyType()));
                 int resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(storeProduct.getItemEffectType()), "string", getContext().getPackageName());
                 viewholder.productExplain.setText(getResources().getText(resourceId));
-                viewholder.productNum.setText(""+dataList.getItemNumber(storeProduct.getItemCode() -1));
+                viewholder.productNum.setText(Integer.toString(storeProduct.getItemNumber()));
 
-                if(storeProduct.getSeedCost().get(-1) != null){
+                //현금성 재화로 구매
+                if(storeProduct.getBuyType() == 0){
                     viewholder.productBuyButton.setImageResource(R.drawable.fruit);
-                    viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getFruitCost()));
                 }
                 else{ //현금성 재화로 구매
                     viewholder.productBuyButton.setImageResource(R.drawable.seed);
-                    viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getSeedCost()));
                 }
 
+                viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getCost()));
                 viewholder.productBuyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -120,14 +120,13 @@ public class MenuStore extends Fragment {
 
                                 dialog.setImage(storeProduct.getImage());
                                 dialog.setName(storeProduct.getItemName());
-                                dialog.setExplain(storeProduct.getItemExplain());
 
                                 // 구매에 사용하는 재화의 정보 보내기
-                                if (storeProduct.getSeedCost().get(-1) != null) {
-                                    dialog.setUseCost(1,storeProduct.getFruitCost());
+                                if (storeProduct.getBuyType() == 0) {
+                                    dialog.setUseCost(1,storeProduct.getCost());
                                     dialog.setPreCost(1,dataList.getFruitHashMap());
                                 } else {
-                                    dialog.setUseCost(0,storeProduct.getSeedCost());
+                                    dialog.setUseCost(0,storeProduct.getCost());
                                     dialog.setPreCost(0,dataList.getScoreHashMap());
                                 }
 
@@ -141,7 +140,7 @@ public class MenuStore extends Fragment {
                                 if (dialog.buySuccess == 1) {
 
                                     dataList.getGoalDataByID(7).setGoalRate(1);
-                                    dataList.setIncItemNumber(storeProduct.getItemCode() - 1, 1);
+                                    dataList.setIncItemNumber(storeProduct.getItemId(), 1);
 
                                     // 만약 1번 아이템이면 10분동안 점수획득후 아이템 감소 하게됨
                                     if(storeProduct.getItemId()==0){

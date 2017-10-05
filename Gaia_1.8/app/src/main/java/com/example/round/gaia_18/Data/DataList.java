@@ -171,23 +171,27 @@ public class DataList {
         return storeProducts;
     }
 
-    public static void setStoreProducts(ArrayList<StoreProduct> storeProducts) {
-        DataList.storeProducts = storeProducts;
-    }
-
+//    public static void setStoreProducts(ArrayList<StoreProduct> storeProducts) {
+//        DataList.storeProducts = storeProducts;
+//    }
+//
+//
     public void setItemNumber(int id, int num){
         this.storeProducts.get(id).setItemNumber(num);
     }
+//
     public void setIncItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp + num);
     }
+
     public void setDesItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp - num);
     }
+
     public int getItemNumber(int id){
-        return  this.storeProducts.get(id).getItemNumber();
+        return this.storeProducts.get(id).getItemNumber();
     }
 
     public static ArrayList<Water> getWaters() {

@@ -111,14 +111,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     //Store DataBase
     private static final String STORE_TABLE_NAME ="store";
-    private static final String storeCode="productCode";
     private static final String storeNo="productId";
     private static final String storeName="productName";
-    private static final String storeSeed ="productSeed";
-    private static final String storeFruit="productFruit";
+    private static final String storeBuyType ="productSeed";
+    private static final String storeCost="productFruit";
     private static final String storeEffectType="productEffectType";
-    private static final String storeExplain="productExplain";
-    private static final String storeImage ="productImage";
     //Water
     final private static String WATER_TABLE_NAME = "WATER_TABLE";
     final private static String waterKey = "KEY_KEY";
@@ -1261,34 +1258,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         String CREATE_TABLE = "CREATE TABLE " + STORE_TABLE_NAME + "("
                 + storeNo + " INTEGER NOT NULL PRIMARY KEY,"
-                + storeCode + " INTEGER NOT NULL,"
                 + storeName + " TEXT NOT NULL,"
-                + storeSeed + " INTEGER NOT NULL,"
-                + storeFruit + " INTEGER NOT NULL,"
-                + storeEffectType + " INTEGER NOT NULL,"
-                + storeExplain + " TEXT NOT NULL,"
-                + storeImage + " TEXT NOT NULL"+ ")";
+                + storeBuyType + " INTEGER NOT NULL,"
+                + storeCost + " INTEGER NOT NULL,"
+                + storeEffectType + " INTEGER NOT NULL"+ ")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,1,"자동 클릭",-1,300,1,"보유 시 초당 10회 자동 탭.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,2,"체력 포션",-1,15,2,"체력 20% 회복.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,3,"부활 포션",-1,100,3,"체력이 0%가 되어 시들어버린 꽃을 부활시킴.","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,4,"물",-1,3,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
-        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,4,"물",10000,-1,4,"화면에 띄워놓은 꽃에 물주기 옵션이 활성화되면 물을 줄 때 사용하는 아이템","ImagePath"));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(0,"자동 클릭",0,300,1));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(1,"체력 포션",0,15,2));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(2,"부활 포션",0,100,3));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(3,"물",0,3,4));
+        sqLiteDatabase.insert(STORE_TABLE_NAME,null,getStoreProductValues(4,"물",1,10000,4));
 
     }
 
-    private ContentValues getStoreProductValues(int id, int code, String name, int seedCost, int fruitCost, int effect, String explain, String iamge){
+    private ContentValues getStoreProductValues(int id, String name, int buyType, int cost, int effect){
 
         ContentValues values = new ContentValues();
         values.put(storeNo,id);
-        values.put(storeCode,code);
         values.put(storeName,name);
-        values.put(storeSeed,seedCost);
-        values.put(storeFruit,fruitCost);
+        values.put(storeBuyType,buyType);
+        values.put(storeCost,cost);
         values.put(storeEffectType,effect);
-        values.put(storeExplain,explain);
-        values.put(storeImage,iamge);
         return values;
     }
 
@@ -1303,13 +1294,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             do {
                 StoreProduct storeProduct = new StoreProduct();
                 storeProduct.setItemId(cursor.getInt(0));
-                storeProduct.setItemCode(cursor.getInt(1));
-                storeProduct.setItemName(cursor.getString(2));
-                storeProduct.setSeedCost(cursor.getInt(3));
-                storeProduct.setFruitCost(cursor.getInt(4));
-                storeProduct.setItemEffectType(cursor.getInt(5));
-                storeProduct.setItemExplain(cursor.getString(6));
-                storeProduct.setImage(cursor.getString(7));
+                storeProduct.setItemName(cursor.getString(1));
+                storeProduct.setBuyType(cursor.getInt(2));
+                storeProduct.setCost(cursor.getInt(3));
+                storeProduct.setItemEffectType(cursor.getInt(4));
 
                 storeProducts.add(storeProduct);
             } while (cursor.moveToNext());
