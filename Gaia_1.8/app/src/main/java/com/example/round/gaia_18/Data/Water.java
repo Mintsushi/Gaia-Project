@@ -20,14 +20,8 @@ public class Water {
         waterNeedWaterNum  = neddWaterNum;
     }
 
-    public int getFlowerId() {
-        return flowerId;
-    }
     public int getWaterNeedWaterNum() {
         return waterNeedWaterNum;
-    }
-    public int getWaterPenalty() {
-        return waterPenalty;
     }
     public int getWaterPenaltyTime() {
         return waterPenaltyTime;

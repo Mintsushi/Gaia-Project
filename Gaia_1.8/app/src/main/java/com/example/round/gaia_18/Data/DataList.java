@@ -78,6 +78,8 @@ public class DataList {
 
     //자동 클릭될 VIEW
     private View clickView;
+    //Tab skill Level에 따른 점수 / 가격
+    private TabData tabData;
 
     //사용자가 가지고 있는 점수
     private static ConcurrentHashMap<Integer, Integer> score = new ConcurrentHashMap<>();
@@ -90,7 +92,11 @@ public class DataList {
         this.skillInfos = skillInfos;
         this.storeProducts = storeProducts;
         this.waters = waters;
+        this.skillDatas.add(0,null);
     }
+
+    public void setTabData(TabData tabData){this.tabData = tabData;}
+    public TabData getTabData(){return this.tabData;}
 
     public ArrayList<Flower> getFlowers() {
         return flowers;
@@ -1049,5 +1055,82 @@ public class DataList {
         }
 
         return partScore;
+    }
+
+    public void tabSkillLevelUp(){
+
+        Iterator<Integer> iterator = tabData.getScore().keySet().iterator();
+
+        levelUpFlowerResetSkillType3();
+
+        while (iterator.hasNext()){
+            int key = iterator.next();
+            int value = tabData.getScore().get(key);
+
+            minusScore(key,value,clickScore);
+            minusScore(key,value,overlayClickScore);
+        }
+        Log.i("LevelUp","******************************");
+        tabData.setSkillLevel(tabData.getSkillLevel() + 1);
+
+        //tab skill의 새로운 점수 / 가격 계산
+        //점수
+        int type = 0;
+        long num1 = (long)Math.pow(2,Math.ceil((tabData.getSkillLevel()/50)));
+        long num2 = (long)Math.ceil((tabData.getSkillLevel()/25));
+        long num3 = (long)(5*(tabData.getSkillLevel()-1));
+
+        if(num1 == (long)0) num1 = 1;
+        if(num2 == (long)0) num2 = 1;
+        if(num3 == (long)0) num3 = 1;
+
+        double num4 = num1 * num2 * num3;
+
+        while(true){
+            long nameogi = (long)num4 % 1000;
+            long mok = (long)num4 / 1000;
+
+            if(nameogi != 0){
+                plusScore(type,(int)nameogi,tabData.getCost());
+            }
+            if(mok <1000){
+                plusScore(type + 1, (int)mok, tabData.getCost());
+                break;
+            }
+
+            num4 = mok;
+            type ++;
+        }
+        //가격
+        type = 0;
+
+        num3 = num1 * num2 * 2;
+
+        while(true){
+            long nameogi =(long)num3 %1000;
+            long mok = (long)num3 / 1000;
+
+            if(nameogi != 0){
+                plusScore(type,(int)nameogi,tabData.getScore());
+            }
+            if(mok <1000){
+                if(mok != 0)
+                    plusScore(type+1,(int)mok,tabData.getCost());
+                break;
+            }
+
+            num3 = mok;
+            type ++;
+        }
+
+        iterator = tabData.getScore().keySet().iterator();
+
+        while (iterator.hasNext()){
+            int key = iterator.next();
+            int value = tabData.getScore().get(key);
+
+            plusScore(key,value,clickScore);
+            plusScore(key,value,overlayClickScore);
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.example.round.gaia_18.Data.GoalInfo;
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
 import com.example.round.gaia_18.Data.StoreProduct;
+import com.example.round.gaia_18.Data.TabData;
 import com.example.round.gaia_18.Data.Water;
 
 import java.util.ArrayList;
@@ -163,7 +164,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getStoreTable(sqLiteDatabase);
         // 물주기테이블 구축
         WaterTable(sqLiteDatabase);
-
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {
@@ -530,7 +530,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 +skillCostType + " INTEGER NOT NULL"+")";
         sqLiteDatabase.execSQL(CREATE_TABLE);
 
-        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(0,-1,1,2,1000,12,0));
+        sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(0,-1,1,2,100,10,0));
         sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(1,0,1,2,100,12,0));
         sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(2,0,2,2,500,14,0));
         sqLiteDatabase.insert(SKILL_DATA_TABLE_NAME   ,   null   ,   getSkillData(3,0,3,2,1,16,1));
@@ -754,6 +754,28 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             dataList.putSkillData(skillNo,skillData);
         }
 
+    }
+
+    public void getTabSkillData(int level){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery;
+        Cursor cursor;
+
+        selectQuery = "SELECT * FROM " + SKILL_DATA_TABLE_NAME + " WHERE " + skillId + "=0";
+
+        TabData skillData = new TabData();
+        cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                skillData.setSkillLevel(level);
+                skillData.setBuyType(cursor.getInt(3));
+                skillData.setCost(cursor.getInt(6),cursor.getInt(4));
+                skillData.setScore(0,cursor.getInt(5));
+            } while (cursor.moveToNext());
+        }
+
+        dataList.setTabData(skillData);
     }
 
     public SkillData getSkill(int id, int level){

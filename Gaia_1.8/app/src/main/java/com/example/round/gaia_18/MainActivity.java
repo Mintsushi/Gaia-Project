@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        RequestQueue requestQueue = Volley.newRequestQueue(this);
 //        requestQueue.add(request);
 
-        dataList.setScore(3,50);
+        dataList.setScore(0,50);
         dataList.setFruit(0,500);
 
         dataList.setItemNumber(0,0);
@@ -436,7 +436,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         skill.add(5,0);
         skill.add(6,0);
 
-        for(int i =0 ;i<skill.size();i++){
+        dataBaseHelper.getTabSkillData(skill.get(0));
+
+        for(int i =1 ;i<skill.size();i++){
             dataBaseHelper.getAllSkillData(i,skill.get(i));
         }
 
@@ -618,7 +620,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static void buyPlant( Flower flower ){
 
         dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower, 100));
-        dataList.getPlants().get(flower.getFlowerNo()).plantRepaint( relativeLayout);
+        dataList.getPlants().get(flower.getFlowerNo()).plantRepaint(relativeLayout);
     }
 
 

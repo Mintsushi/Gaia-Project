@@ -14,7 +14,7 @@
     <string name="skillCase3">탭 당 %d %%만큼의 점수 증가</string>
     <string name="skillCase4">분당 %d회 자동 탭</string>
     <string name="skillCase5">날씨가 흐릴 때 %d개의 물 획득</string>
-    <string name="skillCase6">탭 당 점수 %d개(레벨업시 증가)</string>
+    <string name="skillCase6">탭 당 점수 %s점 획득(레벨업시 증가)</string>
 
     <!--Goal-->
     <string name="goalCase0">%d회 로그인하여 꽃과 친해지기</string>

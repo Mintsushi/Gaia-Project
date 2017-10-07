@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
+import com.example.round.gaia_18.Data.TabData;
 import com.example.round.gaia_18.R;
 
 import java.util.Iterator;
@@ -76,7 +77,16 @@ public class MenuSkill extends Fragment {
         public View getView(int position, View view, ViewGroup parent) {
 
             SkillInfo skillInfo = dataList.getSkillInfos().get(position);
-            SkillData skillData = dataList.getSkillDatas().get(position);
+            SkillData skillData = null;
+            TabData tabData = null;
+            int buyType = 0;
+            if(skillInfo.getSkillNo() == 0){
+                tabData = dataList.getTabData();
+                buyType = tabData.getBuyType();
+            }else{
+                skillData = dataList.getSkillDatas().get(position);
+                buyType = skillData.getbuyType();
+            }
             final SkillViewHolder skillViewHolder;
 
             Log.i("onResume","skill id : "+skillInfo.getSkillNo()+" / skill Use State : "+skillInfo.getSkillUseState());
@@ -94,11 +104,19 @@ public class MenuSkill extends Fragment {
                 skillInfo.setSkillCoolTime(skillViewHolder.coolTime);
                 skillInfo.setSkillCoolTimeInApp(skillViewHolder.coolTime);
                 skillViewHolder.skillUseButton = (ImageButton) view.findViewById(R.id.skillUseButton);
-                skillViewHolder.skillUseButton.setTag(skillData.getSkillNo());
                 skillViewHolder.skillLevelUp = (ImageButton) view.findViewById(R.id.skillLevelUpButton);
-                skillViewHolder.skillLevelUp.setTag(skillData.getSkillNo());
+
+
                 skillViewHolder.skillLevelUpScore = (TextView) view.findViewById(R.id.skillLevelUpScore);
                 skillViewHolder.skillExplain = (TextView) view.findViewById(R.id.skillExplain);
+
+                if(skillInfo.getSkillNo() == 0){
+                    skillViewHolder.skillUseButton.setTag(tabData.getSkillNo());
+                    skillViewHolder.skillLevelUp.setTag(tabData.getSkillNo());
+                }else{
+                    skillViewHolder.skillUseButton.setTag(skillData.getSkillNo());
+                    skillViewHolder.skillLevelUp.setTag(skillData.getSkillNo());
+                }
 
                 view.setTag(skillViewHolder);
                 skillInfo.setSkillView(view);
@@ -114,148 +132,193 @@ public class MenuSkill extends Fragment {
 
                 skillInfo.setSkillDataChange(false);
                 //후에 skill Image로 변경
-                int resourceId = getContext().getResources().getIdentifier("skill"+skillInfo.getSkillNo(),"drawable",getContext().getPackageName());
+                int resourceId = getContext().getResources().getIdentifier("skill" + skillInfo.getSkillNo(), "drawable", getContext().getPackageName());
                 skillViewHolder.skillImage.setImageResource(resourceId);
 //                skillViewHolder.skillImage.setImageResource(R.drawable.image);
                 skillViewHolder.skillName.setText(skillInfo.getSkillName());
-                skillViewHolder.skillExpBar.setProgress(skillData.getSkillLevel() * 4);
-                skillViewHolder.skillLevel.setText(Integer.toString(skillData.getSkillLevel()));
                 resourceId = getContext().getResources().getIdentifier("skillCase" + skillInfo.getSkillCase(), "string", getContext().getPackageName());
-                skillViewHolder.skillExplain.setText(String.format(getString(resourceId), skillData.getSkillEffect()));
 
-                if (skillData.getbuyType() == 1) {
+                if (skillInfo.getSkillNo() == 0) {
+                    skillViewHolder.skillExpBar.setProgress(tabData.getSkillLevel() * 4);
+                    skillViewHolder.skillLevel.setText(Integer.toString(tabData.getSkillLevel()));
+                    skillViewHolder.skillExplain.setText(String.format(getString(resourceId),dataList.getAllScore(tabData.getScore())));
+
+                } else {
+                    skillViewHolder.skillExpBar.setProgress(skillData.getSkillLevel() * 4);
+                    skillViewHolder.skillLevel.setText(Integer.toString(skillData.getSkillLevel()));
+                    skillViewHolder.skillExplain.setText(String.format(getString(resourceId), skillData.getSkillEffect()));
+                }
+
+                if (buyType == 1) {
                     skillViewHolder.skillLevelUp.setImageResource(R.drawable.fruit);
                 } else {
                     skillViewHolder.skillLevelUp.setImageResource(R.drawable.seed);
                 }
 
-                //skill을 구입함.
-                if (skillData.getSkillBuy()) {
+                if (skillInfo.getSkillNo() == 0) {
 
-                    //skill이 최대 레벨일 때
-                    if (skillData.getSkillLevel() == skillInfo.getSkillMaxLevel()) {
+                    if(tabData.getSkillLevel() == skillInfo.getSkillMaxLevel()){
                         skillViewHolder.skillLevelUp.setImageResource(R.drawable.complete);
                         skillViewHolder.background.setBackgroundResource(R.drawable.max_level_background);
                         skillViewHolder.skillLevelUpScore.setText("*MAX*");
-                    } else {//skill이 최대 레벨이 아닐때
-                        skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
+                    }else {//skill이 최대 레벨이 아닐때
+                        skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(tabData.getCost()));
                         skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     }
 
-                    //스킬이 cooltime으로 인해 사용이 불가한 경우
-                    if (skillInfo.getSkillUseState()) {
-                        skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
-                    } else {
-                        skillViewHolder.coolTime.setVisibility(View.INVISIBLE);
-                        //지속스킬일 경우
-                        if (skillInfo.getPassive() == 1) {
+                    skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                    skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            SkillInfo skillInfo = dataList.getSkillInfos().get((int)view.getTag());
+                            TabData tabData = dataList.getTabData();
+
+                            if(buyForScore(tabData.getCost())) {
+                                dataList.tabSkillLevelUp();
+                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+                                skillInfo.setSkillDataChange(true);
+
+                                if (dataList.getGoalDataByID(8).getGoalRate() < dataList.getGoalDataByID(8).getGoalCondition()) {
+                                    dataList.getGoalDataByID(8).setGoalRate(1);
+                                }
+
+                                mAdapter.notifyDataSetChanged();
+                            }else{
+                                //이 부분은 좀 더 시각적으로 표현하자
+                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                } else {
+                    //skill을 구입함.
+                    if (skillData.getSkillBuy()) {
+
+                        //skill이 최대 레벨일 때
+                        if (skillData.getSkillLevel() == skillInfo.getSkillMaxLevel()) {
+                            skillViewHolder.skillLevelUp.setImageResource(R.drawable.complete);
+                            skillViewHolder.background.setBackgroundResource(R.drawable.max_level_background);
+                            skillViewHolder.skillLevelUpScore.setText("*MAX*");
+                        } else {//skill이 최대 레벨이 아닐때
+                            skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
+                            skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
+                        }
+
+                        //스킬이 cooltime으로 인해 사용이 불가한 경우
+                        if (skillInfo.getSkillUseState()) {
+                            skillViewHolder.coolTime.setVisibility(View.VISIBLE);
                             skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                        } else { //지속스킬이 아닐 경우
-                            skillViewHolder.skillUseButton.setImageResource(R.drawable.use);
-                            skillViewHolder.skillUseButton.setVisibility(View.VISIBLE);
+                            skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+                        } else {
+                            skillViewHolder.coolTime.setVisibility(View.INVISIBLE);
+                            //지속스킬일 경우
+                            if (skillInfo.getPassive() == 1) {
+                                skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                            } else { //지속스킬이 아닐 경우
+                                skillViewHolder.skillUseButton.setImageResource(R.drawable.use);
+                                skillViewHolder.skillUseButton.setVisibility(View.VISIBLE);
 
-                            skillViewHolder.skillUseButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                                skillViewHolder.skillUseButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
 
-                                    int id = (int)view.getTag();
+                                        int id = (int) view.getTag();
 
-                                    SkillInfo skillInfo = dataList.getSkillInfos().get(id);
-                                    SkillData skillData = dataList.getSkillDatas().get(id);
+                                        SkillInfo skillInfo = dataList.getSkillInfos().get(id);
+                                        SkillData skillData = dataList.getSkillDatas().get(id);
 
-                                    skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                    mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
+                                        skillViewHolder.coolTime.setVisibility(View.VISIBLE);
+                                        mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
 
-                                    skillInfo.setSkillUseState(true);
-                                    //Skill Cool Time동안은 사용 불가능
-                                    skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                                    skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+                                        skillInfo.setSkillUseState(true);
+                                        //Skill Cool Time동안은 사용 불가능
+                                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
 
-                                    useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
+                                        useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
 
-                                    // 수식 에러로 터져서 주석처리
-                                    // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
+                                        // 수식 에러로 터져서 주석처리
+                                        // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
                                     /*
                                     if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
                                         dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
                                     }
                                     */
-                                }
-                            });
-                        }
-                    }
-                } else {//skill을 구입하지 않음.
-
-                    skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                    skillViewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
-                    skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                    skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
-                }
-
-                skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int id = (int)view.getTag();
-
-                        SkillInfo skillInfo = dataList.getSkillInfos().get(id);
-                        SkillData skillData = dataList.getSkillDatas().get(id);
-
-                        if (skillData.getSkillLevel() + 1 > skillInfo.getSkillMaxLevel()) {
-                            Toast.makeText(getActivity(), "최대 레벨입니다!!!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //게임 재화로 구입
-                        if (skillData.getbuyType() == 2) {
-                            if (buyForScore(skillData.getCost())) { //구입완료
-                                dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
-                                seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-
-                                skillInfo.setSkillDataChange(true);
-
-                                if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()) {
-                                    dataList.getGoalDataByID(16 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
-                                }
-
-                                mAdapter.notifyDataSetChanged();
-                            } else { //재화부족으로 구매 실패
-                                //이 부분은 좀 더 시각적으로 표현하자
-                                Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
-                        } else {//현금성 재화로 구입
-                            if (buyForFruit(skillData.getCost())) {
-                                dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
-                                fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+                        }
+                    } else {//skill을 구입하지 않음.
 
-                                Log.i("skillData.getSkillNo()",""+skillData.getSkillNo());
-                                skillInfo.setSkillDataChange(true);
+                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
+                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                        skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
+                    }
 
-                                if(skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
-                                    // 수식 에러로 터져서 주석처리
-                                    // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
+                    skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int id = (int) view.getTag();
+
+                            SkillInfo skillInfo = dataList.getSkillInfos().get(id);
+                            SkillData skillData = dataList.getSkillDatas().get(id);
+
+                            if (skillData.getSkillLevel() + 1 > skillInfo.getSkillMaxLevel()) {
+                                Toast.makeText(getActivity(), "최대 레벨입니다!!!", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            //게임 재화로 구입
+                            if (skillData.getbuyType() == 2) {
+                                if (buyForScore(skillData.getCost())) { //구입완료
+                                    dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
+                                    seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+
+                                    skillInfo.setSkillDataChange(true);
+
+                                    if (dataList.getGoalDataByID(16 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(16 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
+                                        dataList.getGoalDataByID(16 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
+                                    }
+
+                                    mAdapter.notifyDataSetChanged();
+                                } else { //재화부족으로 구매 실패
+                                    //이 부분은 좀 더 시각적으로 표현하자
+                                    Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {//현금성 재화로 구입
+                                if (buyForFruit(skillData.getCost())) {
+                                    dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
+                                    fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+
+                                    Log.i("skillData.getSkillNo()", "" + skillData.getSkillNo());
+                                    skillInfo.setSkillDataChange(true);
+
+                                    if (skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
+                                        // 수식 에러로 터져서 주석처리
+                                        // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
 /*
                                     if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()){
                                         dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).setGoalRate(1);
                                     }
 */
-                                }else{
-                                    Log.i("BuySkill","skill id : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalNo()+" / skillGoalRate : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate());
-                                    if (dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalCondition()) {
-                                        //dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
+                                    } else {
+                                        Log.i("BuySkill", "skill id : " + dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalNo() + " / skillGoalRate : " + dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalRate());
+                                        if (dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalCondition()) {
+                                            //dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
+                                        }
                                     }
-                                }
 
-                                mAdapter.notifyDataSetChanged();
-                            } else {
-                                //이 부분은 좀 더 시각적으로 표현하자
-                                Toast.makeText(getActivity(), "Fruit이 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                                    mAdapter.notifyDataSetChanged();
+                                } else {
+                                    //이 부분은 좀 더 시각적으로 표현하자
+                                    Toast.makeText(getActivity(), "Fruit이 부족합니다!!!", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
-
             return skillInfo.getSkillView();
         }
     }
