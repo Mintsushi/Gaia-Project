@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80sp"
     android:orientation="horizontal"
     android:id="@+id/skillBackground"
     android:baselineAligned="false">
@@ -61,45 +62,53 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/skillUse"
+        android:layout_width="70sp"
+        android:layout_height="50sp"
         android:layout_gravity="center"
+        android:background="@drawable/skill_use_background"
         android:gravity="center">
-
-        <ImageButton
-            android:id="@+id/skillUseButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"/>
 
         <TextView
             android:id="@+id/skillCoolTime"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:gravity="center"
-            android:textSize="15sp"
             android:textColor="@color/White"
+            android:textSize="15sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/skillUseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/skill_use" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+    <LinearLayout
+        android:id="@+id/skillLevelUpButton"
+        android:layout_width="150sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5sp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/skillLevelUpButton"
-            android:layout_width="150sp"
-            android:layout_height="60dp"
+        <ImageView
+            android:id="@+id/skillLevelUpType"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:scaleType="fitXY"/>
 
         <TextView
             android:id="@+id/skillLevelUpScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/skillLevelUpButton"
-            android:layout_centerHorizontal="true"
             android:textSize="15sp"
+            android:textColor="@color/White"
             android:textStyle="bold" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,6 +2,9 @@ package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -16,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.round.gaia_18.Data.Plant;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -38,6 +42,7 @@ public class MenuOverlay extends Fragment {
     private ListView plantList;
     //GPS Setting
     private android.app.AlertDialog alertDialog = null;
+    private static final float BYTES_PER_PX = 4.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -102,7 +107,10 @@ public class MenuOverlay extends Fragment {
             if(plant != null){
 
                 //plantViewHolder.plantImage.setImageResource(plant.getFlower.getImage())
-                plantViewHolder.plantImage.setImageResource(R.drawable.image);
+//                plantViewHolder.plantImage.setImageResource(R.drawable.image);
+                int resourceId = getContext().getResources().getIdentifier("flower" + plant.getPlantNo(), "drawable", getContext().getPackageName());
+                loadImage(plantViewHolder.plantImage,resourceId);
+
                 plantViewHolder.plantName.setText(plant.getFlower().getFlowerName());
                 String weatherScore = "";
 
@@ -196,5 +204,41 @@ public class MenuOverlay extends Fragment {
             plantList = (ListView)view.findViewById(R.id.menu_overlay_list);
             plantList.setAdapter(plantAdapter);
         }
+    }
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesFree()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

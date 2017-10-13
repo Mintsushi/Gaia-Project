@@ -141,7 +141,7 @@ public class MenuDryFlower extends Fragment {
             //꽃을 넣을 수 없는 곳
             else{
                 viewHolder.dryFlowerInfoButton.setVisibility(View.INVISIBLE);
-                viewHolder.background.setBackgroundResource(R.drawable.lock_map);
+                viewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
 
                 //지속스킬 칸을 늘리기 위한 구입
                 viewHolder.background.setOnClickListener(new View.OnClickListener() {

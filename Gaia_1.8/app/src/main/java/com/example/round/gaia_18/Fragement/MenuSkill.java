@@ -1,6 +1,9 @@
 package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,12 +16,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
 import com.example.round.gaia_18.Data.TabData;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.Iterator;
@@ -36,6 +41,7 @@ public class MenuSkill extends Fragment {
     private static final String TAG = ".ActiveSkillActivity";
     //skill을 띄어줄 list
     private ListView skillList;
+    private static final float BYTES_PER_PX = 4.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -56,8 +62,10 @@ public class MenuSkill extends Fragment {
         TextView skillLevel;
         TextView skillName;
         TextView coolTime;
-        ImageButton skillUseButton;
-        ImageButton skillLevelUp;
+        RelativeLayout skillUse;
+        ImageView skillUseButton;
+        LinearLayout skillLevelUp;
+        ImageView skillLevelUpType;
         TextView skillLevelUpScore;
         TextView skillExplain;
     }
@@ -103,8 +111,10 @@ public class MenuSkill extends Fragment {
                 skillViewHolder.coolTime = (TextView) view.findViewById(R.id.skillCoolTime);
                 skillInfo.setSkillCoolTime(skillViewHolder.coolTime);
                 skillInfo.setSkillCoolTimeInApp(skillViewHolder.coolTime);
-                skillViewHolder.skillUseButton = (ImageButton) view.findViewById(R.id.skillUseButton);
-                skillViewHolder.skillLevelUp = (ImageButton) view.findViewById(R.id.skillLevelUpButton);
+                skillViewHolder.skillUse = (RelativeLayout) view.findViewById(R.id.skillUse);
+                skillViewHolder.skillUseButton = (ImageView) view.findViewById(R.id.skillUseButton);
+                skillViewHolder.skillLevelUp = (LinearLayout) view.findViewById(R.id.skillLevelUpButton);
+                skillViewHolder.skillLevelUpType = (ImageView) view.findViewById(R.id.skillLevelUpType);
 
 
                 skillViewHolder.skillLevelUpScore = (TextView) view.findViewById(R.id.skillLevelUpScore);
@@ -133,10 +143,12 @@ public class MenuSkill extends Fragment {
                 skillInfo.setSkillDataChange(false);
                 //후에 skill Image로 변경
                 int resourceId = getContext().getResources().getIdentifier("skill" + skillInfo.getSkillNo(), "drawable", getContext().getPackageName());
-                skillViewHolder.skillImage.setImageResource(resourceId);
+                loadImage(skillViewHolder.skillImage,resourceId);
 //                skillViewHolder.skillImage.setImageResource(R.drawable.image);
                 skillViewHolder.skillName.setText(skillInfo.getSkillName());
                 resourceId = getContext().getResources().getIdentifier("skillCase" + skillInfo.getSkillCase(), "string", getContext().getPackageName());
+
+                skillViewHolder.skillLevelUp.setBackgroundResource(R.drawable.buy_background);
 
                 if (skillInfo.getSkillNo() == 0) {
                     skillViewHolder.skillExpBar.setProgress(tabData.getSkillLevel() * 4);
@@ -150,23 +162,25 @@ public class MenuSkill extends Fragment {
                 }
 
                 if (buyType == 1) {
-                    skillViewHolder.skillLevelUp.setImageResource(R.drawable.fruit);
+//                    skillViewHolder.skillLevelUp.setImageResource(R.drawable.fruit);
+                    loadImage(skillViewHolder.skillLevelUpType,R.drawable.reward1);
                 } else {
-                    skillViewHolder.skillLevelUp.setImageResource(R.drawable.seed);
+//                    skillViewHolder.skillLevelUp.setImageResource(R.drawable.seed);
+                    loadImage(skillViewHolder.skillLevelUpType,R.drawable.reward2);
                 }
 
                 if (skillInfo.getSkillNo() == 0) {
 
                     if(tabData.getSkillLevel() == skillInfo.getSkillMaxLevel()){
-                        skillViewHolder.skillLevelUp.setImageResource(R.drawable.complete);
+                        skillViewHolder.skillLevelUpType.setImageResource(R.drawable.complete);
                         skillViewHolder.background.setBackgroundResource(R.drawable.max_level_background);
                         skillViewHolder.skillLevelUpScore.setText("*MAX*");
                     }else {//skill이 최대 레벨이 아닐때
-                        skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(tabData.getCost()));
+                        skillViewHolder.skillLevelUpScore.setText("X"+dataList.getAllScore(tabData.getCost()));
                         skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     }
 
-                    skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                    skillViewHolder.skillUse.setVisibility(View.INVISIBLE);
                     skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -197,11 +211,11 @@ public class MenuSkill extends Fragment {
 
                         //skill이 최대 레벨일 때
                         if (skillData.getSkillLevel() == skillInfo.getSkillMaxLevel()) {
-                            skillViewHolder.skillLevelUp.setImageResource(R.drawable.complete);
+                            skillViewHolder.skillLevelUpType.setImageResource(R.drawable.complete);
                             skillViewHolder.background.setBackgroundResource(R.drawable.max_level_background);
                             skillViewHolder.skillLevelUpScore.setText("*MAX*");
                         } else {//skill이 최대 레벨이 아닐때
-                            skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
+                            skillViewHolder.skillLevelUpScore.setText("X"+dataList.getAllScore(skillData.getCost()));
                             skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                         }
 
@@ -214,10 +228,11 @@ public class MenuSkill extends Fragment {
                             skillViewHolder.coolTime.setVisibility(View.INVISIBLE);
                             //지속스킬일 경우
                             if (skillInfo.getPassive() == 1) {
-                                skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                                skillViewHolder.skillUse.setVisibility(View.INVISIBLE);
                             } else { //지속스킬이 아닐 경우
-                                skillViewHolder.skillUseButton.setImageResource(R.drawable.use);
+//                                skillViewHolder.skillUseButton.setImageResource(R.drawable.use);
                                 skillViewHolder.skillUseButton.setVisibility(View.VISIBLE);
+                                skillViewHolder.skillUse.setVisibility(View.VISIBLE);
 
                                 skillViewHolder.skillUseButton.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -253,8 +268,8 @@ public class MenuSkill extends Fragment {
 
                         skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
                         skillViewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
-                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                        skillViewHolder.skillLevelUpScore.setText(dataList.getAllScore(skillData.getCost()));
+                        skillViewHolder.skillUse.setVisibility(View.INVISIBLE);
+                        skillViewHolder.skillLevelUpScore.setText("X"+dataList.getAllScore(skillData.getCost()));
                     }
 
                     skillViewHolder.skillLevelUp.setOnClickListener(new View.OnClickListener() {
@@ -394,5 +409,42 @@ public class MenuSkill extends Fragment {
         }
 
         return true;
+    }
+
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesFree()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

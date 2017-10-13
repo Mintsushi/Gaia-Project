@@ -52,24 +52,28 @@ android:background="@drawable/flower_buy_available">
 
 </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+    <LinearLayout
+        android:id="@+id/productBuyButton"
+        android:layout_width="150sp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="5sp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@drawable/buy_background">
 
-        <ImageButton
-            android:id="@+id/productBuyButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <ImageView
+            android:id="@+id/productBuy"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:scaleType="fitXY"/>
+
         <TextView
             android:id="@+id/productBuyCost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/productBuyButton"
-            android:layout_centerHorizontal="true"
             android:textSize="15sp"
-            android:textStyle="bold"/>
-
-    </RelativeLayout>
+            android:textColor="@color/White"
+            android:textStyle="bold" />
+    </LinearLayout>
 </LinearLayout>

@@ -5,71 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/bg41">
+    android:background="@drawable/background">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/brown_background"
-        android:orientation="horizontal"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginTop="15sp"
+        android:background="@drawable/view_background"
         android:gravity="center"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/flower_buy_available">
+            android:gravity="center">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/seed"
-                android:textColor="@color/White"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:layout_width="50sp"
+                android:layout_height="match_parent"
+                android:src="@drawable/reward2" />
 
             <TextView
                 android:id="@+id/seed"
-                android:layout_width="wrap_content"
+                android:layout_width="70sp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="20sp"
-                android:layout_weight="1"
-                android:textColor="@color/White"
+                android:layout_marginEnd="10sp"
+                android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/fruit"
-                android:textColor="@color/White"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:src="@drawable/fruit"/>
 
             <TextView
                 android:id="@+id/fruit"
-                android:layout_width="wrap_content"
+                android:layout_width="70sp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/White" />
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_marginLeft="15sp"/>
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/weather"
-            android:layout_width="70sp"
-            android:layout_height="70sp"
-            android:scaleType="fitXY"/>
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:layout_marginRight="15sp"
+            android:background="@drawable/weather_background"/>
 
-        <Button
+        <ImageView
             android:id="@+id/setting"
-            android:layout_width="50sp"
-            android:layout_height="50sp"
-            android:text="Button" />
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:src="@drawable/setting"/>
     </LinearLayout>
 
     <RelativeLayout
@@ -78,85 +74,108 @@
         android:layout_height="0sp"
         android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!--LinearLayout
+        android:layout_width="100sp"
         android:layout_height="wrap_content"
-        android:gravity="end"
+        android:layout_gravity="end"
         android:orientation="horizontal"
-        android:id="@+id/linearLayout2">
+        android:id="@+id/linearLayout2"
+        android:background="@drawable/view_background"
+        android:layout_margin ="15sp"
+        android:padding="10sp">
 
-        <Button
+        <ImageView
             android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/menu" />
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:src="@drawable/menu"
+            android:layout_weight="1"/>
 
-        <Button
+    </LinearLayout-->
+
+    <LinearLayout
+        android:id="@+id/menuButtonLayout"
+        android:background="@android:color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="60sp">
+
+        <ImageView
+            android:id="@+id/menuFlowerButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/btn_star_big_on" />
+
+        <ImageView
+            android:id="@+id/menuASkillButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/stat_sys_vp_phone_call" />
+
+        <ImageView
+            android:id="@+id/menuPSkillButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/stat_sys_phone_call_forward" />
+
+        <ImageView
+            android:id="@+id/menuOverlayButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/ic_menu_report_image" />
+
+        <ImageView
+            android:id="@+id/menuStoreButton"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/ic_menu_always_landscape_portrait" />
+
+        <!--ImageView
+            android:id="@+id/menuDownButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/arrow_down_float"/-->
+
+        <ImageView
             android:id="@+id/goal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/Goal" />
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:src="@drawable/goal"
+            android:layout_weight="1"
+            android:layout_marginLeft="5sp"
+            android:background="@drawable/view_background"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/menuLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:background="#a08d8f8c">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/menuFlowerButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
-
-            <ImageButton
-                android:id="@+id/menuASkillButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/stat_sys_vp_phone_call" />
-
-            <ImageButton
-                android:id="@+id/menuPSkillButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/stat_sys_phone_call_forward" />
-
-            <ImageButton
-                android:id="@+id/menuOverlayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_report_image" />
-
-            <ImageButton
-                android:id="@+id/menuStoreButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_menu_always_landscape_portrait" />
-
-            <ImageButton
-                android:id="@+id/menuDownButton"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/arrow_down_float" />
-        </LinearLayout>
-
+        android:orientation="vertical">
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/list_layout">
+            android:id="@+id/list_layout"
+            android:background="#a08d8f8c">
         </FrameLayout>
 
     </LinearLayout>

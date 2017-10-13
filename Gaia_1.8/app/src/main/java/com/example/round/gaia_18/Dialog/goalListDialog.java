@@ -120,7 +120,7 @@ public class goalListDialog extends Dialog {
 
                 //후에 업적이미지로 변경
                 int resourceId = getContext().getResources().getIdentifier("goal" + goalInfo.getId(), "drawable", getContext().getPackageName());
-                viewHolder.goalImageView.setImageResource(resourceId);
+                loadImage(viewHolder.goalImageView,resourceId);
 
                 resourceId = getContext().getResources().getIdentifier("reward" + goalData.getGoalRewardType(), "drawable", getContext().getPackageName());
                 loadImage(viewHolder.reward,resourceId);

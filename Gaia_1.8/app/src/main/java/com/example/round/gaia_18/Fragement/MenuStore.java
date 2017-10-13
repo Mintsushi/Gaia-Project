@@ -2,6 +2,7 @@ package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +53,8 @@ public class MenuStore extends Fragment {
         TextView productExplain;
         TextView productNum;
         TextView productBuyScore;
-        ImageButton productBuyButton;
+        ImageView productBuy;
+        LinearLayout productBuyButton;
     }
 
     // 상점 리스트 어뎁터
@@ -83,7 +86,8 @@ public class MenuStore extends Fragment {
                 viewholder.productExplain = (TextView)view.findViewById(R.id.productExplain);
                 viewholder.productNum = (TextView)view.findViewById(R.id.storeProductNum);
                 viewholder.productBuyScore = (TextView)view.findViewById(R.id.productBuyCost);
-                viewholder.productBuyButton = (ImageButton)view.findViewById(R.id.productBuyButton);
+                viewholder.productBuyButton = (LinearLayout) view.findViewById(R.id.productBuyButton);
+                viewholder.productBuy = (ImageView)view.findViewById(R.id.productBuy);
 
                 view.setTag(viewholder);
             }else{
@@ -102,13 +106,13 @@ public class MenuStore extends Fragment {
 
                 //현금성 재화로 구매
                 if(storeProduct.getBuyType() == 0){
-                    viewholder.productBuyButton.setImageResource(R.drawable.fruit);
+                    viewholder.productBuy.setImageResource(R.drawable.reward1);
                 }
                 else{ //현금성 재화로 구매
-                    viewholder.productBuyButton.setImageResource(R.drawable.seed);
+                    viewholder.productBuy.setImageResource(R.drawable.reward2);
                 }
 
-                viewholder.productBuyScore.setText(dataList.getAllScore(storeProduct.getCost()));
+                viewholder.productBuyScore.setText("X"+dataList.getAllScore(storeProduct.getCost()));
                 viewholder.productBuyButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

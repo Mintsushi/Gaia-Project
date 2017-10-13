@@ -1,6 +1,9 @@
 package com.example.round.gaia_18.Data;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.round.gaia_18.MainActivity;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
@@ -35,8 +40,10 @@ public class Plant{
 
     private int plantNo;
     private int level;
+    private int levelType;
     private Flower flower;
-    private RelativeLayout plantLayout;
+    private LinearLayout plantLayout;
+    private LinearLayout linearLayout;
     private ImageView plant;
     private int hp;
     private Timer timer = new Timer();
@@ -46,7 +53,7 @@ public class Plant{
     private ImageButton plantItemBtn;
     private ImageButton itemListRemoveButton;
     private ImageView plantWater;
-    private final ArrayList<Water> waterInfo;
+    private final Water water;
 
     private Timemer timemer;
     //state == 0 : overlayview에 없음
@@ -60,6 +67,8 @@ public class Plant{
     private int effect;
     private Boolean dryFlowerSetting = false;
 
+    private static final float BYTES_PER_PX = 4.0f;
+
     //외부에서 얻을 수 있는 점수
     private ConcurrentHashMap<Integer, Integer> overlayScore = new ConcurrentHashMap<>();
 
@@ -71,20 +80,31 @@ public class Plant{
 
         this.plantNo = plantNo;
         this.level = level;
+        this.levelType = level/100;
+        if(levelType == 4) levelType -= 1;
         this.flower = flower;
         this.hp = hp;
         this.waterState = 0;
-        waterInfo = DataList.getWaters();
-        this.timemer = new Timemer(waterInfo.get(plantNo).getWaterPeriod(),waterInfo.get(plantNo).getWaterPenaltyTime());
+
+        this.water = DataList.getWaters().get(plantNo);
+        this.timemer = new Timemer(this.water.getWaterPeriod(),this.water.getWaterPenaltyTime());
     }
 
-    public void plantRepaint(RelativeLayout relativeLayout){
+    public void replacePlant(){
+        LinearLayout.LayoutParams relParams = (LinearLayout.LayoutParams)plant.getLayoutParams();
 
-        plantLayout = new RelativeLayout(MainActivity.context);
-        RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(300, 400);
+        int resourceId = MainActivity.context.getResources().getIdentifier("flower" + flower.getFlowerNo()+levelType, "drawable", MainActivity.context.getPackageName());
+        loadImage(plant,resourceId);
+        plantLayout.updateViewLayout(plant,relParams);
+    }
+    public void plantRepaint(final RelativeLayout relativeLayout){
+
+        plantLayout = new LinearLayout(MainActivity.context);
+        plantLayout.setOrientation(LinearLayout.VERTICAL);
+        RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         // 위치는 후에 Random 값으로 배치
         plantLayoutParams.leftMargin = 200;
-        plantLayoutParams.topMargin = 200;
+        plantLayoutParams.topMargin = 1000;
         plantLayout.setOnLongClickListener(MainActivity.onLongClick);
         plantLayout.setOnTouchListener(MainActivity.onTouch);
         relativeLayout.addView(plantLayout, plantLayoutParams);
@@ -92,23 +112,24 @@ public class Plant{
         // 식물 이미지
         plant = new ImageView(MainActivity.context);
         //plant.setImageResource(flower.getImage());
-        plant.setImageResource(R.drawable.imageflower);
+        int resourceId = MainActivity.context.getResources().getIdentifier("flower" + flower.getFlowerNo()+levelType, "drawable", MainActivity.context.getPackageName());
+        loadImage(plant,resourceId);
         //plant.setTag(flower.getImage());
 
-        RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
+        LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(250,250);
         relParams.topMargin = 50;
-        plantLayout.addView(plant, relParams);
 
         plantWater = new ImageView(MainActivity.context);
-        plantWater.setImageResource(R.drawable.reward4);
+        loadImage(plantWater,R.drawable.reward4);
+
         plantWater.setVisibility(View.INVISIBLE);
         plantWater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 물의 개수가 물을 줄수있을만큼 있을때.
-                if( dataList.getItemNumber(3) >= waterInfo.get(getPlantNo()).getWaterNeedWaterNum()) {
+                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
                     Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
-                    dataList.setDesItemNumber(3,waterInfo.get(getPlantNo()).getWaterNeedWaterNum());
+                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
                     setWaterState(0);
                     getPlantWater().setVisibility(View.INVISIBLE);
                 }else{
@@ -118,12 +139,15 @@ public class Plant{
             }
         });
         // 위치세팅
-        RelativeLayout.LayoutParams waterParams = new RelativeLayout.LayoutParams(100, 100);
+        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(100, 100);
         int[] waterLocation = new int[2];
-        plantLayout.getLocationOnScreen(waterLocation);
-        waterParams.leftMargin = 100;
-        waterParams.topMargin = 0;
+//        plantLayout.getLocationOnScreen(waterLocation);
+//        waterParams.leftMargin = 100;
+//        waterParams.topMargin = 0;
+
+
         plantLayout.addView(plantWater,waterParams);
+        plantLayout.addView(plant, relParams);
 
 
         // 체력바
@@ -131,33 +155,44 @@ public class Plant{
         plantHP.setMax(MAX_HP); // 최대체력 100
         plantHP.setProgress(getHp());
 
+        linearLayout = new LinearLayout(MainActivity.context);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         // 위치세팅
-        RelativeLayout.LayoutParams hpParams = new RelativeLayout.LayoutParams(200, 40);
+        LinearLayout.LayoutParams hpParams = new LinearLayout.LayoutParams(200, 40);
         int[] hpLocation1 = new int[2];
         plantLayout.getLocationOnScreen(hpLocation1);
-        hpParams.leftMargin = 30;
-        hpParams.topMargin = 350;
-        plantLayout.addView(plantHP, hpParams);
+//        hpParams.leftMargin = 30;
+//        hpParams.topMargin = 350;
+        linearLayout.addView(plantHP, hpParams);
 
         // 아이템버튼
         plantItemBtn = new ImageButton(MainActivity.context);
         plantItemBtn.setImageResource(R.drawable.open);
+        plantItemBtn.setTag(0);
 
         // 위치세팅
-        final RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(60, 60);
+        final LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(60, 60);
         int[] btnLocation = new int[2];
         plantLayout.getLocationOnScreen(btnLocation);
-        btnParams.leftMargin =230;
-        btnParams.topMargin = 350;
-        plantLayout.addView(plantItemBtn,btnParams);
+//        btnParams.leftMargin =230;
+//        btnParams.topMargin = 350;
+        linearLayout.addView(plantItemBtn,btnParams);
 
         plantItemBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //아이템 리스트 만들어 주는 함수
-                open_item_list();
+                if((int)view.getTag() == 0){//close
+                    open_item_list();
+                    view.setTag(1);
+                }else{ //open
+                    linearLayout.removeView(itemList);
+                    view.setTag(0);
+                }
             }
         });
+
+        plantLayout.addView(linearLayout);
     }
 
     public void open_item_list(){
@@ -166,30 +201,31 @@ public class Plant{
         MiniItemAdapter mAdapter = new MiniItemAdapter(MainActivity.context, R.layout.mini_item);
         itemList.setAdapter(mAdapter);
 
-        final RelativeLayout.LayoutParams listParams = new RelativeLayout.LayoutParams(300, 400);
+        final LinearLayout.LayoutParams listParams = new LinearLayout.LayoutParams(300, 400);
         int[] listLocation = new int[2];
         plantLayout.getLocationOnScreen(listLocation);
-        listParams.leftMargin =listLocation[0]+ 220;
-        listParams.topMargin = listLocation[1] - 300;
-        relativeLayout.addView(itemList,listParams);
-
-        // 리스트 종료버튼.. 클릭시 리스트와 버튼 둘다 레이아웃에서 제거
-        itemListRemoveButton = new ImageButton(MainActivity.context);
-        itemListRemoveButton.setImageResource(R.drawable.close);
-        itemListRemoveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                relativeLayout.removeView(itemList);
-                relativeLayout.removeView(itemListRemoveButton);
-            }
-        });
-
-        final RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(40, 40);
-        int[] btnLocation = new int[2];
-        plantLayout.getLocationOnScreen(btnLocation);
-        btnParams.leftMargin =btnLocation[0]+ 520;
-        btnParams.topMargin = btnLocation[1] - 310;
-        relativeLayout.addView(itemListRemoveButton,btnParams);
+//        listParams.leftMargin =listLocation[0]+ 220;
+//        listParams.topMargin = listLocation[1] - 300;
+        linearLayout.addView(itemList,listParams);
+//        plantLayout.updateViewLayout(linearLayout,null);
+//
+//        // 리스트 종료버튼.. 클릭시 리스트와 버튼 둘다 레이아웃에서 제거
+//        itemListRemoveButton = new ImageButton(MainActivity.context);
+//        itemListRemoveButton.setImageResource(R.drawable.close);
+//        itemListRemoveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                relativeLayout.removeView(itemList);
+//                relativeLayout.removeView(itemListRemoveButton);
+//            }
+//        });
+//
+//        final RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(40, 40);
+//        int[] btnLocation = new int[2];
+//        plantLayout.getLocationOnScreen(btnLocation);
+//        btnParams.leftMargin =btnLocation[0]+ 520;
+//        btnParams.topMargin = btnLocation[1] - 310;
+//        relativeLayout.addView(itemListRemoveButton,btnParams);
     }
 
     // 아이템 리스트뷰 포멧
@@ -305,6 +341,8 @@ public class Plant{
 
     public void setLevel(int level) {
         this.level = level;
+        this.levelType = level/100;
+        if(this.levelType == 4) this.levelType -= 1;
     }
 
     public Flower getFlower() {
@@ -401,12 +439,12 @@ public class Plant{
         this.overlayScore = overlayScore;
     }
 
-    public RelativeLayout getPlantLayout() {
+    public LinearLayout getPlantLayout() {
         return plantLayout;
     }
 
-    public ArrayList<Water> getWaterInfo() {
-        return waterInfo;
+    public Water getWaterInfo() {
+        return water;
     }
 
     public Timer getTimer() {
@@ -482,21 +520,21 @@ public class Plant{
 
         // 물 주기 이밴트
         protected void waterUpdate() {
-            Runnable updater = new Runnable() {
-                public void run() {
-                    if(getWaterTime() <= getTimes()){
-                        // 스테이트 업데이트
-                        Log.i("Timer","waterUpdate State UP");
-                        setWaterState(1);
-                        getPlantWater().setVisibility(View.VISIBLE);
-                        setTimes(0);
-                    }
-                    else{
-                        setTimes(1);
-                    }
-                }
-            };
-            handler.post(updater);
+//            Runnable updater = new Runnable() {
+//                public void run() {
+//                    if(getWaterTime() <= getTimes()){
+//                        // 스테이트 업데이트
+//                        Log.i("Timer","waterUpdate State UP");
+//                        setWaterState(1);
+//                        getPlantWater().setVisibility(View.VISIBLE);
+//                        setTimes(0);
+//                    }
+//                    else{
+//                        setTimes(1);
+//                    }
+//                }
+//            };
+//            handler.post(updater);
         }
 
         // 물 패널티 이밴트
@@ -521,5 +559,41 @@ public class Plant{
             timer.cancel();
             timer = null;
         }
+    }
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesFree()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = MainActivity.context.getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = MainActivity.context.getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

@@ -1091,10 +1091,10 @@ public class DataList {
             long mok = (long)num4 / 1000;
 
             if(nameogi != 0){
-                plusScore(type,(int)nameogi,tabData.getCost());
+                plusScore(type,(int)nameogi,tabData.getScore());
             }
             if(mok <1000){
-                plusScore(type + 1, (int)mok, tabData.getCost());
+                plusScore(type + 1, (int)mok, tabData.getScore());
                 break;
             }
 
@@ -1111,7 +1111,7 @@ public class DataList {
             long mok = (long)num3 / 1000;
 
             if(nameogi != 0){
-                plusScore(type,(int)nameogi,tabData.getScore());
+                plusScore(type,(int)nameogi,tabData.getCost());
             }
             if(mok <1000){
                 if(mok != 0)

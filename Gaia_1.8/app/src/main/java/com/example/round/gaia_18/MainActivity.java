@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -59,17 +60,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Layout / View
     public static RelativeLayout relativeLayout;
     private LinearLayout linearLayout;
-    private Button goal, menu, setting;
+    private LinearLayout menuButtonLayout;
+    private ImageView goal, setting;
+//    private ImageView menu;
     public static TextView seed, fruit;
     public static ImageView weather;
 
     //FragementButton
-    private ImageButton menuFlowerButton;
-    private ImageButton menuASkillButton;
-    private ImageButton menuPSkillButton;
-    private ImageButton menuOverlayButton;
-    private ImageButton menuStoreButton;
-    private ImageButton menuDownButton;
+    private ImageView menuFlowerButton;
+    private ImageView menuASkillButton;
+    private ImageView menuPSkillButton;
+    private ImageView menuOverlayButton;
+    private ImageView menuStoreButton;
+//    private ImageView menuDownButton;
 
     //Data
     public int gameMoney;
@@ -87,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //ImageView(Plant) Moving
     private static Boolean moving;
     private static int originalXPos,originalYPos;
+
+    //fragement View 상태
+    // 0: close , 1: open
+    private int fragement = 0;
+    private View view;
 
     //GPS Setting
     private android.app.AlertDialog alertDialog = null;
@@ -216,25 +224,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Layout / View
         relativeLayout = (RelativeLayout)findViewById(R.id.relativeLayout);
         linearLayout = (LinearLayout)findViewById(R.id.menuLayout);
+        menuButtonLayout = (LinearLayout)findViewById(R.id.menuButtonLayout);
+
         seed = (TextView)findViewById(R.id.seed);
         fruit = (TextView)findViewById(R.id.fruit);
-        menu = (Button)findViewById(R.id.menu);
-        goal = (Button)findViewById(R.id.goal);
+//        menu = (ImageView)findViewById(R.id.menu);
+        goal = (ImageView)findViewById(R.id.goal);
         weather = (ImageView)findViewById(R.id.weather);
-        setting = (Button)findViewById(R.id.setting);
+        setting = (ImageView)findViewById(R.id.setting);
 
         //Fragement Button
-        menuFlowerButton = (ImageButton)findViewById(R.id.menuFlowerButton);
-        menuASkillButton = (ImageButton)findViewById(R.id.menuASkillButton);
-        menuPSkillButton = (ImageButton)findViewById(R.id.menuPSkillButton);
-        menuOverlayButton = (ImageButton)findViewById(R.id.menuOverlayButton);
-        menuStoreButton = (ImageButton)findViewById(R.id.menuStoreButton);
-        menuDownButton = (ImageButton)findViewById(R.id.menuDownButton);
+        menuFlowerButton = (ImageView)findViewById(R.id.menuFlowerButton);
+        menuFlowerButton.setTag(1);
+        menuASkillButton = (ImageView)findViewById(R.id.menuASkillButton);
+        menuASkillButton.setTag(1);
+        menuPSkillButton = (ImageView)findViewById(R.id.menuPSkillButton);
+        menuPSkillButton.setTag(1);
+        menuOverlayButton = (ImageView)findViewById(R.id.menuOverlayButton);
+        menuOverlayButton.setTag(1);
+        menuStoreButton = (ImageView)findViewById(R.id.menuStoreButton);
+        menuStoreButton.setTag(1);
+//        menuDownButton = (ImageView)findViewById(R.id.menuDownButton);
 
         //2. Fragement Button setOnClickListener
         setImageButtonClick();
         //3. menu 버튼 활성화
-        menu.setOnClickListener(this);
+//        menu.setOnClickListener(this);
         //4. 화면 클릭을 통한 점수 획득
         relativeLayout.setOnClickListener(this);
         //6. goal(업적) 버튼 활성화
@@ -473,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Boolean already = false;
         int plantNo = 0;
-        int plantLevel = 399;
+        int plantLevel = 298;
         int plantHP = 100;
 
         ArrayList<Flower> flowers = dataList.getFlowers();
@@ -538,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuPSkillButton.setOnClickListener(this);
         menuOverlayButton.setOnClickListener(this);
         menuStoreButton.setOnClickListener(this);
-        menuDownButton.setOnClickListener(this);
+//        menuDownButton.setOnClickListener(this);
     }
 
     private boolean isServiceRunning(Class<?> serviceClass){
@@ -557,52 +572,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view){
-        if(view == menuFlowerButton){
-            MainActivity.this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.list_layout,menuFlower)
-                    .commit();
-        }else if(view == menuASkillButton){
 
-            MainActivity.this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.list_layout,menuSkill)
-                    .commit();
-
-        }else if(view == menuPSkillButton){
-
-            MainActivity.this.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.list_layout,menuDryFlower)
-                    .commit();
-
-        }else if(view == menuOverlayButton){
-
-            MainActivity.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.list_layout, menuOverlay)
-                    .commit();
-
-        }else if(view == menuStoreButton){
-            MainActivity.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.list_layout, menuStore)
-                    .commit();
-
-        }else if(view == menuDownButton){
-
-            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-            params.height = 0;
-            linearLayout.setLayoutParams(params);
-
-        }else if(view == menu){
-
-            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-            params.height = 900;
-            linearLayout.setLayoutParams(params);
-
-            MainActivity.this.getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.list_layout,menuFlower)
-                    .commit();
-        }else if(view == relativeLayout){
+        if(view == relativeLayout){
             dataList.windowClick();
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
 
@@ -614,13 +585,102 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if(view == setting){
             Setting dialog = new Setting(view.getContext());
             dialog.show();
+        }else{
+
+            if(fragement == 0){
+
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)menuButtonLayout.getLayoutParams();
+                layoutParams.setMargins(20,0,20,10);
+                menuButtonLayout.setLayoutParams(layoutParams);
+
+                ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                params.height = 700;
+                linearLayout.setLayoutParams(params);
+
+                fragement = 1;
+            }
+
+            if((int)view.getTag() == 0){ //동일한 button click
+                ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                params.height = 0;
+                linearLayout.setLayoutParams(params);
+
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)menuButtonLayout.getLayoutParams();
+                layoutParams.setMargins(20,0,20,60);
+                menuButtonLayout.setLayoutParams(layoutParams);
+
+                fragement = 0;
+                view.setTag(1);
+                this.view = null;
+
+            }else{ //다른 button click
+                view.setTag(0);
+                if(this.view == null) {
+                    this.view = view;
+                }else{
+                    this.view.setTag(1);
+                    this.view = view;
+                }
+            }
+
+            if(view == menuFlowerButton){
+
+                MainActivity.this.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_layout,menuFlower)
+                        .commit();
+            }else if(view == menuASkillButton){
+
+                MainActivity.this.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_layout,menuSkill)
+                        .commit();
+
+            }else if(view == menuPSkillButton){
+
+                MainActivity.this.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.list_layout,menuDryFlower)
+                        .commit();
+
+            }else if(view == menuOverlayButton){
+
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, menuOverlay)
+                        .commit();
+
+            }else if(view == menuStoreButton){
+                MainActivity.this.getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.list_layout, menuStore)
+                        .commit();
+
+            }
         }
+
+//        else if(view == menuDownButton){
+//
+//            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+//            params.height = 0;
+//            linearLayout.setLayoutParams(params);
+//
+//        }
+//        else if(view == menu){
+//
+//            ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+//            params.height = 750;
+//            linearLayout.setLayoutParams(params);
+//
+//            MainActivity.this.getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .replace(R.id.list_layout,menuFlower)
+//                    .commit();
+//        }
     }
 
     public static void buyPlant( Flower flower ){
 
-        dataList.addPlant(new Plant(flower.getFlowerNo(), 1, flower, 100));
-        dataList.getPlants().get(flower.getFlowerNo()).plantRepaint(relativeLayout);
+        Plant plant = new Plant(flower.getFlowerNo(),1,flower,100);
+        plant.plantRepaint(relativeLayout);
+        dataList.addPlant(plant);
     }
 
 
@@ -632,6 +692,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for(int i =0 ;i < plants.size() ; i++){
             if(plants.get(i).getPlantNo() == plantNo){
                 plants.get(i).setLevel(plants.get(i).getLevel()+1);
+                plants.get(i).replacePlant();
             }
         }
     }
@@ -670,8 +731,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return false;
                 }
 
-                params.leftMargin = x-170;
-                params.topMargin = y-150;
+                params.leftMargin = x-150;
+                params.topMargin = y-600;
 
                 relativeLayout.updateViewLayout(view,params);
             }

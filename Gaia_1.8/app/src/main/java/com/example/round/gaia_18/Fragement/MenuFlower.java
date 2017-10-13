@@ -1,6 +1,10 @@
 package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.MainActivity;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
@@ -41,6 +46,7 @@ public class MenuFlower extends Fragment {
 
     //Layout / View
     private ListView flowerList;
+    private static final float BYTES_PER_PX = 4.0f;
 
     //Data
     private ArrayList<Flower> flowers = new ArrayList<>();
@@ -74,7 +80,8 @@ public class MenuFlower extends Fragment {
         TextView flowerLevel;
         TextView flowerName;
         TextView flowerScore;
-        ImageButton flowerLevelUp;
+        LinearLayout flowerLevelUp;
+        ImageView flowerLevelUpType;
         TextView flowerLevelUpScore;
         ProgressBar hpProgress;
     }
@@ -110,7 +117,8 @@ public class MenuFlower extends Fragment {
                 viewHolder.flowerLevel=(TextView)v.findViewById(R.id.flowerLevel);
                 viewHolder.flowerName=(TextView)v.findViewById(R.id.flowerName);
                 viewHolder.flowerScore=(TextView)v.findViewById(R.id.flowerScore);
-                viewHolder.flowerLevelUp=(ImageButton) v.findViewById(R.id.flowerLevelUp);
+                viewHolder.flowerLevelUp=(LinearLayout) v.findViewById(R.id.flowerLevelUp);
+                viewHolder.flowerLevelUpType = (ImageView)v.findViewById(R.id.flowerLevelUpType);
                 viewHolder.flowerLevelUpScore=(TextView)v.findViewById(R.id.flowerLevelUpScore);
                 viewHolder.hpProgress = (ProgressBar)v.findViewById(R.id.hpProgress);
 
@@ -123,6 +131,10 @@ public class MenuFlower extends Fragment {
 
             if(flower != null){
                 //buyType ==0 이면 잠긴이미지
+
+                int resourceId = getContext().getResources().getIdentifier("flower" + flower.getFlowerNo(), "drawable", getContext().getPackageName());
+                loadImage(viewHolder.flowerImage,resourceId);
+
                 if(flower.isBuyType()) {
                     int hp=0;
                     for(int i = 0 ;i<dataList.getPlants().size();i++){
@@ -134,16 +146,19 @@ public class MenuFlower extends Fragment {
                     viewHolder.hpProgress.setProgress(100-hp);
 
                     if(flower.getLevel() == 400){
-                        viewHolder.flowerLevelUp.setImageResource(R.drawable.complete);
+                        viewHolder.flowerLevelUpType.setImageResource(R.drawable.complete);
                         viewHolder.background.setBackgroundResource(R.drawable.max_level_background);
                         viewHolder.flowerLevelUpScore.setVisibility(View.INVISIBLE);
                     }else{
-                        viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
+//                        viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
+                        loadImage(viewHolder.flowerLevelUpType,R.drawable.reward2);
                         viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
-                        viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
+
+                        viewHolder.flowerLevelUpScore.setText("X"+dataList.getAllScore(flower.getCost()));
                     }
 
-                    viewHolder.flowerImage.setImageResource(R.drawable.image);
+                    viewHolder.flowerLevelUp.setBackgroundResource(R.drawable.buy_background);
+                    viewHolder.flowerImage.setBackgroundResource(R.drawable.flower_background);
                     viewHolder.flowerScore.setText("클릭 당 점수 : " + dataList.getAllScore(flower.getScore()));
                     viewHolder.flowerLevel.setText("Level . " + flower.getLevel());
                     viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
@@ -175,10 +190,11 @@ public class MenuFlower extends Fragment {
                         }
                     });
                 }else if(flower.isBuyPossible()){
-                    viewHolder.flowerLevelUpScore.setText(dataList.getAllScore(flower.getCost()));
+                    viewHolder.flowerLevelUpScore.setText("X"+dataList.getAllScore(flower.getCost()));
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
-                    viewHolder.flowerLevelUp.setImageResource(R.drawable.buy);
-                    viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
+                    loadImage(viewHolder.flowerLevelUpType,R.drawable.reward2);
+                    viewHolder.flowerLevelUp.setBackgroundResource(R.drawable.buy_background);
+                    viewHolder.flowerImage.setBackgroundResource(R.drawable.flower_background);
                     viewHolder.flowerLevel.setText("Level . ???");
                     viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -200,7 +216,7 @@ public class MenuFlower extends Fragment {
                     });
                 }else{
                     viewHolder.background.setBackgroundResource(R.drawable.flower_item_lock);
-                    viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
+//                    viewHolder.flowerImage.setImageResource(R.mipmap.ic_launcher);
                     viewHolder.flowerLevel.setText("Level . ???");
                     viewHolder.flowerLevelUp.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -242,5 +258,40 @@ public class MenuFlower extends Fragment {
 
     }
 
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesFree()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
 
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
+    }
 }
