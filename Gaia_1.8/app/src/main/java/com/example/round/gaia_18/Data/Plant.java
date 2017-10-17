@@ -561,7 +561,7 @@ public class Plant{
         }
     }
     private void loadImage(ImageView image,int resourceId){
-        if(readBitmapInfo(resourceId) > MemUtils.megabytesFree()){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");
             subImage(32,resourceId,image);
         }else{
@@ -595,5 +595,13 @@ public class Plant{
 
         final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
         image.setImageBitmap(bitmap);
+    }
+
+    public int getLevelType() {
+        return levelType;
+    }
+
+    public void setLevelType(int levelType) {
+        this.levelType = levelType;
     }
 }

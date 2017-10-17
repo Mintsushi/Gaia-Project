@@ -4,6 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.FeatureInfo;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.round.gaia_18.Data.DryFlower;
 import com.example.round.gaia_18.Data.Plant;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.ArrayList;
@@ -44,6 +48,7 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
 
     private ImageButton select;
     private ImageButton cancel;
+    private static final float BYTES_PER_PX = 4.0f;
 
     public AddDryFlower(Context context) {
         super(context);
@@ -134,7 +139,9 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
             if(max != null){
 
                 //후에 식물 이미지로 변경
-                viewHolder.maxLevelImage.setImageResource(R.drawable.image);
+                int resourceId = getContext().getResources().getIdentifier("flower" + max.getDryFlowerNo(), "drawable", getContext().getPackageName());
+                loadImage(viewHolder.maxLevelImage,resourceId);
+//                viewHolder.maxLevelImage.setImageResource(R.drawable.image);
                 viewHolder.maxLevelName.setText(max.getDryFlowerName());
                 viewHolder.maxLevelEffect.setText("초당 "+dataList.getAllScore(max.getScore())+" 점수 획득");
 
@@ -171,4 +178,40 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
         return this.selectFlower;
     }
 
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesAvailable()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
+    }
 }

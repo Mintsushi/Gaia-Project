@@ -5,6 +5,9 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.location.Criteria;
 import android.location.Location;
@@ -71,6 +74,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     private static final String TAG = ".OverlayService";
     private final IBinder mBinder = new LocalBinder();
+    private static final float BYTES_PER_PX = 4.0f;
 
     //사용자 세팅 상태
     public static int[] settingVar = new int[]{1,1,1,1,1};
@@ -197,7 +201,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         builder = new Notification.Builder(getApplicationContext());
 
         //후에 application icon으로 변경
-        builder.setSmallIcon(R.drawable.image)
+        builder.setSmallIcon(R.drawable.close)
                 .setContentTitle("Gaia Project");
 
         //후에 icon은 app logo를 이용
@@ -611,7 +615,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
             // 식물 이미지
            ImageView plantImage = new ImageView(MainActivity.context);
             //plant.setImageResource(flower.getImage());
-            plantImage.setImageResource(R.drawable.imageflower);
+//            plantImage.setImageResource(R.drawable.imageflower);
+            int resourceId = MainActivity.context.getResources().getIdentifier("flower" + plant.getPlantNo()+plant.getLevelType(), "drawable", MainActivity.context.getPackageName());
+            loadImage(plantImage,resourceId);
             //plant.setTag(flower.getImage());
 
             RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
@@ -1063,5 +1069,40 @@ public class OverlayService extends Service implements View.OnClickListener,View
             plant.getTimer().schedule(task,0,180000);
         }
     }
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesAvailable()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
 
+    private float readBitmapInfo(int resourceId){
+        final Resources res = MainActivity.context.getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = MainActivity.context.getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
+    }
 }

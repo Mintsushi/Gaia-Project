@@ -10,6 +10,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // 0: close , 1: open
     private int fragement = 0;
     private View view;
+    private Fragment removeFragement = null;
 
     //GPS Setting
     private android.app.AlertDialog alertDialog = null;
@@ -487,36 +489,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
         Boolean already = false;
-        int plantNo = 0;
-        int plantLevel = 298;
-        int plantHP = 100;
-
-        ArrayList<Flower> flowers = dataList.getFlowers();
-        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
-
-        ArrayList<Plant> plants = new ArrayList<>();
-
-        for (int i = 0; i < overlayPlants.size(); i++) {
-            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
-                already = true;
-            }
-        }
-
-        if(!already) {
-            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
-            for (int i = 0; i < flowers.size(); i++) {
-                if (flowers.get(i).getFlowerNo() == plantNo) {
-
-                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i),plantHP));
-                    break;
-                }
-            }
-        }
-
-        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
-        dataList.setPlants(plants);
-        dataList.compareFlowers();
-        dataList.setBuyPossible();
+//        int plantNo = 0;
+//        int plantLevel = ;
+//        int plantHP = 100;
+//
+//        ArrayList<Flower> flowers = dataList.getFlowers();
+//        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
+//
+//        ArrayList<Plant> plants = new ArrayList<>();
+//
+//        for (int i = 0; i < overlayPlants.size(); i++) {
+//            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
+//                already = true;
+//            }
+//        }
+//
+//        if(!already) {
+//            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
+//            for (int i = 0; i < flowers.size(); i++) {
+//                if (flowers.get(i).getFlowerNo() == plantNo) {
+//
+//                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i),plantHP));
+//                    break;
+//                }
+//            }
+//        }
+//
+//        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
+//        dataList.setPlants(plants);
+//        dataList.compareFlowers();
+//        dataList.setBuyPossible();
     }
 
     private void addFlower(ArrayList<Plant> plants,int flowerNo, int level, int hp){
@@ -609,6 +611,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 layoutParams.setMargins(20,0,20,60);
                 menuButtonLayout.setLayoutParams(layoutParams);
 
+                if(removeFragement != null){
+                    MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
+                }
+
                 fragement = 0;
                 view.setTag(1);
                 this.view = null;
@@ -621,33 +627,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     this.view.setTag(1);
                     this.view = view;
                 }
+
+                if(removeFragement != null){
+                    Log.i("remvoeFragement","remove : "+removeFragement.toString());
+                    MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
+                }
             }
 
             if(view == menuFlowerButton){
 
+                removeFragement = menuFlower;
                 MainActivity.this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.list_layout,menuFlower)
                         .commit();
             }else if(view == menuASkillButton){
 
+                removeFragement = menuSkill;
                 MainActivity.this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.list_layout,menuSkill)
                         .commit();
 
             }else if(view == menuPSkillButton){
 
+                removeFragement = menuDryFlower;
                 MainActivity.this.getSupportFragmentManager().beginTransaction()
                         .replace(R.id.list_layout,menuDryFlower)
                         .commit();
 
             }else if(view == menuOverlayButton){
 
+                removeFragement = menuOverlay;
                 MainActivity.this.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.list_layout, menuOverlay)
                         .commit();
 
             }else if(view == menuStoreButton){
+
+                removeFragement = menuStore;
                 MainActivity.this.getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.list_layout, menuStore)

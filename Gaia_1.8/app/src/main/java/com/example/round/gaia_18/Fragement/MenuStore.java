@@ -2,6 +2,9 @@ package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.StoreProduct;
 import com.example.round.gaia_18.Dialog.StoreCheckDialog;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.Timer;
@@ -35,6 +39,7 @@ public class MenuStore extends Fragment {
 
     private static final String TAG = ".StoreProduct";
     private ListView storeList;
+    private static final float BYTES_PER_PX = 4.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // fragment 화면 활성화
@@ -97,10 +102,14 @@ public class MenuStore extends Fragment {
             if(storeProduct != null){
 
                 //후에 아이템 이미지로 변경
-                viewholder.productImage.setImageResource(R.drawable.image);
+
+                int resourceId = getContext().getResources().getIdentifier("item" + Integer.toString(storeProduct.getItemEffectType()), "drawable", getContext().getPackageName());
+                loadImage(viewholder.productImage,resourceId);
+//                viewholder.productImage.setImageResource(R.drawable.image);
                 viewholder.productName.setText(storeProduct.getItemName());
                 Log.i("getString","product" + Integer.toString(storeProduct.getBuyType()));
-                int resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(storeProduct.getItemEffectType()), "string", getContext().getPackageName());
+
+                resourceId = getContext().getResources().getIdentifier("product" + Integer.toString(storeProduct.getItemEffectType()), "string", getContext().getPackageName());
                 viewholder.productExplain.setText(getResources().getText(resourceId));
                 viewholder.productNum.setText(Integer.toString(storeProduct.getItemNumber()));
 
@@ -239,5 +248,42 @@ public class MenuStore extends Fragment {
             // 사용후 아이템 감소
             dataList.setDesItemNumber(0,1);
         }
+    }
+
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesAvailable()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

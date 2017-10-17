@@ -2,6 +2,9 @@ package com.example.round.gaia_18.Fragement;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import com.example.round.gaia_18.Data.DryFlower;
 import com.example.round.gaia_18.Dialog.AddDryFlower;
 import com.example.round.gaia_18.Dialog.AddDryFlowerItemDialog;
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import static com.example.round.gaia_18.Data.DataList.dryFlowerAdapter;
@@ -31,6 +35,7 @@ public class MenuDryFlower extends Fragment {
 
     private static final String TAG = ".MenuDryFlower";
     private ListView dryFlowerList;
+    private static final float BYTES_PER_PX = 4.0f;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
@@ -92,7 +97,9 @@ public class MenuDryFlower extends Fragment {
                     final DryFlower dryFlower = dataList.getDryFlower(position);
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
                     //후에 식물 이미지로 변경
-                    viewHolder.dryFlowerImage.setImageResource(R.drawable.image);
+                    int resourceId = getContext().getResources().getIdentifier("flower" + dryFlower.getDryFlowerNo(), "drawable", getContext().getPackageName());
+                    loadImage(viewHolder.dryFlowerImage,resourceId);
+
                     viewHolder.dryFlowerName.setText(dryFlower.getDryFlowerName());
                     viewHolder.dryFlowerEffect.setText("초당 "+dataList.getAllScore(dryFlower.getScore())+" 점수 획득");
                     viewHolder.dryFlowerInfoButton.setImageResource(R.drawable.info);
@@ -164,5 +171,42 @@ public class MenuDryFlower extends Fragment {
 
             return view;
         }
+    }
+
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesAvailable()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 }

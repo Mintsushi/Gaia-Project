@@ -12,7 +12,7 @@ android:background="@drawable/flower_buy_available">
         android:layout_marginRight="20dp"
         android:background="#ffffff">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/productImage"
             android:layout_width="60sp"
             android:layout_height="60sp"

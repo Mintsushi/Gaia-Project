@@ -206,7 +206,7 @@ public class MenuOverlay extends Fragment {
         }
     }
     private void loadImage(ImageView image,int resourceId){
-        if(readBitmapInfo(resourceId) > MemUtils.megabytesFree()){
+        if(readBitmapInfo(resourceId) > MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");
             subImage(32,resourceId,image);
         }else{

@@ -412,7 +412,7 @@ public class MenuSkill extends Fragment {
     }
 
     private void loadImage(ImageView image,int resourceId){
-        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesFree()){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");
             subImage(32,resourceId,image);
         }else{
