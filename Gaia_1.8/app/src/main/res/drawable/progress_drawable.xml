@@ -14,8 +14,8 @@
                             android:bottom="2dp">
                             <shape>
                                 <gradient
-                                    android:startColor="#79ff0400"
-                                    android:endColor="#CCC" />
+                                    android:startColor="#6eff0400"
+                                    android:endColor="#43cccccc" />
                                 <!--corners android:radius="10dp" /-->
                             </shape>
                         </item>

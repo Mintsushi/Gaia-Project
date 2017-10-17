@@ -168,13 +168,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
             fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
             mOverlayService.setSeed();
-            Log.i("repaint ", "repaint size : "+dataList.getPlants().size());
+
             for(int i =0;i<dataList.getPlants().size();i++) {
 
                 Log.i("repaint ", "repaint state : "+dataList.getPlants().get(i).getState());
                     if (dataList.getPlants().get(i).getState() == 0) {
                         Log.i("repaint ", "repaint  : "+dataList.getPlants().get(i).getFlower().getFlowerName());
-                        dataList.getPlants().get(i).plantRepaint( relativeLayout);
+                        dataList.getPlants().get(i).drawPlant(relativeLayout);
                     }
 
             }
@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mOverlayService != null){
             mOverlayService.visible();
             dataList.setClickView(null);
+
+            relativeLayout.removeAllViews();
         }
     }
 
@@ -489,36 +491,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
         Boolean already = false;
-//        int plantNo = 0;
-//        int plantLevel = ;
-//        int plantHP = 100;
-//
-//        ArrayList<Flower> flowers = dataList.getFlowers();
-//        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
-//
-//        ArrayList<Plant> plants = new ArrayList<>();
-//
-//        for (int i = 0; i < overlayPlants.size(); i++) {
-//            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
-//                already = true;
-//            }
-//        }
-//
-//        if(!already) {
-//            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
-//            for (int i = 0; i < flowers.size(); i++) {
-//                if (flowers.get(i).getFlowerNo() == plantNo) {
-//
-//                    plants.add(new Plant(plantNo, plantLevel, flowers.get(i),plantHP));
-//                    break;
-//                }
-//            }
-//        }
-//
-//        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
-//        dataList.setPlants(plants);
-//        dataList.compareFlowers();
-//        dataList.setBuyPossible();
+        int plantNo = 0;
+        int plantLevel = 299;
+        int plantHP = 40;
+
+        ArrayList<Flower> flowers = dataList.getFlowers();
+        ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
+
+        ArrayList<Plant> plants = new ArrayList<>();
+
+        for (int i = 0; i < overlayPlants.size(); i++) {
+            if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
+                already = true;
+            }
+        }
+
+        if(!already) {
+            //plantArray(사용자가 소유하고 이름 꽃의 정보)에 데이터 추가
+            for (int i = 0; i < flowers.size(); i++) {
+                if (flowers.get(i).getFlowerNo() == plantNo) {
+
+                    Plant plant = new Plant(plantNo, plantLevel, flowers.get(i),plantHP);
+                    plant.plantRepaint(relativeLayout);
+                    plants.add(plant);
+                    break;
+                }
+            }
+        }
+
+        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
+        dataList.setPlants(plants);
+        dataList.compareFlowers();
+        dataList.setBuyPossible();
     }
 
     private void addFlower(ArrayList<Plant> plants,int flowerNo, int level, int hp){

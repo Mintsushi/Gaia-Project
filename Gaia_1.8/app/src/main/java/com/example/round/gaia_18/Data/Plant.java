@@ -97,6 +97,11 @@ public class Plant{
         loadImage(plant,resourceId);
         plantLayout.updateViewLayout(plant,relParams);
     }
+
+    public void drawPlant(RelativeLayout relativeLayout){
+        relativeLayout.addView(plantLayout,plantLayout.getLayoutParams());
+    }
+
     public void plantRepaint(final RelativeLayout relativeLayout){
 
         plantLayout = new LinearLayout(MainActivity.context);
@@ -410,14 +415,21 @@ public class Plant{
             this.hp = 100;
         }
         this.plantHP.setProgress(this.hp );
+        if(dataList.flowerAdapter != null)
+            dataList.flowerAdapter.notifyDataSetChanged();
     }
 
     public void desHp(int hp) {
         this.hp -= hp;
-        if(this.hp < 0){
+        if(this.hp <= 0){
+            //식물 죽음
+            //click 점수에서 제외
+            //사망 이미지로 update
             this.hp = 0;
         }
         this.plantHP.setProgress(this.hp );
+        if(dataList.flowerAdapter != null)
+            dataList.flowerAdapter.notifyDataSetChanged();
     }
 
     public static int getMaxHp() {
@@ -561,7 +573,7 @@ public class Plant{
         }
     }
     private void loadImage(ImageView image,int resourceId){
-        if(readBitmapInfo(resourceId) > MemUtils.megabytesAvailable()){
+        if(readBitmapInfo(resourceId)*10 > MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");
             subImage(32,resourceId,image);
         }else{
