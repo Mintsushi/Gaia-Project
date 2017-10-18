@@ -2,9 +2,13 @@ package com.example.round.gaia_18;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,6 +57,8 @@ import com.google.gson.reflect.TypeToken;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -159,6 +165,10 @@ public class OverlayService extends Service implements View.OnClickListener,View
     //날씨에 따른 passive / 패널티
     public static ArrayList<Integer> weatherData;
 
+    //Notification Click Event
+    private static final String MyOnClick = "overlayView";
+    private int removeAllState = 0;
+
     //Skill 사용
     public static SkillCoolTime skillCoolTime = new SkillCoolTime();
     public static skillUseTimer_type0 type0 = new skillUseTimer_type0();
@@ -200,6 +210,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         remoteView.setViewVisibility(remoteView.getLayoutId(),View.INVISIBLE);
         builder = new Notification.Builder(getApplicationContext());
 
+        remoteView.setOnClickPendingIntent(R.id.remove,getPendingSelfIntent(this,MyOnClick));
         //후에 application icon으로 변경
         builder.setSmallIcon(R.drawable.close)
                 .setContentTitle("Gaia Project");
@@ -222,6 +233,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 dataBaseHelper.getAllStoreProduct(),
                 dataBaseHelper.getWaterInform()
         );
+
         user = new User();
 
         notificationManager.cancel(notification_id);
@@ -229,6 +241,57 @@ public class OverlayService extends Service implements View.OnClickListener,View
         startForeground(startId,noti);
         return START_STICKY;
     }
+
+    private PendingIntent getPendingSelfIntent(Context context, String action){
+        Intent intent = new Intent(MyOnClick);
+//        intent.setAction(action);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MyOnClick);
+        registerReceiver(clickBroadCastReceiver,filter);
+        return PendingIntent.getBroadcast(context,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+    private BroadcastReceiver clickBroadCastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+
+            if (MyOnClick.equals(intent.getAction())) {
+                //create -> remove
+                if (removeAllState == 0) {
+
+                    if (removeState == 0) {
+                        ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                        for (int i = 0; i < plants.size(); i++) {
+                            mWindowManager.removeView(plants.get(i).getOverlayPlant());
+                        }
+                    }
+
+                    if (clickState == 1) {
+                        mWindowManager.removeView(linearLayout);
+                        click.setImageResource(R.drawable.click);
+                        clickState = 0;
+                    }
+                    mWindowManager.removeView(skill);
+                    removeAllState = 1;
+                } else { //remove -> create
+
+                    if (removeState == 0) {
+                        ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                        for (int i = 0; i < plants.size(); i++) {
+                            mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
+                        }
+                    }
+
+                    mWindowManager.addView(skill, skill.getLayoutParams());
+                    removeAllState = 0;
+                }
+            }
+        }
+    };
 
     @Override
     public void onCreate(){
@@ -297,7 +360,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     public void setSeed(){
-//        seedOverlay.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+        seedOverlay.setText(dataList.getAllScore(dataList.getScoreHashMap()));
     }
 
     private void setLayout(){
@@ -308,12 +371,13 @@ public class OverlayService extends Service implements View.OnClickListener,View
         skillList.setBackgroundColor(getResources().getColor(R.color.White));
         overlaySkillAdpter = new OverlaySkillAdpter(this, R.layout.overlay_skill_item);
         skillList.setAdapter(overlaySkillAdpter);
+        skillList.setBackgroundColor(getResources().getColor(R.color.transparent));
 
         skill = new LinearLayout(this);
         skill.setOrientation(LinearLayout.VERTICAL);
 
         skillWindow = new WindowManager.LayoutParams(
-                300, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_TOAST,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
@@ -332,8 +396,16 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 PixelFormat.TRANSLUCENT);
 
         open = new CircleButton(this);
-        open.setImageResource(R.drawable.open);
+        loadImage(open, R.drawable.flower);
+//        open.setImageResource(R.drawable.open);
         open.setTag(0);
+
+        seedOverlay = new TextView(this);
+        seedOverlay.setMinWidth(150);
+        seedOverlay.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        seedOverlay.setTextSize(15);
+        seedOverlay.setTextColor(getResources().getColor(R.color.Black));
+        seedOverlay.setBackgroundResource(R.drawable.view_background);
 
         click = new CircleButton(this);
         click.setImageResource(R.drawable.click);
@@ -357,8 +429,6 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 //close - > open
                 if((int)view.getTag() == 0){
                     LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(150, 150);
-                    buttonParams.gravity=Gravity.CENTER;
-                    buttonParams.bottomMargin=20;
                     skill.addView(click,buttonParams);
                     skill.addView(remove,buttonParams);
                     skill.addView(useSkill,buttonParams);
@@ -378,11 +448,20 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 }
             }
         });
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(150, 150);
-        buttonParams.gravity=Gravity.CENTER;
-        buttonParams.topMargin=150;
-        buttonParams.bottomMargin = 100;
-        skill.addView(open,buttonParams);
+        LinearLayout.LayoutParams skillParams = new LinearLayout.LayoutParams(
+                150,150);
+        skillParams.gravity=Gravity.CENTER;
+        skillParams.topMargin=150;
+//        buttonParams.bottomMargin = 100;
+//        skillParams.bottomMargin = 50;
+        skill.addView(open,skillParams);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity=Gravity.CENTER;
+//        buttonParams.bottomMargin = 100;
+//        params.bottomMargin = 50;
+        skill.addView(seedOverlay,params);
 
     }
 
@@ -402,16 +481,17 @@ public class OverlayService extends Service implements View.OnClickListener,View
         }
 
         @Override
-        public int getCount(){return dataList.getSkillInfos().size();}
+        public int getCount(){return dataList.getSkillInfos().size()-1;}
 
         @Override
         public View getView(int position, View view, ViewGroup parent){
 
+            position +=1;
             final SkillInfo skillInfo = dataList.getSkillInfos().get(position);
             final SkillData skillData = dataList.getSkillDatas().get(position);
             final OverlaySkillViewHolder skillViewHolder;
 
-            Log.i("OverlaySkill","id : "+position+" / buy : "+skillData.getSkillBuy());
+            Log.i("skillData","skillData : "+position);
             if(view == null){
 
                 view = inflater.inflate(R.layout.overlay_skill_item, parent, false);
@@ -429,21 +509,21 @@ public class OverlayService extends Service implements View.OnClickListener,View
             }
 
 
-            if(skillInfo != null){
-                int resourceId = getContext().getResources().getIdentifier("skill"+skillInfo.getSkillNo(),"drawable",getContext().getPackageName());
+            if(skillInfo != null) {
+                int resourceId = getContext().getResources().getIdentifier("skill" + skillInfo.getSkillNo(), "drawable", getContext().getPackageName());
                 skillViewHolder.skillImage.setImageResource(resourceId);
 //                skillViewHolder.skillImage.setImageResource(R.drawable.image);
 
                 //skill을 구입함
-                if(skillData.getSkillBuy()){
+                if (skillData.getSkillBuy()) {
                     skillViewHolder.coolTime.setText("");
 
                     //skill을 cooltime으로 인해 사용이 불가한 경우
-                    if(skillInfo.getSkillUseState()){
+                    if (skillInfo.getSkillUseState()) {
                         skillViewHolder.cantUse.setVisibility(View.VISIBLE);
                         skillViewHolder.cantUse.setBackgroundColor(getResources().getColor(R.color.overlaySkillUse));
-                    }
-                    else{ //스킬 사용이 가능한 경우
+                        skillViewHolder.skillImage.setOnClickListener(null);
+                    } else { //스킬 사용이 가능한 경우
                         skillViewHolder.cantUse.setVisibility(View.INVISIBLE);
                         skillViewHolder.skillImage.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -464,8 +544,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
                             }
                         });
                     }
-                }
-                else{//skill을 구입하지 않음
+                } else {//skill을 구입하지 않음
                     skillViewHolder.coolTime.setText("Buy!!");
                     skillViewHolder.cantUse.setVisibility(View.VISIBLE);
                     skillViewHolder.cantUse.setBackgroundColor(getResources().getColor(R.color.overlaySkill));
@@ -849,8 +928,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             //Non Use Skill -> Use Skill
             if(skillUse == 0) {
                 Log.i("UseSkill","use Skill!!");
-                LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(200, 500);
-                buttonParams.gravity=Gravity.CENTER;
+                LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(170, 500);
                 skill.addView(skillList,buttonParams);
                 skillUse = 1;
             }

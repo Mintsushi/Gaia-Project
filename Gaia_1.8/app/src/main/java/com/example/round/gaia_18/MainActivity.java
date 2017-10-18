@@ -595,6 +595,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if(fragement == 0){
 
+                Log.i("Fragment","Fragement 0");
                 LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)menuButtonLayout.getLayoutParams();
                 layoutParams.setMargins(20,0,20,10);
                 menuButtonLayout.setLayoutParams(layoutParams);
@@ -604,39 +605,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 linearLayout.setLayoutParams(params);
 
                 fragement = 1;
-            }
-
-            if((int)view.getTag() == 0){ //동일한 button click
-                ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
-                params.height = 0;
-                linearLayout.setLayoutParams(params);
-
-                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)menuButtonLayout.getLayoutParams();
-                layoutParams.setMargins(20,0,20,60);
-                menuButtonLayout.setLayoutParams(layoutParams);
-
-                if(removeFragement != null){
-                    MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
-                }
-
-                fragement = 0;
-                view.setTag(1);
-                this.view = null;
-
-            }else{ //다른 button click
                 view.setTag(0);
-                if(this.view == null) {
-                    this.view = view;
-                }else{
+                this.view = view;
+            }else{
+
+                if((int)view.getTag() == 0){ //동일한 button click
+
+                    Log.i("Fragment","Fragement close");
+                    ViewGroup.LayoutParams params = linearLayout.getLayoutParams();
+                    params.height = 0;
+                    linearLayout.setLayoutParams(params);
+
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)menuButtonLayout.getLayoutParams();
+                    layoutParams.setMargins(20,0,20,30);
+                    menuButtonLayout.setLayoutParams(layoutParams);
+//
+//                    if(removeFragement != null){
+//                        MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
+//                    }
+
+                    fragement = 0;
+                    view.setTag(1);
+                    this.view = null;
+
+                }else{ //다른 button click
+
+                    view.setTag(0);
+
                     this.view.setTag(1);
                     this.view = view;
-                }
 
-                if(removeFragement != null){
-                    Log.i("remvoeFragement","remove : "+removeFragement.toString());
-                    MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
+                    if(removeFragement != null){
+                        Log.i("remvoeFragement","remove : "+removeFragement.toString());
+                        MainActivity.this.getSupportFragmentManager().beginTransaction().remove(removeFragement).commit();
+                    }
                 }
             }
+
 
             if(view == menuFlowerButton){
 

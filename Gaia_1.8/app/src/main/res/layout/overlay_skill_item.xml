@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="60sp"
-    android:gravity="center"
-    android:layout_marginBottom="10sp">
+    android:layout_height="wrap_content"
+    android:gravity="center">
 
 
     <ImageView
         android:id="@+id/skillImage"
-        android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_width="65sp"
+        android:layout_height="65sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true" />
 
     <ImageView
         android:id="@+id/cantUse"
-        android:layout_width="match_parent"
-        android:layout_height="60sp"/>
+        android:layout_width="65sp"
+        android:layout_height="65sp"/>
 
     <TextView
         android:id="@+id/coolTime"
-        android:layout_width="match_parent"
+        android:layout_width="65sp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
         android:textSize="15sp"
         android:textStyle="bold"
         android:textColor="@color/White"
-        android:gravity="center"
-        android:text="TextView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:gravity="center"/>
 
 </RelativeLayout>

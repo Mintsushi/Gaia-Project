@@ -74,25 +74,6 @@
         android:layout_height="0sp"
         android:layout_weight="1" />
 
-    <!--LinearLayout
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:orientation="horizontal"
-        android:id="@+id/linearLayout2"
-        android:background="@drawable/view_background"
-        android:layout_margin ="15sp"
-        android:padding="10sp">
-
-        <ImageView
-            android:id="@+id/menu"
-            android:layout_width="25sp"
-            android:layout_height="25sp"
-            android:src="@drawable/menu"
-            android:layout_weight="1"/>
-
-    </LinearLayout-->
-
     <LinearLayout
         android:id="@+id/menuButtonLayout"
         android:background="@android:color/transparent"
@@ -103,7 +84,7 @@
         android:gravity="center"
         android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"
-        android:layout_marginBottom="60sp">
+        android:layout_marginBottom="30sp">
 
         <ImageView
             android:id="@+id/menuFlowerButton"
@@ -111,7 +92,7 @@
             android:layout_height="50sp"
             android:layout_weight="1"
             android:background="@drawable/view_background"
-            app:srcCompat="@android:drawable/btn_star_big_on" />
+            app:srcCompat="@drawable/flower" />
 
         <ImageView
             android:id="@+id/menuASkillButton"
@@ -120,7 +101,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="5sp"
             android:background="@drawable/view_background"
-            app:srcCompat="@android:drawable/stat_sys_vp_phone_call" />
+            app:srcCompat="@drawable/skill_use" />
 
         <ImageView
             android:id="@+id/menuPSkillButton"
@@ -129,7 +110,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="5sp"
             android:background="@drawable/view_background"
-            app:srcCompat="@android:drawable/stat_sys_phone_call_forward" />
+            app:srcCompat="@drawable/dry_flower" />
 
         <ImageView
             android:id="@+id/menuOverlayButton"
@@ -138,7 +119,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="5sp"
             android:background="@drawable/view_background"
-            app:srcCompat="@android:drawable/ic_menu_report_image" />
+            app:srcCompat="@drawable/overlay" />
 
         <ImageView
             android:id="@+id/menuStoreButton"
@@ -147,7 +128,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="5sp"
             android:background="@drawable/view_background"
-            app:srcCompat="@android:drawable/ic_menu_always_landscape_portrait" />
+            app:srcCompat="@drawable/store" />
 
         <!--ImageView
             android:id="@+id/menuDownButton"

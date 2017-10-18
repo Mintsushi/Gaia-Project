@@ -24,7 +24,7 @@ public class SkillData {
     private ConcurrentHashMap<Integer, Integer> cost = new ConcurrentHashMap<>();
     private int skillEffect = 0;
     private int buyType;
-    private Boolean skillBuy;
+    private Boolean skillBuy = false;
 
     public SkillData() {
         cost.put(0,0);
