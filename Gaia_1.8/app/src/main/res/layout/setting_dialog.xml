@@ -35,7 +35,7 @@
                 <LinearLayout
                     android:id="@+id/linearLayout"
                     android:layout_width="300dp"
-                    android:layout_height="430dp"
+                    android:layout_height="450dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/dialog_back_corner"
                     android:orientation="vertical">
@@ -101,6 +101,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="name" />
+
                             </LinearLayout>
 
                         </LinearLayout>
@@ -111,7 +112,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="60dp"
                         android:layout_marginRight="60dp"
-                        android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
                         <Switch
@@ -153,6 +153,26 @@
                             android:layout_marginTop="10dp"
                             android:text="Swhitch5"
                             android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:orientation="vertical">
+
+                            <SeekBar
+                                android:id="@+id/hpGaugeBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/hpGaugeText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:text="40 / 100" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
 

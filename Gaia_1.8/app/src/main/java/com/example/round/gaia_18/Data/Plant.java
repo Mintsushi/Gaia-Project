@@ -25,9 +25,7 @@ import android.widget.Toast;
 import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
-import com.example.round.gaia_18.model.Main;
 
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -647,21 +645,21 @@ public class Plant{
 
         // 물 주기 이밴트
         protected void waterUpdate() {
-//            Runnable updater = new Runnable() {
-//                public void run() {
-//                    if(getWaterTime() <= getTimes()){
-//                        // 스테이트 업데이트
-//                        Log.i("Timer","waterUpdate State UP");
-//                        setWaterState(1);
-//                        getPlantWater().setVisibility(View.VISIBLE);
-//                        setTimes(0);
-//                    }
-//                    else{
-//                        setTimes(1);
-//                    }
-//                }
-//            };
-//            handler.post(updater);
+            Runnable updater = new Runnable() {
+                public void run() {
+                    if(getWaterTime() <= getTimes()){
+                        // 스테이트 업데이트
+                        Log.i("Timer","waterUpdate State UP");
+                        setWaterState(1);
+                        getPlantWater().setVisibility(View.VISIBLE);
+                        setTimes(0);
+                    }
+                    else{
+                        setTimes(1);
+                    }
+                }
+            };
+            handler.post(updater);
         }
 
         // 물 패널티 이밴트

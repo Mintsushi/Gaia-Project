@@ -50,6 +50,9 @@ public class DataList {
     // WATER 물주기 정보
     private static ArrayList<Water> waters = new ArrayList<>();
 
+
+    // 설정정보
+    public static GameSetting settings;
     //식물에 따른 클릭 수
     public static ConcurrentHashMap<Integer, Integer> clickScore = new ConcurrentHashMap<>();
     //식물에 따른 클릭 수 + 날씨에 따른 식물의 클릭 수 -> 실제 클릭 수
@@ -166,7 +169,7 @@ public class DataList {
     }
 
     public static ArrayList<StoreProduct> getMiniItemListProducts() {
-        ArrayList<StoreProduct> miniList = new ArrayList<>();;
+        ArrayList<StoreProduct> miniList = new ArrayList<>();
         miniList.add(storeProducts.get(1));
         miniList.add(storeProducts.get(2));
         miniList.add(storeProducts.get(3));
@@ -177,7 +180,7 @@ public class DataList {
         return storeProducts;
     }
 
-//    public static void setStoreProducts(ArrayList<StoreProduct> storeProducts) {
+    //    public static void setStoreProducts(ArrayList<StoreProduct> storeProducts) {
 //        DataList.storeProducts = storeProducts;
 //    }
 //
@@ -185,7 +188,7 @@ public class DataList {
     public void setItemNumber(int id, int num){
         this.storeProducts.get(id).setItemNumber(num);
     }
-//
+    //
     public void setIncItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
         this.storeProducts.get(id).setItemNumber(temp + num);
@@ -199,6 +202,7 @@ public class DataList {
     public int getItemNumber(int id){
         return this.storeProducts.get(id).getItemNumber();
     }
+
 
     public static ArrayList<Water> getWaters() {
         return waters;
@@ -553,32 +557,32 @@ public class DataList {
         if(score == 0){
             return;
         }
-            if (hashMap.containsKey(type)) {
-                if (hashMap.get(type) + score > 999) {
-                    while (true) {
-                        int mok = (hashMap.get(type) + score) / 1000;
-                        int nameogi = (hashMap.get(type) + score) % 1000;
+        if (hashMap.containsKey(type)) {
+            if (hashMap.get(type) + score > 999) {
+                while (true) {
+                    int mok = (hashMap.get(type) + score) / 1000;
+                    int nameogi = (hashMap.get(type) + score) % 1000;
 
-                        hashMap.put(type, nameogi);
-                        type ++;
-                        if (hashMap.containsKey(type)) {
-                            int newScore = hashMap.get(type) + mok;
-                            if (newScore <= 999) {
-                                hashMap.put(type, newScore);
-                                return;
-                            }
-                        } else {
-                            hashMap.put(type, mok);
+                    hashMap.put(type, nameogi);
+                    type ++;
+                    if (hashMap.containsKey(type)) {
+                        int newScore = hashMap.get(type) + mok;
+                        if (newScore <= 999) {
+                            hashMap.put(type, newScore);
                             return;
                         }
+                    } else {
+                        hashMap.put(type, mok);
+                        return;
                     }
-                } else {
-                    int newScore = hashMap.get(type) + score;
-                    hashMap.put(type, newScore);
                 }
             } else {
-                hashMap.put(type, score);
+                int newScore = hashMap.get(type) + score;
+                hashMap.put(type, newScore);
             }
+        } else {
+            hashMap.put(type, score);
+        }
     }
 
     public void windowClick(){
@@ -1133,4 +1137,20 @@ public class DataList {
             plusScore(key,value,overlayClickScore);
         }
     }
+
+
+    public void setSetting(GameSetting set){
+        this.settings = set;
+        this.settings.setAlarm(set.getAlarm());
+        this.settings.setHpAparm(set.getHpAparm());
+        this.settings.setHpAparmGauge(set.getHpAparmGauge());
+        this.settings.setSound(set.getSound());
+        this.settings.setVibration(set.getVibration());
+        this.settings.setWeather(set.getWeather());
+    }
+
+    public GameSetting getSetting(){
+        return this.settings;
+    }
+
 }

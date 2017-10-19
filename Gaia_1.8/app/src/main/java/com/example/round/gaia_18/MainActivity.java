@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -14,17 +13,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.round.gaia_18.Data.Flower;
+import com.example.round.gaia_18.Data.GameSetting;
 import com.example.round.gaia_18.Data.OverlayPlant;
 import com.example.round.gaia_18.Data.Plant;
 import com.example.round.gaia_18.Dialog.Setting;
@@ -489,6 +487,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+
+        dataList.setSetting(new GameSetting(1,1,1,1,1,80));
 
         ArrayList<Plant> plants = new ArrayList<>();
 

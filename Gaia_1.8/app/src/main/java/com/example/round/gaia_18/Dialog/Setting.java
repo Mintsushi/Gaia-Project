@@ -13,15 +13,17 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.round.gaia_18.Data.GameSetting;
 import com.example.round.gaia_18.OverlayService;
 import com.example.round.gaia_18.R;
 
 import static com.example.round.gaia_18.MainActivity.weatherOnOff;
-import static com.example.round.gaia_18.OverlayService.settingVar;
+import static com.example.round.gaia_18.OverlayService.dataList;
 
 public class Setting extends Dialog {
 
@@ -31,13 +33,16 @@ public class Setting extends Dialog {
     }
     private ImageButton back;
     private Button save, load, logout;
-    private TextView nameText, emailText;
+    private TextView nameText, emailText, hpGaugeText;
+    private SeekBar hpGaugeBar;
     private ImageView logtypeImage;
     // 이름 사용시 수정할 것
     private Switch switch1,switch2,switch3,switch4,switch5;
+    private GameSetting setting = dataList.getSetting();
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,57 +114,80 @@ public class Setting extends Dialog {
 
         });
 
+        hpGaugeText = (TextView)findViewById(R.id.hpGaugeText);
+        hpGaugeText.setText(""+setting.getHpAparmGauge() + " / 100");
+        hpGaugeBar = (SeekBar)findViewById(R.id.hpGaugeBar);
+        hpGaugeBar.setMax(100);
+        hpGaugeBar.setProgress(setting.getHpAparmGauge());
+        hpGaugeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                hpGaugeText.setText(""+setting.getHpAparmGauge() + " / 100");
+            }
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                hpGaugeText.setText(""+setting.getHpAparmGauge() + " / 100");
+            }
+
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setting.setHpAparmGauge(progress);
+                hpGaugeText.setText(""+setting.getHpAparmGauge() + " / 100");
+            }
+        });
+
+
         switch1 = (Switch)findViewById(R.id.switch1);
-        if(settingVar[0]==1){switch1.setChecked(true);}
+        if(setting.getVibration()==1){switch1.setChecked(true);}
         switch1.setText("진동");
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(getContext().getApplicationContext(), "On", Toast.LENGTH_SHORT).show();
-                    settingVar[0]=1;
+                    setting.setVibration(1);
                 } else {
                     Toast.makeText(getContext().getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-                    settingVar[0]=0;
+                    setting.setVibration(0);
                 }
             }
         });
 
         switch2 = (Switch)findViewById(R.id.switch2);
-        if(settingVar[1]==1){switch2.setChecked(true);}
+        if(setting.getSound()==1){switch2.setChecked(true);}
         switch2.setText("소리");
         switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(getContext().getApplicationContext(), "On", Toast.LENGTH_SHORT).show();
-                    settingVar[1]=1;
+
+                    setting.setSound(1);
                 } else {
+
                     Toast.makeText(getContext().getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-                    settingVar[1]=0;
+                    setting.setSound(0);
                 }
             }
         });
 
         switch3 = (Switch)findViewById(R.id.switch3);
 
-        if(settingVar[2]==1){switch3.setChecked(true);}
+        if(setting.getAlarm()==1){switch3.setChecked(true);}
         switch3.setText("알람");
         switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(getContext().getApplicationContext(), "On", Toast.LENGTH_SHORT).show();
-                    settingVar[2]=1;
+                    setting.setAlarm(1);
                 } else {
                     Toast.makeText(getContext().getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-                    settingVar[2]=0;
+                    setting.setAlarm(0);
                 }
             }
         });
 
         switch4 = (Switch)findViewById(R.id.switch4);
-        if(settingVar[3]==1){switch4.setChecked(true);}
+        if( setting.getWeather()==1){switch4.setChecked(true);}
         switch4.setText("날씨알림");
         switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -168,18 +196,27 @@ public class Setting extends Dialog {
                     weatherOnOff(true);
                     Toast.makeText(getContext().getApplicationContext(), "On", Toast.LENGTH_SHORT).show();
 
-                    settingVar[3]=1;
+                    setting.setWeather(1);
                 } else {
                     weatherOnOff(false);
                     Toast.makeText(getContext().getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
 
-                    settingVar[3]=0;
+                    setting.setWeather(0);
                 }
             }
         });
 
         switch5 = (Switch)findViewById(R.id.switch5);
-        if(settingVar[4]==1){switch5.setChecked(true);}
+        if(setting.getHpAparm()==1){
+            switch5.setChecked(true);
+            hpGaugeText.setVisibility(View.VISIBLE);
+            hpGaugeBar.setVisibility(View.VISIBLE);
+        }
+        else {
+            hpGaugeText.setVisibility(View.INVISIBLE);
+            hpGaugeBar.setVisibility(View.INVISIBLE);
+        }
+
         switch5.setText("HP경고");
         switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -187,11 +224,15 @@ public class Setting extends Dialog {
                 if (isChecked == true){
                     OverlayService.nitificationOnOff(true);
                     Toast.makeText(getContext().getApplicationContext(), "On", Toast.LENGTH_SHORT).show();
-                    settingVar[4]=1;
+                    setting.setHpAparm(1);
+                    hpGaugeText.setVisibility(View.VISIBLE);
+                    hpGaugeBar.setVisibility(View.VISIBLE);
                 } else {
                     OverlayService.nitificationOnOff(false);
                     Toast.makeText(getContext().getApplicationContext(), "Off", Toast.LENGTH_SHORT).show();
-                    settingVar[4]=0;
+                    setting.setHpAparm(0);
+                    hpGaugeText.setVisibility(View.INVISIBLE);
+                    hpGaugeBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
