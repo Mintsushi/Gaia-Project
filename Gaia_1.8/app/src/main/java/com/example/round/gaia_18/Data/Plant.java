@@ -56,8 +56,9 @@ public class Plant{
     private ImageButton itemListRemoveButton;
     private ImageView plantWater;
     private final Water water;
+    private int hpWarning = 0;
 
-    private Timemer timemer;
+//    private Timemer timemer;
     //state == 0 : overlayview에 없음
     //state == 1 : overlayview에 있음
     private int state;
@@ -88,7 +89,8 @@ public class Plant{
         this.hp = hp;
         this.waterState = 0;
         this.water = DataList.getWaters().get(plantNo);
-        this.timemer = new Timemer(this.water.getWaterPeriod(),this.water.getWaterPenaltyTime());
+        handlerStart();
+//        this.timemer = new Timemer(this.water.getWaterPeriod(),this.water.getWaterPenaltyTime());
     }
 
     public void replacePlant(){
@@ -101,7 +103,7 @@ public class Plant{
 
     public void drawPlant(RelativeLayout relativeLayout){
 
-        setWaterState(this.waterState);
+//        setWaterState(this.waterState);
         relativeLayout.addView(plantLayout,plantLayout.getLayoutParams());
 
     }
@@ -156,11 +158,12 @@ public class Plant{
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         plantLayout.addView(linearLayout);
 
-        setWaterImage();
-        if(this.hp < 100){
-            setHPImage();
-            setSaveImage();
-        }
+//        setWaterImage();
+//        if(this.hp < 100){
+//            setHPImage();
+//            setSaveImage();
+//        }
+
         LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(
                 200, 250);
         plantLayout.addView(plant, relParams);
@@ -383,26 +386,27 @@ public class Plant{
         plantWater.setTag(R.drawable.reward5);
         loadImage(plantWater,R.drawable.reward5);
 
-//        plantWater.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 물의 개수가 물을 줄수있을만큼 있을때.
-//                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
-//                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
-//                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
-//                    setWaterState(0);
-//                    getPlantWater().setVisibility(View.INVISIBLE);
-//                }else{
-//                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
-//
-//                }
-//            }
-//        });
+        plantWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 물의 개수가 물을 줄수있을만큼 있을때.
+                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
+                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
+                    setWaterState(0);
+                    timer.cancel();
+                    handlerStart();
+                }else{
+                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
 
         // 위치세팅
-        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(60, 60);
         waterParams.gravity = Gravity.CENTER;
-        waterParams.setMargins(0,0,20,0);
+        waterParams.setMargins(0,0,10,0);
         linearLayout.addView(plantWater,waterParams);
     }
 
@@ -466,6 +470,14 @@ public class Plant{
             //사망 이미지로 update
             this.hp = 0;
         }
+
+        if(this.hp<dataList.getSetting().getHpAparmGauge()){
+            if(hpWarning == 0) {
+                setHPImage();
+                hpWarning = 1;
+            }
+        }
+
         this.plantHP.setProgress(this.hp );
         if(dataList.flowerAdapter != null)
             dataList.flowerAdapter.notifyDataSetChanged();
@@ -478,14 +490,17 @@ public class Plant{
         hpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                linearLayout.removeView(hpButton);
                 hp += 15;
+                if(hp > dataList.getSetting().getHpAparm()){
+                    linearLayout.removeView(hpButton);
+                }
                 if(hp > 100) hp = 100;
+                hpWarning = 0;
             }
         });
 
         // 위치세팅
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(60, 60);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,0,10,0);
         linearLayout.addView(hpButton,params);
@@ -499,34 +514,34 @@ public class Plant{
             @Override
             public void onClick(View view) {
                 linearLayout.removeView(saveButton);
-//                hp += 10;
+                hp = 100;
             }
         });
 
         // 위치세팅
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(60, 60);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,0,10,0);
         linearLayout.addView(saveButton,params);
     }
-
-    public void desHp(int minusHp) {
-        this.hp -= minusHp;
-        if(this.hp <= 0){
-            //식물 죽음
-            //click 점수에서 제외
-            //사망 이미지로 update
-            this.hp = 0;
-        }
-
-        if(this.hp < 100){
-            setHPImage();
-        }
-
-        this.plantHP.setProgress(this.hp );
-        if(dataList.flowerAdapter != null)
-            dataList.flowerAdapter.notifyDataSetChanged();
-    }
+//
+//    public void desHp(int minusHp) {
+//        this.hp -= minusHp;
+//        if(this.hp <= 0){
+//            //식물 죽음
+//            //click 점수에서 제외
+//            //사망 이미지로 update
+//            this.hp = 0;
+//        }
+//
+//        if(this.hp < 100){
+//            setHPImage();
+//        }
+//
+//        this.plantHP.setProgress(this.hp );
+//        if(dataList.flowerAdapter != null)
+//            dataList.flowerAdapter.notifyDataSetChanged();
+//    }
 
     public static int getMaxHp() {
         return MAX_HP;
@@ -580,111 +595,174 @@ public class Plant{
         this.timer = timer;
     }
 
-// 물주기 타이머
-    class Timemer {
-        Timer timer;
-        private int type=0;
-        private TimerTask second;
-        private int times;
-        private int waterTime;
-        private int penaltytime;
+    public void handlerStart(){
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                setWaterState(1);
+//                waterTimer();
+//                Toast.makeText(MainActivity.context,"Show Water",Toast.LENGTH_LONG).show();
+//                handler.removeCallbacks(this);
+//            }
+//        },water.getWaterPeriod()*1000);
 
-        Timemer(int waterTime, int penaltytime){
-            this.waterTime = waterTime;
-            this.penaltytime = penaltytime;
-            this.times = 0;
-            handlerStart();
-        }
-        public int getPenaltytime() {
-            return penaltytime;
-        }
-        public int getWaterTime() {
-            return waterTime;
-        }
-        public int getType() {
-            return type;
-        }
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public int getTimes() {
-            return times;
-        }
-        public void setTimes(int times) {
-            if(times == 0){
-                this.times = 0;
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setWaterState(1);
+                waterTimer();
+                Toast.makeText(MainActivity.context,"Show Water",Toast.LENGTH_LONG).show();
+                handler.removeCallbacks(this);
             }
-            else{
-                this.times += times;
-            }
-        }
-
-        private final Handler handler = new Handler();
-
-    // 메인타이머
-        public void handlerStart(){
-            timer = new Timer();
-            second = new TimerTask() {
-                @Override
-                public void run() {
-
-                    Log.i("Timer","if");
-                    if(getWaterState()==1){
-                        Log.i("Timer","penaltyUpdate");
-                        penaltyUpdate();
-                    }
-                    else{
-                        Log.i("Timer","waterUpdate");
-                        waterUpdate();
-                    }
-                }
-            };
-            timer.schedule(second, 0, 1000);
-        }
-
-        // 물 주기 이밴트
-        protected void waterUpdate() {
-            Runnable updater = new Runnable() {
-                public void run() {
-                    if(getWaterTime() <= getTimes()){
-                        // 스테이트 업데이트
-                        Log.i("Timer","waterUpdate State UP");
-                        setWaterState(1);
-                        getPlantWater().setVisibility(View.VISIBLE);
-                        setTimes(0);
-                    }
-                    else{
-                        setTimes(1);
-                    }
-                }
-            };
-            handler.post(updater);
-        }
-
-        // 물 패널티 이밴트
-        protected void penaltyUpdate() {
-            Runnable updater = new Runnable() {
-                public void run() {
-                    if(getPenaltytime() <= getTimes()){
-                        // 체력감소
-                        desHp(1);
-                        Log.i("Timer","penaltyUpdate Hp down");
-                        setTimes(0);
-                    }
-                    else{
-                        setTimes(1);
-                    }
-                }
-            };
-            handler.post(updater);
-        }
-
-        public void handleEnd(){
-            timer.cancel();
-            timer = null;
-        }
+        },10000);
     }
+
+    private void waterTimer(){
+
+        timer = new Timer();
+        TimerTask second = new TimerTask() {
+            @Override
+            public void run() {
+                Log.i("hp", "HP is decrease : "+water.getWaterPenalty());
+                decreadHp();
+                if(hp <= 0) timer.cancel();
+            }
+        };
+
+        timer.schedule(second,0, water.getWaterPenaltyTime()*1000);
+    }
+
+    private final Handler handler = new Handler();
+
+    private void decreadHp() {
+        Runnable updater = new Runnable() {
+            public void run() {
+               setHp(water.getWaterPenalty()*-1);
+            }
+        };
+
+        handler.post(updater);
+    }
+
+//
+//// 물주기 타이머
+//    class Timemer {
+//        Timer timer;
+//        private int type=0;
+//        private TimerTask second;
+////        private int times;
+//        private int waterTime;
+//        private int penaltytime;
+//
+//        Timemer(int waterTime, int penaltytime){
+//            this.waterTime = waterTime;
+//            this.penaltytime = penaltytime;
+////            this.times = 0;
+//            handlerStart();
+//        }
+////        public int getPenaltytime() {
+////            return penaltytime;
+////        }
+////        public int getWaterTime() {
+////            return waterTime;
+////        }
+////        public int getType() {
+////            return type;
+////        }
+////        public void setType(int type) {
+////            this.type = type;
+////        }
+////
+////        public int getTimes() {
+////            return times;
+////        }
+////        public void setTimes(int times) {
+////            if(times == 0){
+////                this.times = 0;
+////            }
+////            else{
+////                this.times += times;
+////            }
+////        }
+//
+//        private final Handler handler = new Handler();
+//
+//    // 메인타이머
+//        public void handlerStart(int waterTime){
+////            timer = new Timer();
+////            second = new TimerTask() {
+////                @Override
+////                public void run() {
+////                    setWaterState(1);
+////                }
+////            };
+////            timer.schedule(second, 0, 1000);
+////
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    setWaterState(1);
+//                    waterTimer();
+//                    handler.removeCallbacks(this);
+//                }
+//            },waterTime*1000);
+//        }
+//
+//        private void waterTimer(){
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    setHp(-1);
+//                }
+//            },penaltytime*1000);
+//        }
+//
+//        // 물 주기 이밴트
+//        protected void waterUpdate() {
+//            Runnable updater = new Runnable() {
+//                public void run() {
+//                    if(getWaterTime() <= getTimes()){
+//                        // 스테이트 업데이트
+//                        Log.i("Timer","waterUpdate State UP");
+//                        setWaterState(1);
+////                        getPlantWater().setVisibility(View.VISIBLE);
+//                        setTimes(0);
+//                    }
+//                    else{
+//                        setTimes(1);
+//                    }
+//                }
+//            };
+//            handler.post(updater);
+//        }
+//
+//        // 물 패널티 이밴트
+//        protected void penaltyUpdate() {
+//            Runnable updater = new Runnable() {
+//                public void run() {
+//                    if(getPenaltytime() <= getTimes()){
+//                        // 체력감소
+////                        desHp(1);
+//                        Log.i("Timer","penaltyUpdate Hp down");
+//                        setTimes(0);
+//                    }
+//                    else{
+//                        setTimes(1);
+//                    }
+//                }
+//            };
+//            handler.post(updater);
+//        }
+//
+//        public void handleEnd(){
+//            timer.cancel();
+//            timer = null;
+//        }
+//    }
+
     private void loadImage(ImageView image,int resourceId){
         if(readBitmapInfo(resourceId)*10 > MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");

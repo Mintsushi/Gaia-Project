@@ -493,9 +493,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Plant> plants = new ArrayList<>();
 
         createPlant(0,399,40,plants);
-        createPlant(1,250,100,plants);
-        createPlant(2,140,60,plants);
-        createPlant(3,3,10,plants);
+//        createPlant(1,250,100,plants);
+//        createPlant(2,140,60,plants);
+//        createPlant(3,3,10,plants);
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
         dataList.compareFlowers();

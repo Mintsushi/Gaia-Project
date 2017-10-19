@@ -244,15 +244,17 @@ public class MenuSkill extends Fragment {
                                         SkillInfo skillInfo = dataList.getSkillInfos().get(id);
                                         SkillData skillData = dataList.getSkillDatas().get(id);
 
-                                        skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                        mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
 
-                                        skillInfo.setSkillUseState(true);
-                                        //Skill Cool Time동안은 사용 불가능
-                                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+                                        if(useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect())){
 
-                                        useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
+                                            skillViewHolder.coolTime.setVisibility(View.VISIBLE);
+                                            mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
+                                            skillInfo.setSkillUseState(true);
+                                            //Skill Cool Time동안은 사용 불가능
+                                            skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                                            skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+
+                                        }
 
                                         // 수식 에러로 터져서 주석처리
                                         // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
@@ -339,7 +341,7 @@ public class MenuSkill extends Fragment {
         }
     }
 
-    private void useSkill(int skillType, int effect){
+    private Boolean useSkill(int skillType, int effect){
 
         switch (skillType){
 
@@ -374,9 +376,12 @@ public class MenuSkill extends Fragment {
                 }
                 else{
                     Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
                 break;
         }
+
+        return true;
     }
 
     //게임 재화로 구매
