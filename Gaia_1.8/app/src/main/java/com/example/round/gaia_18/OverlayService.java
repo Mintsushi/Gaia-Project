@@ -13,6 +13,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -465,6 +466,55 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent){
+
+        Log.i("onTouch","motion : "+motionEvent.toString());
+        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+            moving = false;
+
+            float x = motionEvent.getRawX();
+            float y = motionEvent.getRawY();
+
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+
+            originalX = location[0];
+            originalY = location[1];
+            offsetX = originalX - x;
+            offsetY = originalY - y;
+        }
+        else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+            int[] topLeftLocationOnScreen = new int[2];
+            toLeftView.getLocationOnScreen(topLeftLocationOnScreen);
+
+            float x = motionEvent.getRawX();
+            float y = motionEvent.getRawY();
+
+            WindowManager.LayoutParams params = (WindowManager.LayoutParams)view.getLayoutParams();
+
+            int newX = (int)(offsetX + x);
+            int newY = (int)(offsetY + y);
+
+            if (Math.abs(newX - originalX) < 1 && Math.abs(newY - originalY) < 1 && !moving) {
+                return false;
+            }
+
+            params.x = newX - (topLeftLocationOnScreen[0]);
+            params.y = newY - (topLeftLocationOnScreen[1]);
+
+            mWindowManager.updateViewLayout(view, params);
+            moving = true;
+        }
+        else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+            if(moving){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private class OverlaySkillViewHolder{
         ImageView skillImage;
         TextView coolTime;
@@ -634,6 +684,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
         for(int i =0 ;i<plants.size();i++){
             if(plants.get(i).getPlant().getPlantNo() == id){
                 relativeLayout.addView(plants.get(i).getPlant().getPlantLayout());
+                plants.get(i).getPlant().repaintItem(plants.get(i).getItemLayout());
                 minusOverlayClickScore(plants.get(i).getPlant());
                 plants.remove(i);
             }
@@ -672,12 +723,13 @@ public class OverlayService extends Service implements View.OnClickListener,View
             int[] location = new int[2];
             exPlant.getLocationOnScreen(location);
 
-            RelativeLayout overlayPlant = new RelativeLayout(this);
+            LinearLayout overlayPlant = new LinearLayout(this);
+            overlayPlant.setOrientation(LinearLayout.VERTICAL);
             //overlayPlant.setImageResource(plant.getFlower().getImage());
             //overlayPlant.setImageResource(R.drawable.imageflower);
 
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                    exPlant.getWidth(), exPlant.getHeight(),
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
                     WindowManager.LayoutParams.TYPE_TOAST,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
@@ -688,66 +740,157 @@ public class OverlayService extends Service implements View.OnClickListener,View
             params.x = location[0];
             params.y = location[1];
 
-            overlayPlant.setOnClickListener(this);
-            overlayPlant.setOnTouchListener(this);
+//            overlayPlant.setOnClickListener(this);
+//            overlayPlant.setOnTouchListener(this);
 
             // 식물 이미지
-           ImageView plantImage = new ImageView(MainActivity.context);
+           ImageView plantImage = new ImageView(this);
             //plant.setImageResource(flower.getImage());
 //            plantImage.setImageResource(R.drawable.imageflower);
             int resourceId = MainActivity.context.getResources().getIdentifier("flower" + plant.getPlantNo()+plant.getLevelType(), "drawable", MainActivity.context.getPackageName());
             loadImage(plantImage,resourceId);
-            //plant.setTag(flower.getImage());
 
-            RelativeLayout.LayoutParams relParams = new RelativeLayout.LayoutParams(300,300);
-            relParams.topMargin = 50;
+            LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(exPlant.getWidth()-50,exPlant.getHeight()-50);
+//            overlayPlant.addView(plantImage, relParams);
+
+            //plant.setTag(flower.getImage());
+//
+            int childView = plant.getLinearLayout().getChildCount();
+
+            LinearLayout itemLayout = new LinearLayout(this);
+            itemLayout.setOrientation(LinearLayout.HORIZONTAL);
+            overlayPlant.addView(itemLayout);
             overlayPlant.addView(plantImage, relParams);
 
-            ImageView plantWater = new ImageView(MainActivity.context);
-            plantWater.setImageResource(R.drawable.reward4);
-            plantWater.setVisibility(View.INVISIBLE);
-            plantWater.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // 물의 개수가 물을 줄수있을만큼 있을때.
-                    if( dataList.getItemNumber(3) >= plant.getWaterInfo().getWaterNeedWaterNum()) {
-                        Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
-                        dataList.setDesItemNumber(3, plant.getWaterInfo().getWaterNeedWaterNum());
-                        plant.setWaterState(0);
-                        plant.getPlantWater().setVisibility(View.INVISIBLE);
-                    }else{
-                        Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+            for(int i =0 ;i<childView;i++){
+                View v = plant.getLinearLayout().getChildAt(i);
 
-                    }
-                }
-            });
-            // 위치세팅
-            RelativeLayout.LayoutParams waterParams = new RelativeLayout.LayoutParams(100, 100);
-            int[] waterLocation = new int[2];
-            overlayPlant.getLocationOnScreen(waterLocation);
-            waterParams.leftMargin =  params.x+100;
-            waterParams.topMargin = params.y+0;
-            overlayPlant.addView(plantWater,waterParams);
+                ImageView item = new ImageView(this);
+                item.setLayoutParams(v.getLayoutParams());
+                item.setImageResource((int)v.getTag());
+                item.setTag((int)v.getTag());
+                itemLayout.addView(item);
+            }
+//            for ( int i =0 ;i<childView;i++){
+//                View v = plant.getLinearLayout().getChildAt(i);
+//                if((int)v.getTag() == 0){
+//                    //물주기 버튼
+//                    ImageView plantWater = new ImageView(MainActivity.context);
+//                    plantWater.setTag(0);
+//                    loadImage(plantWater,R.drawable.reward5);
+
+//        plantWater.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 물의 개수가 물을 줄수있을만큼 있을때.
+//                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
+//                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+//                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
+//                    setWaterState(0);
+//                    getPlantWater().setVisibility(View.INVISIBLE);
+//                }else{
+//                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+//
+//                }
+//            }
+//        });
+
+//                    // 위치세팅
+//                    LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(60, 60);
+//                    waterParams.gravity = Gravity.CENTER;
+//                    waterParams.setMargins(0,0,20,0);
+//                    itemLayout.addView(plantWater,waterParams);
+//                }else if((int)v.getTag() == 1){
+//                    final ImageView hpButton = new ImageView(MainActivity.context);
+//                    loadImage(hpButton,R.drawable.reward4);
+//                    hpButton.setTag(1);
+//        hpButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                linearLayout.removeView(hpButton);
+//                hp += 10;
+//            }
+//        });
+
+//                    // 위치세팅
+//                    LinearLayout.LayoutParams HPparams = new LinearLayout.LayoutParams(60, 60);
+//                    HPparams.gravity = Gravity.CENTER;
+//                    HPparams.setMargins(0,0,10,0);
+//                    itemLayout.addView(hpButton,HPparams);
+//                }else{
+//                    final ImageView saveButton = new ImageView(MainActivity.context);
+//                    loadImage(saveButton,R.drawable.item3);
+//                    saveButton.setTag(2);
+//        hpButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                linearLayout.removeView(hpButton);
+//                hp += 10;
+//            }
+//        });
+
+//                    // 위치세팅
+//                    LinearLayout.LayoutParams Saveparams = new LinearLayout.LayoutParams(60, 60);
+//                    Saveparams.gravity = Gravity.CENTER;
+//                    Saveparams.setMargins(0,0,10,0);
+//                    itemLayout.addView(saveButton,Saveparams);
+//                }
+//                itemLayout.addView(v,v.getLayoutParams());
+//            }
+
+//            ImageView plantWater = new ImageView(MainActivity.context);
+//            plantWater.setImageResource(R.drawable.reward4);
+//            plantWater.setVisibility(View.INVISIBLE);
+//            plantWater.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    // 물의 개수가 물을 줄수있을만큼 있을때.
+//                    if( dataList.getItemNumber(3) >= plant.getWaterInfo().getWaterNeedWaterNum()) {
+//                        Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+//                        dataList.setDesItemNumber(3, plant.getWaterInfo().getWaterNeedWaterNum());
+//                        plant.setWaterState(0);
+//                        plant.getPlantWater().setVisibility(View.INVISIBLE);
+//                    }else{
+//                        Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+//
+//                    }
+//                }
+//            });
+//
+//            // 위치세팅
+//            RelativeLayout.LayoutParams waterParams = new RelativeLayout.LayoutParams(100, 100);
+//            int[] waterLocation = new int[2];
+//            overlayPlant.getLocationOnScreen(waterLocation);
+//            waterParams.leftMargin =  params.x+100;
+//            waterParams.topMargin = params.y+0;
+//            overlayPlant.addView(plantWater,waterParams);
 
 
-            // 체력바
-            ProgressBar plantHP = new ProgressBar(MainActivity.context, null, android.R.attr.progressBarStyleHorizontal);
-            plantHP.setMax(plant.getMaxHp()); // 최대체력 100
+//             체력바
+            ProgressBar plantHP = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+            plantHP.setMax(plant.MAX_HP); // 최대체력 100
             plantHP.setProgress(plant.getHp());
 
-            // 위치세팅
-            RelativeLayout.LayoutParams hpParams = new RelativeLayout.LayoutParams(200, 40);
-            int[] hpLocation1 = new int[2];
-            overlayPlant.getLocationOnScreen(hpLocation1);
-            hpParams.leftMargin = params.x+30;
-            hpParams.topMargin = params.y+350;
-            overlayPlant.addView(plantHP, hpParams);
+            Drawable myDrawable = this.getResources().getDrawable(R.drawable.hp_progress);
+            plantHP.setProgressDrawable(myDrawable);
+//            plantHP.setMax(plant.getMaxHp()); // 최대체력 100
+//            plantHP.setProgress(plant.getHp());
 
-            plant.setState(1);
-            Log.i("overlay","plusOverlayClickScore");
+//            // 위치세팅
+            LinearLayout.LayoutParams hpParams = new LinearLayout.LayoutParams(100, 15);
+            hpParams.gravity=Gravity.CENTER;
+//            int[] hpLocation1 = new int[2];
+//            overlayPlant.getLocationOnScreen(hpLocation1);
+//            hpParams.leftMargin = params.x+30;
+//            hpParams.topMargin = params.y+350;
+
+            overlayPlant.addView(plantHP,hpParams);
+//
+//            plant.setState(1);
+//            Log.i("overlay","plusOverlayClickScore");
             plusOverlayClickScore(plant);
 
-            dataList.addOverlayPlant(new OverlayPlant(plant, overlayPlant, params));
+            dataList.addOverlayPlant(new OverlayPlant(plant, itemLayout,plantImage,overlayPlant, params, toLeftView, mWindowManager));
 
             return true;
         }
@@ -820,54 +963,54 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 */
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent){
-
-        Log.i("onTouch","motion : "+motionEvent.toString());
-        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-            moving = false;
-
-            float x = motionEvent.getRawX();
-            float y = motionEvent.getRawY();
-
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-
-            originalX = location[0];
-            originalY = location[1];
-            offsetX = originalX - x;
-            offsetY = originalY - y;
-        }
-        else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
-            int[] topLeftLocationOnScreen = new int[2];
-            toLeftView.getLocationOnScreen(topLeftLocationOnScreen);
-
-            float x = motionEvent.getRawX();
-            float y = motionEvent.getRawY();
-
-            WindowManager.LayoutParams params = (WindowManager.LayoutParams)view.getLayoutParams();
-
-            int newX = (int)(offsetX + x);
-            int newY = (int)(offsetY + y);
-
-            if (Math.abs(newX - originalX) < 1 && Math.abs(newY - originalY) < 1 && !moving) {
-                return false;
-            }
-
-            params.x = newX - (topLeftLocationOnScreen[0]);
-            params.y = newY - (topLeftLocationOnScreen[1]);
-
-            mWindowManager.updateViewLayout(view, params);
-            moving = true;
-        }
-        else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-            if(moving){
-                return true;
-            }
-        }
-
-        return false;
-    }
+//    @Override
+//    public boolean onTouch(View view, MotionEvent motionEvent){
+//
+//        Log.i("onTouch","motion : "+motionEvent.toString());
+//        if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+//            moving = false;
+//
+//            float x = motionEvent.getRawX();
+//            float y = motionEvent.getRawY();
+//
+//            int[] location = new int[2];
+//            view.getLocationOnScreen(location);
+//
+//            originalX = location[0];
+//            originalY = location[1];
+//            offsetX = originalX - x;
+//            offsetY = originalY - y;
+//        }
+//        else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+//            int[] topLeftLocationOnScreen = new int[2];
+//            toLeftView.getLocationOnScreen(topLeftLocationOnScreen);
+//
+//            float x = motionEvent.getRawX();
+//            float y = motionEvent.getRawY();
+//
+//            WindowManager.LayoutParams params = (WindowManager.LayoutParams)view.getLayoutParams();
+//
+//            int newX = (int)(offsetX + x);
+//            int newY = (int)(offsetY + y);
+//
+//            if (Math.abs(newX - originalX) < 1 && Math.abs(newY - originalY) < 1 && !moving) {
+//                return false;
+//            }
+//
+//            params.x = newX - (topLeftLocationOnScreen[0]);
+//            params.y = newY - (topLeftLocationOnScreen[1]);
+//
+//            mWindowManager.updateViewLayout(view, params);
+//            moving = true;
+//        }
+//        else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+//            if(moving){
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
 
     @Override
     public void onClick(View view){

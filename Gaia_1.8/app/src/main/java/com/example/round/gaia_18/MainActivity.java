@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Overlay Service
     public static OverlayService mOverlayService;
     private Intent overlayService;
-
-    //ImageView(Plant) Moving
-    private static Boolean moving;
-    private static int originalXPos,originalYPos;
+//
+//    //ImageView(Plant) Moving
+//    private static Boolean moving;
+//    private static int originalXPos,originalYPos;
 
     //fragement View 상태
     // 0: close , 1: open
@@ -490,15 +490,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
         fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
-        Boolean already = false;
-        int plantNo = 0;
-        int plantLevel = 299;
-        int plantHP = 40;
+        ArrayList<Plant> plants = new ArrayList<>();
 
+        createPlant(0,399,40,plants);
+        createPlant(1,250,100,plants);
+        createPlant(2,140,60,plants);
+        createPlant(3,3,10,plants);
+        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
+        dataList.setPlants(plants);
+        dataList.compareFlowers();
+        dataList.setBuyPossible();
+    }
+
+    private void createPlant(int plantNo, int plantLevel, int plantHP, ArrayList<Plant> plants){
+        Boolean already = false;
         ArrayList<Flower> flowers = dataList.getFlowers();
         ArrayList<OverlayPlant> overlayPlants = dataList.getOverlayPlants();
-
-        ArrayList<Plant> plants = new ArrayList<>();
 
         for (int i = 0; i < overlayPlants.size(); i++) {
             if (overlayPlants.get(i).getPlant().getPlantNo() == plantNo) {
@@ -518,11 +525,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-
-        //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
-        dataList.setPlants(plants);
-        dataList.compareFlowers();
-        dataList.setBuyPossible();
     }
 
     private void addFlower(ArrayList<Plant> plants,int flowerNo, int level, int hp){
@@ -727,54 +729,54 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seed.setText(Integer.toString(score));
     }
 
-    public static View.OnTouchListener onTouch = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-
-                Log.i(TAG,"ImageVeiw Touch Down");
-
-                moving = false;
-
-                int [] location = new int[2];
-                view.getLocationOnScreen(location);
-
-                originalXPos = location[0];
-                originalYPos = location[1];
-            }
-            else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
-
-                moving = true;
-
-                Log.i(TAG,"ImageView Touch Move");
-
-                int x = (int)motionEvent.getRawX();
-                int y = (int)motionEvent.getRawY();
-
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
-
-                if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
-                    return false;
-                }
-
-                params.leftMargin = x-150;
-                params.topMargin = y-600;
-
-                relativeLayout.updateViewLayout(view,params);
-            }
-            else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
-
-                Log.i(TAG,"ImageView Touch Up");
-                moving = false;
-            }
-            return false;
-        }
-    };
-
-    public static View.OnLongClickListener onLongClick = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View view) {
-            return false;
-        }
-    };
+//    public static View.OnTouchListener onTouch = new View.OnTouchListener() {
+//        @Override
+//        public boolean onTouch(View view, MotionEvent motionEvent) {
+//            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+//
+//                Log.i(TAG,"ImageVeiw Touch Down");
+//
+//                moving = false;
+//
+//                int [] location = new int[2];
+//                view.getLocationOnScreen(location);
+//
+//                originalXPos = location[0];
+//                originalYPos = location[1];
+//            }
+//            else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+//
+//                moving = true;
+//
+//                Log.i(TAG,"ImageView Touch Move");
+//
+//                int x = (int)motionEvent.getRawX();
+//                int y = (int)motionEvent.getRawY();
+//
+//                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)view.getLayoutParams();
+//
+//                if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
+//                    return false;
+//                }
+//
+//                params.leftMargin = x-150;
+//                params.topMargin = y-600;
+//
+//                relativeLayout.updateViewLayout(view,params);
+//            }
+//            else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+//
+//                Log.i(TAG,"ImageView Touch Up");
+//                moving = false;
+//            }
+//            return false;
+//        }
+//    };
+//
+//    public static View.OnLongClickListener onLongClick = new View.OnLongClickListener() {
+//        @Override
+//        public boolean onLongClick(View view) {
+//            return false;
+//        }
+//    };
 }

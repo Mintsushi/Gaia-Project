@@ -223,6 +223,7 @@ public class MenuSkill extends Fragment {
                         if (skillInfo.getSkillUseState()) {
                             skillViewHolder.coolTime.setVisibility(View.VISIBLE);
                             skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                            skillViewHolder.skillUseButton.setOnClickListener(null);
                             skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
                         } else {
                             skillViewHolder.coolTime.setVisibility(View.INVISIBLE);

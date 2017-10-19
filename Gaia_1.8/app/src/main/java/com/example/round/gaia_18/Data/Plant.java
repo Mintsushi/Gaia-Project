@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
+import com.example.round.gaia_18.model.Main;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -36,7 +40,7 @@ import static com.example.round.gaia_18.OverlayService.dataList;
  */
 
 public class Plant{
-    private static final int MAX_HP = 100;
+    public static final int MAX_HP = 100;
 
     private int plantNo;
     private int level;
@@ -85,7 +89,6 @@ public class Plant{
         this.flower = flower;
         this.hp = hp;
         this.waterState = 0;
-
         this.water = DataList.getWaters().get(plantNo);
         this.timemer = new Timemer(this.water.getWaterPeriod(),this.water.getWaterPenaltyTime());
     }
@@ -99,106 +102,119 @@ public class Plant{
     }
 
     public void drawPlant(RelativeLayout relativeLayout){
+
+        setWaterState(this.waterState);
         relativeLayout.addView(plantLayout,plantLayout.getLayoutParams());
+
     }
 
     public void plantRepaint(final RelativeLayout relativeLayout){
 
         plantLayout = new LinearLayout(MainActivity.context);
         plantLayout.setOrientation(LinearLayout.VERTICAL);
+
+        //Plant / water / HP bar / item 들이 들어가는 layout setting
         RelativeLayout.LayoutParams plantLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         // 위치는 후에 Random 값으로 배치
         plantLayoutParams.leftMargin = 200;
         plantLayoutParams.topMargin = 1000;
-        plantLayout.setOnLongClickListener(MainActivity.onLongClick);
-        plantLayout.setOnTouchListener(MainActivity.onTouch);
+
+//        plantLayout.setOnLongClickListener(MainActivity.onLongClick);
+//        plantLayout.setOnTouchListener(MainActivity.onTouch);
+
         relativeLayout.addView(plantLayout, plantLayoutParams);
+
 
         // 식물 이미지
         plant = new ImageView(MainActivity.context);
-        //plant.setImageResource(flower.getImage());
         int resourceId = MainActivity.context.getResources().getIdentifier("flower" + flower.getFlowerNo()+levelType, "drawable", MainActivity.context.getPackageName());
         loadImage(plant,resourceId);
-        //plant.setTag(flower.getImage());
 
-        LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(250,250);
-        relParams.topMargin = 50;
+        plant.setOnLongClickListener(onLongClick);
+        plant.setOnTouchListener(onTouch);
+//        //물주기 버튼
+//        plantWater = new ImageView(MainActivity.context);
+//        loadImage(plantWater,R.drawable.reward5);
+//
+//        plantWater.setVisibility(View.INVISIBLE);
+//        plantWater.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 물의 개수가 물을 줄수있을만큼 있을때.
+//                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
+//                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+//                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
+//                    setWaterState(0);
+//                    getPlantWater().setVisibility(View.INVISIBLE);
+//                }else{
+//                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+//
+//                }
+//            }
+//        });
 
-        plantWater = new ImageView(MainActivity.context);
-        loadImage(plantWater,R.drawable.reward4);
+        //HP bar / 아이템 사용 button
+        linearLayout = new LinearLayout(MainActivity.context);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        plantLayout.addView(linearLayout);
 
-        plantWater.setVisibility(View.INVISIBLE);
-        plantWater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // 물의 개수가 물을 줄수있을만큼 있을때.
-                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
-                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
-                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
-                    setWaterState(0);
-                    getPlantWater().setVisibility(View.INVISIBLE);
-                }else{
-                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
-
-                }
-            }
-        });
-        // 위치세팅
-        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(100, 100);
-        int[] waterLocation = new int[2];
-//        plantLayout.getLocationOnScreen(waterLocation);
-//        waterParams.leftMargin = 100;
-//        waterParams.topMargin = 0;
-
-
-        plantLayout.addView(plantWater,waterParams);
+        setWaterImage();
+        if(this.hp < 100){
+            setHPImage();
+            setSaveImage();
+        }
+        LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(
+                200, 250);
         plantLayout.addView(plant, relParams);
-
 
         // 체력바
         plantHP = new ProgressBar(MainActivity.context, null, android.R.attr.progressBarStyleHorizontal);
         plantHP.setMax(MAX_HP); // 최대체력 100
         plantHP.setProgress(getHp());
 
-        linearLayout = new LinearLayout(MainActivity.context);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-        // 위치세팅
-        LinearLayout.LayoutParams hpParams = new LinearLayout.LayoutParams(200, 40);
-        int[] hpLocation1 = new int[2];
-        plantLayout.getLocationOnScreen(hpLocation1);
-//        hpParams.leftMargin = 30;
-//        hpParams.topMargin = 350;
-        linearLayout.addView(plantHP, hpParams);
-
-        // 아이템버튼
-        plantItemBtn = new ImageButton(MainActivity.context);
-        plantItemBtn.setImageResource(R.drawable.open);
-        plantItemBtn.setTag(0);
+        Drawable myDrawable = MainActivity.context.getResources().getDrawable(R.drawable.hp_progress);
+        plantHP.setProgressDrawable(myDrawable);
 
         // 위치세팅
-        final LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(60, 60);
-        int[] btnLocation = new int[2];
-        plantLayout.getLocationOnScreen(btnLocation);
-//        btnParams.leftMargin =230;
-//        btnParams.topMargin = 350;
-        linearLayout.addView(plantItemBtn,btnParams);
+        LinearLayout.LayoutParams hpParams = new LinearLayout.LayoutParams(
+                150, 15);
+        hpParams.gravity= Gravity.CENTER;
+//        int[] hpLocation1 = new int[2];
+//        plantLayout.getLocationOnScreen(hpLocation1);
+        plantLayout.addView(plantHP, hpParams);
 
-        plantItemBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //아이템 리스트 만들어 주는 함수
-                if((int)view.getTag() == 0){//close
-                    open_item_list();
-                    view.setTag(1);
-                }else{ //open
-                    linearLayout.removeView(itemList);
-                    view.setTag(0);
-                }
-            }
-        });
+//        // 아이템버튼
+//        plantItemBtn = new ImageButton(MainActivity.context);
+//        plantItemBtn.setImageResource(R.drawable.open);
+//        plantItemBtn.setTag(0);
 
-        plantLayout.addView(linearLayout);
+//        // 위치세팅
+//        final LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(60, 60);
+////        int[] btnLocation = new int[2];
+////        plantLayout.getLocationOnScreen(btnLocation);
+//////        btnParams.leftMargin =230;
+//////        btnParams.topMargin = 350;
+//        linearLayout.addView(plantItemBtn,btnParams);
+//
+//        plantItemBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //아이템 리스트 만들어 주는 함수
+//                if((int)view.getTag() == 0){//close
+//                    open_item_list();
+//                    view.setTag(1);
+//                }else{ //open
+//                    linearLayout.removeView(itemList);
+//                    view.setTag(0);
+//                }
+//            }
+//        });
+//
+//        plantLayout.addView(linearLayout);
     }
+
+    public LinearLayout getLinearLayout(){return linearLayout;}
+    public ProgressBar getProgressBar(){return this.plantHP;}
 
     public void open_item_list(){
         // 미니 아이템 리스트 구현
@@ -362,12 +378,44 @@ public class Plant{
         return waterState;
     }
 
+    private void setWaterImage(){
+
+        //물주기 버튼
+        plantWater = new ImageView(MainActivity.context);
+        plantWater.setTag(R.drawable.reward5);
+        loadImage(plantWater,R.drawable.reward5);
+
+//        plantWater.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // 물의 개수가 물을 줄수있을만큼 있을때.
+//                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
+//                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+//                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
+//                    setWaterState(0);
+//                    getPlantWater().setVisibility(View.INVISIBLE);
+//                }else{
+//                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+//
+//                }
+//            }
+//        });
+
+        // 위치세팅
+        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(40, 40);
+        waterParams.gravity = Gravity.CENTER;
+        waterParams.setMargins(0,0,20,0);
+        linearLayout.addView(plantWater,waterParams);
+    }
+
     public void setWaterState(int waterState) {
         if(waterState==1){
-            getPlantWater().setVisibility(View.VISIBLE);
+//            getPlantWater().setVisibility(View.VISIBLE);
+            setWaterImage();
         }
         else {
-            getPlantWater().setVisibility(View.INVISIBLE);
+//            getPlantWater().setVisibility(View.INVISIBLE);
+            linearLayout.removeView(plantWater);
         }
         this.waterState = waterState;
     }
@@ -414,19 +462,69 @@ public class Plant{
         if(this.hp > 100){
             this.hp = 100;
         }
+        else if(this.hp<0){
+            //식물 죽음
+            //click 점수에서 제외
+            //사망 이미지로 update
+            this.hp = 0;
+        }
         this.plantHP.setProgress(this.hp );
         if(dataList.flowerAdapter != null)
             dataList.flowerAdapter.notifyDataSetChanged();
     }
 
-    public void desHp(int hp) {
-        this.hp -= hp;
+    private void setHPImage(){
+        final ImageView hpButton = new ImageView(MainActivity.context);
+        loadImage(hpButton,R.drawable.reward4);
+        hpButton.setTag(R.drawable.reward4);
+        hpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayout.removeView(hpButton);
+                hp += 15;
+                if(hp > 100) hp = 100;
+            }
+        });
+
+        // 위치세팅
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        params.gravity = Gravity.CENTER;
+        params.setMargins(0,0,10,0);
+        linearLayout.addView(hpButton,params);
+    }
+
+    private void setSaveImage(){
+        final ImageView saveButton = new ImageView(MainActivity.context);
+        loadImage(saveButton,R.drawable.item3);
+        saveButton.setTag(R.drawable.item3);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                linearLayout.removeView(saveButton);
+//                hp += 10;
+            }
+        });
+
+        // 위치세팅
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        params.gravity = Gravity.CENTER;
+        params.setMargins(0,0,10,0);
+        linearLayout.addView(saveButton,params);
+    }
+
+    public void desHp(int minusHp) {
+        this.hp -= minusHp;
         if(this.hp <= 0){
             //식물 죽음
             //click 점수에서 제외
             //사망 이미지로 update
             this.hp = 0;
         }
+
+        if(this.hp < 100){
+            setHPImage();
+        }
+
         this.plantHP.setProgress(this.hp );
         if(dataList.flowerAdapter != null)
             dataList.flowerAdapter.notifyDataSetChanged();
@@ -453,6 +551,23 @@ public class Plant{
 
     public LinearLayout getPlantLayout() {
         return plantLayout;
+    }
+
+    public void repaintItem(LinearLayout itemLayout){
+
+        linearLayout.removeAllViews();
+        int childView = itemLayout.getChildCount();
+
+        for(int i =0 ;i<childView;i++){
+            View v = itemLayout.getChildAt(i);
+
+            ImageView item = new ImageView(MainActivity.context);
+            item.setLayoutParams(v.getLayoutParams());
+            item.setImageResource((int)v.getTag());
+            item.setTag((int)v.getTag());
+            linearLayout.addView(item);
+        }
+
     }
 
     public Water getWaterInfo() {
@@ -616,4 +731,51 @@ public class Plant{
     public void setLevelType(int levelType) {
         this.levelType = levelType;
     }
+
+    public View.OnTouchListener onTouch = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+
+                moving = false;
+
+                int [] location = new int[2];
+                plantLayout.getLocationOnScreen(location);
+
+                originalXPos = location[0];
+                originalYPos = location[1];
+            }
+            else if(motionEvent.getAction() == MotionEvent.ACTION_MOVE){
+
+                moving = true;
+
+
+                int x = (int)motionEvent.getRawX();
+                int y = (int)motionEvent.getRawY();
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)plantLayout.getLayoutParams();
+
+                if (Math.abs(x - originalXPos) < 1 && Math.abs(y - originalYPos) < 1 && !moving) {
+                    return false;
+                }
+
+                params.leftMargin = x-80;
+                params.topMargin = y-480;
+
+                relativeLayout.updateViewLayout(plantLayout,params);
+            }
+            else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+
+                moving = false;
+            }
+            return false;
+        }
+    };
+
+    public View.OnLongClickListener onLongClick = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            return false;
+        }
+    };
 }
