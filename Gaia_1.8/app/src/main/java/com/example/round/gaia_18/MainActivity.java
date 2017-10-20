@@ -13,14 +13,17 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.round.gaia_18.Callendar.CallendarMainActivity;
 import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.GameSetting;
 import com.example.round.gaia_18.Data.OverlayPlant;
@@ -40,6 +43,7 @@ import static com.example.round.gaia_18.OverlayService.dataList;
 import static com.example.round.gaia_18.OverlayService.user;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
 
     private static final String TAG = ".MainActivity";
     public static Context context;
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Data
     public int gameMoney;
+
+    ImageButton cal_button;
 
     //Fragment Activity
     private MenuFlower menuFlower = new MenuFlower();
@@ -207,6 +213,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i("Touch event",""+event.getRawX()+" / "+event.getX());
+        return super.onTouchEvent(event);
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -259,7 +272,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //7 세팅창
         setting.setOnClickListener(this);
 
+
+        cal_button = (ImageButton)findViewById(R.id.cal_button);
+        cal_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context, CallendarMainActivity.class);
+                overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_left);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
+
 
     private void getUserInfo(int id){
 
@@ -437,10 +462,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dataList.setScore(0,50);
         dataList.setFruit(0,500);
 
-        dataList.setItemNumber(0,0);
         dataList.setItemNumber(1,0);
         dataList.setItemNumber(2,0);
-        dataList.setItemNumber(3,5);
+        dataList.setItemNumber(3,0);
+        dataList.setItemNumber(4,5);
 
         user.setDryFlowerItem(2);
 
@@ -493,9 +518,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<Plant> plants = new ArrayList<>();
 
         createPlant(0,399,40,plants);
-//        createPlant(1,250,100,plants);
-//        createPlant(2,140,60,plants);
-//        createPlant(3,3,10,plants);
+        createPlant(1,250,100,plants);
+        createPlant(2,140,60,plants);
+        createPlant(3,3,10,plants);
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
         dataList.setPlants(plants);
         dataList.compareFlowers();

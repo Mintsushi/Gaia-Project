@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -243,26 +242,35 @@ public class MenuSkill extends Fragment {
 
                                         SkillInfo skillInfo = dataList.getSkillInfos().get(id);
                                         SkillData skillData = dataList.getSkillDatas().get(id);
-
-
-                                        if(useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect())){
-
-                                            skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                            mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
-                                            skillInfo.setSkillUseState(true);
-                                            //Skill Cool Time동안은 사용 불가능
-                                            skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                                            skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
-
+                                
+                                        // 비가 오지않을경우 에러포기
+                                        if(weatherData.get(0)!=1 && skillInfo.getSkillNo() == 6){
+                                            Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                                            return;
                                         }
 
+                                        skillViewHolder.coolTime.setVisibility(View.VISIBLE);
+                                        mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
+
+                                        skillInfo.setSkillUseState(true);
+                                        //Skill Cool Time동안은 사용 불가능
+                                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+
+                                        useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
+
+                                        Log.i("skillInfo.getSkillNo()",""+skillInfo.getSkillNo());
                                         // 수식 에러로 터져서 주석처리
-                                        // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
-                                    /*
-                                    if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
-                                        dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
-                                    }
-                                    */
+                                        // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.]
+                                        if(6==skillInfo.getSkillNo()){
+                                            if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 3).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 3).getGoalCondition()) {
+                                                dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 3).setGoalRate(1);
+                                            }
+                                        }else{
+                                            if (dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalRate() < dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).getGoalCondition()) {
+                                                dataList.getGoalDataByID(17 + 2 * (skillInfo.getSkillNo() - 1) - 1).setGoalRate(1);
+                                            }
+                                        }
                                     }
                                 });
                             }
@@ -304,27 +312,36 @@ public class MenuSkill extends Fragment {
                                     //이 부분은 좀 더 시각적으로 표현하자
                                     Toast.makeText(getActivity(), "Score가 부족합니다!!!", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {//현금성 재화로 구입
+                            }  else {//현금성 재화로 구입
                                 if (buyForFruit(skillData.getCost())) {
                                     dataList.replaceSkillData(skillData.getSkillNo(), skillData.getSkillLevel() + 1);
                                     fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
 
-                                    Log.i("skillData.getSkillNo()", "" + skillData.getSkillNo());
                                     skillInfo.setSkillDataChange(true);
 
-                                    if (skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
+                                    if(skillData.getSkillNo() != 4 && skillData.getSkillNo() != 5) {
                                         // 수식 에러로 터져서 주석처리
                                         // 업적에서 터지고. 이유는 업적 2개(지속스킬 사용횟수)의 삭제로 밀려서 그렇게 됨.
-/*
-                                    if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()){
-                                        dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).setGoalRate(1);
-                                    }
-*/
-                                    } else {
-                                        Log.i("BuySkill", "skill id : " + dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalNo() + " / skillGoalRate : " + dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalRate());
-                                        if (dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).getGoalCondition()) {
-                                            //dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).setGoalRate(1);
+                                        if(6==skillInfo.getSkillNo()){
+                                            Log.i("skill test",""+skillInfo.getSkillNo());
+                                            if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-3).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-3).getGoalCondition()){
+
+                                                Log.i("skill test",""+(16+2*(skillInfo.getSkillNo()-1)-3));
+                                                dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-3).setGoalRate(1);
+                                            }
+                                        }else{
+                                            if(dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalRate() <  dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).getGoalCondition()){
+                                                dataList.getGoalDataByID(16+2*(skillInfo.getSkillNo()-1)-1).setGoalRate(1);
+                                            }
                                         }
+
+                                    }else{
+                                        Log.i("BuySkill","skill id : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalNo()+" / skillGoalRate : "+dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate());
+
+                                        if (dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalRate() < dataList.getGoalDataByID(18 + skillData.getSkillNo()-1).getGoalCondition()) {
+                                            dataList.getGoalDataByID(18 + skillData.getSkillNo() - 1).setGoalRate(1);
+                                        }
+
                                     }
 
                                     mAdapter.notifyDataSetChanged();
@@ -341,7 +358,7 @@ public class MenuSkill extends Fragment {
         }
     }
 
-    private Boolean useSkill(int skillType, int effect){
+    private void useSkill(int skillType, int effect){
 
         switch (skillType){
 
@@ -376,12 +393,9 @@ public class MenuSkill extends Fragment {
                 }
                 else{
                     Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
-                    return false;
                 }
                 break;
         }
-
-        return true;
     }
 
     //게임 재화로 구매
