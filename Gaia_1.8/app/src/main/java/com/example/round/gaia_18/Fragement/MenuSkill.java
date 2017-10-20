@@ -242,7 +242,7 @@ public class MenuSkill extends Fragment {
 
                                         SkillInfo skillInfo = dataList.getSkillInfos().get(id);
                                         SkillData skillData = dataList.getSkillDatas().get(id);
-                                
+
                                         // 비가 오지않을경우 에러포기
                                         if(weatherData.get(0)!=1 && skillInfo.getSkillNo() == 6){
                                             Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
