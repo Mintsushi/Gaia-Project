@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -249,15 +250,16 @@ public class MenuSkill extends Fragment {
                                             return;
                                         }
 
-                                        skillViewHolder.coolTime.setVisibility(View.VISIBLE);
-                                        mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
+                                        if(useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect())){
+                                            skillViewHolder.coolTime.setVisibility(View.VISIBLE);
+                                            mOverlayService.skillCoolTime.skillCoolTime(skillInfo);
 
-                                        skillInfo.setSkillUseState(true);
-                                        //Skill Cool Time동안은 사용 불가능
-                                        skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
-                                        skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
+                                            skillInfo.setSkillUseState(true);
+                                            //Skill Cool Time동안은 사용 불가능
+                                            skillViewHolder.skillUseButton.setVisibility(View.INVISIBLE);
+                                            skillViewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
 
-                                        useSkill(skillInfo.getSkillCase(), skillData.getSkillEffect());
+                                        }
 
                                         Log.i("skillInfo.getSkillNo()",""+skillInfo.getSkillNo());
                                         // 수식 에러로 터져서 주석처리
@@ -358,7 +360,7 @@ public class MenuSkill extends Fragment {
         }
     }
 
-    private void useSkill(int skillType, int effect){
+    private Boolean useSkill(int skillType, int effect){
 
         switch (skillType){
 
@@ -393,9 +395,11 @@ public class MenuSkill extends Fragment {
                 }
                 else{
                     Toast.makeText(getContext(), "비가 오지 않았어요 ㅠㅠ", Toast.LENGTH_SHORT).show();
+                    return false;
                 }
                 break;
         }
+        return true;
     }
 
     //게임 재화로 구매

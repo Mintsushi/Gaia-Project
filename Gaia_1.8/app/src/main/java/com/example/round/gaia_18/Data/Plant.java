@@ -56,6 +56,7 @@ public class Plant{
     private ImageButton itemListRemoveButton;
     private ImageView plantWater;
     private final Water water;
+    private int hpWarning = 0;
 
 //    private Timemer timemer;
     //state == 0 : overlayview에 없음
@@ -88,6 +89,7 @@ public class Plant{
         this.hp = hp;
         this.waterState = 0;
         this.water = DataList.getWaters().get(plantNo);
+        handlerStart();
 //        this.timemer = new Timemer(this.water.getWaterPeriod(),this.water.getWaterPenaltyTime());
     }
 
@@ -101,7 +103,7 @@ public class Plant{
 
     public void drawPlant(RelativeLayout relativeLayout){
 
-        setWaterState(this.waterState);
+//        setWaterState(this.waterState);
         relativeLayout.addView(plantLayout,plantLayout.getLayoutParams());
 
     }
@@ -156,11 +158,12 @@ public class Plant{
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         plantLayout.addView(linearLayout);
 
-        setWaterImage();
-        if(this.hp < 100){
-            setHPImage();
-            setSaveImage();
-        }
+//        setWaterImage();
+//        if(this.hp < 100){
+//            setHPImage();
+//            setSaveImage();
+//        }
+
         LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(
                 200, 250);
         plantLayout.addView(plant, relParams);
@@ -383,26 +386,28 @@ public class Plant{
         plantWater.setTag(R.drawable.reward5);
         loadImage(plantWater,R.drawable.reward5);
 
-//        plantWater.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // 물의 개수가 물을 줄수있을만큼 있을때.
-//                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
-//                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
-//                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
-//                    setWaterState(0);
+        plantWater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 물의 개수가 물을 줄수있을만큼 있을때.
+                if( dataList.getItemNumber(3) >= water.getWaterNeedWaterNum()) {
+                    Toast.makeText(MainActivity.context, "물 주기 성공", Toast.LENGTH_LONG).show();
+                    dataList.setDesItemNumber(3,water.getWaterNeedWaterNum());
+                    setWaterState(0);
+                    timer.cancel();
+                    handlerStart();
 //                    getPlantWater().setVisibility(View.INVISIBLE);
-//                }else{
-//                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
-//
-//                }
-//            }
-//        });
+                }else{
+                    Toast.makeText(MainActivity.context, "물 주기 실패 ㅠㅠ", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
 
         // 위치세팅
-        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams waterParams = new LinearLayout.LayoutParams(60, 60);
         waterParams.gravity = Gravity.CENTER;
-        waterParams.setMargins(0,0,20,0);
+        waterParams.setMargins(0,0,10,0);
         linearLayout.addView(plantWater,waterParams);
     }
 
@@ -464,8 +469,17 @@ public class Plant{
             //식물 죽음
             //click 점수에서 제외
             //사망 이미지로 update
+            setSaveImage();
             this.hp = 0;
         }
+
+        if(this.hp < dataList.getSetting().getHpAparmGauge()){
+            if(hpWarning == 0){
+                setHPImage();
+                hpWarning = 1;
+            }
+        }
+
         this.plantHP.setProgress(this.hp );
         if(dataList.flowerAdapter != null)
             dataList.flowerAdapter.notifyDataSetChanged();
@@ -478,22 +492,22 @@ public class Plant{
         hpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dataList.getItemNumber(1) > 0){
+                if(dataList.getItemNumber(1)>0) {
                     hp += 15;
-                    if(hp > dataList.getSetting().getHpAparm()){
+                    if (hp > dataList.getSetting().getHpAparmGauge()) {
                         linearLayout.removeView(hpButton);
                     }
-                    if(hp > 100) hp = 100;
+                    if (hp > 100) hp = 100;
                     hpWarning = 0;
                     dataList.setDesItemNumber(1,1);
                 }else{
-                    Toast.makeText(MainActivity.context, "해당 아이템을 구입해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.context,"해당 아이템을 구입해주세요!",Toast.LENGTH_LONG).show();
                 }
             }
         });
 
         // 위치세팅
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(60, 60);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,0,10,0);
         linearLayout.addView(hpButton,params);
@@ -506,40 +520,40 @@ public class Plant{
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(dataList.getItemNumber(2) > 0){
-                    linearLayout.removeView(saveButton);
+                if (dataList.getItemNumber(2) > 0) {
                     hp = 100;
-                    dataList.setDesItemNumber(2,1);
+                    linearLayout.removeView(saveButton);
+                    dataList.setDesItemNumber(2, 1);
                 }else{
-                    Toast.makeText(MainActivity.context, "해당 아이템을 구입해주세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.context,"해당 아이템을 구입해주세요!",Toast.LENGTH_LONG).show();
                 }
             }
         });
 
         // 위치세팅
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(60, 60);
         params.gravity = Gravity.CENTER;
         params.setMargins(0,0,10,0);
         linearLayout.addView(saveButton,params);
     }
-
-    public void desHp(int minusHp) {
-        this.hp -= minusHp;
-        if(this.hp <= 0){
-            //식물 죽음
-            //click 점수에서 제외
-            //사망 이미지로 update
-            this.hp = 0;
-        }
-
-        if(this.hp < 100){
-            setHPImage();
-        }
-
-        this.plantHP.setProgress(this.hp );
-        if(dataList.flowerAdapter != null)
-            dataList.flowerAdapter.notifyDataSetChanged();
-    }
+//
+//    public void desHp(int minusHp) {
+//        this.hp -= minusHp;
+//        if(this.hp <= 0){
+//            //식물 죽음
+//            //click 점수에서 제외
+//            //사망 이미지로 update
+//            this.hp = 0;
+//        }
+//
+//        if(this.hp < 100){
+//            setHPImage();
+//        }
+//
+//        this.plantHP.setProgress(this.hp );
+//        if(dataList.flowerAdapter != null)
+//            dataList.flowerAdapter.notifyDataSetChanged();
+//    }
 
     public static int getMaxHp() {
         return MAX_HP;
@@ -716,6 +730,44 @@ public class Plant{
 //        r);
 //        }
 //
+
+    public void handlerStart(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setWaterState(1);
+                waterTimer();
+                handler.removeCallbacks(this);
+            }
+        },water.getWaterPeriod()*1000);
+    }
+
+    private void waterTimer(){
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                decreaseHp();
+                if(hp <= 0) timer.cancel();
+            }
+        };
+
+        timer.schedule(task,0,water.getWaterPenaltyTime()*1000);
+    }
+
+    private final Handler handler = new Handler();
+
+    private void decreaseHp(){
+        Runnable updater = new Runnable() {
+            @Override
+            public void run() {
+                setHp(water.getWaterPenalty()*-1);
+            }
+        };
+        handler.post(updater);
+    }
+
     private void loadImage(ImageView image,int resourceId){
         if(readBitmapInfo(resourceId)*10 > MemUtils.megabytesAvailable()){
             Log.i("LoadImage","Big Image");

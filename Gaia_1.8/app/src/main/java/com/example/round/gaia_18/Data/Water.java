@@ -49,4 +49,6 @@ public class Water {
     public void setWaterNeedWaterNum(int waterNeedWaterNum) {
         this.waterNeedWaterNum = waterNeedWaterNum;
     }
+
+    public int getWaterPenalty(){return this.waterPenalty;}
 }

@@ -1360,7 +1360,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     private float readBitmapInfo(int resourceId){
-        final Resources res = MainActivity.context.getResources();
+        final Resources res = this.getResources();
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(res,resourceId,options);
@@ -1377,7 +1377,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             return;
         }
 
-        final Resources res = MainActivity.context.getResources();
+        final Resources res = this.getResources();
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
         options.inSampleSize = powerOf2;
