@@ -468,6 +468,7 @@ public class Plant{
             //식물 죽음
             //click 점수에서 제외
             //사망 이미지로 update
+            setSaveImage();
             this.hp = 0;
         }
 
@@ -490,12 +491,18 @@ public class Plant{
         hpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hp += 15;
-                if(hp > dataList.getSetting().getHpAparm()){
-                    linearLayout.removeView(hpButton);
+                if(dataList.getItemNumber(1) > 0){
+                    hp += 15;
+                    if(hp > dataList.getSetting().getHpAparm()){
+                        linearLayout.removeView(hpButton);
+                    }
+                    if(hp > 100) hp = 100;
+                    hpWarning = 0;
+                    dataList.setDesItemNumber(1,1);
+                }else{
+                    Toast.makeText(MainActivity.context, "해당 아이템을 구입해주세요.", Toast.LENGTH_LONG).show();
                 }
-                if(hp > 100) hp = 100;
-                hpWarning = 0;
+
             }
         });
 
@@ -513,8 +520,13 @@ public class Plant{
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                linearLayout.removeView(saveButton);
-                hp = 100;
+                if(dataList.getItemNumber(2) > 0){
+                    linearLayout.removeView(saveButton);
+                    hp = 100;
+                    dataList.setDesItemNumber(2,1);
+                }else{
+                    Toast.makeText(MainActivity.context, "해당 아이템을 구입해주세요.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -616,7 +628,7 @@ public class Plant{
                 Toast.makeText(MainActivity.context,"Show Water",Toast.LENGTH_LONG).show();
                 handler.removeCallbacks(this);
             }
-        },10000);
+        },water.getWaterPeriod()*1000);
     }
 
     private void waterTimer(){

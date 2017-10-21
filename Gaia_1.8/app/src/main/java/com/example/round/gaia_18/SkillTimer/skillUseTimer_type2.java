@@ -15,7 +15,7 @@ import static com.example.round.gaia_18.OverlayService.dataList;
 public class skillUseTimer_type2 extends SkillUse {
 
     @Override
-    public void startSkill(final int skillType, final int time) {
+    public void startSkill(int skillType, final int time) {
 
         TimerTask task = new TimerTask() {
             int cool = 0;

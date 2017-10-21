@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.StoreProduct;
 import com.example.round.gaia_18.Dialog.StoreCheckDialog;
+import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
@@ -31,6 +32,7 @@ import java.util.TimerTask;
 
 import static com.example.round.gaia_18.Data.DataList.getScore;
 import static com.example.round.gaia_18.Data.DataList.storeAdapter;
+import static com.example.round.gaia_18.MainActivity.mOverlayService;
 import static com.example.round.gaia_18.MainActivity.seed;
 import static com.example.round.gaia_18.OverlayService.dataList;
 
@@ -57,6 +59,7 @@ public class MenuStore extends Fragment {
         TextView productName;
         TextView productExplain;
         TextView productNum;
+        ImageView productUse;
         TextView productBuyScore;
         ImageView productBuy;
         LinearLayout productBuyButton;
@@ -90,6 +93,7 @@ public class MenuStore extends Fragment {
                 viewholder.productName = (TextView)view.findViewById(R.id.productName);
                 viewholder.productExplain = (TextView)view.findViewById(R.id.productExplain);
                 viewholder.productNum = (TextView)view.findViewById(R.id.storeProductNum);
+                viewholder.productUse = (ImageView)view.findViewById(R.id.itemUse);
                 viewholder.productBuyScore = (TextView)view.findViewById(R.id.productBuyCost);
                 viewholder.productBuyButton = (LinearLayout) view.findViewById(R.id.productBuyButton);
                 viewholder.productBuy = (ImageView)view.findViewById(R.id.productBuy);
@@ -102,6 +106,24 @@ public class MenuStore extends Fragment {
             if(storeProduct != null){
 
                 //후에 아이템 이미지로 변경
+
+                //click
+                if(storeProduct.getItemId() == 0){
+                    viewholder.productUse.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //아이템이 있음
+                            if(dataList.getItemNumber(0) > 0){
+                                mOverlayService.item.startSkill(0,60);
+                                dataList.setDesItemNumber(0,1);
+                            }else{ //아이템이 없음.
+                                Toast.makeText(MainActivity.context, "해당 아이템을 구입해주세요.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }else{
+                    viewholder.productUse.setVisibility(View.INVISIBLE);
+                }
 
                 int resourceId = getContext().getResources().getIdentifier("item" + Integer.toString(storeProduct.getItemEffectType()), "drawable", getContext().getPackageName());
                 loadImage(viewholder.productImage,resourceId);

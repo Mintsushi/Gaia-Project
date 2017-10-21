@@ -44,8 +44,8 @@
     <string name="goalCase26">물받기 스킬 %d 번 사용하기</string>
 
     <!--Store-->
-    <string name="product1">초당 10회 자동 탭</string>
-    <string name="product2">꽃 하나의 체력 20% 회복</string>
+    <string name="product1">1분동안 초당 10회 자동 탭</string>
+    <string name="product2">꽃 하나의 체력 15% 회복</string>
     <string name="product3">시들어버린 꽃 부활</string>
     <string name="product4">꽃에 물을 줄 때 사용하는 아이템</string>
 </resources>

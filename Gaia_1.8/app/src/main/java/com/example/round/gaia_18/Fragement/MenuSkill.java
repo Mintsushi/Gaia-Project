@@ -370,7 +370,7 @@ public class MenuSkill extends Fragment {
                 Log.i("weaterData",""+ effect);
                 Log.i("weaterData",""+weatherData.get(0));
                 // 날씨정보 얻어오기.
-                if(weatherData.get(0)==1) {
+                if(weatherData.get(1)==1) {
                     dataList.setIncItemNumber(3, effect);
                     Toast.makeText(getContext(), "빗물을 열심히 받았어요!", Toast.LENGTH_SHORT).show();
                 }

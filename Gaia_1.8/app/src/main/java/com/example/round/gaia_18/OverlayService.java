@@ -143,6 +143,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
     private Button removeAll;
     private ListView skillList;
     private LinearLayout.LayoutParams ButtonParams;
+    private LinearLayout weatherContainer;
+    private ImageView weatherImage;
+//    private TextView temp;
 
     //0 닫혀있는 상태
     //1 열려있는 상태
@@ -174,6 +177,8 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public static SkillCoolTime skillCoolTime = new SkillCoolTime();
     public static skillUseTimer_type0 type0 = new skillUseTimer_type0();
     public static skillUseTimer_type2 type2 = new skillUseTimer_type2();
+    //item 사용
+    public static skillUseTimer_type2 item = new skillUseTimer_type2();
 
     @Override
     public IBinder onBind(Intent intent){ return mBinder; }
@@ -276,8 +281,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
                         clickState = 0;
                     }
                     mWindowManager.removeView(skill);
+                    mWindowManager.removeView(weatherContainer);
                     removeAllState = 1;
                 } else { //remove -> create
+
+                    mWindowManager.addView(skill, skill.getLayoutParams());
+                    mWindowManager.addView(weatherContainer, weatherContainer.getLayoutParams());
 
                     if (removeState == 0) {
                         ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
@@ -287,7 +296,6 @@ public class OverlayService extends Service implements View.OnClickListener,View
                         }
                     }
 
-                    mWindowManager.addView(skill, skill.getLayoutParams());
                     removeAllState = 0;
                 }
             }
@@ -365,6 +373,42 @@ public class OverlayService extends Service implements View.OnClickListener,View
     }
 
     private void setLayout(){
+
+        WindowManager.LayoutParams weatherParams = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 500,
+                WindowManager.LayoutParams.TYPE_TOAST,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT
+        );
+
+        weatherParams.gravity= Gravity.LEFT | Gravity.TOP;
+
+        weatherImage = new ImageView(this);
+
+//        temp = new TextView(this);
+//        temp.setMinWidth(150);
+//        temp.setGravity(View.TEXT_ALIGNMENT_CENTER);
+//        temp.setTextSize(15);
+//        temp.setTextColor(getResources().getColor(R.color.Black));
+//        temp.setBackgroundResource(R.drawable.view_background);
+
+        weatherContainer = new LinearLayout(this);
+        weatherContainer.setOrientation(LinearLayout.VERTICAL);
+        weatherContainer.setLayoutParams(weatherParams);
+        weatherContainer.setOnClickListener(this);
+        weatherContainer.setOnTouchListener(this);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.gravity = Gravity.CENTER;
+
+        weatherContainer.addView(weatherImage,params);
+
+//        LinearLayout.LayoutParams tempParams = new LinearLayout.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        tempParams.gravity=Gravity.CENTER;
+//        weatherContainer.addView(temp,tempParams);
+
         linearLayout = new LinearLayout(this);
         linearLayout.setOnClickListener(this);
 
@@ -457,12 +501,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
 //        skillParams.bottomMargin = 50;
         skill.addView(open,skillParams);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams seedParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.gravity=Gravity.CENTER;
+        seedParams.gravity=Gravity.CENTER;
 //        buttonParams.bottomMargin = 100;
 //        params.bottomMargin = 50;
-        skill.addView(seedOverlay,params);
+        skill.addView(seedOverlay,seedParams);
 
     }
 
@@ -639,20 +683,24 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         if(visible == 1){
 
-            if(removeState == 0) {
-                ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+            if(removeAllState == 0){
+                if(removeState == 0) {
+                    ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
 
-                for (int i = 0; i < plants.size(); i++) {
-                    mWindowManager.removeView(plants.get(i).getOverlayPlant());
+                    for (int i = 0; i < plants.size(); i++) {
+                        mWindowManager.removeView(plants.get(i).getOverlayPlant());
+                    }
                 }
+
+                if (clickState == 1) {
+                    mWindowManager.removeView(linearLayout);
+                    clickState = 0;
+                }
+                mWindowManager.removeView(skill);
+                mWindowManager.removeView(weatherContainer);
+//            mWindowManager.removeView(circleMenu);
             }
 
-            if (clickState == 1) {
-                mWindowManager.removeView(linearLayout);
-                clickState = 0;
-            }
-            mWindowManager.removeView(skill);
-//            mWindowManager.removeView(circleMenu);
             visible = 0;
         }
     }
@@ -660,15 +708,20 @@ public class OverlayService extends Service implements View.OnClickListener,View
     public void visible(){
 
         if(visible == 0) {
-            ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+            if(removeAllState == 0){
 
-            for (int i = 0; i < plants.size(); i++) {
-                mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
-            }
+                mWindowManager.addView(weatherContainer,weatherContainer.getLayoutParams());
+                mWindowManager.addView(skill, skillWindow);
 
-            mWindowManager.addView(skill, skillWindow);
+                ArrayList<OverlayPlant> plants = dataList.getOverlayPlants();
+
+                for (int i = 0; i < plants.size(); i++) {
+                    mWindowManager.addView(plants.get(i).getOverlayPlant(), plants.get(i).getParams());
+                }
+
 //            mWindowManager.addView(circleMenu,skillWindow);
-            setSeed();
+                setSeed();
+            }
 
             visible = 1;
         }
@@ -750,7 +803,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
             int resourceId = MainActivity.context.getResources().getIdentifier("flower" + plant.getPlantNo()+plant.getLevelType(), "drawable", MainActivity.context.getPackageName());
             loadImage(plantImage,resourceId);
 
-            LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(exPlant.getWidth()-50,exPlant.getHeight()-50);
+            LinearLayout.LayoutParams relParams = new LinearLayout.LayoutParams(exPlant.getWidth(),exPlant.getHeight());
 //            overlayPlant.addView(plantImage, relParams);
 
             //plant.setTag(flower.getImage());
@@ -1146,6 +1199,12 @@ public class OverlayService extends Service implements View.OnClickListener,View
                 ;
                 weatherData = dataBaseHelper.getWeatherPassive(openWeatherMap.getWeather().get(0).getDescription());
                 Log.i("Weather**","Diff Weather : "+weatherData.toString());
+                int resourceId = getResources().getIdentifier("weather" + weatherData.get(0).toString(), "drawable",getPackageName());
+                loadImage(weatherImage,resourceId);
+//                mWindowManager.addView(weatherImage,weatherImage.getLayoutParams());
+//                int resourceId = getResources().getIdentifier("weather0", "drawable",getPackageName());
+//                weatherImage.setImageResource(resourceId);
+//                temp.setText(String.format("%.2f °C",openWeatherMap.getMain().getTemp()));
 
                 dataList.overlayClickScore.clear();
                 for(int i =0; i<dataList.getOverlayPlants().size(); i++){
@@ -1161,7 +1220,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
                     //날씨에 따른 패널티 / 패시브
                     // 김태우 정보 밀려남에따라 아이디 +2
-                    int effect = weatherData.get(id+2);
+                    int effect = weatherData.get(id+3);
                     // effect>0일 경우는 추가 점수
                     // effect<0일 경우는 hp 감소
                     if(effect > 0) {
