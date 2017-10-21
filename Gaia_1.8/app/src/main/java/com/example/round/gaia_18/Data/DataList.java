@@ -186,17 +186,32 @@ public class DataList {
 //
 //
     public void setItemNumber(int id, int num){
-        this.storeProducts.get(id).setItemNumber(num);
+        this.storeProducts.get((id-1)).setItemNumber(num);
+        if( (id-1) == 3){
+            this.storeProducts.get((id)).setItemNumber(num);
+        }
     }
     //
     public void setIncItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
-        this.storeProducts.get(id).setItemNumber(temp + num);
+        if( (id) == 3 || id==4){
+            this.storeProducts.get(3).setItemNumber(temp + num);
+            this.storeProducts.get(4).setItemNumber(temp + num);
+        }
+        else{
+            this.storeProducts.get(id).setItemNumber(temp + num);
+        }
     }
 
     public void setDesItemNumber(int id, int num){
         int temp = this.storeProducts.get(id).getItemNumber();
-        this.storeProducts.get(id).setItemNumber(temp - num);
+        if( (id) == 3 || id==4){
+            this.storeProducts.get(3).setItemNumber(temp - num);
+            this.storeProducts.get(4).setItemNumber(temp - num);
+        }
+        else{
+            this.storeProducts.get(id).setItemNumber(temp - num);
+        }
     }
 
     public int getItemNumber(int id){

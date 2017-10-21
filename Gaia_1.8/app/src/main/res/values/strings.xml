@@ -48,4 +48,15 @@
     <string name="product2">꽃 하나의 체력 15% 회복</string>
     <string name="product3">시들어버린 꽃 부활</string>
     <string name="product4">꽃에 물을 줄 때 사용하는 아이템</string>
+
+    <!--Callendar-->
+
+    <string name="weather_icon">Weather icon</string>
+    <string name="event_icon">Event icon</string>
+    <string name="add_thing">일정추가</string>
+    <string name="daily">일간</string>
+    <string name="weekly">주간</string>
+    <string name="monthly">월간</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="month">월</string>
 </resources>

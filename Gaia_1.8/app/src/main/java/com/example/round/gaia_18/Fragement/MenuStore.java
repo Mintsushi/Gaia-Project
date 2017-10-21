@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -14,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.round.gaia_18.Data.StoreProduct;
 import com.example.round.gaia_18.Dialog.StoreCheckDialog;
@@ -177,10 +174,17 @@ public class MenuStore extends Fragment {
                                     dataList.getGoalDataByID(7).setGoalRate(1);
                                     dataList.setIncItemNumber(storeProduct.getItemId(), 1);
 
+                                    if (dataList.getGoalDataByID(11).getGoalRate() < dataList.getGoalDataByID(11).getGoalCondition()) {
+                                        dataList.getGoalDataByID(11).setGoalRate(1);
+                                    }
+
                                     // 만약 1번 아이템이면 10분동안 점수획득후 아이템 감소 하게됨
                                     if(storeProduct.getItemId()==0){
                                         itemskillTimemer itemskillTimemer = new itemskillTimemer(600);
                                         itemskillTimemer.handlerStart();
+                                        if (dataList.getGoalDataByID(12).getGoalRate() < dataList.getGoalDataByID(12).getGoalCondition()) {
+                                            dataList.getGoalDataByID(12).setGoalRate(1);
+                                        }
                                     }
                                     storeAdapter.notifyDataSetChanged();
                                 }

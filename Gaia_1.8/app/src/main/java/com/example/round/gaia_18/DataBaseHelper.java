@@ -12,6 +12,7 @@ import com.example.round.gaia_18.Data.Flower;
 import com.example.round.gaia_18.Data.FlowerData;
 import com.example.round.gaia_18.Data.GoalData;
 import com.example.round.gaia_18.Data.GoalInfo;
+import com.example.round.gaia_18.Data.ScheduleItem;
 import com.example.round.gaia_18.Data.SkillData;
 import com.example.round.gaia_18.Data.SkillInfo;
 import com.example.round.gaia_18.Data.StoreProduct;
@@ -126,6 +127,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     final private static String waterPenalty = "KEY_PENALTY";
     final private static String waterNeedWaterNum = "KEY_NEED_WATER_NUM";
 
+    //일정 Table
+    private static final String DataFormatTableName = "DATA_FORMAT_TABLE";
+    private static final String DataFormatID = "DATA_FORMAT_ID";
+    private static final String DataFormatnum0 = "DATA_FORMAT_YEAR";
+    private static final String DataFormatnum1 = "DATA_FORMAT_MONTH";
+    private static final String DataFormatnum2 = "DATA_FORMAT_DAYE";
+    private static final String DataFormatnum3 = "DATA_FORMAT_HOUR";
+    private static final String DataFormatnum4 = "DATA_FORMAT_MINUTE";
+    private static final String DataFormatnum5 = "DATA_FORMAT_TITLE";
+    private static final String DataFormatnum6 = "DATA_FORMAT_MEMO";
+    private static final String DataFormatnum7 = "DATA_FORMAT_ALARM_TYPE";
+
 
     public DataBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VER);
@@ -164,6 +177,126 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         getStoreTable(sqLiteDatabase);
         // 물주기테이블 구축
         WaterTable(sqLiteDatabase);
+
+        // 일정
+        DataFormatTable(sqLiteDatabase);
+    }
+
+
+    public void DataFormatInsert(int index, ScheduleItem scheduleItem){
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(DataFormatTableName,null,getDataFormatValues( index,
+                scheduleItem.getToYears(),
+                scheduleItem.getToMonths(),
+                scheduleItem.getToDays(),
+                scheduleItem.getTimeHours(),
+                scheduleItem.getTimeMinutes(),
+                scheduleItem.getTitle(),
+                scheduleItem.getMemo(),
+                scheduleItem.getAlarms()));
+        Log.i("DataFormatTableName Insert : ",""+index+" / "+scheduleItem.getTitle() );
+    }
+
+
+    public void DataFormatDelete(int id, int year, int month, int date) {
+        SQLiteDatabase db = getWritableDatabase();
+        // 입력한 항목과 일치하는 행 삭제
+        db.execSQL("DELETE FROM "+DataFormatTableName+" WHERE "+DataFormatID+"='" + id + "' AND " +DataFormatnum0+"='" + year + "' AND "+DataFormatnum1+"='" + month +  "' AND "+DataFormatnum2+"='" + date + "';");
+    }
+
+
+    private void DataFormatTable(SQLiteDatabase sqLiteDatabase) {
+        //Flower Table
+        String CREATE_TABLE = "CREATE TABLE " + DataFormatTableName + "("
+                + DataFormatID + " INTEGER NOT NULL,"
+                + DataFormatnum0 + " INTEGER NOT NULL,"
+                + DataFormatnum1 + " INTEGER NOT NULL,"
+                + DataFormatnum2 + " INTEGER NOT NULL,"
+                + DataFormatnum3 + " INTEGER NOT NULL,"
+                + DataFormatnum4 + " INTEGER NOT NULL,"
+                + DataFormatnum5 + " TEXT NOT NULL,"
+                + DataFormatnum6 + " TEXT NOT NULL,"
+                + DataFormatnum7 + " INTEGER NOT NULL"+")";
+        sqLiteDatabase.execSQL(CREATE_TABLE);
+
+        //Insert Flower Data
+        sqLiteDatabase.insert(DataFormatTableName, null, getDataFormatValues(0,2017,10,21,12,00,"비버 시험날","좋아영",1));
+    }
+
+    private ContentValues getDataFormatValues(int id, int yy, int mm, int dd, int hour, int menute, String title, String memo, int alarmType){
+
+        ContentValues values = new ContentValues();
+
+        values.put(DataFormatID, id);
+        values.put(DataFormatnum0, yy);
+        values.put(DataFormatnum1, mm);
+        values.put(DataFormatnum2, dd);
+        values.put(DataFormatnum3, hour);
+        values.put(DataFormatnum4, menute);
+        values.put(DataFormatnum5, title);
+        values.put(DataFormatnum6, memo);
+        values.put(DataFormatnum7, alarmType);
+
+        return values;
+
+    }
+
+    public ScheduleItem getDataForamt(int number){
+
+        ScheduleItem scheduleItems = new ScheduleItem();
+        String selectQuery = "SELECT * FROM " + DataFormatTableName+" WHERE "+DataFormatID+" = '"+number+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+
+                ScheduleItem scheduleItem = new  ScheduleItem();
+                scheduleItem.setId(cursor.getInt(0));
+                scheduleItem.setToYears(cursor.getInt(1));
+                scheduleItem.setToMonths(cursor.getInt(2));
+                scheduleItem.setToDays(cursor.getInt(3));
+                scheduleItem.setTimeHours(cursor.getInt(4));
+                scheduleItem.setTimeMinutes(cursor.getInt(5));
+                scheduleItem.setTitle(cursor.getString(6));
+                scheduleItem.setMemo(cursor.getString(7));
+                scheduleItem.setAlarms(cursor.getInt(8));
+
+                scheduleItems = scheduleItem;
+            } while (cursor.moveToNext());
+        }
+
+        return scheduleItems;
+    }
+
+    //getter
+    public ArrayList<ScheduleItem> getAllDataForamt() {
+        ArrayList<ScheduleItem> scheduleItems = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + DataFormatTableName;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+
+                ScheduleItem scheduleItem = new  ScheduleItem();
+
+                scheduleItem.setId(cursor.getInt(0));
+                scheduleItem.setToYears(cursor.getInt(1));
+                scheduleItem.setToMonths(cursor.getInt(2));
+                scheduleItem.setToDays(cursor.getInt(3));
+                scheduleItem.setTimeHours(cursor.getInt(4));
+                scheduleItem.setTimeMinutes(cursor.getInt(5));
+                scheduleItem.setTitle(cursor.getString(6));
+                scheduleItem.setMemo(cursor.getString(7));
+                scheduleItem.setAlarms(cursor.getInt(8));
+
+                scheduleItems.add(scheduleItem);
+            } while (cursor.moveToNext());
+        }
+
+        return scheduleItems;
     }
 
     private void flowerTable(SQLiteDatabase sqLiteDatabase) {

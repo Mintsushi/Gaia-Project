@@ -67,7 +67,12 @@ public class GetGoalReward extends Dialog {
             @Override
             public void onClick(View view) {
                 rewardFromGoal();
-                dataList.goalLevelUp(goalNo);
+                if(goalNo==24 || goalNo==25){
+                    dataList.goalLevelUp(goalNo-1);
+                }else{
+                    Log.i("goal test","" + goalNo +" / ");
+                    dataList.goalLevelUp(goalNo);
+                }
                 goalAdapter.notifyDataSetChanged();
                 dismiss();
             }

@@ -86,6 +86,14 @@
         android:layout_marginRight="20sp"
         android:layout_marginBottom="30sp">
 
+        <ImageButton
+            android:id="@+id/cal_button"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:layout_weight="1"
+            android:background="@drawable/view_background"
+            app:srcCompat="@android:drawable/ic_menu_week" />
+
         <ImageView
             android:id="@+id/menuFlowerButton"
             android:layout_width="50sp"
