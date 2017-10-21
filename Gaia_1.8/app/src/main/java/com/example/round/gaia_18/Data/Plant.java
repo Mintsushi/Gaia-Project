@@ -469,14 +469,15 @@ public class Plant{
             //식물 죽음
             //click 점수에서 제외
             //사망 이미지로 update
+            plant.setImageResource(R.drawable.death_flower);
             setSaveImage();
             this.hp = 0;
-        }
-
-        if(this.hp < dataList.getSetting().getHpAparmGauge()){
-            if(hpWarning == 0){
-                setHPImage();
-                hpWarning = 1;
+        }else{
+            if(this.hp < dataList.getSetting().getHpAparmGauge()){
+                if(hpWarning == 0){
+                    setHPImage();
+                    hpWarning = 1;
+                }
             }
         }
 
@@ -523,6 +524,8 @@ public class Plant{
                 if (dataList.getItemNumber(2) > 0) {
                     hp = 100;
                     linearLayout.removeView(saveButton);
+                    int resourceId = MainActivity.context.getResources().getIdentifier("flower" + flower.getFlowerNo()+levelType, "drawable", MainActivity.context.getPackageName());
+                    loadImage(plant,resourceId);
                     dataList.setDesItemNumber(2, 1);
                 }else{
                     Toast.makeText(MainActivity.context,"해당 아이템을 구입해주세요!",Toast.LENGTH_LONG).show();

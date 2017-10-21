@@ -157,6 +157,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+GOAL_DATA_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+STORE_TABLE_NAME);
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+WATER_TABLE_NAME);
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS "+DataFormatTableName);
         //flower Table 구축
         flowerTable(sqLiteDatabase);
         //flower 수식 data DB 구축
