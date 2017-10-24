@@ -7,9 +7,9 @@
 
     <LinearLayout
         android:layout_width="300dp"
-        android:layout_height="400dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/cal_day_cell_bg"
+        android:background="@drawable/cal_back_in"
         android:orientation="vertical">
 
         <LinearLayout
@@ -20,11 +20,16 @@
 
             <TextView
                 android:id="@+id/thisDayText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="5dp"
+                android:background="@drawable/cal_button_1"
+                android:padding="5dp"
                 android:text="알람 시간 설정"
+                android:textAlignment="center"
                 android:textSize="18sp" />
 
             <RadioGroup
@@ -83,10 +88,11 @@
                 android:id="@+id/alarmSettingButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/cal_lineframe"
+                android:background="@drawable/cal_button_1"
                 android:text="선택완료" />
 
         </LinearLayout>
