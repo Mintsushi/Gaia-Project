@@ -1,34 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="350sp"
+    android:layout_height="350sp"
+    android:padding="10sp"
+    android:background="@drawable/setting_dialog_background">
 
-    <ListView
-        android:id="@+id/maxLevelPlant"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/White"
+        android:minHeight="150sp">
+
+        <ListView
+            android:id="@+id/maxLevelPlant"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center">
-        <ImageButton
-            android:id="@+id/select"
-            android:layout_marginRight="20sp"
-            android:layout_width="145dp"
-            android:layout_height="60dp"
-            android:background="@drawable/check_dialog"
-            android:scaleType="fitCenter"
-            android:textColor="#ffffff" />
+        android:gravity="center"
+        android:layout_marginTop="10sp">
 
-        <ImageButton
+        <Button
+            android:id="@+id/select"
+            android:layout_marginRight="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_button"
+            android:textColor="@color/White"
+            android:text="선택"/>
+
+        <Button
             android:id="@+id/cancel"
-            android:layout_width="145dp"
-            android:layout_height="60dp"
-            android:background="@drawable/no_dialog"
+            android:layout_marginLeft="5sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/dialog_button"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:text="취소"/>
     </LinearLayout>
 </LinearLayout>

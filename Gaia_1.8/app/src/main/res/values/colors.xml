@@ -12,4 +12,6 @@
     <color name="buy_flower">#0178ff</color>
     <color name="flower_center">#7900e6ff</color>
     <color name="transparent">@android:color/transparent</color>
+
+    <color name="dialog_button">#0eb94f</color>
 </resources>

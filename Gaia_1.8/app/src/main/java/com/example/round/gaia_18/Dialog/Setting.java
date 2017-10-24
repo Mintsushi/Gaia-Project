@@ -31,7 +31,6 @@ public class Setting extends Dialog {
     public Setting(Context context){
         super(context);
     }
-    private ImageButton back;
     private Button save, load, logout;
     private TextView nameText, emailText, hpGaugeText;
     private SeekBar hpGaugeBar;
@@ -56,12 +55,11 @@ public class Setting extends Dialog {
 
         String str = pref.getString("nickname","");
         boolean type = pref.getBoolean("autoLogin",false);
-        Log.i("pref : ",""+ str + "  /  " + type);
 
         // pref정보 로딩
-        emailText = (TextView)findViewById(R.id.emailText);
+        emailText = (TextView)findViewById(R.id.txt_Email);
         emailText.setText(pref.getString("Email","NULL"));
-        nameText = (TextView)findViewById(R.id.nameText);
+        nameText = (TextView)findViewById(R.id.txt_Name);
         nameText.setText(pref.getString("nickname","NULL"));
         logtypeImage = (ImageView)findViewById(R.id.loginTypeImage);
 
@@ -70,15 +68,6 @@ public class Setting extends Dialog {
         if(pref.getString("LoginType","null").equals("Google")){
             logtypeImage.setImageResource(R.drawable.google);
         }
-
-        back = (ImageButton)findViewById(R.id.settingExit);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-
-        });
 
         save = (Button)findViewById(R.id.saveButton);
         save.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +126,6 @@ public class Setting extends Dialog {
 
         switch1 = (Switch)findViewById(R.id.switch1);
         if(setting.getVibration()==1){switch1.setChecked(true);}
-        switch1.setText("진동");
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -153,7 +141,6 @@ public class Setting extends Dialog {
 
         switch2 = (Switch)findViewById(R.id.switch2);
         if(setting.getSound()==1){switch2.setChecked(true);}
-        switch2.setText("소리");
         switch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -172,7 +159,6 @@ public class Setting extends Dialog {
         switch3 = (Switch)findViewById(R.id.switch3);
 
         if(setting.getAlarm()==1){switch3.setChecked(true);}
-        switch3.setText("알람");
         switch3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -188,7 +174,6 @@ public class Setting extends Dialog {
 
         switch4 = (Switch)findViewById(R.id.switch4);
         if( setting.getWeather()==1){switch4.setChecked(true);}
-        switch4.setText("날씨알림");
         switch4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -217,7 +202,6 @@ public class Setting extends Dialog {
             hpGaugeBar.setVisibility(View.INVISIBLE);
         }
 
-        switch5.setText("HP경고");
         switch5.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

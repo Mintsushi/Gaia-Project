@@ -146,9 +146,9 @@ public class MenuFlower extends Fragment {
                     viewHolder.hpProgress.setProgress(100-hp);
 
                     if(flower.getLevel() == 400){
-                        viewHolder.flowerLevelUpType.setImageResource(R.drawable.complete);
+                        viewHolder.flowerLevelUpType.setVisibility(View.INVISIBLE);
                         viewHolder.background.setBackgroundResource(R.drawable.max_level_background);
-                        viewHolder.flowerLevelUpScore.setVisibility(View.INVISIBLE);
+                        viewHolder.flowerLevelUpScore.setText("Max Level");
                     }else{
 //                        viewHolder.flowerLevelUp.setImageResource(R.drawable.levelup);
                         loadImage(viewHolder.flowerLevelUpType,R.drawable.reward2);

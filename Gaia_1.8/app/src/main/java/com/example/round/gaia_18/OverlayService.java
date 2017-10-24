@@ -218,7 +218,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 
         remoteView.setOnClickPendingIntent(R.id.remove,getPendingSelfIntent(this,MyOnClick));
         //후에 application icon으로 변경
-        builder.setSmallIcon(R.drawable.close)
+        builder.setSmallIcon(R.drawable.flower)
                 .setContentTitle("Gaia Project");
 
         //후에 icon은 app logo를 이용
@@ -473,7 +473,9 @@ public class OverlayService extends Service implements View.OnClickListener,View
             public void onClick(View view) {
                 //close - > open
                 if((int)view.getTag() == 0){
-                    LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(150, 150);
+                    LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(100, 100);
+                    buttonParams.bottomMargin=10;
+                    buttonParams.gravity = Gravity.CENTER;
                     skill.addView(click,buttonParams);
                     skill.addView(remove,buttonParams);
                     skill.addView(useSkill,buttonParams);

@@ -151,7 +151,7 @@ public class MenuStore extends Fragment {
                             @Override
                             public void onShow(DialogInterface dialogInterface) {
 
-                                dialog.setImage(storeProduct.getImage());
+                                dialog.setImage(storeProduct.getItemEffectType());
                                 dialog.setName(storeProduct.getItemName());
                                 dialog.setExplain(viewholder.productExplain.getText().toString());
                                 // 구매에 사용하는 재화의 정보 보내기

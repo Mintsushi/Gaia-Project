@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //Data
     public int gameMoney;
 
-    ImageButton cal_button;
+    ImageView cal_button;
 
     //Fragment Activity
     private MenuFlower menuFlower = new MenuFlower();
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setting.setOnClickListener(this);
 
 
-        cal_button = (ImageButton)findViewById(R.id.cal_button);
+        cal_button = (ImageView) findViewById(R.id.cal_button);
         cal_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -459,8 +459,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        RequestQueue requestQueue = Volley.newRequestQueue(this);
 //        requestQueue.add(request);
 
-        dataList.setScore(0,50);
+        dataList.setScore(0,150);
+        dataList.setScore(1,397);
         dataList.setFruit(0,500);
+        dataList.setFruit(1,129);
 
         dataList.setItemNumber(1,0);
         dataList.setItemNumber(2,0);

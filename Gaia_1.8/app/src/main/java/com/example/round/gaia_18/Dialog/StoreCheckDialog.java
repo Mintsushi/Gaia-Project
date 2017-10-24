@@ -2,17 +2,22 @@ package com.example.round.gaia_18.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.round.gaia_18.MemUtils;
 import com.example.round.gaia_18.R;
 
 import java.util.Collections;
@@ -40,11 +45,12 @@ public class StoreCheckDialog extends Dialog {
     TextView diaUseCostTypeText;
     TextView diaUseCostText;
 
-    ImageButton diaBuyYesButton;
-    ImageButton diaBuyNoButton;
+    Button diaBuyYesButton;
+    Button diaBuyNoButton;
 
     public int costType;
     public int buySuccess = 0;
+    private static final float BYTES_PER_PX = 4.0f;
     private ConcurrentHashMap<Integer, Integer> useCostHash = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> preCostHash = new ConcurrentHashMap<>();
     private ConcurrentHashMap<Integer, Integer> futCostHash = new ConcurrentHashMap<>();
@@ -62,8 +68,8 @@ public class StoreCheckDialog extends Dialog {
         diaPreCostText = (TextView)findViewById(R.id.diaPreCostText);
         diaUseCostTypeText = (TextView)findViewById(R.id.diaUseCostTypeText);
         diaUseCostText = (TextView)findViewById(R.id.diaUseCostText);
-        diaBuyYesButton = (ImageButton)findViewById(R.id.buyYesButton);
-        diaBuyNoButton = (ImageButton)findViewById(R.id.buyNoButton);
+        diaBuyYesButton = (Button)findViewById(R.id.buyYesButton);
+        diaBuyNoButton = (Button)findViewById(R.id.buyNoButton);
 
         diaBuyYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +122,10 @@ public class StoreCheckDialog extends Dialog {
     public void setExplain(String str) {
         storeCheckExplainText.setText(str);
     }
-    public void setImage(String str) {
-        Log.i("path :: ", ":: " + str + "::" + getContext().getPackageName());
+    public void setImage(int effectType) {
         //storeCheckImage.setImageResource();
+        int resourceId = getContext().getResources().getIdentifier("item" + Integer.toString(effectType), "drawable", getContext().getPackageName());
+        loadImage(storeCheckImage,resourceId);
     }
 
     public void setUseCost(int type, ConcurrentHashMap<Integer, Integer> str) {
@@ -189,6 +196,43 @@ public class StoreCheckDialog extends Dialog {
 
         return true;
 
+    }
+
+    private void loadImage(ImageView image,int resourceId){
+        if(readBitmapInfo(resourceId) * 100> MemUtils.megabytesAvailable()){
+            Log.i("LoadImage","Big Image");
+            subImage(32,resourceId,image);
+        }else{
+            Log.i("LoadImage","Small Image");
+            image.setImageResource(resourceId);
+        }
+    }
+
+    private float readBitmapInfo(int resourceId){
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(res,resourceId,options);
+
+        final float imageHeight = options.outHeight;
+        final float imageWidth = options.outWidth;
+        final String imageMimeType = options.outMimeType;
+
+        return imageWidth*imageHeight*BYTES_PER_PX / MemUtils.BYTE_IN_MB;
+    }
+
+    private void subImage(int powerOf2,int resourceId,ImageView image){
+        if(powerOf2 < 1 || powerOf2 > 32){
+            return;
+        }
+
+        final Resources res = getContext().getResources();
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = powerOf2;
+
+        final Bitmap bitmap = BitmapFactory.decodeResource(res,resourceId,options);
+        image.setImageBitmap(bitmap);
     }
 
 }

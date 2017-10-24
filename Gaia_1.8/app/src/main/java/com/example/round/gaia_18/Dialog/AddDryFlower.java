@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -46,8 +47,8 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
     private ArrayList<DryFlower> maxLevel = new ArrayList<>();
     private ArrayList<DryFlower> selectFlower = new ArrayList<>();
 
-    private ImageButton select;
-    private ImageButton cancel;
+    private Button select;
+    private Button cancel;
     private static final float BYTES_PER_PX = 4.0f;
 
     public AddDryFlower(Context context) {
@@ -77,8 +78,8 @@ public class AddDryFlower extends Dialog implements View.OnClickListener{
         mList = (ListView)findViewById(R.id.maxLevelPlant);
         mList.setAdapter(mAdapter);
 
-        select = (ImageButton)findViewById(R.id.select);
-        cancel = (ImageButton)findViewById(R.id.cancel);
+        select = (Button)findViewById(R.id.select);
+        cancel = (Button)findViewById(R.id.cancel);
 
         select.setOnClickListener(this);
         cancel.setOnClickListener(this);

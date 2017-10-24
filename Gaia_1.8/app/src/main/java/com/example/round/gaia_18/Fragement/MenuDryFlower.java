@@ -54,7 +54,7 @@ public class MenuDryFlower extends Fragment {
         ImageView dryFlowerImage;
         TextView dryFlowerName;
         TextView dryFlowerEffect;
-        ImageButton dryFlowerInfoButton;
+        ImageView dryFlowerInfoButton;
     }
 
     public class DryFlowerAdapter extends ArrayAdapter<DryFlower>{
@@ -81,7 +81,7 @@ public class MenuDryFlower extends Fragment {
                 viewHolder.dryFlowerImage = (ImageView) view.findViewById(R.id.dryFlowerImage);
                 viewHolder.dryFlowerName = (TextView) view.findViewById(R.id.dryFlowerName);
                 viewHolder.dryFlowerEffect = (TextView) view.findViewById(R.id.dryFlowerEffect);
-                viewHolder.dryFlowerInfoButton = (ImageButton) view.findViewById(R.id.dryFlowerInfoButton);
+                viewHolder.dryFlowerInfoButton = (ImageView) view.findViewById(R.id.dryFlowerInfoButton);
 
                 view.setTag(viewHolder);
             }else{
@@ -95,6 +95,7 @@ public class MenuDryFlower extends Fragment {
                 //꽃이 있는 곳
                 if(position<dataList.getDryPlantSize()){
                     final DryFlower dryFlower = dataList.getDryFlower(position);
+                    viewHolder.dryFlowerInfoButton.setVisibility(View.VISIBLE);
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_item);
                     //후에 식물 이미지로 변경
                     int resourceId = getContext().getResources().getIdentifier("flower" + dryFlower.getDryFlowerNo(), "drawable", getContext().getPackageName());
@@ -102,10 +103,10 @@ public class MenuDryFlower extends Fragment {
 
                     viewHolder.dryFlowerName.setText(dryFlower.getDryFlowerName());
                     viewHolder.dryFlowerEffect.setText("초당 "+dataList.getAllScore(dryFlower.getScore())+" 점수 획득");
-                    viewHolder.dryFlowerInfoButton.setImageResource(R.drawable.info);
                 }
                 //꽃이 없는 곳
                 else{
+                    viewHolder.dryFlowerInfoButton.setVisibility(View.INVISIBLE);
                     viewHolder.background.setBackgroundResource(R.drawable.flower_buy_available);
                     viewHolder.background.setOnClickListener(new View.OnClickListener() {
                         @Override
