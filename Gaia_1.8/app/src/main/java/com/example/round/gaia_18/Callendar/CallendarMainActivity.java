@@ -95,13 +95,6 @@ public class CallendarMainActivity extends FragmentActivity {
         Button addButton = (Button) findViewById(R.id.main_add_bt);
         thisMonthTv = (TextView) findViewById(R.id.this_month_tv);
 
-        Button backbtn = (Button)findViewById(R.id.backbtn);
-        backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         schLists = dataBaseHelper.getAllDataForamt();
 
         scheduleList = (ListView)findViewById(R.id.scheduleList);

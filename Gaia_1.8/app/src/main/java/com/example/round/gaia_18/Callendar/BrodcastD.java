@@ -12,10 +12,12 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import com.example.round.gaia_18.MainActivity;
 import com.example.round.gaia_18.R;
 
 import static com.example.round.gaia_18.Callendar.CallendarMainActivity.AlarmLogMemo;
 import static com.example.round.gaia_18.Callendar.CallendarMainActivity.AlarmLogTitle;
+import static com.example.round.gaia_18.OverlayService.dataList;
 
 /**
  * Created by 리제 on 2017-10-23.
@@ -34,22 +36,25 @@ public class BrodcastD extends BroadcastReceiver {
 
         Intent intent4 = new Intent(context, setBGM.class);
 
-        NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, setBGM.class), PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification.Builder builder = new Notification.Builder(context);
-        builder.setSmallIcon(R.drawable.reward2)
-                .setTicker("HETT").setWhen(System.currentTimeMillis())
-                .setNumber(1)
-                .setContentIntent(pendingIntent)
-                .setContentTitle(""+AlarmLogTitle)
-                .setContentText(""+AlarmLogMemo)
-                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setStyle(new Notification.BigTextStyle().bigText(""+AlarmLogMemo));
+        if(dataList.getOverlayPlants().size() == 0) {
+            NotificationManager notificationmanager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, setBGM.class), PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification.Builder builder = new Notification.Builder(context);
+            builder.setSmallIcon(R.drawable.reward2)
+                    .setTicker("HETT").setWhen(System.currentTimeMillis())
+                    .setNumber(1)
+                    .setContentIntent(pendingIntent)
+                    .setContentTitle("" + AlarmLogTitle)
+                    .setContentText("" + AlarmLogMemo)
+                    .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setStyle(new Notification.BigTextStyle().bigText("" + AlarmLogMemo));
 
-        notificationmanager.notify(1, builder.build());
-
+            notificationmanager.notify(1, builder.build());
+        }else{
+            dataList.getOverlayPlants().get(0).setAlarm(AlarmLogTitle,AlarmLogMemo);
+        }
 
     }
 

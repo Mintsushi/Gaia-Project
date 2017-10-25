@@ -57,6 +57,7 @@ public class Plant{
     private ImageView plantWater;
     private final Water water;
     private int hpWarning = 0;
+    private LinearLayout alarm;
 
 //    private Timemer timemer;
     //state == 0 : overlayview에 없음
@@ -123,7 +124,6 @@ public class Plant{
 //        plantLayout.setOnTouchListener(MainActivity.onTouch);
 
         relativeLayout.addView(plantLayout, plantLayoutParams);
-
 
         // 식물 이미지
         plant = new ImageView(MainActivity.context);

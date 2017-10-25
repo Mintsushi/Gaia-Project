@@ -2,15 +2,19 @@ package com.example.round.gaia_18.Data;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.round.gaia_18.MainActivity;
+import com.example.round.gaia_18.OverlayService;
 
 /**
  * Created by Round on 2017-09-06.
@@ -28,17 +32,21 @@ public class OverlayPlant implements View.OnClickListener,View.OnTouchListener{
     private ProgressBar overlayPlantHP;
     private ImageView overlayPlantWater;
     private RelativeLayout  overlayPlantLayout;
+    private LinearLayout alarm;
+    private Context context;
 
     private float offsetX, offsetY;
     private int originalX, originalY;
     private boolean moving;
 
-    public OverlayPlant(Plant plant, LinearLayout itemLayout, ImageView plantImage,
+    public OverlayPlant(Plant plant, Context context, LinearLayout itemLayout, LinearLayout alarm,ImageView plantImage,
                         LinearLayout overlayPlant, WindowManager.LayoutParams params,
                         View topLeftView, WindowManager windowManager) {
         this.plant = plant;
         this.overlayPlant = overlayPlant;
         this.itemLayout = itemLayout;
+        this.alarm = alarm;
+        this.context = context;
 
         plantImage.setOnClickListener(this);
         plantImage.setOnTouchListener(this);
@@ -73,6 +81,15 @@ public class OverlayPlant implements View.OnClickListener,View.OnTouchListener{
 
     public void setParams(WindowManager.LayoutParams params) {
         this.params = params;
+    }
+
+    public void setAlarm(String title, String memo){
+        TextView mail = new TextView(context);
+        mail.setText(title+"\n"+memo);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER;
+        this.alarm.addView(mail,params);
     }
 
     @Override

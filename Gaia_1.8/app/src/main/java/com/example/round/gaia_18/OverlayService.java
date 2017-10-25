@@ -798,6 +798,13 @@ public class OverlayService extends Service implements View.OnClickListener,View
 //            overlayPlant.setOnClickListener(this);
 //            overlayPlant.setOnTouchListener(this);
 
+            //Alarm
+            LinearLayout alarm = new LinearLayout(this);
+            LinearLayout.LayoutParams alarmParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            alarmParams.gravity=Gravity.CENTER;
+
+            overlayPlant.addView(alarm,alarmParams);
+
             // 식물 이미지
            ImageView plantImage = new ImageView(this);
             //plant.setImageResource(flower.getImage());
@@ -945,7 +952,7 @@ public class OverlayService extends Service implements View.OnClickListener,View
 //            Log.i("overlay","plusOverlayClickScore");
             plusOverlayClickScore(plant);
 
-            dataList.addOverlayPlant(new OverlayPlant(plant, itemLayout,plantImage,overlayPlant, params, toLeftView, mWindowManager));
+            dataList.addOverlayPlant(new OverlayPlant(plant, this, alarm,itemLayout,plantImage,overlayPlant, params, toLeftView, mWindowManager));
 
             return true;
         }
