@@ -13,9 +13,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.round.gaia_18.MainActivity;
-import com.example.round.gaia_18.OverlayService;
-
 /**
  * Created by Round on 2017-09-06.
  */
@@ -86,8 +83,7 @@ public class OverlayPlant implements View.OnClickListener,View.OnTouchListener{
     public void setAlarm(String title, String memo){
         TextView mail = new TextView(context);
         mail.setText(title+"\n"+memo);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.gravity = Gravity.CENTER;
         this.alarm.addView(mail,params);
     }

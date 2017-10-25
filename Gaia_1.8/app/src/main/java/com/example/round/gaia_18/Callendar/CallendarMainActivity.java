@@ -298,11 +298,12 @@ public class CallendarMainActivity extends FragmentActivity {
 
             //알람시간 calendar에 set해주기
             Log.i("Alram Set : ",""+scheduleItem.getToYears()+" / "+scheduleItem.getToMonths()+" / "+scheduleItem.getToDays()+" / "+scheduleItem.getTimeHours()+" / "+scheduleItem.getTimeMinutes()+" / "+scheduleItem.getAlarms());
-
+            long t = SystemClock.elapsedRealtime();
             if(scheduleItem.getAlarms()==1){
                 //10분
                 calendar.set(scheduleItem.getToYears(),scheduleItem.getToMonths(),scheduleItem.getToDays(),scheduleItem.getTimeHours(),(scheduleItem.getTimeMinutes()-10));
                 Log.i("Time 1", ""+calendar.getTime());
+
                 am.setExact (AlarmManager.RTC_WAKEUP,  calendar.getTimeInMillis(), sender);
             }
             else if(scheduleItem.getAlarms()==2){
@@ -315,24 +316,27 @@ public class CallendarMainActivity extends FragmentActivity {
                 //1시간
                 calendar.set(scheduleItem.getToYears(),scheduleItem.getToMonths(),scheduleItem.getToDays(),(scheduleItem.getTimeHours()-1),(scheduleItem.getTimeMinutes()));
                 Log.i("Time 1", ""+calendar.getTime());
-                am.setExact (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                am.setExact (AlarmManager.RTC_WAKEUP, (t*60*60*1000), sender);
             }
             else if(scheduleItem.getAlarms()==4){
                 //2시간
                 calendar.set(scheduleItem.getToYears(),scheduleItem.getToMonths(),scheduleItem.getToDays(),(scheduleItem.getTimeHours()-2),(scheduleItem.getTimeMinutes()));
                 Log.i("Time 1", ""+calendar.getTime());
-                am.setExact (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                am.setExact (AlarmManager.RTC_WAKEUP, (t*60*60*2000), sender);
             }
             else if(scheduleItem.getAlarms()==5){
                 //하루
                 calendar.set(scheduleItem.getToYears(),scheduleItem.getToMonths(),(scheduleItem.getToDays()-1),(scheduleItem.getTimeHours()),(scheduleItem.getTimeMinutes()));
                 Log.i("Time 1", ""+calendar.getTime());
-                am.setExact (AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+                am.setExact (AlarmManager.RTC_WAKEUP, (t*60*10000), sender);
             }else{
 
                 calendar.set(scheduleItem.getToYears(),scheduleItem.getToMonths(),scheduleItem.getToDays(),scheduleItem.getTimeHours(),(scheduleItem.getTimeMinutes()));
+                calendar.set(Calendar.HOUR_OF_DAY,scheduleItem.getTimeHours() ); calendar.set(Calendar.MINUTE, scheduleItem.getTimeMinutes());
 
-                long t = SystemClock.elapsedRealtime();
+                long s = calendar.getTimeInMillis();
+                Log.i("Time 1", ""+t +" / "+ s + " / " + (t*5000));
+
                 am.setExact (AlarmManager.RTC_WAKEUP, (t*5000), sender);
             }
         }
