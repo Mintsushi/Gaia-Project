@@ -3,15 +3,19 @@
 Plant-raising tab game based on real-time weather information
 
 Application Platform : android
+
 Language : java(Android Studio)
 
+
 Server Platform : Linux
+
 Language : Node.js
 
 DataBase : MySQL
 
 
-1. Game System
+
+1.Game System
 
 (1) 화면을 클릭해서 포인트를 모아 원하는 식물을 구입하고 레벨을 올려주세요.
 
