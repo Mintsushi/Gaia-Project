@@ -7,11 +7,12 @@ Plant-raising tab game based on real-time weather information
 
   - Language : java(Android Studio)
   
-Server Platform : Linux
+### Server 
+  - Platform : Linux
+  
+  - Language : Node.js
 
-Language : Node.js
-
-DataBase : MySQL
+### DataBase : MySQL
 
 
 
