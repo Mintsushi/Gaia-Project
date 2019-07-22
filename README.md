@@ -15,9 +15,9 @@ Plant-raising tab game based on real-time weather information
 ### DataBase
   - MySQL
 
-
-
-1.Game System
+#
+##
+## 1. Game System
 
 (1) 화면을 클릭해서 포인트를 모아 원하는 식물을 구입하고 레벨을 올려주세요.
 
@@ -33,4 +33,7 @@ Plant-raising tab game based on real-time weather information
   
   - 날씨에 따라 해당 식물에게 좋지 않은 날씨일 때 식물의 HP 감소
   
-![1](https://user-images.githubusercontent.com/22411296/61605696-ab86af00-ac81-11e9-8bc1-eaf0fcb17faa.JPG)
+![1](https://user-images.githubusercontent.com/22411296/61605696-ab86af00-ac81-11e9-8bc1-eaf0fcb17faa.JPG)\
+#
+## 2. Main 화면
+![2](https://user-images.githubusercontent.com/22411296/61606075-885cff00-ac83-11e9-8a68-3bb31f4f14da.JPG)
