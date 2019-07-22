@@ -114,3 +114,18 @@ Plant-raising tab game based on real-time weather information
     - 물 : 식물에게 물을 줄 때 필요한 아이템.
     
 ![7](https://user-images.githubusercontent.com/22411296/61606887-55b50580-ac87-11e9-9d3e-a37f2afc18a7.JPG)
+
+## 8. 업적 & Out door skill 화면
+(1) 업적 : 업적을 달성해 포인트를 획득할 수 있습니다.
+
+(2) Outdoor Skill : 게임 외부에서도 게임 내에서와 같이 스킬을 사용할 수 있습니다.
+
+    - 게임 내부나 외부에서 스킬을 사용했다면 스킬 재사용 시간은 둘 모두에게 동일하게 적용됩니다.
+    
+    - 사용자가 영상을 시청하거나 다른 일을 할 때 식물 이미지가 방해되지 않도록, 식물을 사라지게 할 수 있습니다.
+    
+ ![8](https://user-images.githubusercontent.com/22411296/61607022-e390f080-ac87-11e9-9346-73061fd0a891.JPG)
+ 
+ ## 기능 정리
+ ![11](https://user-images.githubusercontent.com/22411296/61607086-19ce7000-ac88-11e9-8413-5b027fb81bbb.JPG)
+
