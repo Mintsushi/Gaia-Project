@@ -1,12 +1,12 @@
 # Gaia-Project
 
-Plant-raising tab game based on real-time weather information
+Plant-raising tab game based on real-time weather information  
 
-Application Platform : android
+### Application   
+  - Platform : android
 
-Language : java(Android Studio)
-
-
+  - Language : java(Android Studio)
+  
 Server Platform : Linux
 
 Language : Node.js
