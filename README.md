@@ -128,4 +128,6 @@ Plant-raising tab game based on real-time weather information
  
  ## 기능 정리
  ![11](https://user-images.githubusercontent.com/22411296/61607086-19ce7000-ac88-11e9-8413-5b027fb81bbb.JPG)
+ 
+ ## 데모 영상
 
