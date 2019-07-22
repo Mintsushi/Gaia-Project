@@ -130,6 +130,5 @@ Plant-raising tab game based on real-time weather information
  ![11](https://user-images.githubusercontent.com/22411296/61607086-19ce7000-ac88-11e9-8413-5b027fb81bbb.JPG)
  
  ## 데모 영상
- <div>
-  <iframe width="639" height="360" src="https://www.youtube.com/embed/OxtukQNEpLg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
- </div>
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/OxtukQNEpLg" frameborder="0" gesture="media" allowfullscreen=" "></iframe>
