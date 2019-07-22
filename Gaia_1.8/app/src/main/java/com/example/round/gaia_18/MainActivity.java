@@ -286,245 +286,245 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getUserInfo(int id){
 
-//        String url = "http://192.168.0.19:3000/userInfo/"+Integer.toString(id);
-//
-//        StringRequest request = new StringRequest(Request.Method.GET,url,
-//                new Response.Listener<String>(){
-//
-//                    @Override
-//                    public void onResponse(String response){
-//
-//                        Log.i("getUserInfo","response length : "+response);
-//                        try{
-//                            JSONObject userInfo = new JSONObject(response);
-//
-//                            //userInfo
-//                            String userName = userInfo.getString("userName");
-//                            String userEamil = userInfo.getString("userEmail");
-//                            String userImage = userInfo.getString("userImage");
-//                            int userDryFlower = userInfo.getInt("userDryFlowerNum");
-//
-//                            user.setUserName(userName);
-//                            user.setUserEmail(userEamil);
-//                            user.setUserImage(userImage);
-//                            user.setDryFlowerItem(userDryFlower);
-//
-//                            //seed
-//                            JSONArray seeds = userInfo.getJSONArray("seed");
-//                            if(seeds.length() > 0) {
-//                                for (int i = 0; i < seeds.length(); i++) {
-//                                    JSONObject object = seeds.getJSONObject(i);
-//                                    int seedType = object.getInt("seedType");
-//                                    int seed = object.getInt("seed");
-//                                    dataList.setScore(seedType, seed);
-//                                }
-//                            }else{
-//                                dataList.setScore(0, 0);
-//                            }
-//
-//                            //fruit
-//                            JSONArray fruits = userInfo.getJSONArray("fruit");
-//                            if(fruits.length() > 0) {
-//                                for (int i = 0; i < fruits.length(); i++) {
-//                                    JSONObject object = fruits.getJSONObject(i);
-//                                    int fruitType = object.getInt("fruitType");
-//                                    int fruit = object.getInt("fruit");
-//                                    dataList.setFruit(fruitType, fruit);
-//                                }
-//                            }else{
-//                                dataList.setFruit(0, 0);
-//                            }
-//
-//                            ArrayList<Plant> plants = new ArrayList<>();
-//                            //flower
-//                            JSONArray flowers = userInfo.getJSONArray("flower");
-//                            if(flowers.length() > 0) {
-//                                for (int i = 0; i < flowers.length(); i++) {
-//                                    JSONObject object = fruits.getJSONObject(i);
-//                                    int flowerNo = object.getInt("flowerNo");
-//                                    int level = object.getInt("level");
-//                                    int hp = object.getInt("hp");
-//                                    addFlower(plants, flowerNo, level, hp);
-//                                }
-//                            }
-//
-//                            //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
-//                            dataList.setPlants(plants);
-//                            dataList.compareFlowers();
-//                            dataList.setBuyPossible();
-//
-//                            //dryflower
-//                            JSONArray dryFlowers = userInfo.getJSONArray("dryflower");
-//                            if(dryFlowers.length() > 0) {
-//                                for (int i = 0; i < dryFlowers.length(); i++) {
-//                                    JSONObject object = dryFlowers.getJSONObject(i);
-//                                    int flowerNo = object.getInt("dryflowerNo");
-//                                    int number = object.getInt("number");
-//                                    String flowerName = getFlowerName(flowerNo);
-//                                    for (int j = 0; j < number; j++) {
-//                                        DryFlower dryFlower = dataBaseHelper.getDryFlowerData(flowerNo);
-//                                        dryFlower.setDryFlowerName(flowerName);
-//                                        dataList.setDryPlats(dryFlower);
-//                                    }
-//                                }
-//                            }
-//
-//                            //Store
-//                            JSONArray item = userInfo.getJSONArray("item");
-//                            if(item.length() > 0) {
-//                                int index =0 ;
-//                                for (int i = 0; i < dataList.getStoreProducts().size(); i++) {
-//                                    int itemNo = i;
-//                                    int number = 0;
-//
-//                                    if(itemNo == item.getJSONObject(index).getInt("itemNo")){
-//                                        itemNo = item.getJSONObject(index).getInt("itemNo");
-//                                        number = item.getJSONObject(index).getInt("number");
-//
-//                                        index ++;
-//                                    }
-//                                    dataList.setNumber(itemNo, number);
-//                                }
-//                            }else{
-//                                for(int i =0;i<dataList.getStoreProducts().size();i++){
-//                                    dataList.setNumber(i,0);
-//                                }
-//                            }
-//
-//                            //skill
-//                            JSONArray skill = userInfo.getJSONArray("skill");
-//                            if(skill.length() > 0) {
-//                                int index = 0;
-//                                for (int i = 0; i < dataList.getSkillInfos().size(); i++) {
-//                                    int skillNo = i;
-//                                    int skillLevel = 0;
-//
-//                                    if (skillNo == skill.getJSONObject(index).getInt("skillNo")) {
-//                                        skillNo = skill.getJSONObject(index).getInt("skillNo");
-//                                        skillLevel = skill.getJSONObject(index).getInt("level");
-//
-//                                        index++;
-//                                    }
-//                                    dataBaseHelper.getAllSkillData(skillNo, skillLevel);
-//                                }
-//                            }else{
-//                                for(int i =0;i<dataList.getSkillInfos().size();i++){
-//                                    dataBaseHelper.getAllSkillData(i,0);
-//                                }
-//                            }
-//
-//                            //goal
-//                            JSONArray goal = userInfo.getJSONArray("goal");
-//                            if(goal.length() >0) {
-//                                int index = 0;
-//                                for (int i = 0; i < dataList.getGoalInfos().size(); i++) {
-//                                    int goalNo = i;
-//                                    int goalLevel = 1;
-//                                    int goalRate = 0;
-//
-//                                    if (goalNo == goal.getJSONObject(index).getInt("goalNo")) {
-//                                        goalNo = goal.getJSONObject(index).getInt("goalNo");
-//                                        goalLevel = goal.getJSONObject(index).getInt("level");
-//                                        goalRate = goal.getJSONObject(index).getInt("rate");
-//
-//                                        index++;
-//                                    }
-//
-//                                    dataList.setGoalDatas(goalNo, goalLevel, goalRate);
-//                                }
-//                            }else{
-//                                for(int i =0;i<dataList.getGoalInfos().size();i++){
-//                                    dataList.setGoalDatas(i,1,0);
-//                                }
-//                            }
-//
-//                            seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-//                            fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
-//
-//                        }catch (JSONException e){
-//                            Log.i("getUserInfo","json Exception : "+e.toString());
-//                        }
-//                    }
-//                },new Response.ErrorListener(){
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getApplicationContext(),"Error : "+error.toString(),Toast.LENGTH_SHORT).show();
-//                Log.i("getUserInfo",error.toString());
-//            }
-//        });
-//
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        requestQueue.add(request);
+       String url = "http://192.168.0.19:3000/userInfo/"+Integer.toString(id);
 
-        dataList.setScore(0,150);
-        dataList.setScore(1,397);
-        dataList.setFruit(0,500);
-        dataList.setFruit(1,129);
+       StringRequest request = new StringRequest(Request.Method.GET,url,
+               new Response.Listener<String>(){
 
-        dataList.setItemNumber(1,0);
-        dataList.setItemNumber(2,0);
-        dataList.setItemNumber(3,0);
-        dataList.setItemNumber(4,5);
+                   @Override
+                   public void onResponse(String response){
 
-        user.setDryFlowerItem(2);
+                       Log.i("getUserInfo","response length : "+response);
+                       try{
+                           JSONObject userInfo = new JSONObject(response);
 
-        ArrayList<Integer> skill = new ArrayList<>();
-        skill.add(0,1);
-        skill.add(1,1);
-        skill.add(2,1);
-        skill.add(3,0);
-        skill.add(4,0);
-        skill.add(5,0);
-        skill.add(6,0);
+                           //userInfo
+                           String userName = userInfo.getString("userName");
+                           String userEamil = userInfo.getString("userEmail");
+                           String userImage = userInfo.getString("userImage");
+                           int userDryFlower = userInfo.getInt("userDryFlowerNum");
 
-        dataBaseHelper.getTabSkillData(skill.get(0));
+                           user.setUserName(userName);
+                           user.setUserEmail(userEamil);
+                           user.setUserImage(userImage);
+                           user.setDryFlowerItem(userDryFlower);
 
-        for(int i =1 ;i<skill.size();i++){
-            dataBaseHelper.getAllSkillData(i,skill.get(i));
-        }
+                           //seed
+                           JSONArray seeds = userInfo.getJSONArray("seed");
+                           if(seeds.length() > 0) {
+                               for (int i = 0; i < seeds.length(); i++) {
+                                   JSONObject object = seeds.getJSONObject(i);
+                                   int seedType = object.getInt("seedType");
+                                   int seed = object.getInt("seed");
+                                   dataList.setScore(seedType, seed);
+                               }
+                           }else{
+                               dataList.setScore(0, 0);
+                           }
 
-        dataList.setGoalDatas(0,1,0);
-        dataList.setGoalDatas(1,1,0);
-        dataList.setGoalDatas(2,1,0);
-        dataList.setGoalDatas(3,1,0);
-        dataList.setGoalDatas(4,1,0);
-        dataList.setGoalDatas(5,1,0);
-        dataList.setGoalDatas(6,1,0);
-        dataList.setGoalDatas(7,1,0);
-        dataList.setGoalDatas(8,1,0);
-        dataList.setGoalDatas(9,1,0);
-        dataList.setGoalDatas(10,1,0);
-        dataList.setGoalDatas(11,1,0);
-        dataList.setGoalDatas(12,1,0);
-        dataList.setGoalDatas(13,1,0);
-        dataList.setGoalDatas(14,1,0);
-        dataList.setGoalDatas(15,1,0);
-        dataList.setGoalDatas(16,1,0);
-        dataList.setGoalDatas(17,1,0);
-        dataList.setGoalDatas(18,1,0);
-        dataList.setGoalDatas(19,1,0);
-        dataList.setGoalDatas(20,1,0);
-        dataList.setGoalDatas(21,1,0);
-        dataList.setGoalDatas(22,1,0);
-        dataList.setGoalDatas(23,1,0);
-        dataList.setGoalDatas(24,1,0);
+                           //fruit
+                           JSONArray fruits = userInfo.getJSONArray("fruit");
+                           if(fruits.length() > 0) {
+                               for (int i = 0; i < fruits.length(); i++) {
+                                   JSONObject object = fruits.getJSONObject(i);
+                                   int fruitType = object.getInt("fruitType");
+                                   int fruit = object.getInt("fruit");
+                                   dataList.setFruit(fruitType, fruit);
+                               }
+                           }else{
+                               dataList.setFruit(0, 0);
+                           }
 
-        seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
-        fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+                           ArrayList<Plant> plants = new ArrayList<>();
+                           //flower
+                           JSONArray flowers = userInfo.getJSONArray("flower");
+                           if(flowers.length() > 0) {
+                               for (int i = 0; i < flowers.length(); i++) {
+                                   JSONObject object = fruits.getJSONObject(i);
+                                   int flowerNo = object.getInt("flowerNo");
+                                   int level = object.getInt("level");
+                                   int hp = object.getInt("hp");
+                                   addFlower(plants, flowerNo, level, hp);
+                               }
+                           }
 
-        dataList.setSetting(new GameSetting(1,1,1,1,1,80));
+                           //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
+                           dataList.setPlants(plants);
+                           dataList.compareFlowers();
+                           dataList.setBuyPossible();
 
-        ArrayList<Plant> plants = new ArrayList<>();
+                           //dryflower
+                           JSONArray dryFlowers = userInfo.getJSONArray("dryflower");
+                           if(dryFlowers.length() > 0) {
+                               for (int i = 0; i < dryFlowers.length(); i++) {
+                                   JSONObject object = dryFlowers.getJSONObject(i);
+                                   int flowerNo = object.getInt("dryflowerNo");
+                                   int number = object.getInt("number");
+                                   String flowerName = getFlowerName(flowerNo);
+                                   for (int j = 0; j < number; j++) {
+                                       DryFlower dryFlower = dataBaseHelper.getDryFlowerData(flowerNo);
+                                       dryFlower.setDryFlowerName(flowerName);
+                                       dataList.setDryPlats(dryFlower);
+                                   }
+                               }
+                           }
 
-        createPlant(0,399,40,plants);
-        createPlant(1,250,100,plants);
-        createPlant(2,140,60,plants);
+                           //Store
+                           JSONArray item = userInfo.getJSONArray("item");
+                           if(item.length() > 0) {
+                               int index =0 ;
+                               for (int i = 0; i < dataList.getStoreProducts().size(); i++) {
+                                   int itemNo = i;
+                                   int number = 0;
+
+                                   if(itemNo == item.getJSONObject(index).getInt("itemNo")){
+                                       itemNo = item.getJSONObject(index).getInt("itemNo");
+                                       number = item.getJSONObject(index).getInt("number");
+
+                                       index ++;
+                                   }
+                                   dataList.setNumber(itemNo, number);
+                               }
+                           }else{
+                               for(int i =0;i<dataList.getStoreProducts().size();i++){
+                                   dataList.setNumber(i,0);
+                               }
+                           }
+
+                           //skill
+                           JSONArray skill = userInfo.getJSONArray("skill");
+                           if(skill.length() > 0) {
+                               int index = 0;
+                               for (int i = 0; i < dataList.getSkillInfos().size(); i++) {
+                                   int skillNo = i;
+                                   int skillLevel = 0;
+
+                                   if (skillNo == skill.getJSONObject(index).getInt("skillNo")) {
+                                       skillNo = skill.getJSONObject(index).getInt("skillNo");
+                                       skillLevel = skill.getJSONObject(index).getInt("level");
+
+                                       index++;
+                                   }
+                                   dataBaseHelper.getAllSkillData(skillNo, skillLevel);
+                               }
+                           }else{
+                               for(int i =0;i<dataList.getSkillInfos().size();i++){
+                                   dataBaseHelper.getAllSkillData(i,0);
+                               }
+                           }
+
+                           //goal
+                           JSONArray goal = userInfo.getJSONArray("goal");
+                           if(goal.length() >0) {
+                               int index = 0;
+                               for (int i = 0; i < dataList.getGoalInfos().size(); i++) {
+                                   int goalNo = i;
+                                   int goalLevel = 1;
+                                   int goalRate = 0;
+
+                                   if (goalNo == goal.getJSONObject(index).getInt("goalNo")) {
+                                       goalNo = goal.getJSONObject(index).getInt("goalNo");
+                                       goalLevel = goal.getJSONObject(index).getInt("level");
+                                       goalRate = goal.getJSONObject(index).getInt("rate");
+
+                                       index++;
+                                   }
+
+                                   dataList.setGoalDatas(goalNo, goalLevel, goalRate);
+                               }
+                           }else{
+                               for(int i =0;i<dataList.getGoalInfos().size();i++){
+                                   dataList.setGoalDatas(i,1,0);
+                               }
+                           }
+
+                           seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+                           fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+
+                       }catch (JSONException e){
+                           Log.i("getUserInfo","json Exception : "+e.toString());
+                       }
+                   }
+               },new Response.ErrorListener(){
+
+           @Override
+           public void onErrorResponse(VolleyError error) {
+               Toast.makeText(getApplicationContext(),"Error : "+error.toString(),Toast.LENGTH_SHORT).show();
+               Log.i("getUserInfo",error.toString());
+           }
+       });
+
+       RequestQueue requestQueue = Volley.newRequestQueue(this);
+       requestQueue.add(request);
+        //
+        // dataList.setScore(0,150);
+        // dataList.setScore(1,397);
+        // dataList.setFruit(0,500);
+        // dataList.setFruit(1,129);
+        //
+        // dataList.setItemNumber(1,0);
+        // dataList.setItemNumber(2,0);
+        // dataList.setItemNumber(3,0);
+        // dataList.setItemNumber(4,5);
+        //
+        // user.setDryFlowerItem(2);
+        //
+        // ArrayList<Integer> skill = new ArrayList<>();
+        // skill.add(0,1);
+        // skill.add(1,1);
+        // skill.add(2,1);
+        // skill.add(3,0);
+        // skill.add(4,0);
+        // skill.add(5,0);
+        // skill.add(6,0);
+        //
+        // dataBaseHelper.getTabSkillData(skill.get(0));
+        //
+        // for(int i =1 ;i<skill.size();i++){
+        //     dataBaseHelper.getAllSkillData(i,skill.get(i));
+        // }
+        //
+        // dataList.setGoalDatas(0,1,0);
+        // dataList.setGoalDatas(1,1,0);
+        // dataList.setGoalDatas(2,1,0);
+        // dataList.setGoalDatas(3,1,0);
+        // dataList.setGoalDatas(4,1,0);
+        // dataList.setGoalDatas(5,1,0);
+        // dataList.setGoalDatas(6,1,0);
+        // dataList.setGoalDatas(7,1,0);
+        // dataList.setGoalDatas(8,1,0);
+        // dataList.setGoalDatas(9,1,0);
+        // dataList.setGoalDatas(10,1,0);
+        // dataList.setGoalDatas(11,1,0);
+        // dataList.setGoalDatas(12,1,0);
+        // dataList.setGoalDatas(13,1,0);
+        // dataList.setGoalDatas(14,1,0);
+        // dataList.setGoalDatas(15,1,0);
+        // dataList.setGoalDatas(16,1,0);
+        // dataList.setGoalDatas(17,1,0);
+        // dataList.setGoalDatas(18,1,0);
+        // dataList.setGoalDatas(19,1,0);
+        // dataList.setGoalDatas(20,1,0);
+        // dataList.setGoalDatas(21,1,0);
+        // dataList.setGoalDatas(22,1,0);
+        // dataList.setGoalDatas(23,1,0);
+        // dataList.setGoalDatas(24,1,0);
+        //
+        // seed.setText(dataList.getAllScore(dataList.getScoreHashMap()));
+        // fruit.setText(dataList.getAllScore(dataList.getFruitHashMap()));
+        //
+        // dataList.setSetting(new GameSetting(1,1,1,1,1,80));
+        //
+        // ArrayList<Plant> plants = new ArrayList<>();
+        //
+        // createPlant(0,399,40,plants);
+        // createPlant(1,250,100,plants);
+        // createPlant(2,140,60,plants);
 
         //flowerArray(모든 꽃 종류에 대한 데이터)에서 꽃의 소유여부, 레벨을 초기화
-        dataList.setPlants(plants);
-        dataList.compareFlowers();
-        dataList.setBuyPossible();
+        // dataList.setPlants(plants);
+        // dataList.compareFlowers();
+        // dataList.setBuyPossible();
     }
 
     private void createPlant(int plantNo, int plantLevel, int plantHP, ArrayList<Plant> plants){
