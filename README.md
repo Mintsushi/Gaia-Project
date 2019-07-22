@@ -129,5 +129,6 @@ Plant-raising tab game based on real-time weather information
  ## 기능 정리
  ![11](https://user-images.githubusercontent.com/22411296/61607086-19ce7000-ac88-11e9-8413-5b027fb81bbb.JPG)
  
- ## 데모 영상
+ ## 데모 영상 : Demo
+( 이미지를 클릭해주세요. Click the Image )
 [![데모](https://user-images.githubusercontent.com/22411296/61608020-281e8b00-ac8c-11e9-9632-058c982bc512.JPG)](https://www.youtube.com/watch?v=OxtukQNEpLg&t=1s)
