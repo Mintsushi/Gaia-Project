@@ -35,6 +35,22 @@ Plant-raising tab game based on real-time weather information
   
 ![1](https://user-images.githubusercontent.com/22411296/61605696-ab86af00-ac81-11e9-8bc1-eaf0fcb17faa.JPG)
 
+(4) 어플리케이션은 크게 게임 내 화면(실내)와 게임 외 화면(스마트폰 홈 화면)[실외]로 나뉘어 집니다.
+
+  - 사용자는 자신이 가지고 있는 식물을 게임 내 화면과 스마트폰 홈 화면으로 이동시킬 수 있습니다.(방법은 6. Outdoor 기능에서 설명)
+  
+  - 실외(스마트폰 홈 화면)에 있는 식물은 사용자가 있는 위치에서의 실제 날씨에 영향을 받습니다.
+  
+        ex. 지금 비가 내리고 있다면, 휴대폰 화면에서 비를 내리면 event 표시 - 각 식물들이 밸런스 정보에 맞게 날씨에 영향을 받습니다.
+
+  - 만약 날씨가 해당 식물에게 맞지 않는 날씨일 경우, 식물의 hp 감소 -> hp가 0이 되면 해당 식물이 시들어 죽습니다.[포인트를 얻지 못하는 상태]
+  
+        시들어 죽은 식물은 아이템으로 부활시키거나, 새로 구입해야 합니다.
+        
+  - 즉, 식물을 키우는데 영향을 주는 요인은 식물에게 물 주기, 날씨입니다.
+  
+![9](https://user-images.githubusercontent.com/22411296/61606268-62842a00-ac84-11e9-9caa-edd602bb58ac.JPG)
+
 ## 2. Main 화면
 ![2](https://user-images.githubusercontent.com/22411296/61606075-885cff00-ac83-11e9-8a68-3bb31f4f14da.JPG)
 
@@ -48,3 +64,8 @@ Plant-raising tab game based on real-time weather information
 (4) 각 꽃은 최대레벨까지만 성장할 수 있습니다.
 
 ![3](https://user-images.githubusercontent.com/22411296/61606163-eb4e9600-ac83-11e9-8a38-776407e61ed9.JPG)
+
+## 4. Skill 화면 : 스킬 사용
+(1) Skill을 사용하여, 빠르고 쉽게 포인트를 얻고 식물을 키울 수 있습니다.
+
+(2) Skill에는 재사용 시간이 있고, 이는 어플리케이션 내부와 외부에서 동일하게 작용합니다.
