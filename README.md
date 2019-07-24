@@ -1,6 +1,6 @@
 # Gaia-Project
 
-Plant-raising tab game based on real-time weather information  
+# Plant-raising tab game based on real-time weather information  
 
 ### Application   
   - Platform : android
