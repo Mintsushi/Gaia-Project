@@ -12,7 +12,7 @@ Plant-raising tab game based on real-time weather information
   
   - Language : Node.js
 
-### DataBase
+### DataBase Manager
   - MySQL
 
 #
